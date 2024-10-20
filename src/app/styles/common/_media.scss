@@ -1,0 +1,5 @@
+@mixin for-desktop-1600 {
+  @media screen and (max-width: 1600px) {
+    @content;
+  }
+}

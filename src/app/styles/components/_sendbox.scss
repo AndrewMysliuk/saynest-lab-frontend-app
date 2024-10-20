@@ -1,0 +1,9 @@
+.sendbox {
+  font-family: Arial, sans-serif;
+  padding: rem(20px);
+  text-align: center;
+
+  &__desc {
+    margin-top: rem(24px);
+  }
+}

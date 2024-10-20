@@ -1,0 +1,21 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  margin: 0;
+
+  &::before,
+  &::after {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+html,
+body,
+#app,
+#app-wrapper {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
