@@ -1,0 +1,62 @@
+@use "../../../app/styles/common/mixins" as *;
+
+.omg-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 102;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.--slide-from-right {
+    .omg-modal__content {
+      animation: slideInFromRight 0.3s ease forwards;
+    }
+  }
+
+  &.--slide-out-right {
+    .omg-modal__content {
+      animation: slideOutToRight 0.3s ease forwards;
+    }
+  }
+
+  &__background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(63, 80, 166, 0.35);
+  }
+
+  &__content {
+    position: absolute;
+    z-index: 900;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    width: rem(720px);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}

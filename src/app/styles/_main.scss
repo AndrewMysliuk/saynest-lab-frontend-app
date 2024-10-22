@@ -1,5 +1,5 @@
-@import "common/mixins";
-@import "common/media";
-@import "common/base";
+@use "common/media";
+@use "common/base";
 
-@import "components/sendbox";
+@use "components/sendbox";
+@use "components/room";

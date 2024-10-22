@@ -1,14 +1,10 @@
 import { RouteRecordRaw } from "vue-router"
-
 import MainLayout from "@/layouts/MainLayout.vue"
+import sendbox from "./sendbox"
 
 // Routers
-const childrenComponents = [
-  {
-    path: "/sendbox/whisper",
-    name: "sendbox.whisper",
-    component: async () => await import("@/pages").then((module) => module.WhisperSendboxPage),
-  },
+const childrenComponents: RouteRecordRaw[] = [
+  ...sendbox,
   {
     path: "/:pathMatch(.*)*",
     redirect: "/",
@@ -22,7 +18,7 @@ export const routes: RouteRecordRaw[] = [
     component: MainLayout,
 
     redirect: {
-      name: "sendbox.whisper",
+      name: "sendbox.prompts",
     },
 
     // beforeEnter: async (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {},
