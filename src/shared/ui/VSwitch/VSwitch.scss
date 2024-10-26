@@ -1,0 +1,43 @@
+@use "../../../app/styles/common/mixins" as *;
+
+.v-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: #ececf1;
+  color: #101010;
+  height: 40px;
+  border-radius: 1000px;
+
+  &:hover {
+    background-color: #d8d8d8;
+  }
+
+  &__label {
+    position: relative;
+    color: #666;
+    transition: color 0.1s ease-in-out;
+    padding: 0px 16px;
+    z-index: 2;
+    user-select: none;
+
+    &.--right {
+      margin-left: -8px;
+    }
+  }
+
+  &[data-enabled="true"] {
+    .v-switch__label.--right {
+      color: #fff;
+    }
+  }
+
+  &[data-enabled="false"] {
+    .v-switch__label.--left {
+      color: #fff;
+    }
+  }
+}

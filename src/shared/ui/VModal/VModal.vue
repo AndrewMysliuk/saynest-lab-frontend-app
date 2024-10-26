@@ -1,9 +1,9 @@
 <template>
   <transition name="fade" @enter="startEnterAnimation" @afterEnter="endEnterAnimation" @leave="startLeaveAnimation" @afterLeave="endLeaveAnimation">
-    <div v-if="modelValue" class="omg-modal">
-      <div class="omg-modal__background" @click="closeModal" />
+    <div v-if="modelValue" class="v-modal">
+      <div class="v-modal__background" @click="closeModal" />
 
-      <div class="omg-modal__content">
+      <div class="v-modal__content">
         <slot />
       </div>
     </div>

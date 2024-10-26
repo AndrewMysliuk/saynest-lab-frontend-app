@@ -108,6 +108,10 @@ export class WavRecorder {
     return true
   }
 
+  getRecordingStatus(): boolean {
+    return this.recording
+  }
+
   getSampleRate(): number {
     return this.sampleRate
   }

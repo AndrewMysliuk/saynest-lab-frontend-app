@@ -28,6 +28,10 @@ export class WavStreamPlayer {
     this.sampleRate = sampleRate
   }
 
+  getAnalyser(): AnalyserNode | null {
+    return this.analyser
+  }
+
   async connect(): Promise<true> {
     this.context = new AudioContext({ sampleRate: this.sampleRate })
     if (this.context.state === "suspended") {

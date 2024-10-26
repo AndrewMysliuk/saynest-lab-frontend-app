@@ -12,6 +12,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@openai/realtime-api-beta": "openai/openai-realtime-api-beta",
     "axios": "^1.7.7",
     "pinia": "^2.2.4",
     "vue": "^3.5.10",

@@ -1,6 +1,6 @@
 @use "../../../app/styles/common/mixins" as *;
 
-.omg-modal {
+.v-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,13 +12,13 @@
   justify-content: center;
 
   &.--slide-from-right {
-    .omg-modal__content {
+    .v-modal__content {
       animation: slideInFromRight 0.3s ease forwards;
     }
   }
 
   &.--slide-out-right {
-    .omg-modal__content {
+    .v-modal__content {
       animation: slideOutToRight 0.3s ease forwards;
     }
   }
