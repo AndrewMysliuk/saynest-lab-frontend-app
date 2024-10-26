@@ -36,7 +36,9 @@ export class WavPacker {
    * @param rightBuffer - second buffer
    * @returns ArrayBuffer
    */
-  static mergeBuffers(leftBuffer: ArrayBuffer, rightBuffer: ArrayBuffer): ArrayBuffer {
+  static mergeBuffers(leftBuffer: ArrayBuffer = new ArrayBuffer(0), rightBuffer: ArrayBuffer = new ArrayBuffer(0)): ArrayBuffer {
+    // NOTICE: left or right buffers could be undefined and throw error
+
     const tmpArray = new Uint8Array(leftBuffer.byteLength + rightBuffer.byteLength)
     tmpArray.set(new Uint8Array(leftBuffer), 0)
     tmpArray.set(new Uint8Array(rightBuffer), leftBuffer.byteLength)

@@ -1,7 +1,7 @@
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
-import { useSendboxStore } from "@/shared/store"
+import { useSendboxStore, useRealtimeStore } from "@/shared/store"
 import App from "./index.vue"
 import "./index.scss"
 
@@ -17,3 +17,4 @@ app.use(createPinia())
 app.use(router)
 
 export const sendboxStore = useSendboxStore()
+export const realtimeStore = useRealtimeStore()
