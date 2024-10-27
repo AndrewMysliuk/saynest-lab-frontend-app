@@ -39,7 +39,7 @@ export const useRealtimeStore = defineStore("realtimeStore", () => {
   }
 
   const setMemoryKeyValue = (key: string, value: any) => {
-    memoryKeyValue.value[key] = value
+    memoryKeyValue.value = { ...memoryKeyValue.value, [key]: value }
   }
 
   const clearMemoryKeyValue = () => {

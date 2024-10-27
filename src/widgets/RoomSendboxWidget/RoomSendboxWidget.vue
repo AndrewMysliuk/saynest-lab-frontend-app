@@ -74,7 +74,7 @@
             </div>
 
             <div class="content-actions">
-              <v-switch :defaultValue="false" :labels="['manual', 'vad']" :values="['none', 'server_vad']" @change="(_: boolean, value: string) => changeTurnEndType(value)" />
+              <v-switch :labels="['Manual', 'Vad']" :values="['none', 'server_vad']" @update:values="changeTurnEndType" />
               <div class="spacer" />
               <v-button
                 v-if="getIsConnected && getCanPushToTalk"
@@ -129,6 +129,7 @@ export default defineComponent({
     const wavRecorder = ref(new WavRecorder({ sampleRate: 24000 }))
     const wavStreamPlayer = ref(new WavStreamPlayer({ sampleRate: 24000 }))
     const realtimeClient = ref(new RealtimeClient({ url: "http://localhost:3001" }))
+    const switchValue = ref<boolean>(false)
 
     const getItems = computed(() => realtimeStore.getItems)
     const getRealtimeEvents = computed(() => realtimeStore.getRealtimeEvents)
@@ -184,16 +185,13 @@ export default defineComponent({
 
       if (!realtimeClient.value || !wavRecorder.value || !wavStreamPlayer.value) return
 
-      // Interrupt the audio stream player and get the track sample offset
       const trackSampleOffset = await wavStreamPlayer.value.interrupt()
 
-      // If there is an active track, cancel the response
       if (trackSampleOffset?.trackId) {
         const { trackId, offset } = trackSampleOffset
         await realtimeClient.value.cancelResponse(trackId, offset)
       }
 
-      // Start recording and append the audio data to the client
       await wavRecorder.value.record((data) => realtimeClient.value.appendInputAudio(data.mono))
     }
 
@@ -202,7 +200,6 @@ export default defineComponent({
 
       if (!realtimeClient.value || !wavRecorder.value) return
 
-      // Pause the wavRecorder and create a response from the client
       await wavRecorder.value.pause()
       realtimeClient.value.createResponse()
     }
@@ -210,40 +207,24 @@ export default defineComponent({
     const changeTurnEndType = async (value: string) => {
       if (!realtimeClient.value || !wavRecorder.value) return
 
-      // Pause recording if in 'none' mode and currently recording
       if (value === "none" && wavRecorder.value.getStatus() === "recording") {
         await wavRecorder.value.pause()
       }
 
-      // Update client session with turn detection type
       realtimeClient.value.updateSession({
         turn_detection: value === "none" ? null : { type: "server_vad" },
       })
 
-      // If VAD mode is enabled and client is connected, start recording audio input
       if (value === "server_vad" && realtimeClient.value.isConnected()) {
         await wavRecorder.value.record((data) => realtimeClient.value.appendInputAudio(data.mono))
       }
 
-      // Update the state of push-to-talk based on mode
       realtimeStore.setCanPushToTalk(value === "none")
     }
 
-    onMounted(() => {
-      const cleanupCanvas = initializeCanvas(clientCanvasRef.value, serverCanvasRef.value, wavRecorder.value, wavStreamPlayer.value)
-
-      onBeforeUnmount(() => {
-        cleanupCanvas()
-      })
-    })
-
-    // Core RealtimeClient and audio capture setup
-    onMounted(() => {
-      // Set instructions
+    const initializeRealtimeClient = () => {
       realtimeClient.value.updateSession({ instructions })
       realtimeClient.value.updateSession({ input_audio_transcription: { model: "whisper-1" } })
-
-      // Add tools
       realtimeClient.value.addTool(
         {
           name: "set_memory",
@@ -251,8 +232,14 @@ export default defineComponent({
           parameters: {
             type: "object",
             properties: {
-              key: { type: "string", description: "Key as lowercase and underscores" },
-              value: { type: "string", description: "Value as a string" },
+              key: {
+                type: "string",
+                description: "The key of the memory value. Always use lowercase and underscores, no other characters.",
+              },
+              value: {
+                type: "string",
+                description: "Value can be anything represented as a string",
+              },
             },
             required: ["key", "value"],
           },
@@ -263,7 +250,6 @@ export default defineComponent({
         }
       )
 
-      // Handle realtime events for logging and client-server communication
       realtimeClient.value.on("realtime.event", (realtimeEvent: IRealtimeEvent) => {
         const lastEvent = getRealtimeEvents.value[getRealtimeEvents.value.length - 1]
         if (lastEvent?.event.type === realtimeEvent.event.type) {
@@ -294,14 +280,21 @@ export default defineComponent({
       })
 
       realtimeStore.setItems(realtimeClient.value.conversation.getItems())
+    }
+
+    onMounted(() => {
+      initializeRealtimeClient()
+      const cleanupCanvas = initializeCanvas(clientCanvasRef.value, serverCanvasRef.value, wavRecorder.value, wavStreamPlayer.value)
 
       onBeforeUnmount(() => {
+        cleanupCanvas()
         realtimeClient.value.reset()
       })
     })
 
     return {
       // isSidebarOpen,
+      switchValue,
       startTimestamp,
       clientCanvasRef,
       serverCanvasRef,
