@@ -1,7 +1,5 @@
 import { WavRenderer } from "../utils"
 
-// WavRecorder, WavStreamPlayer,
-
 export const useMicrophone = async (): Promise<MediaStream | null> => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -44,7 +42,7 @@ export const initializeCanvas = (clientCanvas: HTMLCanvasElement | null, serverC
       clientCtx.clearRect(0, 0, clientCanvas.width, clientCanvas.height)
 
       const result = recorder?.getRecordingStatus() ? recorder.getFrequencies("voice") : { values: new Float32Array([0]) }
-      WavRenderer.drawBars(clientCanvas, clientCtx, result.values, "#0099ff", 10, 0, 8)
+      WavRenderer.drawBars(clientCanvas, clientCtx, result.values, "#0099ff", 30, 0, 8)
     }
 
     if (serverCanvas && serverCtx) {
@@ -53,7 +51,7 @@ export const initializeCanvas = (clientCanvas: HTMLCanvasElement | null, serverC
       serverCtx.clearRect(0, 0, serverCanvas.width, serverCanvas.height)
 
       const result = streamPlayer?.getAnalyser() ? streamPlayer.getFrequencies("voice") : { values: new Float32Array([0]) }
-      WavRenderer.drawBars(serverCanvas, serverCtx, result.values, "#009900", 10, 0, 8)
+      WavRenderer.drawBars(serverCanvas, serverCtx, result.values, "#009900", 30, 0, 8)
     }
 
     window.requestAnimationFrame(render)

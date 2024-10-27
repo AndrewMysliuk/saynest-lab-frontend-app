@@ -7,16 +7,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { defineComponent, onBeforeMount, ref } from "vue"
 
 export default defineComponent({
   name: "VSwitch",
 
   props: {
+    defaultValue: {
+      type: Boolean,
+      default: false,
+    },
+
     labels: {
       type: Array as () => string[],
       required: true,
     },
+
     values: {
       type: Array as () => string[],
       required: true,
@@ -24,11 +30,15 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
-    const selectedIndex = ref(0)
+    const selectedIndex = ref<number>(0)
+
+    onBeforeMount(() => {
+      toggleValue(+props.defaultValue)
+    })
 
     const toggleValue = (index: number) => {
       selectedIndex.value = index
-      emit("update:values", props.values[index])
+      emit("change", props.values[index])
     }
 
     return {

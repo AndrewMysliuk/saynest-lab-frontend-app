@@ -3,21 +3,18 @@
 .v-button {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-family: "Roboto Mono", monospace;
-  font-size: 12px;
+  gap: rem(8px);
+  font-size: rem(16px);
   font-optical-sizing: auto;
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
   border: none;
   background-color: #ececf1;
   color: #101010;
-  border-radius: 1000px;
-  padding: 8px 24px;
-  min-height: 42px;
-  transition:
-    transform 0.1s ease-in-out,
-    background-color 0.1s ease-in-out;
+  border-radius: rem(12px);
+  padding: rem(8px 24px);
+  min-height: rem(42px);
+  transition: all 0.3s ease;
   outline: none;
 
   &.--v-button-style {

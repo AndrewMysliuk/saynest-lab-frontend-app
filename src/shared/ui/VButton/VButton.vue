@@ -20,6 +20,11 @@ export default defineComponent({
       type: String as PropType<"regular" | "action" | "alert" | "flush">,
       default: "regular",
     },
+
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { attrs }) {
     const classList = computed(() => {

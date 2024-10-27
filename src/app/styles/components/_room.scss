@@ -6,7 +6,7 @@
 
   &.--sidebar-opened {
     .room__body {
-      padding: rem(24px 80px 24px 440px);
+      padding: rem(24px 80px 24px 680px);
     }
   }
 
@@ -15,11 +15,170 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: rem(360px);
-    background: #ffffff;
+    width: rem(600px);
+    background: #f9f9f9;
     border-right: rem(1px solid black);
     padding: rem(16px);
     box-sizing: border-box;
+    z-index: 100;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    &-navbar {
+      display: flex;
+      justify-content: center;
+      gap: rem(8px);
+      margin: rem(32px auto);
+    }
+  }
+
+  &__history {
+    display: flex;
+    flex-direction: column;
+    padding: rem(24px 10px);
+
+    .conversation-item {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: rem(10px);
+      padding: rem(8px);
+      border-radius: rem(8px);
+    }
+
+    .speaker {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: rem(14px);
+      font-weight: bold;
+      color: #666;
+    }
+
+    .speaker.user {
+      color: #0099ff;
+    }
+
+    .speaker.assistant {
+      color: #009900;
+    }
+
+    .speaker .close {
+      font-size: rem(12px);
+      color: #888;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .speaker .close:hover {
+      color: #ff4d4f;
+    }
+
+    .speaker-content {
+      margin-top: rem(12px);
+      padding: rem(10px);
+      background-color: #fff;
+      border-radius: rem(6px);
+      box-shadow: rem(0 1px 3px rgba(0, 0, 0, 0.1));
+      font-size: rem(14px);
+      line-height: 1.5;
+    }
+
+    .speaker-content.user {
+      background-color: #e6f7ff;
+    }
+
+    .speaker-content.assistant {
+      background-color: #e6ffe6;
+    }
+
+    audio {
+      margin-top: rem(10px);
+      width: 100%;
+      border-radius: rem(4px);
+    }
+
+    .content-block.kv {
+      background-color: #f0f0f5;
+      padding: rem(10px);
+      border-radius: rem(8px);
+      margin-bottom: rem(8px);
+    }
+
+    .content-block-title {
+      font-size: rem(16px);
+      font-weight: bold;
+      margin-bottom: rem(8px);
+      color: #333;
+    }
+
+    .content-block-body.content-kv {
+      font-family: monospace;
+      font-size: rem(14px);
+      white-space: pre-wrap;
+      color: #444;
+      padding: rem(14px);
+      background-color: #fafafa;
+      border: rem(1px solid #ddd);
+      border-radius: rem(5px);
+    }
+
+    .content-block-body {
+      padding: rem(10px);
+      background-color: #f9f9f9;
+      border-radius: rem(8px);
+    }
+
+    .event {
+      margin-bottom: rem(10px);
+      padding: rem(8px);
+      border-radius: rem(5px);
+      background-color: #ffffff;
+      box-shadow: rem(0 1px 3px rgba(0, 0, 0, 0.1));
+      font-size: rem(14px);
+    }
+
+    .event-timestamp {
+      font-size: rem(12px);
+      color: #888;
+      margin-bottom: rem(4px);
+    }
+
+    .event-details {
+      border-left: rem(3px solid #0099ff);
+      padding-left: rem(10px);
+    }
+
+    .event-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .event-source {
+      font-weight: bold;
+      color: #0099ff;
+    }
+
+    .event-source.error {
+      color: #ff4d4f;
+    }
+
+    .event-type {
+      font-style: italic;
+      color: #555;
+    }
+
+    .event-payload {
+      margin-top: rem(8px);
+      font-family: monospace;
+      font-size: rem(13px);
+      white-space: pre-wrap;
+      background-color: #fafafa;
+      padding: rem(10px);
+      border-radius: rem(5px);
+      border: rem(1px solid #ddd);
+    }
   }
 
   &__body {
@@ -30,6 +189,53 @@
     box-sizing: border-box;
     width: 100%;
     min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: rem(40px);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  &__navbar {
+    margin-top: rem(32px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: rem(24px);
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      gap: rem(16px);
+    }
+
+    &-switch {
+      width: rem(525px);
+    }
+  }
+
+  &__spacebar {
+    margin: rem(64px);
+    font-size: rem(32px);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  &__visualization {
+    width: 100%;
+
+    &-entry {
+      width: 100%;
+
+      canvas {
+        width: 100%;
+        height: rem(50px);
+      }
+    }
   }
 }
 
