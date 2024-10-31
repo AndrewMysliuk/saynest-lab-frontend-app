@@ -1,12 +1,14 @@
 <template>
   <div class="sendbox">
-    <h1 class="sendbox__title">Whisper Record To Text</h1>
+    <h1 class="sendbox__title">Conversation Record To Text</h1>
 
     <p class="sendbox__desc">{{ isLoading ? "Wait For Response" : isHold ? "Recording..." : "Press and hold Space for audio record" }}</p>
 
     <p class="sendbox__desc">{{ recordStatus }}</p>
 
-    <p class="sendbox__desc">Response here: {{ getWhisperResponse }}</p>
+    <p class="sendbox__desc">Response here: {{ getConversationResponse.transcript }}</p>
+
+    <audio v-if="getConversationResponse.audioUrl" :src="`http://localhost:3001${getConversationResponse.audioUrl}`" controls />
   </div>
 </template>
 
@@ -25,6 +27,7 @@ export default defineComponent({
     let audioChunks: BlobPart[] = []
 
     const getWhisperResponse = computed(() => sendboxStore.getWhisperResponse)
+    const getConversationResponse = computed(() => sendboxStore.getConversationResponse)
 
     onMounted(async () => {
       mediaStream = await useMicrophone()
@@ -66,13 +69,26 @@ export default defineComponent({
         }
 
         mediaRecorder.onstop = async () => {
-          const audioBlob = new Blob(audioChunks, { type: "audio/webm" })
+          const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
           audioChunks = []
 
           recordStatus.value = "Sending audio to server..."
           isLoading.value = true
 
-          await sendboxStore.fetchWhisperSpeachToText(audioBlob)
+          // await sendboxStore.fetchWhisperSpeachToText(audioBlob)
+          await sendboxStore.fetchConversation({
+            whisper: {
+              audioFile: audioBlob,
+            },
+            gpt_model: {
+              model: "gpt-4-turbo",
+            },
+            tts: {
+              model: "tts-1",
+              voice: "alloy",
+            },
+          })
+
           isLoading.value = false
           recordStatus.value = ""
         }
@@ -111,6 +127,7 @@ export default defineComponent({
       isHold,
       recordStatus,
       getWhisperResponse,
+      getConversationResponse,
     }
   },
 })
