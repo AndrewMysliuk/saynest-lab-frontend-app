@@ -1,3 +1,3 @@
-import RoomSidebar from "./RoomSidebar"
+import RoomSidebarSendbox from "./RoomSidebarSendbox"
 
-export { RoomSidebar }
+export { RoomSidebarSendbox }

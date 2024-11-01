@@ -1,24 +1,49 @@
 <template>
-  <div class="sendbox">
-    <h1 class="sendbox__title">Conversation Record To Text</h1>
+  <div class="room" :class="{ '--sidebar-opened': isSidebarOpen }">
+    <transition name="slide-left">
+      <ConversationSidebarSendbox v-if="isSidebarOpen" />
+    </transition>
 
-    <p class="sendbox__desc">{{ isLoading ? "Wait For Response" : isHold ? "Recording..." : "Press and hold Space for audio record" }}</p>
+    <div class="room__body">
+      <div>
+        <div class="room__title">Conversation Chat</div>
 
-    <p class="sendbox__desc">{{ recordStatus }}</p>
+        <div class="room__navbar">
+          <div class="room__navbar-wrapper">
+            <div class="room__navbar-btn">
+              <v-button label="Toggle History" buttonStyle="regular" @click="isSidebarOpen = !isSidebarOpen" :disabled="!getConversationResponse?.conversation_history?.length" />
+            </div>
+          </div>
+        </div>
 
-    <p class="sendbox__desc">Response here: {{ getConversationResponse.transcript }}</p>
+        <div class="room__spacebar">
+          {{ isLoading ? "Wait For Response" : isHold ? "Recording..." : "Press and hold Space for audio record" }}
+        </div>
 
-    <audio v-if="getConversationResponse.audioUrl" :src="`http://localhost:3001${getConversationResponse.audioUrl}`" controls />
+        <div class="room__spacebar">
+          {{ recordStatus }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from "vue"
+import { defineComponent, ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { sendboxStore } from "@/app"
 import { useMicrophone } from "@/shared/lib"
+import { testPrompt } from "@/shared/utils"
+import { ConversationSidebarSendbox } from "./ui"
+
+const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
 export default defineComponent({
+  components: {
+    ConversationSidebarSendbox,
+  },
+
   setup() {
+    const isSidebarOpen = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     const isHold = ref<boolean>(false)
     const recordStatus = ref<string>("")
@@ -26,7 +51,6 @@ export default defineComponent({
     let mediaStream: MediaStream | null = null
     let audioChunks: BlobPart[] = []
 
-    const getWhisperResponse = computed(() => sendboxStore.getWhisperResponse)
     const getConversationResponse = computed(() => sendboxStore.getConversationResponse)
 
     onMounted(async () => {
@@ -40,30 +64,28 @@ export default defineComponent({
     })
 
     const handleKeyDown = async (e: KeyboardEvent) => {
-      if (e.code === "Space") {
+      if (e.code === "Space" && !isHold.value && !isLoading.value) {
         e.preventDefault()
-
-        if (!isLoading.value && mediaRecorder === null) {
-          await startRecording()
-        }
+        isHold.value = true
+        await startRecording()
       }
     }
 
     const handleKeyUp = async (e: KeyboardEvent) => {
-      if (e.code === "Space") {
+      if (e.code === "Space" && isHold.value && !isLoading.value) {
+        e.preventDefault()
         await stopRecording()
+        isHold.value = false
       }
     }
 
     const startRecording = async () => {
       try {
-        isHold.value = true
         recordStatus.value = "Record in progress..."
 
         if (!mediaStream) return
 
         mediaRecorder = new MediaRecorder(mediaStream)
-
         mediaRecorder.ondataavailable = (event: BlobEvent) => {
           audioChunks.push(event.data)
         }
@@ -75,19 +97,31 @@ export default defineComponent({
           recordStatus.value = "Sending audio to server..."
           isLoading.value = true
 
-          // await sendboxStore.fetchWhisperSpeachToText(audioBlob)
           await sendboxStore.fetchConversation({
             whisper: {
               audioFile: audioBlob,
             },
             gpt_model: {
               model: "gpt-4-turbo",
+              max_tokens: 500,
             },
             tts: {
               model: "tts-1",
               voice: "alloy",
+              response_format: "mp3",
+            },
+            system: {
+              sessionId: getConversationResponse.value?.session_id ?? "",
+              globalPrompt: testPrompt,
             },
           })
+
+          const lastResponse = getConversationResponse.value?.conversation_history?.[getConversationResponse.value?.conversation_history?.length - 1]
+
+          if (lastResponse) {
+            const audio = new Audio(`${VITE_API_CORE_URL}${lastResponse.audioUrl}`)
+            audio.play()
+          }
 
           isLoading.value = false
           recordStatus.value = ""
@@ -102,14 +136,6 @@ export default defineComponent({
     const stopRecording = () => {
       if (mediaRecorder && mediaRecorder.state === "recording") {
         mediaRecorder.stop()
-
-        if (mediaStream) {
-          mediaStream.getTracks().forEach((track) => track.stop())
-          mediaStream = null
-          mediaRecorder = null
-        }
-
-        isHold.value = false
       }
     }
 
@@ -123,10 +149,10 @@ export default defineComponent({
     })
 
     return {
+      isSidebarOpen,
       isLoading,
       isHold,
       recordStatus,
-      getWhisperResponse,
       getConversationResponse,
     }
   },

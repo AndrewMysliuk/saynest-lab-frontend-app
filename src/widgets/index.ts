@@ -1,5 +1,5 @@
-import WhisperSendboxWidget from "./WhisperSendboxWidget"
+import ConversationSendboxWidget from "./ConversationSendboxWidget"
 import PromptsSendboxWidget from "./PromptsSendboxWidget"
 import RoomSendboxWidget from "./RoomSendboxWidget"
 
-export { WhisperSendboxWidget, PromptsSendboxWidget, RoomSendboxWidget }
+export { ConversationSendboxWidget, PromptsSendboxWidget, RoomSendboxWidget }

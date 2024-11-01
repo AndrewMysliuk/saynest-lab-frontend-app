@@ -30,9 +30,19 @@ export interface IConversationPayload {
   whisper: IConversationWhisper
   gpt_model: IGPTPayload
   tts: ITTSPayload
+  system: {
+    sessionId?: string
+    globalPrompt: string
+  }
+}
+
+export interface IConversationHistory {
+  role: GPTRoleType
+  content: string
+  audioUrl?: string
 }
 
 export interface IConversationResponse {
-  transcript: string
-  audioUrl: string
+  session_id: string
+  conversation_history: IConversationHistory[]
 }

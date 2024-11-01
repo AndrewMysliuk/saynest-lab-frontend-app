@@ -1,5 +1,5 @@
-import WhisperSendboxPage from "./WhisperSendboxPage"
+import ConversationSendboxPage from "./ConversationSendboxPage"
 import PromptsSendboxPage from "./PromptsSendboxPage"
 import RoomSendboxPage from "./RoomSendboxPage"
 
-export { WhisperSendboxPage, PromptsSendboxPage, RoomSendboxPage }
+export { ConversationSendboxPage, PromptsSendboxPage, RoomSendboxPage }

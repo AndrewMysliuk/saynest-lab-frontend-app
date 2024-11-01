@@ -1,7 +1,7 @@
 <template>
   <div class="room" :class="{ '--sidebar-opened': isSidebarOpen }">
     <transition name="slide-left">
-      <RoomSidebar v-if="isSidebarOpen" :start-timestamp="startTimestamp" @delete-item="deleteConversationItem" />
+      <RoomSidebarSendbox v-if="isSidebarOpen" :start-timestamp="startTimestamp" @delete-item="deleteConversationItem" />
     </transition>
 
     <div class="room__body">
@@ -52,11 +52,11 @@ import { realtimeStore } from "@/app"
 import { WavRecorder, WavStreamPlayer, initializeCanvas } from "@/shared/lib"
 import { testPrompt as instructions } from "@/shared/utils"
 import { IRealtimeEvent } from "@/shared/types"
-import { RoomSidebar } from "./ui"
+import { RoomSidebarSendbox } from "./ui"
 
 export default defineComponent({
   components: {
-    RoomSidebar,
+    RoomSidebarSendbox,
   },
 
   setup() {

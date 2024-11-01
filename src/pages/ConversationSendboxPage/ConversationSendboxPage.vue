@@ -1,14 +1,14 @@
 <template>
-  <WhisperSendboxWidget />
+  <ConversationSendboxWidget />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import { WhisperSendboxWidget } from "@/widgets"
+import { ConversationSendboxWidget } from "@/widgets"
 
 export default defineComponent({
   components: {
-    WhisperSendboxWidget,
+    ConversationSendboxWidget,
   },
 })
 </script>

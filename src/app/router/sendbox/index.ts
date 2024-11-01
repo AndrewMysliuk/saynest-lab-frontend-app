@@ -4,7 +4,7 @@ const sendbox: RouteRecordRaw[] = [
   {
     path: "/sendbox/whisper",
     name: "sendbox.whisper",
-    component: async () => await import("@/pages").then((module) => module.WhisperSendboxPage),
+    component: async () => await import("@/pages").then((module) => module.ConversationSendboxPage),
   },
   {
     path: "/sendbox/prompts",
