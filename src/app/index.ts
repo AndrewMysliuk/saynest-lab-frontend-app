@@ -6,6 +6,7 @@ import App from "./index.vue"
 import "./index.scss"
 
 import { components } from "@/shared/config"
+import { createAudioPlayer } from "@/shared/lib"
 
 export const app = createApp(App)
 
@@ -15,6 +16,9 @@ components.forEach((element) => {
 
 app.use(createPinia())
 app.use(router)
+
+// Audio Player
+export const audioPlayer = createAudioPlayer()
 
 export const sendboxStore = useSendboxStore()
 export const realtimeStore = useRealtimeStore()

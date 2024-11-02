@@ -30,12 +30,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed } from "vue"
-import { sendboxStore } from "@/app"
+import { sendboxStore, audioPlayer } from "@/app"
 import { useMicrophone } from "@/shared/lib"
 import { testPrompt } from "@/shared/utils"
 import { ConversationSidebarSendbox } from "./ui"
-
-const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
 export default defineComponent({
   components: {
@@ -67,6 +65,7 @@ export default defineComponent({
       if (e.code === "Space" && !isHold.value && !isLoading.value) {
         e.preventDefault()
         isHold.value = true
+        audioPlayer.interruptAndClear()
         await startRecording()
       }
     }
@@ -102,7 +101,7 @@ export default defineComponent({
               audioFile: audioBlob,
             },
             gpt_model: {
-              model: "gpt-4-turbo",
+              model: "gpt-4o-mini",
               max_tokens: 500,
             },
             tts: {
@@ -115,13 +114,6 @@ export default defineComponent({
               globalPrompt: testPrompt,
             },
           })
-
-          const lastResponse = getConversationResponse.value?.conversation_history?.[getConversationResponse.value?.conversation_history?.length - 1]
-
-          if (lastResponse) {
-            const audio = new Audio(`${VITE_API_CORE_URL}${lastResponse.audioUrl}`)
-            audio.play()
-          }
 
           isLoading.value = false
           recordStatus.value = ""

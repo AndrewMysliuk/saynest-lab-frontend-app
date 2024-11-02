@@ -1,4 +1,4 @@
-export type GPTModelType = "gpt-4-turbo" | "gpt-4" | "gpt-4o"
+export type GPTModelType = "gpt-4-turbo" | "gpt-4" | "gpt-4o" | "gpt-4o-mini"
 
 export type GPTRoleType = "user" | "system" | "assistant"
 
@@ -34,6 +34,16 @@ export interface IConversationPayload {
     sessionId?: string
     globalPrompt: string
   }
+}
+
+export interface IConversationHistoryGPT {
+  role: GPTRoleType
+  content: string
+}
+
+export interface IConversationHistoryTTS {
+  role: GPTRoleType
+  audioChunk: string
 }
 
 export interface IConversationHistory {
