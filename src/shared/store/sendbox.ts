@@ -21,8 +21,6 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
     ttsResponses.value = []
 
     await conversationMethod(payload, (data) => {
-      console.log(data)
-
       if ("session_id" in data) {
         conversationResponse.value = data as IConversationResponse
       } else if (data.role === "user") {
