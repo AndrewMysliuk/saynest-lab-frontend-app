@@ -1,12 +1,4 @@
-export type GPTModelType = "gpt-4-turbo" | "gpt-4" | "gpt-4o" | "gpt-4o-mini"
-
-export type GPTRoleType = "user" | "system" | "assistant"
-
-export interface IGPTPayload {
-  model: GPTModelType
-  temperature?: number
-  max_tokens?: number
-}
+import { GPTRoleType, IGPTPayload } from "./IGPT"
 
 export type TTSVoiceType = "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer"
 

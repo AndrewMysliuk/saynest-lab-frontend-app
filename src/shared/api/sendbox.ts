@@ -1,4 +1,4 @@
-import { IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IConversationResponse } from "@/shared/types"
+import { IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IConversationResponse, IGPTRequest, IGPTMessage } from "@/shared/types"
 
 export const conversationMethod = async (
   payload: IConversationPayload,
@@ -58,6 +58,43 @@ export const conversationMethod = async (
 
     const fullData: IConversationResponse = JSON.parse(fullResponse.trim())
     return fullData
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
+export const tasksByGptModelMethod = async (payload: IGPTRequest, onData: (data: IGPTMessage) => void): Promise<IGPTMessage> => {
+  try {
+    const response = await fetch("http://localhost:3001/api/gpt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+
+    if (!response.body) {
+      throw new Error("ReadableStream not supported by the response")
+    }
+
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder("utf-8")
+    let fullResponse = ""
+
+    while (true) {
+      const { value, done } = await reader.read()
+      if (done) break
+
+      const chunk = decoder.decode(value, { stream: true })
+      fullResponse += chunk
+
+      const lines = chunk.split("\n").filter((line) => line.trim() !== "")
+      for (const line of lines) {
+        onData({ role: "assistant", content: line })
+      }
+    }
+
+    return { role: "assistant", content: fullResponse.trim() }
   } catch (error: unknown) {
     throw error
   }

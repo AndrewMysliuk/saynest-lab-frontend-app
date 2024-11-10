@@ -2,8 +2,8 @@ import { RouteRecordRaw } from "vue-router"
 
 const sendbox: RouteRecordRaw[] = [
   {
-    path: "/sendbox/whisper",
-    name: "sendbox.whisper",
+    path: "/sendbox/conversation",
+    name: "sendbox.conversation",
     component: async () => await import("@/pages").then((module) => module.ConversationSendboxPage),
   },
   {
@@ -15,6 +15,11 @@ const sendbox: RouteRecordRaw[] = [
     path: "/sendbox/room",
     name: "sendbox.room",
     component: async () => await import("@/pages").then((module) => module.RoomSendboxPage),
+  },
+  {
+    path: "/sendbox/tasks",
+    name: "sendbox.tasks",
+    component: async () => await import("@/pages").then((module) => module.TasksSendboxPage),
   },
 ]
 

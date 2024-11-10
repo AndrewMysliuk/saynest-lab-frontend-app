@@ -1,22 +1,30 @@
 <template>
-  <div class="sendbox__modal">
-    <h3 class="sendbox__modal-title">Prompt Info</h3>
+  <div class="prompt__modal">
+    <h3 class="prompt__modal-title">{{ getSelectedPrompt?.title }}</h3>
     <br /><br />
-    <p class="sendbox__modal-desc">
-      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Provident, odio minima. Labore quae earum accusantium esse perspiciatis, ipsam temporibus similique vitae repudiandae ab, omnis
-      exercitationem? Animi atque perspiciatis illum at.
+    <p class="prompt__modal-desc" v-if="getSelectedPrompt?.description">
+      {{ getSelectedPrompt?.description }}
     </p>
     <br /><br />
-    <router-link :to="{ name: 'sendbox.room' }" class="sendbox__modal-btn">Enter Room</router-link>
+    <!-- <router-link :to="{ name: 'sendbox.room' }" class="prompt__modal-btn">Enter Room</router-link> -->
+    <router-link :to="{ name: 'sendbox.conversation' }" class="prompt__modal-btn">Start Conversation</router-link>
+
+    <br /><br />
+    <router-link :to="{ name: 'sendbox.tasks' }" class="prompt__modal-btn">Tasks</router-link>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { computed, defineComponent } from "vue"
+import { promptStore } from "@/app"
 
 export default defineComponent({
   setup() {
-    return {}
+    const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
+
+    return {
+      getSelectedPrompt,
+    }
   },
 })
 </script>

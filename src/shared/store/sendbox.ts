@@ -1,19 +1,21 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { audioPlayer } from "@/app"
-import { conversationMethod } from "../api"
-import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS } from "../types"
+import { conversationMethod, tasksByGptModelMethod } from "../api"
+import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IGPTRequest, IGPTMessage } from "../types"
 
 export const useSendboxStore = defineStore("sendboxStore", () => {
   const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [] })
   const gptResponses = ref<IConversationHistoryGPT[]>([])
   const ttsResponses = ref<IConversationHistoryTTS[]>([])
   const isLoading = ref<boolean>(false)
+  const gptMessage = ref<IGPTMessage>({ role: "assistant", content: "" } as IGPTMessage)
 
   const getConversationResponse = computed(() => conversationResponse.value)
   const getGptResponses = computed(() => gptResponses.value)
   const getTtsResponses = computed(() => ttsResponses.value)
   const getIsLoading = computed(() => isLoading.value)
+  const getGptMessage = computed(() => gptMessage.value)
 
   const fetchConversation = async (payload: IConversationPayload) => {
     isLoading.value = true
@@ -43,11 +45,28 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
       })
   }
 
+  const fetchTasksByGptModel = async (payload: IGPTRequest) => {
+    isLoading.value = true
+
+    await tasksByGptModelMethod(payload, (data) => data)
+      .then((response: IGPTMessage) => {
+        gptMessage.value = response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+      .finally(() => {
+        isLoading.value = false
+      })
+  }
+
   return {
     getConversationResponse,
     getGptResponses,
     getTtsResponses,
     getIsLoading,
+    getGptMessage,
     fetchConversation,
+    fetchTasksByGptModel,
   }
 })

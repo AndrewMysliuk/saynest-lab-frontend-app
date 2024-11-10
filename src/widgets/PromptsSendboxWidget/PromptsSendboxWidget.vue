@@ -1,10 +1,10 @@
 <template>
-  <div class="sendbox">
+  <div class="prompt">
     <h1>Prompts</h1>
 
-    <div class="sendbox__wrapper">
-      <div class="sendbox__prompt" @click="isPromptModalOpen = true">
-        <h3 class="sendbox__prompt-title">Mock Prompt</h3>
+    <div class="prompt__wrapper">
+      <div class="prompt__card" v-for="prompt in getPromptList" :key="prompt.id" @click="selectPrompt(prompt)">
+        <h3 class="prompt__card-title">{{ prompt?.title }}</h3>
       </div>
     </div>
 
@@ -15,7 +15,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue"
+import { computed, defineComponent, ref } from "vue"
+import { promptStore } from "@/app"
+import { IPrompt } from "@/shared/types"
 import { PromptDetails } from "./ui"
 
 export default defineComponent({
@@ -26,8 +28,17 @@ export default defineComponent({
   setup() {
     const isPromptModalOpen = ref<boolean>(false)
 
+    const getPromptList = computed(() => promptStore.getPromptList)
+
+    const selectPrompt = (prompt: IPrompt) => {
+      promptStore.setPrompt(prompt)
+      isPromptModalOpen.value = true
+    }
+
     return {
       isPromptModalOpen,
+      getPromptList,
+      selectPrompt,
     }
   },
 })

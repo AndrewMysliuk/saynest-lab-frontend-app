@@ -50,7 +50,6 @@ import { defineComponent, ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { RealtimeClient } from "@openai/realtime-api-beta"
 import { realtimeStore } from "@/app"
 import { WavRecorder, WavStreamPlayer, initializeCanvas } from "@/shared/lib"
-import { testPrompt as instructions } from "@/shared/utils"
 import { IRealtimeEvent } from "@/shared/types"
 import { RoomSidebarSendbox } from "./ui"
 
@@ -156,7 +155,7 @@ export default defineComponent({
     }
 
     const initializeRealtimeClient = () => {
-      realtimeClient.updateSession({ instructions })
+      // realtimeClient.updateSession({ instructions })
       realtimeClient.updateSession({ input_audio_transcription: { model: "whisper-1" } })
       realtimeClient.addTool(
         {

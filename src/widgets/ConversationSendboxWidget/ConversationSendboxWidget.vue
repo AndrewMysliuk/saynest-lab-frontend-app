@@ -30,9 +30,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed } from "vue"
-import { sendboxStore, audioPlayer } from "@/app"
+import { sendboxStore, audioPlayer, promptStore } from "@/app"
 import { useMicrophone } from "@/shared/lib"
-import { testPrompt } from "@/shared/utils"
 import { ConversationSidebarSendbox } from "./ui"
 
 export default defineComponent({
@@ -50,6 +49,7 @@ export default defineComponent({
     let audioChunks: BlobPart[] = []
 
     const getConversationResponse = computed(() => sendboxStore.getConversationResponse)
+    const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
 
     onMounted(async () => {
       mediaStream = await useMicrophone()
@@ -111,7 +111,7 @@ export default defineComponent({
             },
             system: {
               sessionId: getConversationResponse.value?.session_id ?? "",
-              globalPrompt: testPrompt,
+              globalPrompt: getSelectedPrompt.value?.prompt,
             },
           })
 

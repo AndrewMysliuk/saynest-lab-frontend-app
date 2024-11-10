@@ -1,7 +1,7 @@
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
-import { useSendboxStore, useRealtimeStore } from "@/shared/store"
+import { useSendboxStore, useRealtimeStore, usePromptStore } from "@/shared/store"
 import App from "./index.vue"
 import "./index.scss"
 
@@ -22,3 +22,4 @@ export const audioPlayer = createAudioPlayer()
 
 export const sendboxStore = useSendboxStore()
 export const realtimeStore = useRealtimeStore()
+export const promptStore = usePromptStore()

@@ -18,7 +18,7 @@ export const routes: RouteRecordRaw[] = [
     component: MainLayout,
 
     redirect: {
-      name: "sendbox.whisper",
+      name: "sendbox.prompts",
     },
 
     // beforeEnter: async (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {},

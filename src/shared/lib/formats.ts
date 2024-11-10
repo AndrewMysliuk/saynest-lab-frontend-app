@@ -19,3 +19,13 @@ export const formatTimeForLogs = (start_time: string, timestamp: string): string
 
   return `${pad(m)}:${pad(s)}.${pad(hs)}`
 }
+
+export const parseData = (input: string) => {
+  return input
+    .split("||")
+    .filter(Boolean)
+    .map((pair) => {
+      const [question, answer] = pair.split("|").map((item) => item.trim().replace(/^"|"$/g, ""))
+      return { question, answer }
+    })
+}
