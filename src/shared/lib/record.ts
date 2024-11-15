@@ -10,7 +10,64 @@ export const useMicrophone = async (): Promise<MediaStream | null> => {
   }
 }
 
-export const initializeCanvas = (clientCanvas: HTMLCanvasElement | null, serverCanvas: HTMLCanvasElement | null, recorder: typeof WavRecorder, streamPlayer: typeof WavStreamPlayer) => {
+const cleanupAudioContext = async (audioContext: AudioContext, mediaStream: MediaStream) => {
+  mediaStream.getTracks().forEach((track) => track.stop())
+
+  if (audioContext && audioContext.state !== "closed") {
+    await audioContext.close()
+  }
+}
+
+export const initializeCanvasForConversation = (canvas: HTMLCanvasElement | null, mediaStream: MediaStream) => {
+  let isLoaded = true
+  const audioContext = new AudioContext()
+  const analyser = audioContext.createAnalyser()
+
+  analyser.fftSize = 512
+  analyser.smoothingTimeConstant = 0.8
+
+  const source = audioContext.createMediaStreamSource(mediaStream)
+  source.connect(analyser)
+
+  const bufferLength = analyser.frequencyBinCount
+  const dataArray = new Float32Array(bufferLength)
+
+  const render = () => {
+    if (!isLoaded || !canvas) return
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    canvas.width = canvas.offsetWidth
+    canvas.height = canvas.offsetHeight
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    analyser.getFloatTimeDomainData(dataArray)
+
+    const barWidth = (canvas.width / bufferLength) * 2.5
+    let x = 0
+
+    for (let i = 0; i < bufferLength; i++) {
+      const amplitude = Math.abs(dataArray[i])
+      const barHeight = amplitude * canvas.height
+
+      ctx.fillStyle = "#4caf50"
+      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight)
+      x += barWidth + 1
+    }
+
+    requestAnimationFrame(render)
+  }
+
+  render()
+
+  return async () => {
+    isLoaded = false
+    await cleanupAudioContext(audioContext, mediaStream)
+  }
+}
+
+export const initializeCanvasForRoom = (clientCanvas: HTMLCanvasElement | null, serverCanvas: HTMLCanvasElement | null, recorder: typeof WavRecorder, streamPlayer: typeof WavStreamPlayer) => {
   let isLoaded = true
 
   const render = () => {
@@ -55,6 +112,7 @@ export const createAudioPlayer = () => {
   let isBufferUpdating = false
 
   const initMediaSource = () => {
+    if (mediaSource) return
     mediaSource = new MediaSource()
     audioElement = new Audio()
     audioElement.src = URL.createObjectURL(mediaSource)
@@ -72,10 +130,6 @@ export const createAudioPlayer = () => {
         })
       }
     })
-
-    audioElement.play().catch((error) => {
-      console.error("Audio playback error:", error)
-    })
   }
 
   const appendToSourceBuffer = () => {
@@ -83,21 +137,30 @@ export const createAudioPlayer = () => {
       const base64Audio = audioQueue.shift()
       if (base64Audio) {
         const binaryString = atob(base64Audio)
-        const len = binaryString.length
-        const audioData = new Uint8Array(len)
-        for (let i = 0; i < len; i++) {
+        const audioData = new Uint8Array(binaryString.length)
+        for (let i = 0; i < binaryString.length; i++) {
           audioData[i] = binaryString.charCodeAt(i)
         }
 
         isBufferUpdating = true
-        sourceBuffer.appendBuffer(audioData)
+        try {
+          sourceBuffer.appendBuffer(audioData)
+
+          if (audioElement && audioElement.paused) {
+            audioElement.play().catch((error) => {
+              console.error("Audio playback error:", error)
+            })
+          }
+        } catch (error) {
+          console.error("Error appending to source buffer:", error)
+        }
       }
     }
   }
 
   const addToQueue = (base64Audio: string) => {
     audioQueue.push(base64Audio)
-    if (!mediaSource) {
+    if (!mediaSource || !audioElement) {
       initMediaSource()
     }
     if (!isBufferUpdating) {
@@ -105,11 +168,12 @@ export const createAudioPlayer = () => {
     }
   }
 
-  const interruptAndClear = () => {
+  const interruptAndClear = async () => {
     if (audioElement) {
       audioElement.pause()
       audioElement.currentTime = 0
     }
+
     audioQueue = []
 
     if (sourceBuffer) {
@@ -122,7 +186,11 @@ export const createAudioPlayer = () => {
       }
     }
 
-    initMediaSource()
+    if (mediaSource) {
+      mediaSource = null
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 50))
   }
 
   return { addToQueue, interruptAndClear }

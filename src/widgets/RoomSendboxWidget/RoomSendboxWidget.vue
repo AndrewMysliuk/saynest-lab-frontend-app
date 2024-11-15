@@ -49,7 +49,7 @@
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { RealtimeClient } from "@openai/realtime-api-beta"
 import { realtimeStore } from "@/app"
-import { WavRecorder, WavStreamPlayer, initializeCanvas } from "@/shared/lib"
+import { WavRecorder, WavStreamPlayer, initializeCanvasForRoom } from "@/shared/lib"
 import { IRealtimeEvent } from "@/shared/types"
 import { RoomSidebarSendbox } from "./ui"
 
@@ -212,7 +212,7 @@ export default defineComponent({
 
     onMounted(() => {
       initializeRealtimeClient()
-      cleanupCanvas = initializeCanvas(clientCanvasRef.value, serverCanvasRef.value, wavRecorder, wavStreamPlayer)
+      cleanupCanvas = initializeCanvasForRoom(clientCanvasRef.value, serverCanvasRef.value, wavRecorder, wavStreamPlayer)
 
       window.addEventListener("keydown", startRecording)
       window.addEventListener("keyup", stopRecording)

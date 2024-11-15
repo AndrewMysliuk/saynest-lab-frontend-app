@@ -23,7 +23,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
     isLoading.value = true
     gptResponses.value = []
     ttsResponses.value = []
-    lastModelFullAnswer.value = ""
+    setLastModelFullAnswer("")
 
     await conversationMethod(payload, async (data) => {
       if ("session_id" in data) {
@@ -33,7 +33,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
       } else if (data.role === "assistant" && "content" in data) {
         gptResponses.value.push(data as IConversationHistoryGPT)
       } else if (data.role === "assistant" && "audioChunk" in data) {
-        lastModelFullAnswer.value = getGptResponses.value[getGptResponses.value.length - 1]?.content
+        setLastModelFullAnswer(getGptResponses.value[getGptResponses.value.length - 1]?.content)
         audioPlayer.addToQueue(data.audioChunk)
         ttsResponses.value.push(data as IConversationHistoryTTS)
       }
@@ -64,6 +64,10 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
       })
   }
 
+  const setLastModelFullAnswer = (value: string) => {
+    lastModelFullAnswer.value = value
+  }
+
   return {
     getConversationResponse,
     getLastModelFullAnswer,
@@ -73,5 +77,6 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
     getGptMessage,
     fetchConversation,
     fetchTasksByGptModel,
+    setLastModelFullAnswer,
   }
 })

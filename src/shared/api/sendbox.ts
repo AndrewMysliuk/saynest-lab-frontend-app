@@ -51,7 +51,7 @@ export const conversationMethod = async (
             onData(ttsResponse)
           }
         } catch (error: unknown) {
-          throw new Error(`Error parsing JSON line: ${error}`)
+          console.error(`Error parsing JSON line: ${error}`)
         }
       }
     }

@@ -32,6 +32,10 @@
         <div class="conversation__info" @click="isModalInfoOpen = true">
           <i class="fa-regular fa-circle-question" />
         </div>
+
+        <div class="conversation__visualization --client">
+          <canvas ref="clientCanvasRef" />
+        </div>
       </div>
     </div>
 
@@ -45,7 +49,7 @@
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick } from "vue"
 import { sendboxStore, audioPlayer, promptStore } from "@/app"
 import { useRouter } from "vue-router"
-import { useMicrophone } from "@/shared/lib"
+import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
 
 export default defineComponent({
@@ -56,6 +60,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
+    const clientCanvasRef = ref<HTMLCanvasElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
     const isSidebarOpen = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
@@ -63,7 +68,7 @@ export default defineComponent({
     let mediaRecorder: MediaRecorder | null = null
     let mediaStream: MediaStream | null = null
     let audioChunks: BlobPart[] = []
-    let recordingStartTime: number | null = null
+    let cleanupCanvas: (() => void) | null = null
 
     const getConversationResponse = computed(() => sendboxStore.getConversationResponse)
     const getLastModelFullAnswer = computed(() => sendboxStore.getLastModelFullAnswer)
@@ -77,42 +82,44 @@ export default defineComponent({
       }
     })
 
-    onMounted(async () => {
-      mediaStream = await useMicrophone()
-
+    onMounted(() => {
       window.addEventListener("keydown", handleKeyDown)
       window.addEventListener("keyup", handleKeyUp)
     })
 
     const handleKeyDown = async (e: KeyboardEvent) => {
-      if (e.code === "Space" && !isHold.value && !isLoading.value && !mediaRecorder) {
+      if (e.code === "Space" && !isHold.value && !isLoading.value) {
         e.preventDefault()
-
         isHold.value = true
-        audioPlayer.interruptAndClear()
+        sendboxStore.setLastModelFullAnswer("")
+        await audioPlayer.interruptAndClear()
         await startRecording()
       }
     }
 
     const handleKeyUp = async (e: KeyboardEvent) => {
-      if (e.code === "Space") {
+      if (e.code === "Space" && isHold.value) {
         e.preventDefault()
-
-        if (isHold.value && !isLoading.value) {
-          await stopRecording()
-        }
-
+        await stopRecording()
         isHold.value = false
       }
     }
 
     const startRecording = async () => {
-      if (mediaRecorder || isLoading.value || !mediaStream) return
+      if (isLoading.value || mediaRecorder) return
 
       try {
-        recordingStartTime = Date.now()
-        mediaRecorder = new MediaRecorder(mediaStream)
+        mediaStream = await useMicrophone()
         audioChunks = []
+        const recordingStartTime = Date.now()
+
+        if (!mediaStream) return
+
+        mediaRecorder = new MediaRecorder(mediaStream, { mimeType: "audio/webm;codecs=opus" })
+
+        if (clientCanvasRef.value) {
+          cleanupCanvas = initializeCanvasForConversation(clientCanvasRef.value, mediaStream)
+        }
 
         mediaRecorder.ondataavailable = (event: BlobEvent) => {
           audioChunks.push(event.data)
@@ -129,50 +136,57 @@ export default defineComponent({
 
           isLoading.value = true
 
-          await sendboxStore.fetchConversation({
-            whisper: {
-              audioFile: audioBlob,
-            },
-            gpt_model: {
-              model: "gpt-4o-mini",
-              max_tokens: 500,
-            },
-            tts: {
-              model: "tts-1",
-              voice: "alloy",
-              response_format: "mp3",
-            },
-            system: {
-              sessionId: getConversationResponse.value?.session_id ?? "",
-              globalPrompt: getSelectedPrompt.value?.prompt,
-            },
-          })
+          try {
+            await sendboxStore.fetchConversation({
+              whisper: { audioFile: audioBlob },
+              gpt_model: { model: "gpt-4o-mini", max_tokens: 500 },
+              tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+              system: {
+                sessionId: getConversationResponse.value?.session_id ?? "",
+                globalPrompt: getSelectedPrompt.value?.prompt,
+              },
+            })
+          } catch (error) {
+            console.error("Error fetching conversation:", error)
+          } finally {
+            isLoading.value = false
+          }
 
-          isLoading.value = false
-          mediaRecorder = null
+          if (cleanupCanvas) await cleanupCanvas()
         }
 
         mediaRecorder.start()
       } catch (error: unknown) {
         console.log(error)
+        if (cleanupCanvas) await cleanupCanvas()
       }
     }
 
-    const stopRecording = () => {
+    const stopRecording = async () => {
       if (mediaRecorder && mediaRecorder.state === "recording") {
         mediaRecorder.stop()
       }
+
+      if (mediaStream) {
+        mediaStream.getTracks().forEach((track) => track.stop())
+        mediaStream = null
+      }
+
+      if (cleanupCanvas) {
+        await cleanupCanvas()
+        cleanupCanvas = null
+      }
+
       mediaRecorder = null
     }
 
-    onBeforeUnmount(() => {
+    onBeforeUnmount(async () => {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
-
-      if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop())
     })
 
     return {
+      clientCanvasRef,
       isModalInfoOpen,
       isSidebarOpen,
       isLoading,
