@@ -1,3 +1,4 @@
 import ConversationSidebarSendbox from "./ConversationSidebarSendbox"
+import InfoModal from "./InfoModal"
 
-export { ConversationSidebarSendbox }
+export { ConversationSidebarSendbox, InfoModal }

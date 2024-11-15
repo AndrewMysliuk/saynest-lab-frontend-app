@@ -2,7 +2,7 @@
 
 .prompt {
   padding: rem(20px);
-  min-height: 100%;
+  min-height: 100vh;
   background-color: #f9f9f9;
   color: #333;
   box-sizing: border-box;
@@ -49,10 +49,10 @@
   &__modal {
     background-color: #ffffff;
     padding: rem(24px);
-    border-radius: rem(8px);
+    border-radius: rem(8px 0 0 8px);
     box-shadow: rem(0px 8px 16px rgba(0, 0, 0, 0.2));
     width: 100%;
-    min-height: 100%;
+    min-height: 100vh;
     color: #333;
     box-sizing: border-box;
 

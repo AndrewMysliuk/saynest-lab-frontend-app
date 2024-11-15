@@ -5,12 +5,6 @@
     <p class="prompt__modal-desc" v-if="getSelectedPrompt?.description">
       {{ getSelectedPrompt?.description }}
     </p>
-    <br /><br />
-    <!-- <router-link :to="{ name: 'sendbox.room' }" class="prompt__modal-btn">Enter Room</router-link> -->
-    <router-link :to="{ name: 'sendbox.conversation' }" class="prompt__modal-btn">Start Conversation</router-link>
-
-    <br /><br />
-    <router-link :to="{ name: 'sendbox.tasks' }" class="prompt__modal-btn">Tasks</router-link>
   </div>
 </template>
 

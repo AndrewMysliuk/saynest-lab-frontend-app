@@ -16,6 +16,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .main-layout {
-  height: 100%;
+  min-height: 100vh;
 }
 </style>

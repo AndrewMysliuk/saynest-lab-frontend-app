@@ -7,36 +7,30 @@
         <h3 class="prompt__card-title">{{ prompt?.title }}</h3>
       </div>
     </div>
-
-    <v-modal v-model="isPromptModalOpen">
-      <PromptDetails />
-    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue"
+import { computed, defineComponent, nextTick } from "vue"
 import { promptStore } from "@/app"
+import { useRouter } from "vue-router"
 import { IPrompt } from "@/shared/types"
-import { PromptDetails } from "./ui"
 
 export default defineComponent({
-  components: {
-    PromptDetails,
-  },
-
   setup() {
-    const isPromptModalOpen = ref<boolean>(false)
+    const router = useRouter()
 
     const getPromptList = computed(() => promptStore.getPromptList)
 
     const selectPrompt = (prompt: IPrompt) => {
       promptStore.setPrompt(prompt)
-      isPromptModalOpen.value = true
+
+      nextTick(() => {
+        router.push({ name: "sendbox.conversation" })
+      })
     }
 
     return {
-      isPromptModalOpen,
       getPromptList,
       selectPrompt,
     }
