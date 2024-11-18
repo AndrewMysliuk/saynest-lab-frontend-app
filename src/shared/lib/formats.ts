@@ -87,3 +87,16 @@ export const parseCorrection = (originalText: string): string => {
 
   return result.trim()
 }
+
+export const parseAnalyserResponseInJsonFormat = async (input: string) => {
+  try {
+    const cleanedInput = input
+      .replace(/```json\s*/, "")
+      .replace(/\s*```$/, "")
+      .replace(/\\"/g, '"')
+
+    return JSON.parse(cleanedInput)
+  } catch (error: unknown) {
+    console.error("Parsing Error:", error)
+  }
+}

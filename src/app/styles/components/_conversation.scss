@@ -86,19 +86,23 @@
     width: rem(600px);
     background-color: rgba(245, 207, 146, 0.2);
     color: #8c5800;
-    border-left: rem(6px solid rgba(255, 169, 31, 0.4));
+    border-left: rem(6px solid #ffa91f);
     box-sizing: border-box;
     padding: rem(12px 16px);
     font-size: rem(24px);
     line-height: rem(32px);
 
+    &.--flexible {
+      width: 100%;
+    }
+
     .--wrong {
-      color: #F55B64;
+      color: #f55b64;
       font-weight: bold;
     }
 
     .--properly {
-      color: #2E9E38;
+      color: #2e9e38;
       font-weight: bold;
     }
   }

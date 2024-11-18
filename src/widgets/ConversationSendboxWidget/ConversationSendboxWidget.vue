@@ -39,7 +39,7 @@
           <canvas ref="clientCanvasRef" />
         </div>
 
-        <div class="conversation__visualization --prompt" v-else-if="!isHold && getConversationResponse?.conversation_history?.length && !isLoading && !getLastModelFullAnswer">
+        <div class="conversation__visualization --prompt" v-else-if="!isHold && getConversationResponse?.conversation_history?.length && !isLoading">
           <p>Press and hold Spacebar to interrupt and start recording</p>
         </div>
       </div>

@@ -24,7 +24,8 @@ export const usePromptStore = defineStore("promptStore", () => {
     {
       id: 4,
       title: "Small Talk Prompt",
-      description: "This AI focuses on engaging users in conversations to improve their English communication skills",
+      description:
+        "This AI is designed to engage users in a relaxed, supportive, and insightful conversation to enhance their English communication skills. It initiates each interaction by asking about the user's language goals, interests, or areas they would like to practice.",
       prompt: smallTalk1Prompt,
     },
   ])
