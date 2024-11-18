@@ -29,3 +29,61 @@ export const parseData = (input: string) => {
       return { question, answer }
     })
 }
+
+export const removeCorrections = (originalText: string): string => {
+  if (!originalText) return ""
+
+  let result = ""
+  let startIndex = 0
+
+  while (true) {
+    const correctionStart = originalText.indexOf("[CORRECTION:", startIndex)
+    if (correctionStart === -1) break
+
+    result += originalText.slice(startIndex, correctionStart)
+
+    const correctionEnd = originalText.indexOf('"]', correctionStart)
+    if (correctionEnd === -1) break
+
+    startIndex = correctionEnd + 2
+  }
+
+  result += originalText.slice(startIndex)
+
+  return result.trim()
+}
+
+const processCorrectionContent = (input: string): string => {
+  const wrongPattern = /\[WRONG:\s*([^\]]+)\]/g
+  const properlyPattern = /\[PROPERLY:\s*([^\]]+)\]/g
+
+  const withWrongSpans = input.replace(wrongPattern, (_, word) => `<span class="--wrong">${word}</span>`)
+  const withProperlySpans = withWrongSpans.replace(properlyPattern, (_, word) => `<span class="--properly">${word}</span>`)
+
+  return withProperlySpans
+}
+
+export const parseCorrection = (originalText: string): string => {
+  if (!originalText) return ""
+
+  let result = ""
+  let startIndex = 0
+
+  while (true) {
+    const correctionStart = originalText.indexOf("[CORRECTION:", startIndex)
+
+    if (correctionStart === -1) break
+
+    const correctionEnd = originalText.indexOf('"]', correctionStart)
+    if (correctionEnd === -1) break
+
+    const correctionContent = originalText.slice(correctionStart + 12, correctionEnd)
+
+    const processedCorrection = processCorrectionContent(correctionContent)
+
+    result += processedCorrection
+    startIndex = correctionEnd + 2
+  }
+
+  return result.trim()
+}

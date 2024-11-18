@@ -11,7 +11,9 @@
         </div>
 
         <div class="conversation__description" v-if="getLastModelFullAnswer && !isHold">
-          <p v-animate-text="getLastModelFullAnswer" />
+          <p v-if="audioElementRef" v-animate-text="{ text: getLastModelFullAnswer }" />
+
+          <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" />
         </div>
 
         <div class="conversation__description" v-else-if="!isLoading && !isHold">
@@ -33,8 +35,12 @@
           <i class="fa-regular fa-circle-question" />
         </div>
 
-        <div class="conversation__visualization --client">
+        <div class="conversation__visualization --client" v-if="isHold">
           <canvas ref="clientCanvasRef" />
+        </div>
+
+        <div class="conversation__visualization --prompt" v-else-if="!isHold && getConversationResponse?.conversation_history?.length && !isLoading && !getLastModelFullAnswer">
+          <p>Press and hold Spacebar to interrupt and start recording</p>
         </div>
       </div>
     </div>
@@ -46,10 +52,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick } from "vue"
+import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
 import { sendboxStore, audioPlayer, promptStore } from "@/app"
 import { useRouter } from "vue-router"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
+import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
 
 export default defineComponent({
@@ -61,6 +68,7 @@ export default defineComponent({
   setup() {
     const router = useRouter()
     const clientCanvasRef = ref<HTMLCanvasElement | null>(null)
+    const audioElementRef = ref<HTMLAudioElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
     const isSidebarOpen = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
@@ -72,13 +80,16 @@ export default defineComponent({
 
     const getConversationResponse = computed(() => sendboxStore.getConversationResponse)
     const getLastModelFullAnswer = computed(() => sendboxStore.getLastModelFullAnswer)
+    const getLastModelTip = computed(() => sendboxStore.getLastModelTip)
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value).length) {
         nextTick(() => {
           router.push({ name: "sendbox.prompts" })
         })
+      } else {
+        await simulateGreeting()
       }
     })
 
@@ -102,6 +113,31 @@ export default defineComponent({
         e.preventDefault()
         await stopRecording()
         isHold.value = false
+      }
+    }
+
+    const simulateGreeting = async () => {
+      try {
+        const response = await fetch(helloRecord)
+        const audioBlob = await response.blob()
+
+        if (!audioBlob) return
+
+        isLoading.value = true
+
+        await sendboxStore.fetchConversation({
+          whisper: { audioFile: audioBlob },
+          gpt_model: { model: "gpt-4o-mini", max_tokens: 500 },
+          tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+          system: {
+            sessionId: getConversationResponse.value?.session_id ?? "",
+            globalPrompt: getSelectedPrompt.value?.prompt,
+          },
+        })
+      } catch (error) {
+        console.error("Error simulating greeting:", error)
+      } finally {
+        isLoading.value = false
       }
     }
 
@@ -180,6 +216,15 @@ export default defineComponent({
       mediaRecorder = null
     }
 
+    watch(
+      () => audioPlayer.audioElement.value,
+      (newElement) => {
+        if (newElement) {
+          audioElementRef.value = newElement
+        }
+      }
+    )
+
     onBeforeUnmount(async () => {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
@@ -187,11 +232,13 @@ export default defineComponent({
 
     return {
       clientCanvasRef,
+      audioElementRef,
       isModalInfoOpen,
       isSidebarOpen,
       isLoading,
       isHold,
       getLastModelFullAnswer,
+      getLastModelTip,
       getConversationResponse,
     }
   },

@@ -1,3 +1,4 @@
+import { ref } from "vue"
 import { WavRenderer } from "../utils"
 
 export const useMicrophone = async (): Promise<MediaStream | null> => {
@@ -107,15 +108,15 @@ export const initializeCanvasForRoom = (clientCanvas: HTMLCanvasElement | null, 
 export const createAudioPlayer = () => {
   let mediaSource: MediaSource | null = null
   let sourceBuffer: SourceBuffer | null = null
-  let audioElement: HTMLAudioElement | null = null
+  const audioElement = ref<HTMLAudioElement | null>(null)
   let audioQueue: Array<string> = []
   let isBufferUpdating = false
 
   const initMediaSource = () => {
     if (mediaSource) return
     mediaSource = new MediaSource()
-    audioElement = new Audio()
-    audioElement.src = URL.createObjectURL(mediaSource)
+    audioElement.value = new Audio()
+    audioElement.value.src = URL.createObjectURL(mediaSource)
 
     mediaSource.addEventListener("sourceopen", () => {
       if (mediaSource && mediaSource.readyState === "open") {
@@ -146,8 +147,8 @@ export const createAudioPlayer = () => {
         try {
           sourceBuffer.appendBuffer(audioData)
 
-          if (audioElement && audioElement.paused) {
-            audioElement.play().catch((error) => {
+          if (audioElement.value && audioElement.value.paused) {
+            audioElement.value.play().catch((error) => {
               console.error("Audio playback error:", error)
             })
           }
@@ -169,9 +170,9 @@ export const createAudioPlayer = () => {
   }
 
   const interruptAndClear = async () => {
-    if (audioElement) {
-      audioElement.pause()
-      audioElement.currentTime = 0
+    if (audioElement.value) {
+      audioElement.value.pause()
+      audioElement.value.currentTime = 0
     }
 
     audioQueue = []
@@ -193,5 +194,5 @@ export const createAudioPlayer = () => {
     await new Promise((resolve) => setTimeout(resolve, 50))
   }
 
-  return { addToQueue, interruptAndClear }
+  return { addToQueue, interruptAndClear, audioElement }
 }

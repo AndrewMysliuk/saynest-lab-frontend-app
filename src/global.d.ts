@@ -8,4 +8,10 @@ declare global {
   var WavRecorder: typeof WavRecorder
 }
 
+declare global {
+  interface HTMLElement {
+    _cleanup?: () => void
+  }
+}
+
 export {}

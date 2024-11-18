@@ -3,10 +3,12 @@ import { defineStore } from "pinia"
 import { audioPlayer } from "@/app"
 import { conversationMethod, tasksByGptModelMethod } from "../api"
 import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IGPTRequest, IGPTMessage } from "../types"
+import { parseCorrection, removeCorrections } from "../lib"
 
 export const useSendboxStore = defineStore("sendboxStore", () => {
   const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [] })
   const lastModelFullAnswer = ref<string>("")
+  const lastModelTip = ref<string>("")
   const gptResponses = ref<IConversationHistoryGPT[]>([])
   const ttsResponses = ref<IConversationHistoryTTS[]>([])
   const isLoading = ref<boolean>(false)
@@ -14,6 +16,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
 
   const getConversationResponse = computed(() => conversationResponse.value)
   const getLastModelFullAnswer = computed(() => lastModelFullAnswer.value)
+  const getLastModelTip = computed(() => lastModelTip.value)
   const getGptResponses = computed(() => gptResponses.value)
   const getTtsResponses = computed(() => ttsResponses.value)
   const getIsLoading = computed(() => isLoading.value)
@@ -65,12 +68,14 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
   }
 
   const setLastModelFullAnswer = (value: string) => {
-    lastModelFullAnswer.value = value
+    lastModelFullAnswer.value = removeCorrections(value)
+    lastModelTip.value = parseCorrection(value)
   }
 
   return {
     getConversationResponse,
     getLastModelFullAnswer,
+    getLastModelTip,
     getGptResponses,
     getTtsResponses,
     getIsLoading,
