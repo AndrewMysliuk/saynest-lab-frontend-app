@@ -10,13 +10,18 @@
   justify-content: center;
 
   &__history,
-  &__info {
+  &__info,
+  &__analyser {
     position: absolute;
     right: 0;
     z-index: 11;
   }
 
   &__history {
+    top: rem(50px);
+  }
+
+  &__analyser {
     top: 0;
   }
 

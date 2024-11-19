@@ -6,6 +6,10 @@
 
     <div class="room__body">
       <div class="conversation">
+        <div class="conversation__analyser" v-if="getConversationResponse?.conversation_history?.length">
+          <v-button label="Analyse Conversation" buttonStyle="action" @click="$router.push({ name: 'sendbox.analyser' })" />
+        </div>
+
         <div class="conversation__history" v-if="getConversationResponse?.conversation_history?.length">
           <v-button label="Toggle History" buttonStyle="regular" @click="isSidebarOpen = !isSidebarOpen" />
         </div>

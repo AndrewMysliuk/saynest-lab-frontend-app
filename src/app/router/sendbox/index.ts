@@ -12,6 +12,11 @@ const sendbox: RouteRecordRaw[] = [
     component: async () => await import("@/pages").then((module) => module.PromptsSendboxPage),
   },
   {
+    path: "/sendbox/analyser",
+    name: "sendbox.analyser",
+    component: async () => await import("@/pages").then((module) => module.AnalyserSendboxPage),
+  },
+  {
     path: "/sendbox/room",
     name: "sendbox.room",
     component: async () => await import("@/pages").then((module) => module.RoomSendboxPage),

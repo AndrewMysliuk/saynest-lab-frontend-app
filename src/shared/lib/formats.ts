@@ -62,7 +62,7 @@ const processCorrectionContent = (input: string): string => {
   const withWrongSpans = input.replace(wrongPattern, (_, word) => `<span class="--wrong">${word}</span>`)
   const withProperlySpans = withWrongSpans.replace(properlyPattern, (_, word) => `<span class="--properly">${word}</span>`)
 
-  return withProperlySpans
+  return withProperlySpans + '"'
 }
 
 export const parseCorrection = (originalText: string): string => {

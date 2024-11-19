@@ -8,7 +8,7 @@ interface ICoherence {
   score: number
   examples: string[]
   suggestions: string[]
-  corrected_sentence?: string[]
+  corrected_sentence?: string
 }
 
 interface IGrammarError {
