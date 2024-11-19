@@ -22,9 +22,11 @@ export default defineComponent({
     const router = useRouter()
 
     const getPromptList = computed(() => promptStore.getPromptList)
+    const getGptAnalyserResult = computed(() => sendboxStore.getGptAnalyserResult)
 
     onBeforeMount(async () => {
-      await conversationAnalyser()
+      // await conversationAnalyser()
+      // console.log(getGptAnalyserResult.value)
     })
 
     const conversationAnalyser = async () => {

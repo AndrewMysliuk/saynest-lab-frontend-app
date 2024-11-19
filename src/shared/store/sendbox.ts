@@ -2,7 +2,7 @@ import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { audioPlayer } from "@/app"
 import { conversationMethod, tasksByGptModelMethod } from "../api"
-import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IGPTRequest, IGPTMessage } from "../types"
+import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IGPTRequest, IGPTMessage, IAnalysisResponse } from "../types"
 import { parseCorrection, removeCorrections, parseAnalyserResponseInJsonFormat } from "../lib"
 
 export const useSendboxStore = defineStore("sendboxStore", () => {
@@ -13,6 +13,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
   const ttsResponses = ref<IConversationHistoryTTS[]>([])
   const isLoading = ref<boolean>(false)
   const gptMessage = ref<IGPTMessage>({ role: "assistant", content: "" } as IGPTMessage)
+  const gptAnalyserResult = ref<IAnalysisResponse>({} as IAnalysisResponse)
 
   const getConversationResponse = computed(() => conversationResponse.value)
   const getLastModelFullAnswer = computed(() => lastModelFullAnswer.value)
@@ -21,6 +22,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
   const getTtsResponses = computed(() => ttsResponses.value)
   const getIsLoading = computed(() => isLoading.value)
   const getGptMessage = computed(() => gptMessage.value)
+  const getGptAnalyserResult = computed(() => gptAnalyserResult.value)
 
   const fetchConversation = async (payload: IConversationPayload) => {
     isLoading.value = true
@@ -57,7 +59,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
 
     await tasksByGptModelMethod(payload, (data) => data)
       .then(async (response: IGPTMessage) => {
-        console.log(await parseAnalyserResponseInJsonFormat(response.content))
+        gptAnalyserResult.value = await parseAnalyserResponseInJsonFormat(response.content)
       })
       .catch((error: unknown) => {
         throw error
@@ -95,6 +97,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
     getTtsResponses,
     getIsLoading,
     getGptMessage,
+    getGptAnalyserResult,
     fetchConversation,
     fetchConversationAnalyserByGptModel,
     fetchTasksByGptModel,

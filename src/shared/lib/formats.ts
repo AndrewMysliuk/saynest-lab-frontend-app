@@ -1,3 +1,5 @@
+import { IAnalysisResponse } from "../types"
+
 // Input: 2023-01-01T00:01:05.340Z
 // Output: 01:05.34
 export const formatTimeForLogs = (start_time: string, timestamp: string): string => {
@@ -88,7 +90,7 @@ export const parseCorrection = (originalText: string): string => {
   return result.trim()
 }
 
-export const parseAnalyserResponseInJsonFormat = async (input: string) => {
+export const parseAnalyserResponseInJsonFormat = async (input: string): Promise<IAnalysisResponse> => {
   try {
     const cleanedInput = input
       .replace(/```json\s*/, "")
@@ -98,5 +100,6 @@ export const parseAnalyserResponseInJsonFormat = async (input: string) => {
     return JSON.parse(cleanedInput)
   } catch (error: unknown) {
     console.error("Parsing Error:", error)
+    return {} as IAnalysisResponse
   }
 }
