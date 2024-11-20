@@ -1,5 +1,7 @@
 import { IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IConversationResponse, IGPTRequest, IGPTMessage } from "@/shared/types"
 
+const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
+
 export const conversationMethod = async (
   payload: IConversationPayload,
   onData: (data: IConversationHistory | IConversationHistoryGPT | IConversationHistoryTTS | IConversationResponse) => void
@@ -12,7 +14,7 @@ export const conversationMethod = async (
     formData.append("tts", JSON.stringify(payload.tts))
     formData.append("system", JSON.stringify(payload.system))
 
-    const response = await fetch("http://localhost:3001/api/conversation", {
+    const response = await fetch(`${VITE_API_CORE_URL}/api/conversation`, {
       method: "POST",
       body: formData,
     })
@@ -65,7 +67,7 @@ export const conversationMethod = async (
 
 export const tasksByGptModelMethod = async (payload: IGPTRequest, onData: (data: IGPTMessage) => void): Promise<IGPTMessage> => {
   try {
-    const response = await fetch("http://localhost:3001/api/gpt", {
+    const response = await fetch(`${VITE_API_CORE_URL}/api/gpt`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
