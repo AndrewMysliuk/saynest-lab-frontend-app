@@ -1,4 +1,4 @@
-IMAGE_NAME=frontend-app
+IMAGE_NAME=openai-speak-mate-frontend
 
 CONTAINER_NAME=frontend-app-container
 
