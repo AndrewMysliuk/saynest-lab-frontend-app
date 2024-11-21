@@ -24,12 +24,10 @@ export default defineConfig({
   },
   server: {
     https: {
-      // key: fs.readFileSync("/Users/andrewmysliuk/server.key"),
-      // cert: fs.readFileSync("/Users/andrewmysliuk/server.crt"),
-      key: fs.readFileSync("/etc/ssl/private/server.key"),
-      cert: fs.readFileSync("/etc/ssl/certs/server.crt"),
+      key: fs.readFileSync("./certs/server.key"),
+      cert: fs.readFileSync("./certs/server.crt"),
     },
-    host: "localhost",
+    host: "0.0.0.0",
     port: 3000,
   },
   resolve: {

@@ -27,11 +27,11 @@ yarn lint
 ### Docker Build And Run
 
 ```
-make build && make run
+make docker_build && make docker_run_local
 ```
 
 ### Docker Stop And Clean
 
 ```
-make stop && make clean
+make stop && make clean_all
 ```

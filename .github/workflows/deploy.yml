@@ -23,8 +23,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no root@209.38.199.61 << 'EOF'
             cd ~/openai-speak-mate-frontend || exit 1
             
-            make stop && make clean
+            make stop && make clean_all
             
             git pull origin master
-            make build && make run
+            make docker_build && make docker_run_server
           EOF
