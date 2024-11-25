@@ -1,3 +1,5 @@
+import { axios } from "../config"
+import { AxiosResponse } from "axios"
 import { IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IConversationResponse, IGPTRequest, IGPTMessage } from "@/shared/types"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
@@ -65,38 +67,29 @@ export const conversationMethod = async (
   }
 }
 
-export const tasksByGptModelMethod = async (payload: IGPTRequest, onData: (data: IGPTMessage) => void): Promise<IGPTMessage> => {
+export const tasksByGptModelMethod = async (payload: IGPTRequest): Promise<IGPTMessage> => {
   try {
-    const response = await fetch(`${VITE_API_CORE_URL}/api/gpt`, {
+    const response: AxiosResponse = await axios({
+      url: "/api/gpt",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+      data: {
+        ...payload,
       },
-      body: JSON.stringify(payload),
     })
 
-    if (!response.body) {
-      throw new Error("ReadableStream not supported by the response")
+    const toolCalls = response.data.choices?.[0]?.message?.tool_calls
+
+    if (!toolCalls || !Array.isArray(toolCalls)) {
+      throw new Error("No tools found in the response")
     }
 
-    const reader = response.body.getReader()
-    const decoder = new TextDecoder("utf-8")
-    let fullResponse = ""
+    const firstTool = toolCalls[0]
+    const argumentsParsed = JSON.parse(firstTool.function.arguments)
 
-    while (true) {
-      const { value, done } = await reader.read()
-      if (done) break
-
-      const chunk = decoder.decode(value, { stream: true })
-      fullResponse += chunk
-
-      const lines = chunk.split("\n").filter((line) => line.trim() !== "")
-      for (const line of lines) {
-        onData({ role: "assistant", content: line })
-      }
+    return {
+      role: "assistant",
+      content: JSON.stringify(argumentsParsed),
     }
-
-    return { role: "assistant", content: fullResponse.trim() }
   } catch (error: unknown) {
     throw error
   }

@@ -2,8 +2,18 @@ import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { audioPlayer } from "@/app"
 import { conversationMethod, tasksByGptModelMethod } from "../api"
-import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IGPTRequest, IGPTMessage, IAnalysisResponse } from "../types"
-import { parseCorrection, removeCorrections, parseAnalyserResponseInJsonFormat } from "../lib"
+import {
+  IConversationResponse,
+  IConversationPayload,
+  IConversationHistory,
+  IConversationHistoryGPT,
+  IConversationHistoryTTS,
+  IGPTRequest,
+  IGPTMessage,
+  IAnalyzedResponse,
+  IAnalysisResult,
+} from "../types"
+import { formatCorrections } from "../lib"
 
 export const useSendboxStore = defineStore("sendboxStore", () => {
   const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [] })
@@ -13,7 +23,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
   const ttsResponses = ref<IConversationHistoryTTS[]>([])
   const isLoading = ref<boolean>(false)
   const gptMessage = ref<IGPTMessage>({ role: "assistant", content: "" } as IGPTMessage)
-  const gptAnalyserResult = ref<IAnalysisResponse>({} as IAnalysisResponse)
+  const gptAnalyserResult = ref<IAnalysisResult>({} as IAnalysisResult)
 
   const getConversationResponse = computed(() => conversationResponse.value)
   const getLastModelFullAnswer = computed(() => lastModelFullAnswer.value)
@@ -55,38 +65,38 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
   }
 
   const fetchConversationAnalyserByGptModel = async (payload: IGPTRequest) => {
-    isLoading.value = true
-
-    await tasksByGptModelMethod(payload, (data) => data)
-      .then(async (response: IGPTMessage) => {
-        gptAnalyserResult.value = await parseAnalyserResponseInJsonFormat(response.content)
+    await tasksByGptModelMethod(payload)
+      .then((response: IGPTMessage) => {
+        const parseResponse = JSON.parse(response.content) as IAnalysisResult
+        gptAnalyserResult.value = parseResponse
       })
       .catch((error: unknown) => {
         throw error
       })
-      .finally(() => {
-        isLoading.value = false
-      })
   }
 
   const fetchTasksByGptModel = async (payload: IGPTRequest) => {
-    isLoading.value = true
-
-    await tasksByGptModelMethod(payload, (data) => data)
+    await tasksByGptModelMethod(payload)
       .then((response: IGPTMessage) => {
         gptMessage.value = response
       })
       .catch((error: unknown) => {
         throw error
       })
-      .finally(() => {
-        isLoading.value = false
-      })
   }
 
   const setLastModelFullAnswer = (value: string) => {
-    lastModelFullAnswer.value = removeCorrections(value)
-    lastModelTip.value = parseCorrection(value)
+    if (!value) {
+      lastModelFullAnswer.value = ""
+      lastModelTip.value = ""
+
+      return
+    }
+
+    const parseResponse = JSON.parse(value) as IAnalyzedResponse
+
+    lastModelFullAnswer.value = parseResponse?.message ?? ""
+    lastModelTip.value = formatCorrections(parseResponse?.corrections) ?? ""
   }
 
   return {

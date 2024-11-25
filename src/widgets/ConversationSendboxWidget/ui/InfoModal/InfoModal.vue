@@ -25,7 +25,8 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue"
 import { promptStore, sendboxStore } from "@/app"
-import { parseCorrection } from "@/shared/lib"
+import { formatCorrections } from "@/shared/lib"
+import { IAnalyzedResponse } from "@/shared/types"
 
 export default defineComponent({
   setup() {
@@ -34,7 +35,10 @@ export default defineComponent({
     const getCorrectionsFromHistory = computed(() =>
       getConversationHistory.value
         .filter((item) => item.role === "assistant")
-        .map((item) => parseCorrection(item.content))
+        .map((item) => {
+          const parseResponse = JSON.parse(item.content) as IAnalyzedResponse
+          return formatCorrections(parseResponse?.corrections) ?? ""
+        })
         .filter((item) => item)
     )
 

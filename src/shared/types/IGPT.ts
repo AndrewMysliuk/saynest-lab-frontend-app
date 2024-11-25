@@ -6,6 +6,7 @@ export interface IGPTPayload {
   model: GPTModelType
   temperature?: number
   max_tokens?: number
+  jsonSchema: object
 }
 
 export interface IGPTMessage {
@@ -18,4 +19,5 @@ export interface IGPTRequest {
   messages: IGPTMessage[]
   temperature?: number
   max_tokens?: number
+  jsonSchema: object
 }

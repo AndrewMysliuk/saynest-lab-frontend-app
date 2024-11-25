@@ -1,7 +1,7 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { IPrompt } from "@/shared/types"
-import { smallTalk1Prompt } from "@/shared/utils"
+import { smallTalk1Prompt, smallTalk1JsonSchema } from "@/shared/utils"
 
 export const usePromptStore = defineStore("promptStore", () => {
   const promptList = ref<IPrompt[]>([
@@ -27,6 +27,7 @@ export const usePromptStore = defineStore("promptStore", () => {
       description:
         "This AI is designed to engage users in a relaxed, supportive, and insightful conversation to enhance their English communication skills. It initiates each interaction by asking about the user's language goals, interests, or areas they would like to practice.",
       prompt: smallTalk1Prompt,
+      jsonSchema: smallTalk1JsonSchema,
     },
   ])
   const selectedPrompt = ref<IPrompt>({} as IPrompt)

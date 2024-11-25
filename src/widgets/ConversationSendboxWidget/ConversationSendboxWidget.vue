@@ -131,7 +131,7 @@ export default defineComponent({
 
         await sendboxStore.fetchConversation({
           whisper: { audioFile: audioBlob },
-          gpt_model: { model: "gpt-4o-mini", max_tokens: 500 },
+          gpt_model: { model: "gpt-4o-mini", max_tokens: 500, jsonSchema: getSelectedPrompt.value?.jsonSchema },
           tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
           system: {
             sessionId: getConversationResponse.value?.session_id ?? "",
@@ -179,7 +179,7 @@ export default defineComponent({
           try {
             await sendboxStore.fetchConversation({
               whisper: { audioFile: audioBlob },
-              gpt_model: { model: "gpt-4o-mini", max_tokens: 500 },
+              gpt_model: { model: "gpt-4o-mini", max_tokens: 500, jsonSchema: getSelectedPrompt.value?.jsonSchema },
               tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
               system: {
                 sessionId: getConversationResponse.value?.session_id ?? "",

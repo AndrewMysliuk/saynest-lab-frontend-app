@@ -27,7 +27,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue"
 import { sendboxStore } from "@/app"
-import { removeCorrections } from "@/shared/lib"
+import { IAnalyzedResponse } from "@/shared/types"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
@@ -36,7 +36,20 @@ export default defineComponent({
     const currenSection = ref<"history">("history")
 
     const getConversationHistory = computed(() => sendboxStore.getConversationResponse?.conversation_history?.filter((item) => item.role !== "system") ?? [])
-    const removeCorrectionsFromHistory = computed(() => getConversationHistory.value.map((item) => (item.role === "assistant" ? { ...item, content: removeCorrections(item.content) } : item)))
+    const removeCorrectionsFromHistory = computed(() =>
+      getConversationHistory.value.map((item) => {
+        if (item.role === "assistant") {
+          const parseResponse = JSON.parse(item.content) as IAnalyzedResponse
+
+          return {
+            ...item,
+            content: parseResponse.message,
+          }
+        }
+
+        return item
+      })
+    )
 
     return {
       currenSection,

@@ -48,3 +48,14 @@ export interface IConversationResponse {
   session_id: string
   conversation_history: IConversationHistory[]
 }
+
+export interface ICorrection {
+  original: string
+  wrong: string
+  properly: string
+}
+
+export interface IAnalyzedResponse {
+  message: string
+  corrections: ICorrection[]
+}

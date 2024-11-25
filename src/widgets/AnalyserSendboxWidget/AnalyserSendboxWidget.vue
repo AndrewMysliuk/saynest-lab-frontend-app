@@ -130,7 +130,7 @@
 import { defineComponent, ref, computed, onBeforeMount, nextTick } from "vue"
 import { useRouter } from "vue-router"
 import { sendboxStore } from "@/app"
-import { analyzeConversationPrompt } from "@/shared/utils"
+import { analyzeConversationPrompt, analyzeConversationJsonSchema } from "@/shared/utils"
 
 export default defineComponent({
   setup() {
@@ -167,6 +167,7 @@ export default defineComponent({
               content: JSON.stringify(getConversationHistory.value),
             },
           ],
+          jsonSchema: analyzeConversationJsonSchema,
         })
       } catch (error: unknown) {
         console.log(error)

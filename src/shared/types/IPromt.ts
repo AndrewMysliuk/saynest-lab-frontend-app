@@ -3,4 +3,5 @@ export interface IPrompt {
   title?: string
   description?: string
   prompt: string
+  jsonSchema: object
 }
