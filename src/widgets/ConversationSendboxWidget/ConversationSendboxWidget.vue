@@ -35,6 +35,10 @@
           <p>Processing your recording...</p>
         </div>
 
+        <div class="conversation__info --left" v-if="!getIsLoading" @click="repeatLastAudio">
+          <i class="fa-solid fa-repeat" />
+        </div>
+
         <div class="conversation__info" @click="isModalInfoOpen = true">
           <i class="fa-regular fa-circle-question" />
         </div>
@@ -82,6 +86,7 @@ export default defineComponent({
     let audioChunks: BlobPart[] = []
     let cleanupCanvas: (() => void) | null = null
 
+    const getIsLoading = computed(() => sendboxStore.getIsLoading)
     const getConversationResponse = computed(() => sendboxStore.getConversationResponse)
     const getLastModelFullAnswer = computed(() => sendboxStore.getLastModelFullAnswer)
     const getLastModelTip = computed(() => sendboxStore.getLastModelTip)
@@ -107,7 +112,7 @@ export default defineComponent({
         e.preventDefault()
         isHold.value = true
         sendboxStore.setLastModelFullAnswer("")
-        await audioPlayer.interruptAndClear()
+        audioPlayer.interruptAndClear()
         await startRecording()
       }
     }
@@ -118,6 +123,14 @@ export default defineComponent({
         await stopRecording()
         isHold.value = false
       }
+    }
+
+    const repeatLastAudio = async () => {
+      if (!audioElementRef.value) return
+
+      audioElementRef.value.pause()
+      audioElementRef.value.currentTime = 0
+      audioElementRef.value.play()
     }
 
     const simulateGreeting = async () => {
@@ -241,9 +254,11 @@ export default defineComponent({
       isSidebarOpen,
       isLoading,
       isHold,
+      getIsLoading,
       getLastModelFullAnswer,
       getLastModelTip,
       getConversationResponse,
+      repeatLastAudio,
     }
   },
 })

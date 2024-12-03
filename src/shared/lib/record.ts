@@ -114,6 +114,7 @@ export const createAudioPlayer = () => {
 
   const initMediaSource = () => {
     if (mediaSource) return
+
     mediaSource = new MediaSource()
     audioElement.value = new Audio()
     audioElement.value.src = URL.createObjectURL(mediaSource)
@@ -161,15 +162,16 @@ export const createAudioPlayer = () => {
 
   const addToQueue = (base64Audio: string) => {
     audioQueue.push(base64Audio)
+
     if (!mediaSource || !audioElement) {
       initMediaSource()
     }
-    if (!isBufferUpdating) {
+    if (!isBufferUpdating && (!sourceBuffer || !sourceBuffer.updating)) {
       appendToSourceBuffer()
     }
   }
 
-  const interruptAndClear = async () => {
+  const interruptAndClear = () => {
     if (audioElement.value) {
       audioElement.value.pause()
       audioElement.value.currentTime = 0
@@ -190,8 +192,6 @@ export const createAudioPlayer = () => {
     if (mediaSource) {
       mediaSource = null
     }
-
-    await new Promise((resolve) => setTimeout(resolve, 50))
   }
 
   return { addToQueue, interruptAndClear, audioElement }

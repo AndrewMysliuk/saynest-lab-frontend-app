@@ -16,16 +16,16 @@ const sendbox: RouteRecordRaw[] = [
     name: "sendbox.analyser",
     component: async () => await import("@/pages").then((module) => module.AnalyserSendboxPage),
   },
-  {
-    path: "/sendbox/room",
-    name: "sendbox.room",
-    component: async () => await import("@/pages").then((module) => module.RoomSendboxPage),
-  },
-  {
-    path: "/sendbox/tasks",
-    name: "sendbox.tasks",
-    component: async () => await import("@/pages").then((module) => module.TasksSendboxPage),
-  },
+  // {
+  //   path: "/sendbox/room",
+  //   name: "sendbox.room",
+  //   component: async () => await import("@/pages").then((module) => module.RoomSendboxPage),
+  // },
+  // {
+  //   path: "/sendbox/tasks",
+  //   name: "sendbox.tasks",
+  //   component: async () => await import("@/pages").then((module) => module.TasksSendboxPage),
+  // },
 ]
 
 export default sendbox

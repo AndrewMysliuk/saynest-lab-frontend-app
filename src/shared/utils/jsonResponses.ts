@@ -172,3 +172,45 @@ export const analyzeConversationJsonSchema = {
   },
   required: ["confidence", "coherence", "grammar", "vocabulary"],
 }
+
+export const ieltsTest1Schema = {
+  type: "object",
+  properties: {
+    part: {
+      type: "string",
+      enum: ["Part 1", "Part 2", "Part 3"],
+      description: "Indicates which part of the IELTS Speaking test the response belongs to.",
+    },
+    question: {
+      type: "string",
+      description: "The exact question or prompt posed by the examiner.",
+    },
+    response: {
+      type: "string",
+      description: "The candidate's response to the given question or prompt.",
+    },
+    notes: {
+      type: "object",
+      properties: {
+        timeTaken: {
+          type: "number",
+          description: "The amount of time (in seconds) the candidate took to respond.",
+        },
+        fluencyScore: {
+          type: "number",
+          minimum: 0,
+          maximum: 9,
+          description: "An optional fluency score based on the candidate's response (0-9 scale).",
+        },
+        coherenceScore: {
+          type: "number",
+          minimum: 0,
+          maximum: 9,
+          description: "An optional coherence score based on the candidate's response (0-9 scale).",
+        },
+      },
+      required: ["timeTaken"],
+    },
+  },
+  required: ["part", "question", "response"],
+}

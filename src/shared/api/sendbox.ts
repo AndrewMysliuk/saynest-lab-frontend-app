@@ -6,7 +6,7 @@ const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
 export const conversationMethod = async (
   payload: IConversationPayload,
-  onData: (data: IConversationHistory | IConversationHistoryGPT | IConversationHistoryTTS | IConversationResponse) => void
+  onData: (data: IConversationHistory | IConversationHistoryGPT | IConversationHistoryTTS) => void
 ): Promise<IConversationResponse> => {
   try {
     const formData = new FormData()
@@ -27,14 +27,13 @@ export const conversationMethod = async (
 
     const reader = response.body.getReader()
     const decoder = new TextDecoder("utf-8")
-    let fullResponse = ""
+    let fullResponse = {} as IConversationResponse
 
     while (true) {
       const { value, done } = await reader.read()
       if (done) break
 
       const chunk = decoder.decode(value, { stream: true })
-      fullResponse += chunk
 
       const lines = chunk.split("\n").filter((line) => line.trim() !== "")
       for (const line of lines) {
@@ -42,9 +41,12 @@ export const conversationMethod = async (
           const parsedData = JSON.parse(line)
 
           if ("session_id" in parsedData) {
-            const fullHistoryData = parsedData as IConversationResponse
-            return fullHistoryData
-          } else if (parsedData.role === "user" && "content" in parsedData) {
+            fullResponse = {
+              ...parsedData,
+            }
+          }
+
+          if (parsedData.role === "user" && "content" in parsedData) {
             const userResponse = parsedData as IConversationHistory
             onData(userResponse)
           } else if (parsedData.role === "assistant" && "content" in parsedData) {
@@ -60,8 +62,7 @@ export const conversationMethod = async (
       }
     }
 
-    const fullData: IConversationResponse = JSON.parse(fullResponse.trim())
-    return fullData
+    return fullResponse
   } catch (error: unknown) {
     throw error
   }

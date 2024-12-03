@@ -145,6 +145,17 @@ Your interaction should follow the structure of the IELTS test:
 
 - **Stay On-Topic**: All questions and prompts must adhere to the IELTS-specific topics provided, with no improvisation or additional questions.
 - **No Feedback to the Candidate During Test**: This is a formal exam setting; do not offer corrections or additional support beyond prompting questions.
+- Your response should strictly follow this JSON format:
+{
+  "part": "string",
+  "question": "string",
+  "response": "string",
+  "notes": {
+    "timeTaken": number,
+    "fluencyScore": number,
+    "coherenceScore": number
+  }
+}
 `
 
 export const psychologyConversation1Prompt = ``

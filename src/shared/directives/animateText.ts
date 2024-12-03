@@ -3,6 +3,8 @@ import { DirectiveBinding, watchEffect } from "vue"
 export const animateTextDirective = {
   mounted(el: HTMLElement, binding: DirectiveBinding<{ text: string }>) {
     const { text } = binding.value
+    const instance = binding.instance as any
+    const audioElementRef = instance?.audioElementRef
     let index = 0
     let animationFrameId: number
 
@@ -32,17 +34,32 @@ export const animateTextDirective = {
       animationFrameId = requestAnimationFrame(animate)
     }
 
-    watchEffect(() => {
-      const instance = binding.instance as any
-      const audioElementRef = instance?.audioElementRef
+    const resetAnimation = (audioElement: HTMLAudioElement) => {
+      if (audioElement.currentTime === 0) {
+        cancelAnimationFrame(animationFrameId)
+        index = 0
+        el.innerHTML = text
+          .split("")
+          .map((char) => `<span class="--gray">${char}</span>`)
+          .join("")
+        updateAnimation(audioElement)
+      }
+    }
 
+    watchEffect(() => {
       if (audioElementRef) {
         updateAnimation(audioElementRef)
+
+        audioElementRef.addEventListener("timeupdate", () => resetAnimation(audioElementRef))
       }
     })
 
     el._cleanup = () => {
       if (animationFrameId) cancelAnimationFrame(animationFrameId)
+
+      if (audioElementRef) {
+        audioElementRef.removeEventListener("timeupdate", () => resetAnimation(audioElementRef))
+      }
     }
   },
 
