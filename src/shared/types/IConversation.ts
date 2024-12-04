@@ -49,10 +49,14 @@ export interface IConversationResponse {
   conversation_history: IConversationHistory[]
 }
 
-export interface ICorrection {
-  original: string
+export interface IVariation {
   wrong: string
   properly: string
+}
+
+export interface ICorrection {
+  original: string
+  variations: IVariation[]
 }
 
 export interface IAnalyzedResponse {

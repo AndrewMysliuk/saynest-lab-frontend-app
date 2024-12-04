@@ -34,6 +34,9 @@ export const parseData = (input: string) => {
 
 export function formatCorrections(corrections: ICorrection[]): string {
   return corrections
-    .map((correction) => correction.original.replace(correction.wrong, `<span class="--wrong">${correction.wrong}</span> -> <span class="--properly">${correction.properly}</span>`))
+    .map((correction) => {
+      const variations = correction.variations.map((variation) => `<span class="--wrong">${variation.wrong}</span> -> <span class="--properly">${variation.properly}</span>`).join(", ")
+      return `<b>Corrections:</b> ${variations}. <b>Original:</b>  <i>${correction.original}</i>`
+    })
     .join("<br>")
 }

@@ -6,8 +6,8 @@
 
     <div class="room__body">
       <div class="conversation">
-        <div class="conversation__analyser" v-if="getConversationResponse?.conversation_history?.length">
-          <v-button label="Analyse Conversation" buttonStyle="action" @click="$router.push({ name: 'sendbox.analyser' })" />
+        <div class="conversation__analyser" v-if="getUserHistory.length > 15">
+          <v-button label="Analyse Conversation" buttonStyle="action" @click="analyseUserConversation" />
         </div>
 
         <div class="conversation__history" v-if="getConversationResponse?.conversation_history?.length">
@@ -88,6 +88,7 @@ export default defineComponent({
 
     const getIsLoading = computed(() => sendboxStore.getIsLoading)
     const getConversationResponse = computed(() => sendboxStore.getConversationResponse)
+    const getUserHistory = computed(() => getConversationResponse.value.conversation_history?.filter((item) => item.role === "user"))
     const getLastModelFullAnswer = computed(() => sendboxStore.getLastModelFullAnswer)
     const getLastModelTip = computed(() => sendboxStore.getLastModelTip)
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
@@ -107,22 +108,17 @@ export default defineComponent({
       window.addEventListener("keyup", handleKeyUp)
     })
 
-    const handleKeyDown = async (e: KeyboardEvent) => {
-      if (e.code === "Space" && !isHold.value && !isLoading.value) {
-        e.preventDefault()
-        isHold.value = true
-        sendboxStore.setLastModelFullAnswer("")
-        audioPlayer.interruptAndClear()
-        await startRecording()
+    const analyseUserConversation = () => {
+      const history = {
+        ...getConversationResponse.value,
+        conversation_history: getConversationResponse.value.conversation_history.filter((item) => item.role !== "system"),
       }
-    }
 
-    const handleKeyUp = async (e: KeyboardEvent) => {
-      if (e.code === "Space" && isHold.value) {
-        e.preventDefault()
-        await stopRecording()
-        isHold.value = false
-      }
+      localStorage.setItem("last_conversation_history", JSON.stringify(history))
+
+      nextTick(() => {
+        router.push({ name: "sendbox.analyser" })
+      })
     }
 
     const repeatLastAudio = async () => {
@@ -155,6 +151,24 @@ export default defineComponent({
         console.error("Error simulating greeting:", error)
       } finally {
         isLoading.value = false
+      }
+    }
+
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      if (e.code === "Space" && !isHold.value && !isLoading.value) {
+        e.preventDefault()
+        isHold.value = true
+        sendboxStore.setLastModelFullAnswer("")
+        audioPlayer.interruptAndClear()
+        await startRecording()
+      }
+    }
+
+    const handleKeyUp = async (e: KeyboardEvent) => {
+      if (e.code === "Space" && isHold.value) {
+        e.preventDefault()
+        await stopRecording()
+        isHold.value = false
       }
     }
 
@@ -255,9 +269,11 @@ export default defineComponent({
       isLoading,
       isHold,
       getIsLoading,
+      getUserHistory,
       getLastModelFullAnswer,
       getLastModelTip,
       getConversationResponse,
+      analyseUserConversation,
       repeatLastAudio,
     }
   },

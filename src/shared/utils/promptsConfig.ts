@@ -23,11 +23,16 @@ Here are your objectives:
   \"corrections\": [
     {
       \"original\": \"Original user sentence here.\",
-      \"wrong\": \"Highlighted incorrect word or phrase here.\",
-      \"properly\": \"Suggested correction here.\"
+      \"variations\": [
+        {
+          \"wrong\": \"Highlighted incorrect word or phrase here.\",
+          \"properly\": \"Suggested correction here.\"
+        }
+      ]
     }
   ]
 }
+
 - \"corrections\" should be an empty array if there are no mistakes in the user's input.
 - Ensure that the JSON is valid and properly formatted. Do not include any additional text outside the JSON response.
 - If there are multiple corrections, list them as separate objects in the \"corrections\" array.

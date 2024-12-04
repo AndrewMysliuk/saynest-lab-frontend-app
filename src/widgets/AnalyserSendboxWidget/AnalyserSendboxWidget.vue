@@ -137,11 +137,10 @@ export default defineComponent({
     const router = useRouter()
     const isLoading = ref<boolean>(true)
 
-    const getConversationHistory = computed(() => sendboxStore.getConversationResponse.conversation_history.filter((item) => item.role !== "system"))
     const getGptAnalyserResult = computed(() => sendboxStore.getGptAnalyserResult)
 
     onBeforeMount(async () => {
-      if (!getConversationHistory.value.length) {
+      if (!localStorage.getItem("last_conversation_history")) {
         nextTick(() => {
           router.push({ name: "sendbox.prompts" })
         })
@@ -156,7 +155,7 @@ export default defineComponent({
 
         await sendboxStore.fetchConversationAnalyserByGptModel({
           model: "gpt-4o-mini",
-          max_tokens: 1000,
+          max_tokens: 10000,
           messages: [
             {
               role: "system",
@@ -164,7 +163,7 @@ export default defineComponent({
             },
             {
               role: "user",
-              content: JSON.stringify(getConversationHistory.value),
+              content: localStorage.getItem("last_conversation_history") ?? "",
             },
           ],
           jsonSchema: analyzeConversationJsonSchema,

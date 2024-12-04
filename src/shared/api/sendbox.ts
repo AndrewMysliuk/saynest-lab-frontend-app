@@ -78,14 +78,13 @@ export const tasksByGptModelMethod = async (payload: IGPTRequest): Promise<IGPTM
       },
     })
 
-    const toolCalls = response.data.choices?.[0]?.message?.tool_calls
+    const toolCalls = response.data.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments ?? ""
 
-    if (!toolCalls || !Array.isArray(toolCalls)) {
+    if (!toolCalls) {
       throw new Error("No tools found in the response")
     }
 
-    const firstTool = toolCalls[0]
-    const argumentsParsed = JSON.parse(firstTool.function.arguments)
+    const argumentsParsed = JSON.parse(toolCalls)
 
     return {
       role: "assistant",

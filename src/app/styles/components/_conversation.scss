@@ -18,11 +18,11 @@
   }
 
   &__history {
-    top: rem(50px);
+    top: 0;
   }
 
   &__analyser {
-    top: 0;
+    top: rem(50px);
   }
 
   &__description {
@@ -49,7 +49,8 @@
       animation: pulse-animation 1s infinite;
     }
 
-    i {
+    .fa-solid,
+    .fa-regular {
       font-size: rem(42px);
     }
 

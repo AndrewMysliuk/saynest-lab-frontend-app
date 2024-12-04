@@ -8,10 +8,19 @@ export const smallTalk1JsonSchema = {
         type: "object",
         properties: {
           original: { type: "string" },
-          wrong: { type: "string" },
-          properly: { type: "string" },
+          variations: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                wrong: { type: "string" },
+                properly: { type: "string" },
+              },
+              required: ["wrong", "properly"],
+            },
+          },
         },
-        required: ["original", "wrong", "properly"],
+        required: ["original", "variations"],
       },
     },
   },
