@@ -52,6 +52,9 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
     await tasksByGptModelMethod(payload)
       .then((response: IGPTMessage) => {
         const parseResponse = JSON.parse(response.content) as IAnalysisResult
+
+        localStorage.setItem("last_saved_analyse", JSON.stringify(parseResponse))
+
         gptAnalyserResult.value = parseResponse
       })
       .catch((error: unknown) => {
@@ -67,6 +70,12 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
       .catch((error: unknown) => {
         throw error
       })
+  }
+
+  const parseLastSavedAnalyse = () => {
+    if (!localStorage.getItem("last_saved_analyse")) return
+
+    gptAnalyserResult.value = JSON.parse(localStorage.getItem("last_saved_analyse") as string)
   }
 
   const setLastModelFullAnswer = (value: string) => {
@@ -94,6 +103,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
     fetchConversation,
     fetchConversationAnalyserByGptModel,
     fetchTasksByGptModel,
+    parseLastSavedAnalyse,
     setLastModelFullAnswer,
   }
 })
