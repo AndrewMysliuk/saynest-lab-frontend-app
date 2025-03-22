@@ -16,6 +16,8 @@ const sendbox: RouteRecordRaw[] = [
     name: "sendbox.analyser",
     component: async () => await import("@/pages").then((module) => module.AnalyserSendboxPage),
   },
+
+  // DEPRECATED OPENAI REALTIME API VERSION
   // {
   //   path: "/sendbox/room",
   //   name: "sendbox.room",

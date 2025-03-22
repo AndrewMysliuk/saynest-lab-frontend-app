@@ -22,7 +22,6 @@ app.use(router)
 
 // Audio Player
 export const audioPlayer = createAudioPlayer()
-
 export const sendboxStore = useSendboxStore()
 export const realtimeStore = useRealtimeStore()
 export const promptStore = usePromptStore()
