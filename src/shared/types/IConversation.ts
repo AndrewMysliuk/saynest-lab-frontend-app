@@ -1,4 +1,5 @@
-import { GPTRoleType, IGPTPayload } from "./IGPT"
+import { IErrorAnalysisEntity } from "./IErrorAnalysis"
+import { GPTRoleType, IGPTPayload, ITextAnalysisResponse } from "./IGPT"
 
 export type TTSVoiceType = "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer"
 
@@ -14,7 +15,7 @@ export interface ITTSPayload {
 }
 
 export interface IConversationWhisper {
-  audioFile: Blob
+  audio_file: Blob
   prompt?: string
 }
 
@@ -23,8 +24,8 @@ export interface IConversationPayload {
   gpt_model: IGPTPayload
   tts: ITTSPayload
   system: {
-    sessionId?: string
-    globalPrompt: string
+    session_id?: string
+    global_prompt: string
   }
 }
 
@@ -35,31 +36,18 @@ export interface IConversationHistoryGPT {
 
 export interface IConversationHistoryTTS {
   role: GPTRoleType
-  audioChunk: string
+  audio_chunk: string
 }
 
 export interface IConversationHistory {
   role: GPTRoleType
   content: string
-  audioUrl?: string
+  audio_url?: string
 }
 
 export interface IConversationResponse {
   session_id: string
   conversation_history: IConversationHistory[]
-}
-
-export interface IVariation {
-  wrong: string
-  properly: string
-}
-
-export interface ICorrection {
-  original: string
-  variations: IVariation[]
-}
-
-export interface IAnalyzedResponse {
-  message: string
-  corrections: ICorrection[]
+  last_model_response: ITextAnalysisResponse
+  error_analyser_response: IErrorAnalysisEntity | null
 }

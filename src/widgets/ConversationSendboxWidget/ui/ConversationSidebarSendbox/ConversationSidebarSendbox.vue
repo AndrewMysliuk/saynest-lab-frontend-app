@@ -7,7 +7,7 @@
     </div>
 
     <div class="room__history" v-if="currenSection === 'history'">
-      <div v-for="(conversationItem, index) in removeCorrectionsFromHistory" :key="index" class="conversation-item">
+      <div v-for="(conversationItem, index) in getConversationHistory" :key="index" class="conversation-item">
         <div :class="['speaker', conversationItem.role || '']">
           <div>{{ conversationItem.role.replace("_", " ") }}</div>
           <!-- <div class="close" @click="deleteConversationItem(conversationItem.id)">Remove</div> -->
@@ -17,7 +17,7 @@
             {{ conversationItem.content }}
           </div>
 
-          <audio v-if="conversationItem.audioUrl" :src="`${VITE_API_CORE_URL}${conversationItem.audioUrl}`" controls />
+          <audio v-if="conversationItem.audio_url" :src="`${VITE_API_CORE_URL}${conversationItem.audio_url}`" controls />
         </div>
       </div>
     </div>
@@ -27,7 +27,6 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue"
 import { sendboxStore } from "@/app"
-import { IAnalyzedResponse } from "@/shared/types"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
@@ -36,24 +35,10 @@ export default defineComponent({
     const currenSection = ref<"history">("history")
 
     const getConversationHistory = computed(() => sendboxStore.getConversationResponse?.conversation_history?.filter((item) => item.role !== "system") ?? [])
-    const removeCorrectionsFromHistory = computed(() =>
-      getConversationHistory.value.map((item) => {
-        if (item.role === "assistant") {
-          const parseResponse = JSON.parse(item.content) as IAnalyzedResponse
-
-          return {
-            ...item,
-            content: parseResponse.message,
-          }
-        }
-
-        return item
-      })
-    )
 
     return {
       currenSection,
-      removeCorrectionsFromHistory,
+      getConversationHistory,
       VITE_API_CORE_URL,
     }
   },

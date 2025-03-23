@@ -10,7 +10,7 @@ export const conversationMethod = async (
 ): Promise<IConversationResponse> => {
   try {
     const formData = new FormData()
-    formData.append("audio", new File([payload.whisper.audioFile], "audio.wav", { type: "audio/wav" }))
+    formData.append("audio", new File([payload.whisper.audio_file], "audio.wav", { type: "audio/wav" }))
     formData.append("whisper", JSON.stringify(payload.whisper))
     formData.append("gpt_model", JSON.stringify(payload.gpt_model))
     formData.append("tts", JSON.stringify(payload.tts))
@@ -52,7 +52,7 @@ export const conversationMethod = async (
           } else if (parsedData.role === "assistant" && "content" in parsedData) {
             const gptResponse = parsedData as IConversationHistoryGPT
             onData(gptResponse)
-          } else if (parsedData.role === "assistant" && "audioChunk" in parsedData) {
+          } else if (parsedData.role === "assistant" && "audio_chunk" in parsedData) {
             const ttsResponse = parsedData as IConversationHistoryTTS
             onData(ttsResponse)
           }

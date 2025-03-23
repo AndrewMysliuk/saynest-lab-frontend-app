@@ -2,11 +2,11 @@ import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { audioPlayer } from "@/app"
 import { conversationMethod, tasksByGptModelMethod } from "../api"
-import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IGPTRequest, IGPTMessage, IAnalyzedResponse, IAnalysisResult } from "../types"
+import { IConversationResponse, IConversationPayload, IConversationHistory, IConversationHistoryGPT, IGPTRequest, IGPTMessage, IAnalysisResult, ITextAnalysisResponse } from "../types"
 import { formatCorrections } from "../lib"
 
 export const useSendboxStore = defineStore("sendboxStore", () => {
-  const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [] })
+  const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [], last_model_response: {} as ITextAnalysisResponse, error_analyser_response: null })
   const lastModelFullAnswer = ref<string>("")
   const lastModelTip = ref<string>("")
   const gptResponses = ref<IConversationHistoryGPT[]>([])
@@ -25,6 +25,7 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
   const fetchConversation = async (payload: IConversationPayload) => {
     isLoading.value = true
     gptResponses.value = []
+    lastModelTip.value = ""
     setLastModelFullAnswer("")
 
     await conversationMethod(payload, async (data) => {
@@ -32,13 +33,17 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
         conversationResponse.value.conversation_history.push(data as IConversationHistory)
       } else if (data.role === "assistant" && "content" in data) {
         gptResponses.value.push(data as IConversationHistoryGPT)
-      } else if (data.role === "assistant" && "audioChunk" in data) {
+      } else if (data.role === "assistant" && "audio_chunk" in data) {
         setLastModelFullAnswer(getGptResponses.value[getGptResponses.value.length - 1]?.content)
-        audioPlayer.addToQueue(data.audioChunk)
+        audioPlayer.addToQueue(data.audio_chunk)
       }
     })
       .then((response: IConversationResponse) => {
         conversationResponse.value = response
+
+        if (response.error_analyser_response) {
+          lastModelTip.value = formatCorrections(response.error_analyser_response)
+        }
       })
       .catch((error: unknown) => {
         throw error
@@ -81,15 +86,10 @@ export const useSendboxStore = defineStore("sendboxStore", () => {
   const setLastModelFullAnswer = (value: string) => {
     if (!value) {
       lastModelFullAnswer.value = ""
-      lastModelTip.value = ""
-
       return
     }
 
-    const parseResponse = JSON.parse(value) as IAnalyzedResponse
-
-    lastModelFullAnswer.value = parseResponse?.message ?? ""
-    lastModelTip.value = formatCorrections(parseResponse?.corrections) ?? ""
+    lastModelFullAnswer.value = value
   }
 
   return {

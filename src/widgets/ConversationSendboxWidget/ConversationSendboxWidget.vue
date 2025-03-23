@@ -6,7 +6,7 @@
 
     <div class="room__body">
       <div class="conversation">
-        <div class="conversation__analyser" v-if="getUserHistory.length > 15">
+        <div class="conversation__analyser" v-if="getUserHistory?.length > 15">
           <v-button label="Analyse Conversation" buttonStyle="action" @click="analyseUserConversation" />
         </div>
 
@@ -94,7 +94,7 @@ export default defineComponent({
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
 
     onBeforeMount(async () => {
-      if (!Object.keys(getSelectedPrompt.value).length) {
+      if (!Object.keys(getSelectedPrompt.value)?.length) {
         nextTick(() => {
           router.push({ name: "sendbox.prompts" })
         })
@@ -139,12 +139,12 @@ export default defineComponent({
         isLoading.value = true
 
         await sendboxStore.fetchConversation({
-          whisper: { audioFile: audioBlob },
-          gpt_model: { model: "gpt-4o-mini", max_tokens: 500, jsonSchema: getSelectedPrompt.value?.jsonSchema },
+          whisper: { audio_file: audioBlob },
+          gpt_model: { model: "gpt-4o-mini", max_tokens: 1500 },
           tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
           system: {
-            sessionId: getConversationResponse.value?.session_id ?? "",
-            globalPrompt: getSelectedPrompt.value?.prompt,
+            session_id: getConversationResponse.value?.session_id ?? "",
+            global_prompt: getSelectedPrompt.value?.prompt,
           },
         })
       } catch (error) {
@@ -205,12 +205,12 @@ export default defineComponent({
 
           try {
             await sendboxStore.fetchConversation({
-              whisper: { audioFile: audioBlob },
-              gpt_model: { model: "gpt-4o-mini", max_tokens: 500, jsonSchema: getSelectedPrompt.value?.jsonSchema },
+              whisper: { audio_file: audioBlob },
+              gpt_model: { model: "gpt-4o-mini", max_tokens: 1500 },
               tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
               system: {
-                sessionId: getConversationResponse.value?.session_id ?? "",
-                globalPrompt: getSelectedPrompt.value?.prompt,
+                session_id: getConversationResponse.value?.session_id ?? "",
+                global_prompt: getSelectedPrompt.value?.prompt,
               },
             })
           } catch (error) {

@@ -6,7 +6,6 @@ export interface IGPTPayload {
   model: GPTModelType
   temperature?: number
   max_tokens?: number
-  jsonSchema: object
 }
 
 export interface IGPTMessage {
@@ -19,5 +18,15 @@ export interface IGPTRequest {
   messages: IGPTMessage[]
   temperature?: number
   max_tokens?: number
-  jsonSchema: object
+}
+
+export interface ITextAnalysisResponse {
+  detected_language: string
+  is_target_language: boolean
+  topic: string
+  subtopics: string[]
+  keywords: string[]
+  sentence_structure: "simple" | "compound" | "complex"
+  comment_to_user?: string
+  reply_to_user: string
 }
