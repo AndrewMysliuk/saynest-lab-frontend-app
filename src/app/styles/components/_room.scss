@@ -196,50 +196,6 @@
     flex-direction: column;
     justify-content: space-between;
   }
-
-  &__title {
-    font-size: rem(40px);
-    text-align: center;
-    font-weight: 600;
-  }
-
-  &__navbar {
-    margin-top: rem(32px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: rem(24px);
-
-    &-wrapper {
-      display: flex;
-      align-items: center;
-      gap: rem(16px);
-    }
-
-    &-switch {
-      width: rem(525px);
-    }
-  }
-
-  &__spacebar {
-    margin: rem(64px);
-    font-size: rem(32px);
-    font-weight: 500;
-    text-align: center;
-  }
-
-  &__visualization {
-    width: 100%;
-
-    &-entry {
-      width: 100%;
-
-      canvas {
-        width: 100%;
-        height: rem(50px);
-      }
-    }
-  }
 }
 
 .slide-left-enter-active,

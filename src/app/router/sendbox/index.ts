@@ -4,30 +4,23 @@ const sendbox: RouteRecordRaw[] = [
   {
     path: "/sendbox/conversation",
     name: "sendbox.conversation",
-    component: async () => await import("@/pages").then((module) => module.ConversationSendboxPage),
+    component: async () => await import("@/pages").then((module) => module.ConversationPageSendbox),
   },
   {
-    path: "/sendbox/prompts",
-    name: "sendbox.prompts",
-    component: async () => await import("@/pages").then((module) => module.PromptsSendboxPage),
+    path: "/sendbox/conversation-dashboard",
+    name: "sendbox.conversation-dashboard",
+    component: async () => await import("@/pages").then((module) => module.ConversationDashboardPageSendbox),
   },
   {
-    path: "/sendbox/analyser",
-    name: "sendbox.analyser",
-    component: async () => await import("@/pages").then((module) => module.AnalyserSendboxPage),
+    path: "/sendbox/scenario-dashboard",
+    name: "sendbox.scenario-dashboard",
+    component: async () => await import("@/pages").then((module) => module.ScenarioDashboardPageSendbox),
   },
-
-  // DEPRECATED OPENAI REALTIME API VERSION
-  // {
-  //   path: "/sendbox/room",
-  //   name: "sendbox.room",
-  //   component: async () => await import("@/pages").then((module) => module.RoomSendboxPage),
-  // },
-  // {
-  //   path: "/sendbox/tasks",
-  //   name: "sendbox.tasks",
-  //   component: async () => await import("@/pages").then((module) => module.TasksSendboxPage),
-  // },
+  {
+    path: "/sendbox/grammar-dashboard",
+    name: "sendbox.grammar-dashboard",
+    component: async () => await import("@/pages").then((module) => module.GrammarDashboardPageSendbox),
+  },
 ]
 
 export default sendbox

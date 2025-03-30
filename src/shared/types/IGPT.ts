@@ -8,18 +8,6 @@ export interface IGPTPayload {
   max_tokens?: number
 }
 
-export interface IGPTMessage {
-  role: GPTRoleType
-  content: string
-}
-
-export interface IGPTRequest {
-  model: GPTModelType
-  messages: IGPTMessage[]
-  temperature?: number
-  max_tokens?: number
-}
-
 export interface ITextAnalysisResponse {
   detected_language: string
   is_target_language: boolean

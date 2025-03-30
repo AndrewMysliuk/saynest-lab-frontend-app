@@ -1,7 +1,6 @@
-import ConversationSendboxWidget from "./ConversationSendboxWidget"
-import PromptsSendboxWidget from "./PromptsSendboxWidget"
-import RoomSendboxWidget from "./RoomSendboxWidget"
-import TasksSendboxWidget from "./TasksSendboxWidget"
-import AnalyserSendboxWidget from "./AnalyserSendboxWidget"
+import ConversationWidgetSendbox from "./Sendbox/ConversationWidget"
+import ConversationDashboardWidgetSendbox from "./Sendbox/ConversationDashboardWidget"
+import ScenarioDashboardWidgetSendbox from "./Sendbox/ScenarioDashboardWidget"
+import GrammarDashboardWidgetSendbox from "./Sendbox/GrammarDashboardWidget"
 
-export { ConversationSendboxWidget, PromptsSendboxWidget, RoomSendboxWidget, TasksSendboxWidget, AnalyserSendboxWidget }
+export { ConversationWidgetSendbox, ConversationDashboardWidgetSendbox, ScenarioDashboardWidgetSendbox, GrammarDashboardWidgetSendbox }

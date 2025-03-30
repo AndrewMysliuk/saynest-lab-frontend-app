@@ -5,24 +5,8 @@ import { smallTalk1Prompt } from "@/shared/utils"
 
 export const usePromptStore = defineStore("promptStore", () => {
   const promptList = ref<IPrompt[]>([
-    // {
-    //   id: 1,
-    //   title: "IELTS Speaking 1 Prompt",
-    //   description: "Lifelong Learning and Adult Development",
-    //   prompt: ieltsTest1Prompt,
-    // },
-    // {
-    //   id: 2,
-    //   title: "Psychology Conversation 1 Prompt",
-    //   prompt: psychologyConversation1Prompt,
-    // },
-    // {
-    //   id: 3,
-    //   title: "Labourer Conversation 1 Prompt",
-    //   prompt: labourerConversation1Prompt,
-    // },
     {
-      id: 4,
+      id: 1,
       title: "Small Talk Prompt",
       description:
         "This AI is designed to engage users in a relaxed, supportive, and insightful conversation to enhance their English communication skills. It initiates each interaction by asking about the user's language goals, interests, or areas they would like to practice.",
