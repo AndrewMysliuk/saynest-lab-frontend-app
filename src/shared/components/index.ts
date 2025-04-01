@@ -1,3 +1,4 @@
 import TheHeader from "./TheHeader"
+import TaskSelect from "./TaskSelect"
 
-export { TheHeader }
+export { TheHeader, TaskSelect }

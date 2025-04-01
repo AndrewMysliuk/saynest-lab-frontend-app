@@ -12,7 +12,10 @@
       </aside>
       <main class="dashboard__grammar-content">
         <div class="dashboard__topic" v-if="getSelectedTopic && Object.keys(getSelectedTopic).length">
-          <h2 class="dashboard__topic-title">{{ getSelectedTopic.title }}</h2>
+          <div class="dashboard__topic-header">
+            <h2 class="dashboard__topic-title">{{ getSelectedTopic.title }}</h2>
+            <v-button label="Practice by Topic" buttonStyle="info" @click="isTaskModalOpen = true" />
+          </div>
 
           <p class="dashboard__topic-description">
             {{ getSelectedTopic.description["uk"] }}
@@ -62,16 +65,27 @@
         </div>
       </main>
     </div>
+
+    <v-modal v-model="isTaskModalOpen">
+      <TaskSelect />
+    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, ref } from "vue"
 import { languageTheoryStore } from "@/app"
+import { TaskSelect } from "@/shared/components"
 import { ILanguageTopic } from "@/shared/types"
-import { computed, defineComponent, onBeforeMount } from "vue"
 
 export default defineComponent({
+  components: {
+    TaskSelect,
+  },
+
   setup() {
+    const isTaskModalOpen = ref<boolean>(false)
+
     const getLanguageByTheory = computed(() => languageTheoryStore.getLanguageByTheory)
     const getSelectedTopic = computed(() => languageTheoryStore.getSelectedTopic)
 
@@ -89,6 +103,7 @@ export default defineComponent({
     }
 
     return {
+      isTaskModalOpen,
       getLanguageByTheory,
       getSelectedTopic,
       selectTopic,

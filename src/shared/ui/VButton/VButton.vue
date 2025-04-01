@@ -17,7 +17,7 @@ export default defineComponent({
     },
 
     buttonStyle: {
-      type: String as PropType<"regular" | "action" | "alert" | "flush">,
+      type: String as PropType<"regular" | "action" | "alert" | "flush" | "info">,
       default: "regular",
     },
 
