@@ -19,7 +19,7 @@ export default defineComponent({
     const tabList = ref<IHeaderTabs[]>([
       { label: "Conversation", router: { name: "sendbox.conversation-dashboard" } },
       { label: "Speaking Scenario", router: { name: "sendbox.scenario-dashboard" } },
-      { label: "Grammar / Vocabulary Practice", router: { name: "sendbox.grammar-dashboard" } },
+      { label: "Grammar Practice", router: { name: "sendbox.grammar-dashboard" } },
     ])
 
     return {

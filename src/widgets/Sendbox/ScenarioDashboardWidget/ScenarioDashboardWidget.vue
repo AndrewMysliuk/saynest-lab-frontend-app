@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    ScenarioDashboardWidgetSendbox
+    <h1>Speaking Scenario</h1>
 
     <br />
 
