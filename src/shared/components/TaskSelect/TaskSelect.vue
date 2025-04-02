@@ -20,7 +20,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue"
-import { TaskModeEnum } from "@/shared/types"
+import { TaskModeEnum, TaskTypeEnum } from "@/shared/types"
+import { taskGeneratorStore } from "@/app"
+import { useRouter } from "vue-router"
 
 const taskOptions = {
   FILL_BLANK: [TaskModeEnum.WRITE, TaskModeEnum.SELECT],
@@ -33,7 +35,15 @@ const taskOptions = {
 }
 
 export default defineComponent({
-  setup() {
+  props: {
+    topicTitle: {
+      type: String,
+      default: "",
+    },
+  },
+
+  setup(props, { emit }) {
+    const router = useRouter()
     const selectedType = ref<keyof typeof taskOptions | null>(null)
     const selectedModes = ref<TaskModeEnum[]>([])
 
@@ -46,8 +56,28 @@ export default defineComponent({
       }
     }
 
-    const onSelect = (type: string, mode: TaskModeEnum) => {
-      console.log("SELECTED:", { type, mode })
+    const onSelect = async (type: string, mode: TaskModeEnum) => {
+      try {
+        taskGeneratorStore.generateTask({
+          user_id: "01fbe55b-9784-4fc9-90ff-3695d836cc2e",
+          organization_id: "01fbe55b-9784-4fc9-90ff-3695d836cc2e",
+          gpt_payload: {
+            model: "gpt-4o-mini",
+          },
+          type: TaskTypeEnum[type as keyof typeof TaskTypeEnum],
+          mode,
+          sentence_count: 10,
+          topic_titles: props.topicTitle ? [props.topicTitle] : [],
+          language: "Bulgarian",
+          native_language: "Ukrainian",
+        })
+
+        emit("close")
+
+        router.push({ name: "sendbox.task-practice" })
+      } catch (error: unknown) {
+        console.log(error)
+      }
     }
 
     const formatEnum = (str: string) => {

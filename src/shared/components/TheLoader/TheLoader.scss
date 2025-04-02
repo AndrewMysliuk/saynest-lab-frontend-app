@@ -1,0 +1,17 @@
+@use "../../../app/styles/common/mixins" as *;
+
+.loader {
+  width: rem(40px);
+  height: rem(40px);
+  border: rem(4px solid rgba(0, 0, 0, 0.1));
+  border-top-color: #6c5ce7;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

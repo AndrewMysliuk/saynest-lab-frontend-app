@@ -67,7 +67,7 @@
     </div>
 
     <v-modal v-model="isTaskModalOpen">
-      <TaskSelect />
+      <TaskSelect :topic-title="getSelectedTopic?.title" @close="isTaskModalOpen = false" />
     </v-modal>
   </div>
 </template>

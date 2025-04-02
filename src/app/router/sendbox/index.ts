@@ -21,6 +21,12 @@ const sendbox: RouteRecordRaw[] = [
     name: "sendbox.grammar-dashboard",
     component: async () => await import("@/pages").then((module) => module.GrammarDashboardPageSendbox),
   },
+
+  {
+    path: "/sendbox/task-practice",
+    name: "sendbox.task-practice",
+    component: async () => await import("@/pages").then((module) => module.TaskPracticePageSendbox),
+  },
 ]
 
 export default sendbox
