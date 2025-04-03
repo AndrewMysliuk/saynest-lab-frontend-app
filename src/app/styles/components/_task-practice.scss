@@ -14,6 +14,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    gap: rem(48px);
 
     &-header {
       flex-shrink: 0;
@@ -78,5 +79,122 @@
   &__result {
     font-size: 1rem;
     color: #333;
+  }
+}
+
+// CORRECT_SENTENCE
+.correct-sentence-task {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+
+  &__item {
+    flex: 1 1 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+
+  &__title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+  }
+
+  &__sentence {
+    font-style: italic;
+    margin-bottom: 16px;
+    font-size: 16px;
+  }
+
+  &__input-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  &__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+  }
+
+  &__input {
+    margin-top: 4px;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #4a90e2;
+    }
+
+    &--correct {
+      border-color: #28a745;
+      background-color: #e6f9eb;
+    }
+
+    &--incorrect {
+      border-color: #dc3545;
+      background-color: #fbeaea;
+    }
+  }
+
+  &__button {
+    align-self: flex-start;
+    padding: 8px 14px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #3a78c2;
+    }
+  }
+
+  &__feedback {
+    margin-top: 12px;
+    padding: 10px;
+    background-color: #eef6ff;
+    border-left: 4px solid #4a90e2;
+    border-radius: 6px;
+    font-size: 14px;
+
+    code {
+      background-color: #e1ecf9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+  }
+
+  &__check-all {
+    width: 100%;
+    margin-top: 24px;
+    padding: 10px 16px;
+    background-color: #28a745;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #218838;
+    }
   }
 }

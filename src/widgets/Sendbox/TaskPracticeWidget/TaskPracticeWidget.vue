@@ -9,15 +9,13 @@
 
       <CorrectSentence v-if="getCurrentTask.type === TaskTypeEnum.CORRECT_SENTENCE" />
 
-      <FreeAnswer v-if="getCurrentTask.type === TaskTypeEnum.FREE_ANSWER" />
+      <!-- <ListenAndType v-if="getCurrentTask.type === TaskTypeEnum.LISTEN_AND_TYPE" /> -->
 
-      <ListenAndType v-if="getCurrentTask.type === TaskTypeEnum.LISTEN_AND_TYPE" />
+      <!-- <MatchTranslation v-if="getCurrentTask.type === TaskTypeEnum.MATCH_TRANSLATION" /> -->
 
-      <MatchTranslation v-if="getCurrentTask.type === TaskTypeEnum.MATCH_TRANSLATION" />
+      <!-- <MultipleChoice v-if="getCurrentTask.type === TaskTypeEnum.MULTIPLE_CHOICE" /> -->
 
-      <MultipleChoice v-if="getCurrentTask.type === TaskTypeEnum.MULTIPLE_CHOICE" />
-
-      <ReorderWords v-if="getCurrentTask.type === TaskTypeEnum.REORDER_WORDS" />
+      <!-- <ReorderWords v-if="getCurrentTask.type === TaskTypeEnum.REORDER_WORDS" /> -->
 
       <div class="task-practice__content-header">
         <v-button label="Regenerate Task" buttonStyle="info" @click="regenerateTask" />
@@ -36,7 +34,11 @@ import { computed, defineComponent, onBeforeMount, ref } from "vue"
 import { taskGeneratorStore } from "@/app"
 import { TheLoader, TaskSelect } from "@/shared/components"
 import { TaskTypeEnum } from "@/shared/types"
-import { FillBlank, CorrectSentence, FreeAnswer, ListenAndType, MatchTranslation, MultipleChoice, ReorderWords } from "./ui"
+import {
+  FillBlank,
+  CorrectSentence,
+  // ListenAndType, MatchTranslation, MultipleChoice, ReorderWords
+} from "./ui"
 
 export default defineComponent({
   components: {
@@ -44,11 +46,10 @@ export default defineComponent({
     TaskSelect,
     FillBlank,
     CorrectSentence,
-    FreeAnswer,
-    ListenAndType,
-    MatchTranslation,
-    MultipleChoice,
-    ReorderWords,
+    // ListenAndType,
+    // MatchTranslation,
+    // MultipleChoice,
+    // ReorderWords,
   },
 
   setup() {
