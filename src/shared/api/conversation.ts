@@ -1,11 +1,8 @@
-import { IConversationPayload, IConversationHistory, IConversationHistoryGPT, IConversationHistoryTTS, IConversationResponse } from "@/shared/types"
+import { IConversationPayload, IConversationResponse, ConversationStreamEvent, StreamEventEnum } from "@/shared/types"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
-export const createConversationHandler = async (
-  payload: IConversationPayload,
-  onData: (data: IConversationHistory | IConversationHistoryGPT | IConversationHistoryTTS) => void
-): Promise<IConversationResponse> => {
+export const createConversationHandler = async (payload: IConversationPayload, onData: (data: ConversationStreamEvent) => void): Promise<IConversationResponse> => {
   try {
     const formData = new FormData()
     formData.append("audio", new File([payload.whisper.audio_file], "audio.wav", { type: "audio/wav" }))
@@ -20,44 +17,49 @@ export const createConversationHandler = async (
     })
 
     if (!response.body) {
-      throw new Error("ReadableStream not supported by the response")
+      throw new Error("ReadableStream not supported")
     }
 
     const reader = response.body.getReader()
     const decoder = new TextDecoder("utf-8")
-    let fullResponse = {} as IConversationResponse
+    let buffer = ""
+    let fullResponse: IConversationResponse | null = null
 
     while (true) {
       const { value, done } = await reader.read()
       if (done) break
 
-      const chunk = decoder.decode(value, { stream: true })
+      buffer += decoder.decode(value, { stream: true })
 
-      const lines = chunk.split("\n").filter((line) => line.trim() !== "")
+      const lines = buffer.split("\n")
+      buffer = lines.pop() || ""
+
       for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed) continue
+
         try {
-          const parsedData = JSON.parse(line)
+          const parsed = JSON.parse(trimmed)
 
-          if ("session_id" in parsedData) {
-            fullResponse = {
-              ...parsedData,
-            }
+          if (parsed.type === StreamEventEnum.COMPLETE) {
+            fullResponse = parsed
+            continue
           }
 
-          if (parsedData.role === "user" && "content" in parsedData) {
-            const userResponse = parsedData as IConversationHistory
-            onData(userResponse)
-          } else if (parsedData.role === "assistant" && "content" in parsedData) {
-            const gptResponse = parsedData as IConversationHistoryGPT
-            onData(gptResponse)
-          } else if (parsedData.role === "assistant" && "audio_chunk" in parsedData) {
-            const ttsResponse = parsedData as IConversationHistoryTTS
-            onData(ttsResponse)
+          if (parsed.type === StreamEventEnum.ERROR) {
+            onData({ type: StreamEventEnum.ERROR, role: "system", content: `AI Error: ${parsed.text}` })
+            continue
           }
-        } catch (error: unknown) {
-          console.error(`Error parsing JSON line: ${error}`)
+
+          onData(parsed)
+        } catch (err) {
+          throw new Error(`Stream parse error: ${err}, \nRaw line: ${line}`)
         }
       }
+    }
+
+    if (!fullResponse) {
+      throw new Error("Missing final response")
     }
 
     return fullResponse

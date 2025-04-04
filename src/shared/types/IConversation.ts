@@ -29,20 +29,50 @@ export interface IConversationPayload {
   }
 }
 
-export interface IConversationHistoryGPT {
-  role: GPTRoleType
+export enum StreamEventEnum {
+  TRANSCRIPTION = "TRANSCRIPTION",
+  GPT_RESPONSE = "GPT_RESPONSE",
+  TTS_CHUNK = "TTS_CHUNK",
+  ERROR = "ERROR",
+  COMPLETE = "COMPLETE",
+}
+
+export interface IHistoryStreamEvent {
+  type: StreamEventEnum.TRANSCRIPTION
+  role: "user"
+  content: string
+  audio_url: string
+}
+
+export interface IGptResponseStreamEvent {
+  type: StreamEventEnum.GPT_RESPONSE
+  role: "assistant"
   content: string
 }
 
-export interface IConversationHistoryTTS {
-  role: GPTRoleType
-  audio_chunk: string
+export interface ITtsChunkStreamEvent {
+  type: StreamEventEnum.TTS_CHUNK
+  role: "assistant"
+  audioChunk: string
 }
 
+export interface IErrorStreamEvent {
+  type: StreamEventEnum.ERROR
+  role: "system"
+  content: string
+}
+
+export type ConversationShortResponse = IGptResponseStreamEvent | IHistoryStreamEvent
+
+export type ConversationStreamEvent = IHistoryStreamEvent | IGptResponseStreamEvent | ITtsChunkStreamEvent | IErrorStreamEvent
+
 export interface IConversationHistory {
+  session_id: string
+  pair_id: string
   role: GPTRoleType
   content: string
   audio_url?: string
+  created_at: Date
 }
 
 export interface IConversationResponse {

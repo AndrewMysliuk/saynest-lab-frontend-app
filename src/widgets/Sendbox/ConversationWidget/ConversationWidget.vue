@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <v-modal v-model="isModalInfoOpen">
+    <v-modal v-model="isModalInfoOpen" is-curtain>
       <InfoModal />
     </v-modal>
   </div>
