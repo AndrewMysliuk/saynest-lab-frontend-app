@@ -26,11 +26,10 @@ import { useRouter } from "vue-router"
 
 const taskOptions = {
   FILL_BLANK: [TaskModeEnum.WRITE, TaskModeEnum.SELECT],
-  MATCH_TRANSLATION: [TaskModeEnum.SELECT, TaskModeEnum.DRAG_AND_DROP],
+  MATCH_TRANSLATION: [TaskModeEnum.SELECT],
   REORDER_WORDS: [TaskModeEnum.DRAG_AND_DROP, TaskModeEnum.SELECT],
   MULTIPLE_CHOICE: [TaskModeEnum.CHECKBOX_MULTIPLE],
-  CORRECT_SENTENCE: [TaskModeEnum.WRITE],
-  FREE_ANSWER: [TaskModeEnum.WRITE],
+  CORRECT_SENTENCE: [TaskModeEnum.SELECT],
   LISTEN_AND_TYPE: [TaskModeEnum.LISTEN_AND_WRITE],
 }
 
@@ -104,8 +103,6 @@ export default defineComponent({
           return "❓"
         case "CORRECT_SENTENCE":
           return "✅"
-        case "FREE_ANSWER":
-          return "🗣️"
         case "LISTEN_AND_TYPE":
           return "🎧"
         default:
