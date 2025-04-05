@@ -4,5 +4,6 @@ import { useScenarioSimulationStore } from "./scenario_simulation"
 import { useLanguageTheoryStore } from "./language_theory"
 import { usePromptStore } from "./prompt"
 import { useErrorAnalysisStore } from "./error_analysis"
+import { useVocabularyTrackerStore } from "./vocabulary_tracker"
 
-export { useConversationStore, usePromptStore, useTaskGeneratorStore, useScenarioSimulationStore, useLanguageTheoryStore, useErrorAnalysisStore }
+export { useConversationStore, usePromptStore, useTaskGeneratorStore, useScenarioSimulationStore, useLanguageTheoryStore, useErrorAnalysisStore, useVocabularyTrackerStore }

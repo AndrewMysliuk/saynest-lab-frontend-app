@@ -1,8 +1,8 @@
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
-import { useConversationStore, usePromptStore, useTaskGeneratorStore, useScenarioSimulationStore, useLanguageTheoryStore, useErrorAnalysisStore } from "@/shared/store"
-import { animateTextDirective } from "@/shared/directives"
+import { useConversationStore, usePromptStore, useTaskGeneratorStore, useScenarioSimulationStore, useLanguageTheoryStore, useErrorAnalysisStore, useVocabularyTrackerStore } from "@/shared/store"
+import { animateTextDirective, wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
 
@@ -12,6 +12,7 @@ import { createAudioPlayer } from "@/shared/lib"
 export const app = createApp(App)
 
 app.directive("animate-text", animateTextDirective)
+app.directive("word-click", wordClickDirective)
 
 components.forEach((element) => {
   app.component(element.name as string, element)
@@ -28,3 +29,4 @@ export const scenarioSimulationStore = useScenarioSimulationStore()
 export const languageTheoryStore = useLanguageTheoryStore()
 export const promptStore = usePromptStore()
 export const errorAnalysisStore = useErrorAnalysisStore()
+export const vocabularyTrackerStore = useVocabularyTrackerStore()
