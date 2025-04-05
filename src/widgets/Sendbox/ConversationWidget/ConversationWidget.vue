@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore } from "@/app"
+import { conversationStore, audioPlayer, promptStore, errorAnalysisStore } from "@/app"
 import { useRouter } from "vue-router"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import helloRecord from "@/shared/assets/records/hello_record.wav"
@@ -90,7 +90,7 @@ export default defineComponent({
     const getConversationResponse = computed(() => conversationStore.getConversationResponse)
     const getUserHistory = computed(() => getConversationResponse.value.conversation_history?.filter((item) => item.role === "user"))
     const getLastModelFullAnswer = computed(() => conversationStore.getLastModelFullAnswer)
-    const getLastModelTip = computed(() => conversationStore.getLastModelTip)
+    const getLastModelTip = computed(() => errorAnalysisStore.getLastModelTip)
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
 
     onBeforeMount(async () => {
@@ -116,9 +116,7 @@ export default defineComponent({
 
       localStorage.setItem("last_conversation_history", JSON.stringify(history))
 
-      nextTick(() => {
-        router.push({ name: "sendbox.analyser" })
-      })
+      // TODO
     }
 
     const repeatLastAudio = async () => {
@@ -204,6 +202,8 @@ export default defineComponent({
           isLoading.value = true
 
           try {
+            errorAnalysisStore.resetLastModelTip()
+
             await conversationStore.fetchConversation({
               whisper: { audio_file: audioBlob },
               gpt_model: { model: "gpt-4o-mini", max_tokens: 1500 },
@@ -212,6 +212,15 @@ export default defineComponent({
                 session_id: getConversationResponse.value?.session_id ?? "",
                 global_prompt: getSelectedPrompt.value?.prompt,
               },
+            })
+
+            await errorAnalysisStore.fetchErrorAnalysis({
+              gpt_payload: {
+                model: "gpt-4o-mini",
+                max_tokens: 1500,
+                messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
+              },
+              session_id: getConversationResponse.value?.session_id ?? "",
             })
           } catch (error) {
             console.error("Error fetching conversation:", error)

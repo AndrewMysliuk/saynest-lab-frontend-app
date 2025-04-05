@@ -24,10 +24,12 @@
   }
 
   &.--is-curtain {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: rem(720px);
+    .v-modal__content {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: rem(720px);
+    }
   }
 
   &__background {

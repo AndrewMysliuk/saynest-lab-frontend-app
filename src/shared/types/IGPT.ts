@@ -6,6 +6,7 @@ export interface IGPTPayload {
   model: GPTModelType
   temperature?: number
   max_tokens?: number
+  messages?: Array<{ role: GPTRoleType; content: string }>
 }
 
 export interface ITextAnalysisResponse {

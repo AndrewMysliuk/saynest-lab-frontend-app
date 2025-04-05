@@ -34,7 +34,16 @@ export default defineComponent({
   setup() {
     const currenSection = ref<"history">("history")
 
-    const getConversationHistory = computed(() => conversationStore.getConversationResponse?.conversation_history?.filter((item) => item.role !== "system") ?? [])
+    const getConversationHistory = computed(() => {
+      const history = conversationStore.getConversationResponse?.conversation_history ?? []
+      const firstUserIndex = history.findIndex((item) => item.role === "user")
+
+      return history.filter((item, index) => {
+        const isSystem = item.role === "system"
+        const isFirstUser = index === firstUserIndex && item.role === "user"
+        return !isSystem && !isFirstUser
+      })
+    })
 
     return {
       currenSection,

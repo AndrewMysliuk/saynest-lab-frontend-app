@@ -5,6 +5,10 @@
     <div class="dashboard__wrapper">
       <div class="dashboard__card" v-for="prompt in getPromptList" :key="prompt.id" @click="selectPrompt(prompt)">
         <h3 class="dashboard__card-title">{{ prompt?.title }}</h3>
+
+        <br />
+
+        <p class="dashboard__card-description">{{ prompt.description }}</p>
       </div>
     </div>
   </div>

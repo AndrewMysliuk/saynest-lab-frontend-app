@@ -1,7 +1,7 @@
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
-import { useConversationStore, usePromptStore, useTaskGeneratorStore, useScenarioSimulationStore, useLanguageTheoryStore } from "@/shared/store"
+import { useConversationStore, usePromptStore, useTaskGeneratorStore, useScenarioSimulationStore, useLanguageTheoryStore, useErrorAnalysisStore } from "@/shared/store"
 import { animateTextDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
@@ -27,3 +27,4 @@ export const taskGeneratorStore = useTaskGeneratorStore()
 export const scenarioSimulationStore = useScenarioSimulationStore()
 export const languageTheoryStore = useLanguageTheoryStore()
 export const promptStore = usePromptStore()
+export const errorAnalysisStore = useErrorAnalysisStore()

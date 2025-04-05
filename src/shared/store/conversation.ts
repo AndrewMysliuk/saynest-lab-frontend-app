@@ -3,25 +3,21 @@ import { defineStore } from "pinia"
 import { audioPlayer } from "@/app"
 import { createConversationHandler } from "../api"
 import { IConversationResponse, IConversationPayload, ITextAnalysisResponse, StreamEventEnum, ConversationShortResponse } from "../types"
-import { formatCorrections } from "../lib"
 
 export const useConversationStore = defineStore("conversationStore", () => {
-  const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [], last_model_response: {} as ITextAnalysisResponse, error_analyser_response: null })
+  const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [], last_model_response: {} as ITextAnalysisResponse })
   const lastModelFullAnswer = ref<string>("")
-  const lastModelTip = ref<string>("")
   const gptResponses = ref<ConversationShortResponse[]>([])
   const isLoading = ref<boolean>(false)
 
   const getConversationResponse = computed(() => conversationResponse.value)
   const getLastModelFullAnswer = computed(() => lastModelFullAnswer.value)
-  const getLastModelTip = computed(() => lastModelTip.value)
   const getGptResponses = computed(() => gptResponses.value)
   const getIsLoading = computed(() => isLoading.value)
 
   const fetchConversation = async (payload: IConversationPayload) => {
     isLoading.value = true
     gptResponses.value = []
-    lastModelTip.value = ""
     setLastModelFullAnswer("")
 
     await createConversationHandler(payload, (data) => {
@@ -43,10 +39,6 @@ export const useConversationStore = defineStore("conversationStore", () => {
     })
       .then((response: IConversationResponse) => {
         conversationResponse.value = response
-
-        if (response.error_analyser_response) {
-          lastModelTip.value = formatCorrections(response.error_analyser_response)
-        }
       })
       .catch((error: unknown) => {
         throw error
@@ -68,7 +60,6 @@ export const useConversationStore = defineStore("conversationStore", () => {
   return {
     getConversationResponse,
     getLastModelFullAnswer,
-    getLastModelTip,
     getGptResponses,
     getIsLoading,
     fetchConversation,

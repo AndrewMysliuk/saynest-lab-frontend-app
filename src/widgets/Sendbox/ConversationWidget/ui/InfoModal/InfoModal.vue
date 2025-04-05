@@ -11,27 +11,30 @@
 
       <br /><br />
 
-      <!-- <div v-if="getCorrectionsFromHistory.length">
+      <div v-if="getModelTips.length">
         <h4>Helpful Tips</h4>
 
-        <div class="prompt__modal-separator" v-for="(item, index) in getCorrectionsFromHistory" :key="index">
+        <div class="prompt__modal-separator" v-for="(item, index) in getModelTips" :key="index">
           <div class="conversation__warning --flexible" v-html="item" />
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
-import { promptStore } from "@/app"
+import { promptStore, errorAnalysisStore } from "@/app"
 
 export default defineComponent({
   setup() {
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
 
+    const getModelTips = computed(() => errorAnalysisStore.getModelTips)
+
     return {
       getSelectedPrompt,
+      getModelTips,
     }
   },
 })
