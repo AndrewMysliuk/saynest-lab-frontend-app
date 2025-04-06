@@ -15,7 +15,8 @@
         </div>
 
         <div class="conversation__description" v-if="getLastModelFullAnswer && !isHold">
-          <p v-if="audioElementRef" v-animate-text="{ text: getLastModelFullAnswer }" />
+          <!-- <p v-if="audioElementRef" v-animate-text="{ text: getLastModelFullAnswer }" /> -->
+          <p v-word-click="handleWordClick">{{ getLastModelFullAnswer }}</p>
 
           <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" />
         </div>
@@ -53,6 +54,8 @@
       </div>
     </div>
 
+    <TheWordTooltip :language="tooltip.language" :translation-language="tooltip.translation_language" :word="tooltip.word" :position="tooltip.position" :show="tooltip.show" @close="hideTooltip" />
+
     <v-modal v-model="isModalInfoOpen" is-curtain>
       <InfoModal />
     </v-modal>
@@ -63,14 +66,17 @@
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
 import { conversationStore, audioPlayer, promptStore, errorAnalysisStore } from "@/app"
 import { useRouter } from "vue-router"
+import { TheWordTooltip } from "@/shared/components"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
+import { ITooltip } from "@/shared/types"
 
 export default defineComponent({
   components: {
     ConversationSidebarSendbox,
     InfoModal,
+    TheWordTooltip,
   },
 
   setup() {
@@ -85,6 +91,13 @@ export default defineComponent({
     let mediaStream: MediaStream | null = null
     let audioChunks: BlobPart[] = []
     let cleanupCanvas: (() => void) | null = null
+    const tooltip = ref<ITooltip>({
+      show: false,
+      language: "en",
+      translation_language: "uk",
+      word: "",
+      position: { x: 0, y: 0 },
+    })
 
     const getIsLoading = computed(() => conversationStore.getIsLoading)
     const getConversationResponse = computed(() => conversationStore.getConversationResponse)
@@ -256,6 +269,26 @@ export default defineComponent({
       mediaRecorder = null
     }
 
+    const hideTooltip = () => {
+      tooltip.value.show = false
+    }
+
+    const handleWordClick = (word: string, event: MouseEvent) => {
+      tooltip.value.show = false
+
+      setTimeout(() => {
+        tooltip.value = {
+          ...tooltip.value,
+          show: true,
+          word,
+          position: {
+            x: event.clientX + window.scrollX,
+            y: event.clientY + window.scrollY + 20,
+          },
+        }
+      }, 10)
+    }
+
     watch(
       () => audioPlayer.audioElement.value,
       (newElement) => {
@@ -271,6 +304,7 @@ export default defineComponent({
     })
 
     return {
+      tooltip,
       clientCanvasRef,
       audioElementRef,
       isModalInfoOpen,
@@ -282,6 +316,8 @@ export default defineComponent({
       getLastModelFullAnswer,
       getLastModelTip,
       getConversationResponse,
+      hideTooltip,
+      handleWordClick,
       analyseUserConversation,
       repeatLastAudio,
     }
