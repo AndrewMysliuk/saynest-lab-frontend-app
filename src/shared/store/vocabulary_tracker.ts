@@ -1,14 +1,16 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { IVocabularyJSONEntry, IWordExplanationRequest } from "../types"
-import { wordAudioHandler, wordExplanationHandler, wordsListHandler } from "../api"
+import { ISearchSynonymsRequest, IVocabularyJSONEntry, IWordExplanationRequest } from "../types"
+import { searchWordsSynonymsHandler, wordAudioHandler, wordExplanationHandler, wordsListHandler } from "../api"
 
 export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", () => {
   const wordsList = ref<IVocabularyJSONEntry[]>([])
   const currentWord = ref<IVocabularyJSONEntry | null>(null)
+  const recomendedWords = ref<IVocabularyJSONEntry[]>([])
 
   const getWordsList = computed(() => wordsList.value)
   const getCurrentWord = computed(() => currentWord.value)
+  const getRecomendedWords = computed(() => recomendedWords.value)
 
   const fetchWordsList = async () => {
     await wordsListHandler()
@@ -45,11 +47,24 @@ export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", (
       })
   }
 
+  const fetchWordsSynonyms = async (payload: ISearchSynonymsRequest) => {
+    await searchWordsSynonymsHandler(payload)
+      .then((response: IVocabularyJSONEntry[]) => {
+        const newWords = response.filter((item) => !recomendedWords.value.some((entry) => entry.word.toLowerCase() === item.word.toLowerCase()))
+        recomendedWords.value = [...recomendedWords.value, ...newWords]
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
   return {
     getWordsList,
     getCurrentWord,
+    getRecomendedWords,
     fetchWordsList,
     fetchWordExplanation,
     fetchWordAudio,
+    fetchWordsSynonyms,
   }
 })

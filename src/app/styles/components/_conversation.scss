@@ -32,6 +32,10 @@
     flex-direction: column;
     gap: rem(12px);
 
+    &.--cursor {
+      cursor: pointer;
+    }
+
     .--black {
       color: #000;
       transition: color 0.3s ease;

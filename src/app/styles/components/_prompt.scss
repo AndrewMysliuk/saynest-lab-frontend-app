@@ -55,5 +55,41 @@
       padding: rem(0 48px);
       margin-top: rem(24px);
     }
+
+    &-word {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background-color: #f4faff;
+      border: 1px solid #b3e5fc;
+
+      p {
+        margin: 0.3rem 0;
+      }
+    }
+
+    &-meaning {
+      margin-top: 1rem;
+      padding: 0.8rem;
+      background-color: #ffffff;
+      border-radius: 6px;
+      border-left: 4px solid #81d4fa;
+    }
+
+    &-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    &-synonym {
+      background-color: #e0f7fa;
+      color: #0277bd;
+      padding: 0.3rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
   }
 }

@@ -14,7 +14,7 @@
           <v-button label="Toggle History" buttonStyle="regular" @click="isSidebarOpen = !isSidebarOpen" />
         </div>
 
-        <div class="conversation__description" v-if="getLastModelFullAnswer && !isHold">
+        <div class="conversation__description --cursor" v-if="getLastModelFullAnswer && !isHold">
           <!-- <p v-if="audioElementRef" v-animate-text="{ text: getLastModelFullAnswer }" /> -->
           <p v-word-click="handleWordClick">{{ getLastModelFullAnswer }}</p>
 
@@ -64,13 +64,15 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore, errorAnalysisStore } from "@/app"
+import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, vocabularyTrackerStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip } from "@/shared/components"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
 import { ITooltip } from "@/shared/types"
+
+const VOCABULARY_INTERVAL = 60000
 
 export default defineComponent({
   components: {
@@ -81,6 +83,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
+    let intervalId: ReturnType<typeof setInterval> | null = null
     const clientCanvasRef = ref<HTMLCanvasElement | null>(null)
     const audioElementRef = ref<HTMLAudioElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
@@ -120,6 +123,22 @@ export default defineComponent({
       window.addEventListener("keydown", handleKeyDown)
       window.addEventListener("keyup", handleKeyUp)
     })
+
+    const vocabularySynonymSearcher = async () => {
+      try {
+        await vocabularyTrackerStore.fetchWordsSynonyms({
+          payload: {
+            model: "gpt-4o-mini",
+            max_tokens: 1500,
+            messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
+          },
+          language: "en",
+          translation_language: "uk",
+        })
+      } catch (error) {
+        console.error("Error simulating greeting:", error)
+      }
+    }
 
     const analyseUserConversation = () => {
       const history = {
@@ -235,6 +254,10 @@ export default defineComponent({
               },
               session_id: getConversationResponse.value?.session_id ?? "",
             })
+
+            intervalId = setInterval(() => {
+              vocabularySynonymSearcher()
+            }, VOCABULARY_INTERVAL)
           } catch (error) {
             console.error("Error fetching conversation:", error)
           } finally {
@@ -301,6 +324,11 @@ export default defineComponent({
     onBeforeUnmount(async () => {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
+
+      if (intervalId) {
+        clearInterval(intervalId)
+        intervalId = null
+      }
     })
 
     return {
