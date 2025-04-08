@@ -1,12 +1,12 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { ISearchSynonymsRequest, IVocabularyJSONEntry, IWordExplanationRequest } from "../types"
+import { ISearchSynonymsRequest, IVocabularyEntity, IWordExplanationRequest } from "../types"
 import { searchWordsSynonymsHandler, wordAudioHandler, wordExplanationHandler, wordsListHandler } from "../api"
 
 export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", () => {
-  const wordsList = ref<IVocabularyJSONEntry[]>([])
-  const currentWord = ref<IVocabularyJSONEntry | null>(null)
-  const recomendedWords = ref<IVocabularyJSONEntry[]>([])
+  const wordsList = ref<IVocabularyEntity[]>([])
+  const currentWord = ref<IVocabularyEntity | null>(null)
+  const recomendedWords = ref<IVocabularyEntity[]>([])
 
   const getWordsList = computed(() => wordsList.value)
   const getCurrentWord = computed(() => currentWord.value)
@@ -14,7 +14,7 @@ export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", (
 
   const fetchWordsList = async () => {
     await wordsListHandler()
-      .then((response: IVocabularyJSONEntry[]) => {
+      .then((response: IVocabularyEntity[]) => {
         wordsList.value = response
       })
       .catch((error: unknown) => {
@@ -23,9 +23,18 @@ export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", (
   }
 
   const fetchWordExplanation = async (payload: IWordExplanationRequest) => {
+    const existing = wordsList.value.find((item) => item.word.toLowerCase() === payload.word.toLowerCase())
+
+    if (existing) {
+      currentWord.value = existing
+      return existing
+    }
+
     await wordExplanationHandler(payload)
-      .then((response: IVocabularyJSONEntry) => {
+      .then((response: IVocabularyEntity) => {
         currentWord.value = response
+
+        wordsList.value.push(response)
       })
       .catch((error: unknown) => {
         throw error
@@ -33,6 +42,10 @@ export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", (
   }
 
   const fetchWordAudio = async (payload: IWordExplanationRequest) => {
+    if (currentWord.value?.audio_base64) {
+      return
+    }
+
     await wordAudioHandler(payload)
       .then((response: string) => {
         if (currentWord.value) {
@@ -40,6 +53,8 @@ export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", (
             ...currentWord.value,
             audio_base64: response,
           }
+
+          wordsList.value = wordsList.value.map((item) => (item._id === currentWord.value?._id ? { ...item, audio_base64: response } : item))
         }
       })
       .catch((error: unknown) => {
@@ -49,7 +64,7 @@ export const useVocabularyTrackerStore = defineStore("vocabularyTrackerStore", (
 
   const fetchWordsSynonyms = async (payload: ISearchSynonymsRequest) => {
     await searchWordsSynonymsHandler(payload)
-      .then((response: IVocabularyJSONEntry[]) => {
+      .then((response: IVocabularyEntity[]) => {
         const newWords = response.filter((item) => !recomendedWords.value.some((entry) => entry.word.toLowerCase() === item.word.toLowerCase()))
         recomendedWords.value = [...recomendedWords.value, ...newWords]
       })

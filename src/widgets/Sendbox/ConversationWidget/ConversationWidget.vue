@@ -132,6 +132,7 @@ export default defineComponent({
             max_tokens: 1500,
             messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
           },
+          session_id: getConversationResponse.value?.session_id ?? "",
           language: "en",
           translation_language: "uk",
         })

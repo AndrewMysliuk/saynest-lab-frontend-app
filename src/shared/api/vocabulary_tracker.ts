@@ -1,8 +1,8 @@
 import { axios } from "../config"
 import { AxiosResponse } from "axios"
-import { IWordExplanationRequest, IVocabularyJSONEntry, ISearchSynonymsRequest } from "../types"
+import { IWordExplanationRequest, IVocabularyEntity, ISearchSynonymsRequest } from "../types"
 
-export const wordExplanationHandler = async (payload: IWordExplanationRequest): Promise<IVocabularyJSONEntry> => {
+export const wordExplanationHandler = async (payload: IWordExplanationRequest): Promise<IVocabularyEntity> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/vocabulary-tracker/explanation",
@@ -12,7 +12,7 @@ export const wordExplanationHandler = async (payload: IWordExplanationRequest): 
       },
     })
 
-    const { data }: { data: IVocabularyJSONEntry } = response
+    const { data }: { data: IVocabularyEntity } = response
 
     return data
   } catch (error: unknown) {
@@ -38,14 +38,14 @@ export const wordAudioHandler = async (payload: IWordExplanationRequest): Promis
   }
 }
 
-export const wordsListHandler = async (): Promise<IVocabularyJSONEntry[]> => {
+export const wordsListHandler = async (): Promise<IVocabularyEntity[]> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/vocabulary-tracker",
       method: "GET",
     })
 
-    const { data }: { data: IVocabularyJSONEntry[] } = response
+    const { data }: { data: IVocabularyEntity[] } = response
 
     return data
   } catch (error: unknown) {
@@ -53,7 +53,7 @@ export const wordsListHandler = async (): Promise<IVocabularyJSONEntry[]> => {
   }
 }
 
-export const searchWordsSynonymsHandler = async (payload: ISearchSynonymsRequest): Promise<IVocabularyJSONEntry[]> => {
+export const searchWordsSynonymsHandler = async (payload: ISearchSynonymsRequest): Promise<IVocabularyEntity[]> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/vocabulary-tracker/search-synonyms",
@@ -63,7 +63,7 @@ export const searchWordsSynonymsHandler = async (payload: ISearchSynonymsRequest
       },
     })
 
-    const { data }: { data: IVocabularyJSONEntry[] } = response
+    const { data }: { data: IVocabularyEntity[] } = response
 
     return data
   } catch (error: unknown) {

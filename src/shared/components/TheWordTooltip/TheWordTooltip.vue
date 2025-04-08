@@ -28,7 +28,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch, onBeforeUnmount, PropType, CSSProperties, computed } from "vue"
 import { ITooltipPosition } from "@/shared/types"
-import { vocabularyTrackerStore } from "@/app"
+import { conversationStore, vocabularyTrackerStore } from "@/app"
 
 export default defineComponent({
   props: {
@@ -69,6 +69,7 @@ export default defineComponent({
     })
 
     const getCurrentWord = computed(() => vocabularyTrackerStore.getCurrentWord)
+    const getConversationResponse = computed(() => conversationStore.getConversationResponse)
 
     const cancelHide = () => {
       if (hideTimeout.value) {
@@ -97,6 +98,7 @@ export default defineComponent({
     const fetchWordAudio = async () => {
       try {
         await vocabularyTrackerStore.fetchWordAudio({
+          session_id: getConversationResponse.value?.session_id ?? "",
           word: props.word,
           language: props.language,
           translation_language: props.translationLanguage,
@@ -115,6 +117,7 @@ export default defineComponent({
         isLoading.value = true
 
         await vocabularyTrackerStore.fetchWordExplanation({
+          session_id: getConversationResponse.value?.session_id ?? "",
           word: props.word,
           language: props.language,
           translation_language: props.translationLanguage,

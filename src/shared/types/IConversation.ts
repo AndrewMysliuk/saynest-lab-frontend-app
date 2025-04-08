@@ -71,6 +71,7 @@ export interface IConversationHistory {
   role: GPTRoleType
   content: string
   audio_url?: string
+  updated_at: Date
   created_at: Date
 }
 
