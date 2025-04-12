@@ -27,6 +27,12 @@ const sendbox: RouteRecordRaw[] = [
     name: "sendbox.task-practice",
     component: async () => await import("@/pages").then((module) => module.TaskPracticePageSendbox),
   },
+
+  {
+    path: "/sendbox/conversation-history",
+    name: "sendbox.conversation-history",
+    component: async () => await import("@/pages").then((module) => module.ConversationHistoryPageSendbox),
+  },
 ]
 
 export default sendbox

@@ -1,7 +1,16 @@
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
-import { useConversationStore, usePromptStore, useTaskGeneratorStore, useScenarioSimulationStore, useLanguageTheoryStore, useErrorAnalysisStore, useVocabularyTrackerStore } from "@/shared/store"
+import {
+  useConversationStore,
+  usePromptStore,
+  useTaskGeneratorStore,
+  useScenarioSimulationStore,
+  useLanguageTheoryStore,
+  useErrorAnalysisStore,
+  useVocabularyTrackerStore,
+  useCommunicationReviewStore,
+} from "@/shared/store"
 import { animateTextDirective, wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
@@ -30,3 +39,4 @@ export const languageTheoryStore = useLanguageTheoryStore()
 export const promptStore = usePromptStore()
 export const errorAnalysisStore = useErrorAnalysisStore()
 export const vocabularyTrackerStore = useVocabularyTrackerStore()
+export const communicationReviewStore = useCommunicationReviewStore()

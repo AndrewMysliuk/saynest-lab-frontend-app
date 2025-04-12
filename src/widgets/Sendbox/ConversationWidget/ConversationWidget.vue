@@ -5,8 +5,8 @@
     </transition>
 
     <div class="room__body">
-      <div class="conversation">
-        <div class="conversation__analyser" v-if="getUserHistory?.length > 15">
+      <div class="conversation" v-if="!isReviewGenerating">
+        <div class="conversation__analyser" v-if="getUserHistory?.length > 10">
           <v-button label="Analyse Conversation" buttonStyle="action" @click="analyseUserConversation" />
         </div>
 
@@ -52,6 +52,13 @@
           <p>Press and hold Spacebar to interrupt and start recording</p>
         </div>
       </div>
+
+      <div class="conversation" v-else>
+        <div class="conversation__description">
+          <span class="--pulse" />
+          <p>Review Generation In Progress...</p>
+        </div>
+      </div>
     </div>
 
     <TheWordTooltip :language="tooltip.language" :translation-language="tooltip.translation_language" :word="tooltip.word" :position="tooltip.position" :show="tooltip.show" @close="hideTooltip" />
@@ -64,7 +71,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, vocabularyTrackerStore } from "@/app"
+import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, vocabularyTrackerStore, communicationReviewStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip } from "@/shared/components"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
@@ -72,7 +79,7 @@ import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
 import { ITooltip } from "@/shared/types"
 
-const VOCABULARY_INTERVAL = 60000
+const VOCABULARY_INTERVAL = 60000 * 3
 
 export default defineComponent({
   components: {
@@ -88,6 +95,7 @@ export default defineComponent({
     const audioElementRef = ref<HTMLAudioElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
     const isSidebarOpen = ref<boolean>(false)
+    const isReviewGenerating = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     const isHold = ref<boolean>(false)
     let mediaRecorder: MediaRecorder | null = null
@@ -141,15 +149,30 @@ export default defineComponent({
       }
     }
 
-    const analyseUserConversation = () => {
-      const history = {
-        ...getConversationResponse.value,
-        conversation_history: getConversationResponse.value.conversation_history.filter((item) => item.role !== "system"),
+    const analyseUserConversation = async () => {
+      if (getConversationResponse.value) {
+        try {
+          isReviewGenerating.value = true
+
+          if (intervalId) {
+            clearInterval(intervalId)
+            intervalId = null
+          }
+
+          await communicationReviewStore.generateConversationReview({
+            session_id: getConversationResponse.value.session_id,
+            topic_title: getSelectedPrompt.value.title ?? "",
+            language: "en",
+            user_language: "ru",
+          })
+
+          router.push({ name: "sendbox.conversation-history" })
+        } catch (error) {
+          console.error("Error analysing user conversation:", error)
+        } finally {
+          isReviewGenerating.value = false
+        }
       }
-
-      localStorage.setItem("last_conversation_history", JSON.stringify(history))
-
-      // TODO
     }
 
     const repeatLastAudio = async () => {
@@ -340,6 +363,7 @@ export default defineComponent({
       isSidebarOpen,
       isLoading,
       isHold,
+      isReviewGenerating,
       getIsLoading,
       getUserHistory,
       getLastModelFullAnswer,

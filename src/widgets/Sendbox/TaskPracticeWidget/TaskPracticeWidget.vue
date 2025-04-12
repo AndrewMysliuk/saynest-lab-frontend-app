@@ -64,8 +64,8 @@ export default defineComponent({
           isLoading.value = true
 
           await taskGeneratorStore.generateTask({
-            user_id: "01fbe55b-9784-4fc9-90ff-3695d836cc2e",
-            organization_id: "01fbe55b-9784-4fc9-90ff-3695d836cc2e",
+            // user_id: "01fbe55b-9784-4fc9-90ff-3695d836cc2e",
+            // organization_id: "01fbe55b-9784-4fc9-90ff-3695d836cc2e",
             gpt_payload: {
               model: "gpt-4o-mini",
             },

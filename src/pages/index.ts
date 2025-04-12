@@ -3,5 +3,6 @@ import ConversationDashboardPageSendbox from "./Sendbox/ConversationDashboardPag
 import ScenarioDashboardPageSendbox from "./Sendbox/ScenarioDashboardPage"
 import GrammarDashboardPageSendbox from "./Sendbox/GrammarDashboardPage"
 import TaskPracticePageSendbox from "./Sendbox/TaskPracticePage"
+import ConversationHistoryPageSendbox from "./Sendbox/ConversationHistoryPage"
 
-export { ConversationPageSendbox, ConversationDashboardPageSendbox, ScenarioDashboardPageSendbox, GrammarDashboardPageSendbox, TaskPracticePageSendbox }
+export { ConversationPageSendbox, ConversationDashboardPageSendbox, ScenarioDashboardPageSendbox, GrammarDashboardPageSendbox, TaskPracticePageSendbox, ConversationHistoryPageSendbox }
