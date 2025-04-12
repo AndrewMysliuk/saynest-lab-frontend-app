@@ -116,6 +116,7 @@ export default defineComponent({
     const getLastModelFullAnswer = computed(() => conversationStore.getLastModelFullAnswer)
     const getLastModelTip = computed(() => errorAnalysisStore.getLastModelTip)
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
+    const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
 
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {
@@ -166,7 +167,10 @@ export default defineComponent({
             user_language: "ru",
           })
 
-          router.push({ name: "sendbox.conversation-history" })
+          router.push({
+            name: "sendbox.conversation-history",
+            params: { id: getCurrentReview.value?._id },
+          })
         } catch (error) {
           console.error("Error analysing user conversation:", error)
         } finally {

@@ -29,7 +29,7 @@ const sendbox: RouteRecordRaw[] = [
   },
 
   {
-    path: "/sendbox/conversation-history",
+    path: "/sendbox/conversation-history/:id?",
     name: "sendbox.conversation-history",
     component: async () => await import("@/pages").then((module) => module.ConversationHistoryPageSendbox),
   },

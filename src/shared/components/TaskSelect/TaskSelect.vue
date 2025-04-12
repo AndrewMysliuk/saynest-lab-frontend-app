@@ -67,8 +67,8 @@ export default defineComponent({
           mode,
           sentence_count: 10,
           topic_titles: props.topicTitle ? [props.topicTitle] : [],
-          language: "Bulgarian",
-          native_language: "Ukrainian",
+          language: "bg",
+          native_language: "uk",
         })
 
         emit("close")

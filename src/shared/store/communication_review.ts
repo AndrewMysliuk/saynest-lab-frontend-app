@@ -10,6 +10,10 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
   const getReviewsList = computed(() => reviewsList.value)
   const getCurrentReview = computed(() => currentReview.value)
 
+  const setCurrentReview = (review: IStatistics) => {
+    currentReview.value = review
+  }
+
   const generateConversationReview = async (payload: IStatisticsGenerateRequest) => {
     await generateConversationReviewHandler(payload)
       .then((response: IStatistics) => {
@@ -45,6 +49,8 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
   const fetchDeleteReviewById = async (review_id: string) => {
     return deleteReviewHandler(review_id)
       .then((response: boolean) => {
+        reviewsList.value = reviewsList.value.filter((review) => review._id !== review_id)
+
         return response
       })
       .catch((error: unknown) => {
@@ -55,6 +61,7 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
   return {
     getReviewsList,
     getCurrentReview,
+    setCurrentReview,
     generateConversationReview,
     fetchReviewsList,
     fetchReviewById,

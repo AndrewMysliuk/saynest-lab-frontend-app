@@ -90,7 +90,9 @@ export default defineComponent({
     const getSelectedTopic = computed(() => languageTheoryStore.getSelectedTopic)
 
     onBeforeMount(async () => {
-      await languageTheoryStore.fetchTheoryByLanguage("Bulgarian")
+      if (!getLanguageByTheory.value.length) {
+        await languageTheoryStore.fetchTheoryByLanguage("bg")
+      }
     })
 
     const selectTopic = (topic: ILanguageTopic | null) => {
