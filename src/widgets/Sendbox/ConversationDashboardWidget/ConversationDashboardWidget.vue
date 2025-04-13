@@ -3,8 +3,8 @@
     <h1>Prompts</h1>
 
     <div class="dashboard__wrapper">
-      <div class="dashboard__card" v-for="prompt in getPromptList" :key="prompt.id" @click="selectPrompt(prompt)">
-        <h3 class="dashboard__card-title">{{ prompt?.title }}</h3>
+      <div class="dashboard__card" v-for="(prompt, index) in getPromptList" :key="index" @click="selectPrompt(prompt)">
+        <h3 class="dashboard__card-title">{{ prompt.title }}</h3>
 
         <br />
 
@@ -18,7 +18,7 @@
 import { computed, defineComponent, nextTick } from "vue"
 import { useRouter } from "vue-router"
 import { promptStore } from "@/app"
-import { IPrompt } from "@/shared/types"
+import { IPromptScenario } from "@/shared/types"
 
 export default defineComponent({
   setup() {
@@ -26,7 +26,7 @@ export default defineComponent({
 
     const getPromptList = computed(() => promptStore.getPromptList)
 
-    const selectPrompt = (prompt: IPrompt) => {
+    const selectPrompt = (prompt: IPromptScenario) => {
       promptStore.setPrompt(prompt)
 
       nextTick(() => {

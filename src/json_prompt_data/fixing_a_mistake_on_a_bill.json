@@ -1,0 +1,99 @@
+{
+  "title": "Fixing a Mistake on a Bill",
+  "description": "You’ve received a bill at a restaurant, hotel, or shop and notice something is wrong. You want to politely point it out and make sure it’s corrected.",
+  "level": "B2",
+  "goals": [
+    {
+      "phrase": "Politely point out an error on the bill",
+      "translation": "Вежливо указать на ошибку в счёте"
+    },
+    {
+      "phrase": "Explain what is incorrect",
+      "translation": "Объяснить, что именно неверно"
+    },
+    {
+      "phrase": "Ask for the corrected bill",
+      "translation": "Попросить исправленный счёт"
+    }
+  ],
+  "scenario": {
+    "allowed_languages": ["English"],
+    "force_topic_focus": true,
+    "use_for": "model_guidance_only",
+    "setting": "Restaurant / Hotel / Shop",
+    "situation": "User has found a mistake in the bill and wants to resolve it",
+    "goal": "Help the user resolve the issue politely and effectively",
+    "steps": [
+      "Ask the user what the problem is with the bill",
+      "Listen to their explanation (wrong item, double charge, missing discount, etc.)",
+      "Acknowledge the mistake and apologize",
+      "Offer to correct it or explain the charge if it’s actually correct",
+      "Confirm the correction and print the new bill"
+    ]
+  },
+  "prompt": "You are a polite and professional staff member at a restaurant, hotel, or shop. The user believes there is a mistake on their bill. Listen carefully, be helpful, and fix the issue if needed. Stay calm and polite, even if the user is upset.",
+  "dictionary": [
+    {
+      "word": "bill",
+      "translation": "счёт",
+      "meaning": "a list of charges to be paid for goods or services"
+    },
+    {
+      "word": "charge",
+      "translation": "плата / взимать плату",
+      "meaning": "an amount of money asked for a service or product"
+    },
+    {
+      "word": "double charge",
+      "translation": "двойное списание",
+      "meaning": "when a customer is mistakenly charged twice for the same item"
+    },
+    {
+      "word": "refund",
+      "translation": "возврат средств",
+      "meaning": "money returned to a customer for an error or overcharge"
+    },
+    {
+      "word": "receipt",
+      "translation": "чек",
+      "meaning": "a printed record of a transaction"
+    },
+    {
+      "word": "discount",
+      "translation": "скидка",
+      "meaning": "a reduction in price"
+    }
+  ],
+  "phrases": [
+    {
+      "phrase": "I think there’s a mistake on the bill.",
+      "translation": "Мне кажется, в счёте ошибка.",
+      "meaning": "Used to open a polite complaint"
+    },
+    {
+      "phrase": "I didn’t order this item.",
+      "translation": "Я это не заказывал.",
+      "meaning": "Used to reject an incorrect item charge"
+    },
+    {
+      "phrase": "I was charged twice for the same thing.",
+      "translation": "С меня дважды списали за одно и то же.",
+      "meaning": "Used to report a double charge"
+    },
+    {
+      "phrase": "Could you take a look, please?",
+      "translation": "Могли бы вы проверить, пожалуйста?",
+      "meaning": "Used to ask for help without sounding aggressive"
+    },
+    {
+      "phrase": "Can I get a corrected bill?",
+      "translation": "Можно получить исправленный счёт?",
+      "meaning": "Used to request a fixed version of the bill"
+    }
+  ],
+  "meta": {
+    "estimated_duration_minutes": 4,
+    "max_turns": 8,
+    "end_behavior": "Say something like: 'Thank you for your patience. Here is the updated bill — let me know if everything looks good now!'"
+  }
+}

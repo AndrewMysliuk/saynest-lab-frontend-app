@@ -30,13 +30,13 @@
 
             <div class="history__highlight">
               <div class="history__item-details" v-if="getCurrentReview.suggestion">
-                <p><i class="fas fa-lightbulb"></i> <b>Suggestion:</b> {{ getCurrentReview.suggestion }}</p>
+                <p style="cursor: pointer" v-word-click="handleWordClick"><i class="fas fa-lightbulb"></i> <b>Suggestion:</b> {{ getCurrentReview.suggestion }}</p>
               </div>
             </div>
 
             <div class="history__highlight" v-if="getCurrentReview.conclusion">
               <div class="history__item-details">
-                <p><i class="fas fa-check-circle"></i> <b>Conclusion:</b> {{ getCurrentReview.conclusion }}</p>
+                <p style="cursor: pointer" v-word-click="handleWordClick"><i class="fas fa-check-circle"></i> <b>Conclusion:</b> {{ getCurrentReview.conclusion }}</p>
               </div>
             </div>
           </div>
@@ -89,8 +89,9 @@
                 <ul class="history__vocab-list">
                   <li v-for="(word, i) in getCurrentReview.vocabulary" :key="i" class="history__vocab-item">
                     <div class="history__vocab-header">
-                      <span class="history__vocab-word">{{ word.word }}</span>
+                      <span class="history__vocab-word">{{ word.word }} </span>
                       <span class="history__badge history__badge--level">{{ word.frequency_level }}</span>
+                      <span class="history__vocab-word" style="margin-left: auto">({{ word.meanings?.[0].synonyms.join(", ") }})</span>
                     </div>
 
                     <ul class="history__meaning-list">
@@ -98,7 +99,7 @@
                         <p><strong>Part of Speech:</strong> {{ meaning.part_of_speech }}</p>
                         <p><strong>Translation:</strong> {{ meaning.translation }}</p>
                         <p><strong>Meaning:</strong> {{ meaning.meaning }}</p>
-                        <p v-if="meaning.synonyms?.length"><strong>Synonyms:</strong> {{ meaning.synonyms.join(", ") }}</p>
+                        <!-- <p v-if="meaning.synonyms?.length"><strong>Synonyms:</strong> {{ meaning.synonyms.join(", ") }}</p> -->
                       </li>
                     </ul>
                   </li>
@@ -166,23 +167,37 @@
         <p v-else class="history__empty">You don't have any conversation review</p>
       </div>
     </div>
+
+    <TheWordTooltip :language="tooltip.language" :translation-language="tooltip.translation_language" :word="tooltip.word" :position="tooltip.position" :show="tooltip.show" @close="hideTooltip" />
   </div>
 </template>
 
 <script lang="ts">
 import { communicationReviewStore } from "@/app"
 import { useRoute, useRouter } from "vue-router"
-import { IStatistics, IWord } from "@/shared/types"
+import { TheWordTooltip } from "@/shared/components"
+import { IStatistics, ITooltip, IWord } from "@/shared/types"
 import { defineComponent, onBeforeMount, computed, ref } from "vue"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
 export default defineComponent({
+  components: {
+    TheWordTooltip,
+  },
+
   setup() {
     const route = useRoute()
     const router = useRouter()
     const isReady = ref(false)
     const activeTab = ref<"errors" | "vocab" | "dialogue">("errors")
+    const tooltip = ref<ITooltip>({
+      show: false,
+      language: "en",
+      translation_language: "uk",
+      word: "",
+      position: { x: 0, y: 0 },
+    })
 
     const isSingle = computed(() => !!route.params.id)
     const getReviewsList = computed(() => communicationReviewStore.getReviewsList)
@@ -250,17 +265,40 @@ export default defineComponent({
       })
     }
 
+    const hideTooltip = () => {
+      tooltip.value.show = false
+    }
+
+    const handleWordClick = (word: string, event: MouseEvent) => {
+      tooltip.value.show = false
+
+      setTimeout(() => {
+        tooltip.value = {
+          ...tooltip.value,
+          show: true,
+          word,
+          position: {
+            x: event.clientX + window.scrollX,
+            y: event.clientY + window.scrollY + 20,
+          },
+        }
+      }, 10)
+    }
+
     return {
       isReady,
       isSingle,
       activeTab,
+      tooltip,
       getReviewsList,
       getCurrentReview,
       formatDate,
       formatDuration,
       openDetails,
       deleteReview,
+      hideTooltip,
       highlightWords,
+      handleWordClick,
       VITE_API_CORE_URL,
     }
   },

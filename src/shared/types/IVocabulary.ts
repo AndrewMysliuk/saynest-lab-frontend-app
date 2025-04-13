@@ -51,9 +51,9 @@ export interface IWordExplanationRequest {
   word: string
 }
 
-export interface ISearchSynonymsRequest {
-  payload: IGPTPayload
-  session_id: string
-  language: string
-  translation_language: string
-}
+// export interface ISearchSynonymsRequest {
+//   payload: IGPTPayload
+//   session_id: string
+//   language: string
+//   translation_language: string
+// }

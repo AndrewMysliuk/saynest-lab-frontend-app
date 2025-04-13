@@ -6,7 +6,7 @@
 
     <div class="room__body">
       <div class="conversation" v-if="!isReviewGenerating">
-        <div class="conversation__analyser" v-if="getUserHistory?.length > 10">
+        <div class="conversation__analyser" v-if="getUserHistory?.length > getSelectedPrompt?.meta?.max_turns">
           <v-button label="Analyse Conversation" buttonStyle="action" @click="analyseUserConversation" />
         </div>
 
@@ -34,6 +34,20 @@
         <div v-else-if="isLoading" class="conversation__description">
           <span class="--pulse" />
           <p>Processing your recording...</p>
+        </div>
+
+        <!-- Goals Helper -->
+        <div class="prompt-goals">
+          <div class="prompt-goals__title">💬 Quick phrases to use in a dialogue</div>
+
+          <div v-for="(goal, index) in getSelectedPrompt.goals" :key="index" class="prompt-goals__item">
+            <details class="prompt-goals__accordion">
+              <summary class="prompt-goals__phrase">• {{ goal.phrase }}</summary>
+              <div class="prompt-goals__details">
+                <div class="prompt-goals__translation">{{ goal.translation }}</div>
+              </div>
+            </details>
+          </div>
         </div>
 
         <div class="conversation__info --left" v-if="!getIsLoading" @click="repeatLastAudio">
@@ -71,15 +85,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, vocabularyTrackerStore, communicationReviewStore } from "@/app"
+import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip } from "@/shared/components"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
 import { ITooltip } from "@/shared/types"
-
-const VOCABULARY_INTERVAL = 60000 * 3
 
 export default defineComponent({
   components: {
@@ -90,7 +102,6 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
-    let intervalId: ReturnType<typeof setInterval> | null = null
     const clientCanvasRef = ref<HTMLCanvasElement | null>(null)
     const audioElementRef = ref<HTMLAudioElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
@@ -133,32 +144,10 @@ export default defineComponent({
       window.addEventListener("keyup", handleKeyUp)
     })
 
-    const vocabularySynonymSearcher = async () => {
-      try {
-        await vocabularyTrackerStore.fetchWordsSynonyms({
-          payload: {
-            model: "gpt-4o-mini",
-            max_tokens: 1500,
-            messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
-          },
-          session_id: getConversationResponse.value?.session_id ?? "",
-          language: "en",
-          translation_language: "uk",
-        })
-      } catch (error) {
-        console.error("Error simulating greeting:", error)
-      }
-    }
-
     const analyseUserConversation = async () => {
       if (getConversationResponse.value) {
         try {
           isReviewGenerating.value = true
-
-          if (intervalId) {
-            clearInterval(intervalId)
-            intervalId = null
-          }
 
           await communicationReviewStore.generateConversationReview({
             session_id: getConversationResponse.value.session_id,
@@ -198,11 +187,11 @@ export default defineComponent({
 
         await conversationStore.fetchConversation({
           whisper: { audio_file: audioBlob },
-          gpt_model: { model: "gpt-4o-mini", max_tokens: 1500 },
+          gpt_model: { model: "gpt-4o", max_tokens: 1500 },
           tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
           system: {
             session_id: getConversationResponse.value?.session_id ?? "",
-            global_prompt: getSelectedPrompt.value?.prompt,
+            global_prompt: getSelectedPrompt.value?.finally_prompt,
           },
         })
       } catch (error) {
@@ -266,26 +255,22 @@ export default defineComponent({
 
             await conversationStore.fetchConversation({
               whisper: { audio_file: audioBlob },
-              gpt_model: { model: "gpt-4o-mini", max_tokens: 1500 },
+              gpt_model: { model: "gpt-4o", max_tokens: 1500 },
               tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
               system: {
                 session_id: getConversationResponse.value?.session_id ?? "",
-                global_prompt: getSelectedPrompt.value?.prompt,
+                global_prompt: getSelectedPrompt.value?.finally_prompt,
               },
             })
 
             await errorAnalysisStore.fetchErrorAnalysis({
               gpt_payload: {
-                model: "gpt-4o-mini",
+                model: "gpt-4o",
                 max_tokens: 1500,
                 messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
               },
               session_id: getConversationResponse.value?.session_id ?? "",
             })
-
-            intervalId = setInterval(() => {
-              vocabularySynonymSearcher()
-            }, VOCABULARY_INTERVAL)
           } catch (error) {
             console.error("Error fetching conversation:", error)
           } finally {
@@ -352,11 +337,6 @@ export default defineComponent({
     onBeforeUnmount(async () => {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
-
-      if (intervalId) {
-        clearInterval(intervalId)
-        intervalId = null
-      }
     })
 
     return {
@@ -368,6 +348,7 @@ export default defineComponent({
       isLoading,
       isHold,
       isReviewGenerating,
+      getSelectedPrompt,
       getIsLoading,
       getUserHistory,
       getLastModelFullAnswer,

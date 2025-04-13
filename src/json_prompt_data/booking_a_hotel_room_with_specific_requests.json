@@ -1,0 +1,100 @@
+{
+  "title": "Booking a Hotel Room with Specific Requests",
+  "description": "You’re calling or visiting a hotel to make a reservation. You have specific preferences about the room and want to make sure everything is understood before confirming.",
+  "level": "B2",
+  "goals": [
+    {
+      "phrase": "Request a specific type of room (e.g. double, with balcony)",
+      "translation": "Попросить определённый тип номера (например, с балконом или с двумя кроватями)"
+    },
+    {
+      "phrase": "Ask about amenities like Wi-Fi or breakfast",
+      "translation": "Спросить об удобствах, таких как Wi-Fi или завтрак"
+    },
+    {
+      "phrase": "Check if early check-in or late check-out is possible",
+      "translation": "Уточнить возможность раннего заезда или позднего выезда"
+    }
+  ],
+  "scenario": {
+    "allowed_languages": ["English"],
+    "force_topic_focus": true,
+    "use_for": "model_guidance_only",
+    "setting": "Hotel Reception / Phone Call",
+    "situation": "User is trying to book a hotel room with some specific needs",
+    "goal": "Help the user successfully reserve a hotel room that meets their preferences",
+    "steps": [
+      "Ask for the check-in and check-out dates",
+      "Offer available room types",
+      "Respond to user’s requests (balcony, view, quiet room, etc.)",
+      "Mention included services (Wi-Fi, breakfast, gym)",
+      "Confirm any extra charges (e.g. for pets or parking)",
+      "Finalize the booking and repeat the details"
+    ]
+  },
+  "prompt": "You are a polite hotel receptionist. The user is trying to book a room with specific requests. Help them choose a room, ask about their preferences, and confirm availability. Be friendly, informative, and speak clearly.",
+  "dictionary": [
+    {
+      "word": "double room",
+      "translation": "двухместный номер",
+      "meaning": "a hotel room with one double bed or two single beds"
+    },
+    {
+      "word": "balcony",
+      "translation": "балкон",
+      "meaning": "an outdoor space attached to the room"
+    },
+    {
+      "word": "amenities",
+      "translation": "удобства",
+      "meaning": "services or features in a hotel like Wi-Fi, breakfast, or a pool"
+    },
+    {
+      "word": "check-in",
+      "translation": "заезд",
+      "meaning": "the process of arriving and getting your room"
+    },
+    {
+      "word": "late check-out",
+      "translation": "поздний выезд",
+      "meaning": "leaving the hotel room later than the usual time"
+    },
+    {
+      "word": "availability",
+      "translation": "наличие",
+      "meaning": "whether something (like a room) is free to use or reserve"
+    }
+  ],
+  "phrases": [
+    {
+      "phrase": "I’d like to book a room for two nights.",
+      "translation": "Я бы хотел забронировать номер на две ночи.",
+      "meaning": "Used to state your intention to reserve"
+    },
+    {
+      "phrase": "Do you have any rooms with a balcony?",
+      "translation": "У вас есть номера с балконом?",
+      "meaning": "Used to ask for a specific feature"
+    },
+    {
+      "phrase": "Is breakfast included in the price?",
+      "translation": "Завтрак включён в стоимость?",
+      "meaning": "Used to ask about meals"
+    },
+    {
+      "phrase": "Can I check in early?",
+      "translation": "Можно заехать пораньше?",
+      "meaning": "Used to request early check-in"
+    },
+    {
+      "phrase": "Is there free Wi-Fi in the room?",
+      "translation": "Есть ли бесплатный Wi-Fi в номере?",
+      "meaning": "Used to check for internet availability"
+    }
+  ],
+  "meta": {
+    "estimated_duration_minutes": 5,
+    "max_turns": 10,
+    "end_behavior": "Say something like: 'Your booking is confirmed! Let us know if you have any other questions before your arrival.'"
+  }
+}

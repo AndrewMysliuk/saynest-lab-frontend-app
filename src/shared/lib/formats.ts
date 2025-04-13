@@ -18,12 +18,11 @@ export function formatCorrections(correction: IErrorAnalysisEntity): string {
       const highlightedOriginal = highlightWords(issue.original_text, issue.error_words, "--wrong")
       const highlightedCorrected = highlightWords(issue.corrected_text, issue.corrected_words, "--properly")
 
+      // <b>Explanation:</b> <i>${issue.explanation}</i><br>
       return `
         <div class="issue-block">
           <b>Original:</b> ${highlightedOriginal}<br>
           <b>Corrected:</b> ${highlightedCorrected}<br>
-          <b>Explanation:</b> <i>${issue.explanation}</i><br>
-          <hr>
         </div>
       `
     })

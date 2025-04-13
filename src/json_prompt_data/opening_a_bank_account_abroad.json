@@ -1,0 +1,100 @@
+{
+  "title": "Opening a Bank Account Abroad",
+  "description": "You’ve moved to a new country and want to open a bank account. You’ll need to ask about the requirements, types of accounts, fees, and what documents to bring.",
+  "level": "B2",
+  "goals": [
+    {
+      "phrase": "Ask what documents are needed to open an account",
+      "translation": "Спросить, какие документы нужны для открытия счёта"
+    },
+    {
+      "phrase": "Inquire about account types and fees",
+      "translation": "Уточнить типы счетов и комиссии"
+    },
+    {
+      "phrase": "Ask how long the process takes",
+      "translation": "Спросить, сколько времени занимает процесс"
+    }
+  ],
+  "scenario": {
+    "allowed_languages": ["English"],
+    "force_topic_focus": true,
+    "use_for": "model_guidance_only",
+    "setting": "Bank Branch",
+    "situation": "User has just moved to the country and wants to open a local bank account",
+    "goal": "Guide the user through opening an account, step by step, using realistic dialogue",
+    "steps": [
+      "Greet the user and ask how you can help",
+      "Find out if it’s a personal or business account",
+      "Mention the necessary documents (e.g. passport, proof of address, visa)",
+      "Explain account types (checking, savings) and any associated fees",
+      "Let them know how long the process usually takes",
+      "Answer follow-up questions and offer to help them book an appointment"
+    ]
+  },
+  "prompt": "You are a helpful bank employee. The user has just moved to the country and wants to open a local bank account. Ask questions to understand their needs, explain the account options, and describe what they need to bring. Be clear, polite, and informative — not pushy.",
+  "dictionary": [
+    {
+      "word": "checking account",
+      "translation": "текущий счёт",
+      "meaning": "a bank account for daily transactions like withdrawals and card payments"
+    },
+    {
+      "word": "savings account",
+      "translation": "сберегательный счёт",
+      "meaning": "a bank account designed for saving money with possible interest"
+    },
+    {
+      "word": "proof of address",
+      "translation": "подтверждение адреса",
+      "meaning": "a document that shows where you live, like a utility bill or rental contract"
+    },
+    {
+      "word": "ID (identification)",
+      "translation": "удостоверение личности",
+      "meaning": "an official document that proves your identity, like a passport"
+    },
+    {
+      "word": "fee",
+      "translation": "комиссия",
+      "meaning": "a charge for using a service"
+    },
+    {
+      "word": "residency status",
+      "translation": "иммиграционный статус",
+      "meaning": "your legal right to live in the country"
+    }
+  ],
+  "phrases": [
+    {
+      "phrase": "I’d like to open a bank account.",
+      "translation": "Я бы хотел открыть банковский счёт.",
+      "meaning": "Used to state your purpose clearly"
+    },
+    {
+      "phrase": "What documents do I need?",
+      "translation": "Какие документы мне нужны?",
+      "meaning": "Used to ask about requirements"
+    },
+    {
+      "phrase": "Are there any monthly fees?",
+      "translation": "Есть ли ежемесячные комиссии?",
+      "meaning": "Used to ask about costs"
+    },
+    {
+      "phrase": "How long does it take to open an account?",
+      "translation": "Сколько времени занимает открытие счёта?",
+      "meaning": "Used to ask about the process duration"
+    },
+    {
+      "phrase": "Do you offer online banking?",
+      "translation": "У вас есть онлайн-банк?",
+      "meaning": "Used to ask about internet access to the account"
+    }
+  ],
+  "meta": {
+    "estimated_duration_minutes": 5,
+    "max_turns": 10,
+    "end_behavior": "Say something like: 'You’re all set. Let us know if you need help completing the application!'"
+  }
+}

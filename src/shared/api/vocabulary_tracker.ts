@@ -1,6 +1,6 @@
 import { axios } from "../config"
 import { AxiosResponse } from "axios"
-import { IWordExplanationRequest, IVocabularyEntity, ISearchSynonymsRequest } from "../types"
+import { IWordExplanationRequest, IVocabularyEntity } from "../types"
 
 export const wordExplanationHandler = async (payload: IWordExplanationRequest): Promise<IVocabularyEntity> => {
   try {
@@ -53,20 +53,20 @@ export const wordsListHandler = async (): Promise<IVocabularyEntity[]> => {
   }
 }
 
-export const searchWordsSynonymsHandler = async (payload: ISearchSynonymsRequest): Promise<IVocabularyEntity[]> => {
-  try {
-    const response: AxiosResponse = await axios({
-      url: "/api/vocabulary-tracker/search-synonyms",
-      method: "POST",
-      data: {
-        ...payload,
-      },
-    })
+// export const searchWordsSynonymsHandler = async (payload: ISearchSynonymsRequest): Promise<IVocabularyEntity[]> => {
+//   try {
+//     const response: AxiosResponse = await axios({
+//       url: "/api/vocabulary-tracker/search-synonyms",
+//       method: "POST",
+//       data: {
+//         ...payload,
+//       },
+//     })
 
-    const { data }: { data: IVocabularyEntity[] } = response
+//     const { data }: { data: IVocabularyEntity[] } = response
 
-    return data
-  } catch (error: unknown) {
-    throw error
-  }
-}
+//     return data
+//   } catch (error: unknown) {
+//     throw error
+//   }
+// }

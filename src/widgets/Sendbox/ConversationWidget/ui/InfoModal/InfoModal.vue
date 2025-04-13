@@ -11,39 +11,37 @@
 
       <br /><br />
 
-      <div v-if="getModelTips.length">
-        <h4>Helpful Tips</h4>
+      <!-- Dictionary Section -->
+      <div v-if="getSelectedPrompt?.dictionary?.length">
+        <h4>Dictionary</h4>
+        <br />
 
-        <div class="prompt__modal-separator" v-for="(item, index) in getModelTips" :key="index">
-          <div class="conversation__warning --flexible" v-html="item" />
+        <div class="prompt__modal-word" v-for="(entry, index) in getSelectedPrompt.dictionary" :key="'dict-' + index">
+          <p><strong>Word:</strong> {{ entry.word }}</p>
+          <p><strong>Translation:</strong> {{ entry.translation }}</p>
+          <p><strong>Meaning:</strong> {{ entry.meaning }}</p>
         </div>
       </div>
 
       <br /><br />
 
-      <div v-if="getRecomendedWords.length">
-        <h4>Recommended Vocabulary</h4>
-
+      <!-- Phrases Section -->
+      <div v-if="getSelectedPrompt?.phrases?.length">
+        <h4>Phrases</h4>
         <br />
 
-        <div class="prompt__modal-word" v-for="(entry, index) in getRecomendedWords" :key="index">
-          <p><strong>Word:</strong> {{ entry.word }}</p>
+        <div class="prompt__modal-word" v-for="(entry, index) in getSelectedPrompt.phrases" :key="'phrase-' + index">
+          <p><strong>Phrase:</strong> {{ entry.phrase }}</p>
+          <p><strong>Translation:</strong> {{ entry.translation }}</p>
+          <p><strong>Meaning:</strong> {{ entry.meaning }}</p>
+        </div>
+      </div>
 
-          <div v-for="(meaning, idx) in entry.meanings" :key="idx" class="prompt__modal-meaning">
-            <p><strong>Translation:</strong> {{ meaning.translation }}</p>
-            <p><strong>Meaning:</strong> {{ meaning.meaning }}</p>
+      <div v-if="getModelTips.length">
+        <h4>Helpful Tips</h4>
 
-            <div v-if="meaning.synonyms?.length" class="prompt__modal-synonyms">
-              <p><strong>Synonyms:</strong></p>
-              <div class="prompt__modal-synonyms-list">
-                <span v-for="(syn, sidx) in meaning.synonyms" :key="sidx" class="prompt__modal-synonym">
-                  {{ syn }}
-                </span>
-              </div>
-            </div>
-
-            <br />
-          </div>
+        <div class="prompt__modal-separator" v-for="(item, index) in getModelTips" :key="index">
+          <div class="conversation__warning --flexible" v-html="item" />
         </div>
       </div>
     </div>
@@ -52,18 +50,16 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
-import { promptStore, errorAnalysisStore, vocabularyTrackerStore } from "@/app"
+import { promptStore, errorAnalysisStore } from "@/app"
 
 export default defineComponent({
   setup() {
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
     const getModelTips = computed(() => errorAnalysisStore.getModelTips)
-    const getRecomendedWords = computed(() => vocabularyTrackerStore.getRecomendedWords)
 
     return {
       getSelectedPrompt,
       getModelTips,
-      getRecomendedWords,
     }
   },
 })
