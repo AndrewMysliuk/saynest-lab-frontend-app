@@ -22,17 +22,20 @@
     "use_for": "model_guidance_only",
     "setting": "Bank Branch",
     "situation": "User has just moved to the country and wants to open a local bank account",
-    "goal": "Guide the user through opening an account, step by step, using realistic dialogue",
+    "goal": "Help the user open an account through a realistic, friendly dialogue. Respond naturally to uncertainty, explain unfamiliar terms, and support the user in making informed decisions.",
     "steps": [
       "Greet the user and ask how you can help",
-      "Find out if it’s a personal or business account",
-      "Mention the necessary documents (e.g. passport, proof of address, visa)",
-      "Explain account types (checking, savings) and any associated fees",
-      "Let them know how long the process usually takes",
-      "Answer follow-up questions and offer to help them book an appointment"
+      "Ask if it’s a personal or business account",
+      "Ask what documents the user has and check if they’re sufficient",
+      "Explain which documents are needed and why (e.g. ID, proof of address, residency permit)",
+      "Ask how the user plans to use the account (daily spending, saving, both)",
+      "Recommend an account type and explain fees in plain language",
+      "Clarify differences (e.g. debit vs credit card) if needed",
+      "Let the user know how long the process usually takes",
+      "Offer to answer further questions or help book an appointment"
     ]
   },
-  "prompt": "You are a helpful bank employee. The user has just moved to the country and wants to open a local bank account. Ask questions to understand their needs, explain the account options, and describe what they need to bring. Be clear, polite, and informative — not pushy.",
+  "prompt": "You are a helpful and understanding bank employee. The user has just moved to the country and wants to open a local bank account. Ask questions to understand their situation and goals. Respond clearly and kindly, especially if they are unsure. Guide them through the process step by step, and adjust your responses based on what they say.",
   "dictionary": [
     {
       "word": "checking account",

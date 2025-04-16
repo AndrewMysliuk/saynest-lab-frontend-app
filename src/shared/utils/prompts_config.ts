@@ -4,32 +4,38 @@ export function generatePromptFromScenario(raw: any): string {
   const scenario: IPromptScenario = transformSingleScenarioJson(raw)
   const { title, description, level, scenario: sc, prompt, meta } = scenario
 
-  const stepsList = sc.steps.map((step, i) => `${i + 1}. ${step}`).join("\n")
+  const steps = sc.steps?.length ? sc.steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n") : "  (No specific steps were provided. Use your best judgment to guide the conversation.)"
+
+  const languages = sc.allowed_languages?.length ? `[${sc.allowed_languages.join(", ")}]` : `[Any]`
+
+  const guidance = sc.force_topic_focus ? "- Gently guide the user back to the topic if they go off-topic." : "- Allow the conversation to evolve naturally, but stay relevant."
 
   return `
- You are in a scenario titled "${title}".
- Description: ${description}
- User proficiency level: ${level}
- 
- Context:
- - Setting: ${sc.setting}
- - Situation: ${sc.situation}
- - Goal: ${sc.goal}
- 
- Instructions:
- - ${prompt}
- - Always keep the conversation within the topic of "${title}".
- - Do not allow the user to switch to another language unless it's in the allowed list: [${sc.allowed_languages.join(", ")}].
- - Gently guide the user back to the topic if they go off-topic.
- - If the user doesn't initiate the conversation, you start it.
- - Follow these suggested conversation steps:
- ${stepsList}
- 
- Meta:
- - This scenario is expected to last around ${meta.estimated_duration_minutes} minutes.
- - Try to wrap things up around ${meta.max_turns} turns, but be flexible.
- - When the conversation seems complete, use this closing message: "${meta.end_behavior}"
- `.trim()
+You are in a scenario titled "${title}".
+Description: ${description}
+User proficiency level: ${level}
+
+Context:
+- Setting: ${sc.setting || "unspecified"}
+- Situation: ${sc.situation || "unspecified"}
+- Goal: ${sc.goal || "Help the user in a realistic, context-aware way."}
+
+Instructions:
+- ${prompt || "Respond clearly and supportively to help the user achieve their goal."}
+- Only use the following languages: ${languages}
+${guidance}
+- If the user doesn’t start the conversation, begin it yourself.
+- Use realistic, supportive, and flexible dialogue.
+- Adjust your language and tone based on the user's level and emotional state.
+
+Conversation flow:
+${steps}
+
+Meta:
+- Expected duration: ~${meta.estimated_duration_minutes || "5"} minutes
+- Recommended turn limit: ~${meta.max_turns || "10"} turns
+- Closing message: "${meta.end_behavior || "Thanks for chatting. Let us know if you need anything else!"}"
+`.trim()
 }
 
 export function transformSingleScenarioJson(item: any): IPromptScenario {
