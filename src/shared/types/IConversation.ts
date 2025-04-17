@@ -1,4 +1,4 @@
-import { GPTRoleType, IGPTPayload, ITextAnalysisResponse } from "./IGPT"
+import { GPTRoleType, IGPTPayload } from "./IGPT"
 
 export type TTSVoiceType = "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer"
 
@@ -13,6 +13,19 @@ export interface ITTSPayload {
   speed?: number
 }
 
+export interface IVoiceSettings {
+  stability?: number
+  similarity_boost?: number
+}
+
+export interface ITTSElevenLabsPayload {
+  input?: string
+  voice: string
+  model?: string
+  response_format?: "mp3" | "wav" | "ogg"
+  voice_settings?: IVoiceSettings
+}
+
 export interface IConversationWhisper {
   audio_file: Blob
   prompt?: string
@@ -22,6 +35,7 @@ export interface IConversationPayload {
   whisper: IConversationWhisper
   gpt_model: IGPTPayload
   tts: ITTSPayload
+  // tts: ITTSElevenLabsPayload
   system: {
     session_id?: string
     global_prompt: string
@@ -78,5 +92,5 @@ export interface IConversationHistory {
 export interface IConversationResponse {
   session_id: string
   conversation_history: IConversationHistory[]
-  last_model_response: ITextAnalysisResponse
+  last_model_response: string
 }

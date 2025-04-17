@@ -187,8 +187,9 @@ export default defineComponent({
 
         await conversationStore.fetchConversation({
           whisper: { audio_file: audioBlob },
-          gpt_model: { model: "gpt-4o", max_tokens: 1500 },
+          gpt_model: { model: "gpt-4o", max_tokens: 350 },
           tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+          // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
           system: {
             session_id: getConversationResponse.value?.session_id ?? "",
             global_prompt: getSelectedPrompt.value?.finally_prompt,
@@ -205,7 +206,7 @@ export default defineComponent({
       if (e.code === "Space" && !isHold.value && !isLoading.value) {
         e.preventDefault()
         isHold.value = true
-        conversationStore.setLastModelFullAnswer("")
+        conversationStore.resetLastModelFullAnswer()
         audioPlayer.interruptAndClear()
         await startRecording()
       }
@@ -255,8 +256,9 @@ export default defineComponent({
 
             await conversationStore.fetchConversation({
               whisper: { audio_file: audioBlob },
-              gpt_model: { model: "gpt-4o", max_tokens: 1500 },
+              gpt_model: { model: "gpt-4o", max_tokens: 350 },
               tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+              // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
               system: {
                 session_id: getConversationResponse.value?.session_id ?? "",
                 global_prompt: getSelectedPrompt.value?.finally_prompt,
@@ -266,10 +268,13 @@ export default defineComponent({
             await errorAnalysisStore.fetchErrorAnalysis({
               gpt_payload: {
                 model: "gpt-4o",
-                max_tokens: 1500,
+                max_tokens: 350,
                 messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
               },
               session_id: getConversationResponse.value?.session_id ?? "",
+              target_language: "en",
+              user_language: "ru",
+              discussion_topic: getSelectedPrompt.value?.title ?? "",
             })
           } catch (error) {
             console.error("Error fetching conversation:", error)
