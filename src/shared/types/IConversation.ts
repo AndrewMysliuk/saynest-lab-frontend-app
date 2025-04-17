@@ -22,7 +22,6 @@ export interface ITTSElevenLabsPayload {
   input?: string
   voice: string
   model?: string
-  response_format?: "mp3" | "wav" | "ogg"
   voice_settings?: IVoiceSettings
 }
 
