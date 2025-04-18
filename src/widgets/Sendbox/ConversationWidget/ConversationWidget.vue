@@ -192,6 +192,7 @@ export default defineComponent({
           // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
           system: {
             session_id: getConversationResponse.value?.session_id ?? "",
+            prompt_id: getSelectedPrompt.value?.id,
             global_prompt: getSelectedPrompt.value?.finally_prompt,
           },
         })
@@ -261,6 +262,7 @@ export default defineComponent({
               // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
               system: {
                 session_id: getConversationResponse.value?.session_id ?? "",
+                prompt_id: getSelectedPrompt.value?.id,
                 global_prompt: getSelectedPrompt.value?.finally_prompt,
               },
             })

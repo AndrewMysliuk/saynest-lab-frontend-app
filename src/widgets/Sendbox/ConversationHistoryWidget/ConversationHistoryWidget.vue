@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <div>
+    <div v-else>
       <div class="history" v-if="isSingle && getCurrentReview">
         <h1 class="history__title">{{ getCurrentReview.topic_title }}</h1>
 
@@ -57,7 +57,7 @@
                 <ul class="history__errors-list">
                   <li v-for="(analysis, index) in getCurrentReview.error_analysis" :key="index" class="history__error-group">
                     <h3 class="history__error-message">
-                      User Message: <b>{{ analysis.message }}</b>
+                      User Message: <b>{{ analysis.last_user_message }}</b>
                     </h3>
 
                     <ul class="history__issue-list">
@@ -72,11 +72,11 @@
                           <span v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')"></span>
                         </p>
                         <p><strong>💡 Explanation:</strong> {{ issue.explanation }}</p>
-                        <p v-if="issue.topic_tag"><strong>🏷 Topic:</strong> {{ issue.topic_tag }}</p>
+                        <p v-if="issue.topic_titles"><strong>🏷 Topic:</strong> {{ issue.topic_titles }}</p>
                       </li>
                     </ul>
 
-                    <p v-if="analysis.summary_comment" class="history__issue-summary"><i class="fas fa-comment-alt"></i> {{ analysis.summary_comment }}</p>
+                    <p v-if="analysis.suggestion_message" class="history__issue-summary"><i class="fas fa-comment-alt"></i> {{ analysis.suggestion_message }}</p>
                   </li>
                 </ul>
               </div>

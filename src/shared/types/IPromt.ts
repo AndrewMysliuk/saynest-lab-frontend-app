@@ -3,7 +3,6 @@ import { VocabularyFrequencyLevelEnum } from "./IVocabulary"
 export interface IScenarioDetails {
   allowed_languages: string[]
   force_topic_focus: boolean
-  use_for: string
   setting: string
   situation: string
   goal: string
@@ -35,6 +34,7 @@ export interface IPromptGoal {
 }
 
 export interface IPromptScenario {
+  id: string
   title: string
   description: string
   level: VocabularyFrequencyLevelEnum

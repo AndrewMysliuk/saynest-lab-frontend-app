@@ -36,8 +36,9 @@ export interface IConversationPayload {
   tts: ITTSPayload
   // tts: ITTSElevenLabsPayload
   system: {
-    session_id?: string
+    session_id: string
     global_prompt: string
+    prompt_id: string
   }
 }
 
