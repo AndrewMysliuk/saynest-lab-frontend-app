@@ -1,30 +1,34 @@
-import { IErrorAnalysisEntity, IWord } from "../types"
+import { IErrorAnalysisEntity } from "../types"
 
-export function formatCorrections(correction: IErrorAnalysisEntity): string {
-  if (!correction.has_errors || !correction.issues.length) return ""
+export function formatCorrections(data: IErrorAnalysisEntity): string {
+  if (!data.has_errors || !data.issues.length) return ""
 
-  const highlightWords = (text: string, words: IWord[], className: string) => {
-    let result = text
-    for (const word of words) {
-      const escaped = word.value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-      const regex = new RegExp(`\\b${escaped}\\b`, "gi")
-      result = result.replace(regex, `<span class="${className}">${word.value}</span>`)
+  let fixedSentence = data.last_user_message
+  const explanations: string[] = []
+
+  const sortedIssues = [...data.issues].sort((a, b) => b.original_text.length - a.original_text.length)
+
+  sortedIssues.forEach((issue) => {
+    const { original_text, corrected_text, explanation } = issue
+
+    const escapedOriginal = original_text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    const regex = new RegExp(escapedOriginal, "i")
+
+    fixedSentence = fixedSentence.replace(regex, `<span class="ea-highlight">${corrected_text}</span>`)
+
+    if (!explanations.includes(explanation)) {
+      explanations.push(explanation)
     }
-    return result
-  }
+  })
 
-  return correction.issues
-    .map((issue) => {
-      const highlightedOriginal = highlightWords(issue.original_text, issue.error_words, "--wrong")
-      const highlightedCorrected = highlightWords(issue.corrected_text, issue.corrected_words, "--properly")
+  const explanationHtml = explanations.map((explanation) => `<li>${explanation}</li>`).join("")
 
-      // <b>Explanation:</b> <i>${issue.explanation}</i><br>
-      return `
-        <div class="issue-block">
-          <b>Original:</b> ${highlightedOriginal}<br>
-          <b>Corrected:</b> ${highlightedCorrected}<br>
-        </div>
-      `
-    })
-    .join("")
+  return `
+    <div class="ea-container" onclick="this.classList.toggle('ea-expanded')">
+      <p class="ea-corrected"><b>Suggestion:</b> ${fixedSentence}</p>
+      <div class="ea-explanation-block">
+        <ul class="ea-explanation-list">${explanationHtml}</ul>
+      </div>
+    </div>
+  `
 }

@@ -41,7 +41,7 @@
         <h4>Helpful Tips</h4>
 
         <div class="prompt__modal-separator" v-for="(item, index) in getModelTips" :key="index">
-          <div class="conversation__warning --flexible" v-html="item" />
+          <div class="conversation__warning" v-html="item" />
         </div>
       </div>
     </div>

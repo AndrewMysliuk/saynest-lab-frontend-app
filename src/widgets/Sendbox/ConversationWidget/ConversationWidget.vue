@@ -14,14 +14,15 @@
           <v-button label="Toggle History" buttonStyle="regular" @click="isSidebarOpen = !isSidebarOpen" />
         </div>
 
-        <div class="conversation__description --cursor" v-if="getLastModelFullAnswer && !isHold">
+        <!-- v-if="getLastModelFullAnswer && !isHold" -->
+        <div class="conversation__description">
           <!-- <p v-if="audioElementRef" v-animate-text="{ text: getLastModelFullAnswer }" /> -->
-          <p v-word-click="handleWordClick">{{ getLastModelFullAnswer }}</p>
+          <p class="--cursor" v-word-click="handleWordClick">{{ getLastModelFullAnswer }}</p>
 
           <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" />
         </div>
 
-        <div class="conversation__description" v-else-if="!isLoading && !isHold">
+        <!-- <div class="conversation__description" v-else-if="!isLoading && !isHold">
           <i class="fa-solid fa-keyboard" />
           <p>Press and hold Spacebar to start recording</p>
         </div>
@@ -34,11 +35,11 @@
         <div v-else-if="isLoading" class="conversation__description">
           <span class="--pulse" />
           <p>Processing your recording...</p>
-        </div>
+        </div> -->
 
         <!-- Goals Helper -->
         <div class="prompt-goals">
-          <div class="prompt-goals__title">💬 Quick phrases to use in a dialogue</div>
+          <div class="prompt-goals__title">💬 Conversation Goals</div>
 
           <div v-for="(goal, index) in getSelectedPrompt.goals" :key="index" class="prompt-goals__item">
             <details class="prompt-goals__accordion">
@@ -151,6 +152,7 @@ export default defineComponent({
 
           await communicationReviewStore.generateConversationReview({
             session_id: getConversationResponse.value.session_id,
+            prompt_id: getSelectedPrompt.value?.id,
             topic_title: getSelectedPrompt.value.title ?? "",
             language: "en",
             user_language: "ru",
@@ -276,7 +278,7 @@ export default defineComponent({
               session_id: getConversationResponse.value?.session_id ?? "",
               target_language: "en",
               user_language: "ru",
-              discussion_topic: getSelectedPrompt.value?.title ?? "",
+              prompt_id: getSelectedPrompt.value?.id ?? "",
             })
           } catch (error) {
             console.error("Error fetching conversation:", error)
