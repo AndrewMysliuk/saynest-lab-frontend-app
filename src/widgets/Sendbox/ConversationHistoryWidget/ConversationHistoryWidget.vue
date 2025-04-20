@@ -15,8 +15,10 @@
           <div class="history__item-info">
             <div class="history__item-meta">
               <span class="history__badge">{{ getCurrentReview.language }}</span>
-              <span class="history__badge history__badge--level">{{ getCurrentReview.user_cefr_level }}</span>
+              <span class="history__badge history__badge--level">{{ getCurrentReview.user_cefr_level.level }}</span>
             </div>
+
+            <p class="history__level-reason">{{ getCurrentReview.user_cefr_level.reasons }}</p>
 
             <div class="history__item-details">
               <p><i class="fas fa-calendar-alt"></i> {{ formatDate(getCurrentReview.created_at) }}</p>
@@ -28,16 +30,109 @@
 
             <br />
 
-            <div class="history__highlight">
-              <div class="history__item-details" v-if="getCurrentReview.suggestion">
-                <p style="cursor: pointer" v-word-click="handleWordClick"><i class="fas fa-lightbulb"></i> <b>Suggestion:</b> {{ getCurrentReview.suggestion }}</p>
+            <div>
+              <div class="history__highlight">
+                <div class="history__item-details" v-if="getCurrentReview.suggestion?.length">
+                  <p style="cursor: pointer"><i class="fas fa-lightbulb"></i> <b>Suggestion:</b></p>
+                  <ul class="suggestion-list">
+                    <li v-for="(item, index) in getCurrentReview.suggestion" :key="index">
+                      {{ item }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="history__highlight" v-if="getCurrentReview.conclusion">
+                <div class="history__item-details">
+                  <p style="cursor: pointer"><i class="fas fa-check-circle"></i> <b>Conclusion:</b> {{ getCurrentReview.conclusion }}</p>
+                </div>
               </div>
             </div>
 
-            <div class="history__highlight" v-if="getCurrentReview.conclusion">
-              <div class="history__item-details">
-                <p style="cursor: pointer" v-word-click="handleWordClick"><i class="fas fa-check-circle"></i> <b>Conclusion:</b> {{ getCurrentReview.conclusion }}</p>
-              </div>
+            <br />
+
+            <!-- Metrics -->
+            <div class="history__metrics" v-if="getCurrentReview.metrics">
+              <h4 class="history__section-title">Metrics</h4>
+              <ul>
+                <li>
+                  <b title="The proportion of meaningful (content) words compared to the total number of words."> Lexical Density: </b>
+                  {{ (getCurrentReview.metrics.lexical_density * 100).toFixed(2) }}%
+                  <small class="hint">— How rich the speech is in meaningful words</small>
+                </li>
+                <li v-if="getCurrentReview.metrics.filler_word.length">
+                  <b title="Number of filler words like 'uh', 'like', 'you know'."> Filler Words: </b>
+                  {{ getCurrentReview.metrics.filler_word_count }}
+                  ({{ getCurrentReview.metrics.filler_word.join(", ") }})
+                  <small class="hint">— Words that fill gaps but add little meaning</small>
+                </li>
+                <li>
+                  <b title="A score from 0 to 1 measuring how logically and clearly ideas are connected."> Coherence Score: </b>
+                  {{ (getCurrentReview.metrics.coherence_score * 100).toFixed(2) }}%
+                  <small class="hint">— Logical flow and clarity of speech</small>
+                </li>
+                <li v-if="getCurrentReview.metrics?.vocabulary_range">
+                  <b title="Ratio of unique words to total words used."> Vocabulary Range: </b>
+                  {{ (getCurrentReview.metrics.vocabulary_range * 100).toFixed(2) }}%
+                  <small class="hint">— How varied the vocabulary is</small>
+                </li>
+              </ul>
+            </div>
+
+            <br />
+
+            <!-- User Goals -->
+            <div class="history__goals" v-if="getCurrentReview.goals_coverage?.length">
+              <h4 class="history__section-title">User Goals</h4>
+              <ul>
+                <li v-for="goal in getCurrentReview.goals_coverage" :key="goal.goal">
+                  <div class="goal-line">
+                    <i :class="goal.is_covered ? 'fas fa-check text-green' : 'fas fa-times text-red'"></i>
+                    <b>{{ goal.goal }}</b>
+                  </div>
+                  <div class="goal-evidence" v-if="goal.evidence">
+                    {{ goal.evidence }}
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <br />
+
+            <!-- Vocabulary Used -->
+            <div class="history__vocab-used" v-if="getCurrentReview.vocabulary_used?.length">
+              <h4 class="history__section-title">Vocabulary Used</h4>
+              <ul>
+                <li v-for="word in getCurrentReview.vocabulary_used" :key="word.word">
+                  <div class="used-line">
+                    <i :class="word.is_used ? 'fas fa-check text-green' : 'fas fa-times text-red'"></i>
+                    <b>{{ word.word }}</b>
+                    <span>— {{ word.is_used ? "Used" : "Not used" }}</span>
+                  </div>
+                  <div class="used-context" v-if="word.usage_context">
+                    {{ word.usage_context }}
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <br />
+
+            <!-- Phrases Used -->
+            <div class="history__phrases" v-if="getCurrentReview.phrases_used?.length">
+              <h4 class="history__section-title">Phrases Used</h4>
+              <ul>
+                <li v-for="phrase in getCurrentReview.phrases_used" :key="phrase.phrase">
+                  <div class="used-line">
+                    <i :class="phrase.is_used ? 'fas fa-check text-green' : 'fas fa-times text-red'"></i>
+                    <b>{{ phrase.phrase }}</b>
+                    <span>— {{ phrase.is_used ? "Used" : "Not used" }}</span>
+                  </div>
+                  <div class="used-context" v-if="phrase.usage_context">
+                    {{ phrase.usage_context }}
+                  </div>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -63,12 +158,12 @@
                     <ul class="history__issue-list">
                       <li v-for="(issue, i) in analysis.issues" :key="i" class="history__issue">
                         <p>
-                          <strong>❌ Original: </strong>
+                          <strong>💬 Original:</strong>
                           <span v-html="highlightWords(issue.original_text, issue.error_words, 'error')"></span>
                         </p>
 
                         <p>
-                          <strong>✅ Corrected: </strong>
+                          <strong>✨ Suggestion:</strong>
                           <span v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')"></span>
                         </p>
                         <p><strong>💡 Explanation:</strong> {{ issue.explanation }}</p>
@@ -118,6 +213,7 @@
                         <i :class="msg.role === 'user' ? 'fas fa-user' : 'fas fa-robot'"></i>
                         {{ msg.role === "user" ? "You" : "AI" }}
                       </span>
+                      <p><i class="fas fa-calendar-alt"></i> {{ formatDate(msg.created_at) }}</p>
                     </div>
 
                     <p class="history__message-content">{{ msg.content }}</p>
@@ -142,13 +238,15 @@
 
                 <div class="history__item-meta">
                   <span class="history__badge">{{ review.language }}</span>
-                  <span class="history__badge history__badge--level">{{ review.user_cefr_level }}</span>
+                  <span class="history__badge history__badge--level">{{ review.user_cefr_level.level }}</span>
                 </div>
+
+                <p class="history__level-reason">{{ review.user_cefr_level.reasons }}</p>
 
                 <div class="history__item-details">
                   <p><i class="fas fa-calendar-alt"></i> {{ formatDate(review.created_at) }}</p>
                   <p><i class="fas fa-clock"></i> {{ formatDuration(review.history.duration_seconds) }}</p>
-                  <p><i class="fas fa-comments"></i> Messages: {{ review.history.messages.length }}</p>
+                  <p><i class="fas fa-comments"></i> Messages: {{ review.history.messages.length - 1 }}</p>
                 </div>
               </div>
 
@@ -167,37 +265,23 @@
         <p v-else class="history__empty">You don't have any conversation review</p>
       </div>
     </div>
-
-    <TheWordTooltip :language="tooltip.language" :translation-language="tooltip.translation_language" :word="tooltip.word" :position="tooltip.position" :show="tooltip.show" @close="hideTooltip" />
   </div>
 </template>
 
 <script lang="ts">
 import { communicationReviewStore } from "@/app"
 import { useRoute, useRouter } from "vue-router"
-import { TheWordTooltip } from "@/shared/components"
-import { IStatistics, ITooltip, IWord } from "@/shared/types"
+import { IStatistics, IWord } from "@/shared/types"
 import { defineComponent, onBeforeMount, computed, ref } from "vue"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
 export default defineComponent({
-  components: {
-    TheWordTooltip,
-  },
-
   setup() {
     const route = useRoute()
     const router = useRouter()
     const isReady = ref(false)
     const activeTab = ref<"errors" | "vocab" | "dialogue">("errors")
-    const tooltip = ref<ITooltip>({
-      show: false,
-      language: "en",
-      translation_language: "uk",
-      word: "",
-      position: { x: 0, y: 0 },
-    })
 
     const isSingle = computed(() => !!route.params.id)
     const getReviewsList = computed(() => communicationReviewStore.getReviewsList)
@@ -265,40 +349,17 @@ export default defineComponent({
       })
     }
 
-    const hideTooltip = () => {
-      tooltip.value.show = false
-    }
-
-    const handleWordClick = (word: string, event: MouseEvent) => {
-      tooltip.value.show = false
-
-      setTimeout(() => {
-        tooltip.value = {
-          ...tooltip.value,
-          show: true,
-          word,
-          position: {
-            x: event.clientX + window.scrollX,
-            y: event.clientY + window.scrollY + 20,
-          },
-        }
-      }, 10)
-    }
-
     return {
       isReady,
       isSingle,
       activeTab,
-      tooltip,
       getReviewsList,
       getCurrentReview,
       formatDate,
       formatDuration,
       openDetails,
       deleteReview,
-      hideTooltip,
       highlightWords,
-      handleWordClick,
       VITE_API_CORE_URL,
     }
   },

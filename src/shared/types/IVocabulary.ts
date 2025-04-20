@@ -1,5 +1,3 @@
-import { IGPTPayload } from "./IGPT"
-
 export enum VocabularyFrequencyLevelEnum {
   A1 = "A1",
   A2 = "A2",
@@ -50,10 +48,3 @@ export interface IWordExplanationRequest {
   translation_language: string
   word: string
 }
-
-// export interface ISearchSynonymsRequest {
-//   payload: IGPTPayload
-//   session_id: string
-//   language: string
-//   translation_language: string
-// }

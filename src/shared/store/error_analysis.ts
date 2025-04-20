@@ -7,11 +7,13 @@ import { errorAnalysisHandler } from "../api"
 export const useErrorAnalysisStore = defineStore("errorAnalysisStore", () => {
   const lastModelTip = ref<string>("")
   const modelTips = ref<string[]>([])
+  const lastSessionError = ref<IErrorAnalysisEntity | null>(null)
   const sessionErrors = ref<IErrorAnalysisEntity[]>([])
 
   const getLastModelTip = computed(() => lastModelTip.value)
   const getModelTips = computed(() => modelTips.value)
   const getSessionErrors = computed(() => sessionErrors.value)
+  const getLastSessionError = computed(() => lastSessionError.value)
 
   const resetLastModelTip = () => {
     lastModelTip.value = ""
@@ -22,6 +24,7 @@ export const useErrorAnalysisStore = defineStore("errorAnalysisStore", () => {
       .then((response: IErrorAnalysisEntity | null) => {
         if (response && response.has_errors) {
           sessionErrors.value.push(response)
+          lastSessionError.value = response
 
           const format = formatCorrections(response)
           lastModelTip.value = format
@@ -37,6 +40,7 @@ export const useErrorAnalysisStore = defineStore("errorAnalysisStore", () => {
     getLastModelTip,
     getModelTips,
     getSessionErrors,
+    getLastSessionError,
     resetLastModelTip,
     fetchErrorAnalysis,
   }

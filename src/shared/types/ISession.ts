@@ -1,0 +1,32 @@
+export enum SessionTypeEnum {
+  SPEACKING = "SPEACKING",
+  WRITING = "WRITING",
+  READING = "READING",
+  LISETNING = "LISETNING",
+}
+
+export enum SessionStatusEnum {
+  ACTIVE = "ACTIVE",
+  FINISHED = "FINISHED",
+  DELETED = "DELETED",
+}
+
+export interface ISessionEntity {
+  _id: string
+  prompt_id: string
+  // user_id: string
+  // organization_id: string
+  type: SessionTypeEnum
+  status: SessionStatusEnum
+  system_prompt: string
+  session_directory: string
+  updated_at: Date
+  created_at: Date
+  ended_at: Date
+}
+
+export interface ISessionCreateRequest {
+  type: SessionTypeEnum
+  system_prompt: string
+  prompt_id: string
+}

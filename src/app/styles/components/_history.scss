@@ -89,6 +89,22 @@
       background-color: #d1e7dd;
       color: #0f5132;
     }
+
+    &--reason {
+      background-color: #f0f0f0;
+      color: #333;
+      font-size: 12px;
+      font-style: italic;
+    }
+  }
+
+  &__level-reason {
+    margin: 8px 0 16px;
+    font-size: 15px;
+    color: #666;
+    font-weight: 600;
+    font-style: italic;
+    line-height: 1.4;
   }
 
   &__item-details {
@@ -102,6 +118,19 @@
 
       i {
         font-size: 14px;
+        color: #666;
+      }
+    }
+
+    ul {
+      margin: rem(12px 0 0 32px);
+      list-style: square;
+      padding-left: 0;
+
+      li {
+        margin-bottom: 4px;
+        font-size: 14px;
+        line-height: 18px;
         color: #666;
       }
     }
@@ -158,6 +187,8 @@
 
     p {
       margin: 0;
+      font-size: 15px;
+      line-height: 20px;
     }
 
     i {
@@ -356,7 +387,7 @@
   &__message {
     padding: 16px;
     border-radius: 12px;
-    max-width: 100%;
+    max-width: 80%;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
@@ -433,6 +464,103 @@
         box-shadow: 0 4px 16px rgba(13, 110, 253, 0.4);
         transform: scale(1.05);
       }
+    }
+  }
+
+  &__section-title {
+    font-size: 14px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  &__metrics,
+  &__goals,
+  &__vocab-used,
+  &__phrases {
+    ul {
+      list-style: none;
+      padding-left: 0;
+
+      li {
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+    }
+
+    .hint {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .text-green {
+      color: #28a745;
+    }
+
+    .text-red {
+      color: #dc3545;
+    }
+  }
+
+  &__goals {
+    ul li {
+      margin-bottom: 8px;
+    }
+
+    .goal-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+
+      i {
+        width: 14px;
+        text-align: center;
+      }
+    }
+
+    .goal-evidence {
+      margin-left: 20px;
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+      line-height: 1.4;
+    }
+  }
+
+  &__vocab-used,
+  &__phrases {
+    margin-bottom: 8px;
+
+    ul li {
+      margin-bottom: 8px;
+    }
+
+    .used-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+
+      i {
+        width: 14px;
+        text-align: center;
+      }
+
+      span {
+        color: #666;
+      }
+    }
+
+    .used-context {
+      margin-left: 20px;
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+      line-height: 1.4;
     }
   }
 }

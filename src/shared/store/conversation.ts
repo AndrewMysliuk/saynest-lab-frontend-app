@@ -3,6 +3,7 @@ import { defineStore } from "pinia"
 import { audioPlayer } from "@/app"
 import { createConversationHandler } from "../api"
 import { IConversationResponse, IConversationPayload, StreamEventEnum, ConversationShortResponse } from "../types"
+import { createTypewriterStream } from "../utils"
 
 export const useConversationStore = defineStore("conversationStore", () => {
   const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [], last_model_response: "" })
@@ -20,6 +21,13 @@ export const useConversationStore = defineStore("conversationStore", () => {
     gptResponses.value = []
     resetLastModelFullAnswer()
 
+    const typewriterHandler = createTypewriterStream({
+      delayPerChar: 20,
+      onChar: (char) => {
+        lastModelFullAnswer.value += char
+      },
+    })
+
     await createConversationHandler(payload, (data) => {
       switch (data.type) {
         case StreamEventEnum.TRANSCRIPTION:
@@ -27,7 +35,7 @@ export const useConversationStore = defineStore("conversationStore", () => {
           break
         case StreamEventEnum.GPT_RESPONSE:
           gptResponses.value.push({ type: data.type, role: data.role, content: data.content })
-          lastModelFullAnswer.value += data.content
+          typewriterHandler(data.content)
           break
         case StreamEventEnum.TTS_CHUNK:
           audioPlayer.addToQueue(data.audioChunk)

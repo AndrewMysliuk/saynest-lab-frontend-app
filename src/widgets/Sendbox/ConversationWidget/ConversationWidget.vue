@@ -6,7 +6,7 @@
 
     <div class="room__body">
       <div class="conversation" v-if="!isReviewGenerating">
-        <div class="conversation__analyser" v-if="getUserHistory?.length > getSelectedPrompt?.meta?.max_turns">
+        <div class="conversation__analyser" v-if="getUserHistory?.length > getSelectedPrompt?.meta?.max_turns || getLastSessionError?.is_end">
           <v-button label="Analyse Conversation" buttonStyle="action" @click="analyseUserConversation" />
         </div>
 
@@ -14,15 +14,14 @@
           <v-button label="Toggle History" buttonStyle="regular" @click="isSidebarOpen = !isSidebarOpen" />
         </div>
 
-        <!-- v-if="getLastModelFullAnswer && !isHold" -->
-        <div class="conversation__description">
+        <div class="conversation__description" v-if="getLastModelFullAnswer && !isHold">
           <!-- <p v-if="audioElementRef" v-animate-text="{ text: getLastModelFullAnswer }" /> -->
           <p class="--cursor" v-word-click="handleWordClick">{{ getLastModelFullAnswer }}</p>
 
           <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" />
         </div>
 
-        <!-- <div class="conversation__description" v-else-if="!isLoading && !isHold">
+        <div class="conversation__description" v-else-if="!isLoading && !isHold">
           <i class="fa-solid fa-keyboard" />
           <p>Press and hold Spacebar to start recording</p>
         </div>
@@ -35,7 +34,7 @@
         <div v-else-if="isLoading" class="conversation__description">
           <span class="--pulse" />
           <p>Processing your recording...</p>
-        </div> -->
+        </div>
 
         <!-- Goals Helper -->
         <div class="prompt-goals">
@@ -92,7 +91,8 @@ import { TheWordTooltip } from "@/shared/components"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
-import { ITooltip } from "@/shared/types"
+import { ITooltip, SessionTypeEnum } from "@/shared/types"
+import { createSessionHandler } from "@/shared/api"
 
 export default defineComponent({
   components: {
@@ -127,6 +127,7 @@ export default defineComponent({
     const getUserHistory = computed(() => getConversationResponse.value.conversation_history?.filter((item) => item.role === "user"))
     const getLastModelFullAnswer = computed(() => conversationStore.getLastModelFullAnswer)
     const getLastModelTip = computed(() => errorAnalysisStore.getLastModelTip)
+    const getLastSessionError = computed(() => errorAnalysisStore.getLastSessionError)
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
 
@@ -151,11 +152,11 @@ export default defineComponent({
           isReviewGenerating.value = true
 
           await communicationReviewStore.generateConversationReview({
-            session_id: getConversationResponse.value.session_id,
+            session_id: getConversationResponse.value?.session_id,
             prompt_id: getSelectedPrompt.value?.id,
             topic_title: getSelectedPrompt.value.title ?? "",
             language: "en",
-            user_language: "ru",
+            user_language: "uk",
           })
 
           router.push({
@@ -187,13 +188,19 @@ export default defineComponent({
 
         isLoading.value = true
 
+        const { _id } = await createSessionHandler({
+          type: SessionTypeEnum.SPEACKING,
+          system_prompt: getSelectedPrompt.value?.finally_prompt,
+          prompt_id: getSelectedPrompt.value?.id,
+        })
+
         await conversationStore.fetchConversation({
           whisper: { audio_file: audioBlob },
           gpt_model: { model: "gpt-4o", max_tokens: 350 },
           tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
           // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
           system: {
-            session_id: getConversationResponse.value?.session_id ?? "",
+            session_id: _id,
             prompt_id: getSelectedPrompt.value?.id,
             global_prompt: getSelectedPrompt.value?.finally_prompt,
           },
@@ -277,7 +284,7 @@ export default defineComponent({
               },
               session_id: getConversationResponse.value?.session_id ?? "",
               target_language: "en",
-              user_language: "ru",
+              user_language: "uk",
               prompt_id: getSelectedPrompt.value?.id ?? "",
             })
           } catch (error) {
@@ -362,6 +369,7 @@ export default defineComponent({
       getUserHistory,
       getLastModelFullAnswer,
       getLastModelTip,
+      getLastSessionError,
       getConversationResponse,
       hideTooltip,
       handleWordClick,
