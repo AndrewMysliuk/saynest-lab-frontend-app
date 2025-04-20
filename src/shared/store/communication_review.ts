@@ -19,7 +19,11 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
       .then((response: IStatistics) => {
         currentReview.value = response
 
-        reviewsList.value.push(response)
+        const alreadyExists = reviewsList.value.some((r) => r._id === response._id)
+
+        if (!alreadyExists) {
+          reviewsList.value.push(response)
+        }
       })
       .catch((error: unknown) => {
         throw error

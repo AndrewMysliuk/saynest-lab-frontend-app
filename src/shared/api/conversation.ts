@@ -2,7 +2,7 @@ import { IConversationPayload, IConversationResponse, ConversationStreamEvent, S
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
-export const createConversationHandler = async (payload: IConversationPayload, onData: (data: ConversationStreamEvent) => void): Promise<IConversationResponse> => {
+export const createConversationHandler = async (payload: IConversationPayload, onData: (data: ConversationStreamEvent) => void, abortSignal: AbortSignal): Promise<IConversationResponse> => {
   try {
     const formData = new FormData()
     formData.append("audio", new File([payload.whisper.audio_file], "audio.wav", { type: "audio/wav" }))
@@ -10,10 +10,13 @@ export const createConversationHandler = async (payload: IConversationPayload, o
     formData.append("gpt_model", JSON.stringify(payload.gpt_model))
     formData.append("tts", JSON.stringify(payload.tts))
     formData.append("system", JSON.stringify(payload.system))
+    formData.append("target_language", JSON.stringify(payload.target_language))
+    formData.append("user_native_language", JSON.stringify(payload.user_native_language))
 
     const response = await fetch(`${VITE_API_CORE_URL}/api/conversation`, {
       method: "POST",
       body: formData,
+      signal: abortSignal,
     })
 
     if (!response.body) {
@@ -63,7 +66,11 @@ export const createConversationHandler = async (payload: IConversationPayload, o
     }
 
     return fullResponse
-  } catch (error: unknown) {
+  } catch (error: any) {
+    if (error?.name === "AbortError") {
+      console.warn("Request was aborted. Possibly user navigated away mid-conversation. Shrug.")
+    }
+
     throw error
   }
 }

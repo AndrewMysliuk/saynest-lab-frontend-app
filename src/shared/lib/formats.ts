@@ -9,12 +9,14 @@ export function formatCorrections(data: IErrorAnalysisEntity): string {
   const sortedIssues = [...data.issues].sort((a, b) => b.original_text.length - a.original_text.length)
 
   sortedIssues.forEach((issue) => {
-    const { original_text, corrected_text, explanation } = issue
+    const { error_words, corrected_words, explanation } = issue
 
-    const escapedOriginal = original_text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-    const regex = new RegExp(escapedOriginal, "i")
-
-    fixedSentence = fixedSentence.replace(regex, `<span class="ea-highlight">${corrected_text}</span>`)
+    error_words.forEach((errorWord, index) => {
+      const correctedWord = corrected_words[index]?.value || errorWord.value
+      const escapedWord = errorWord.value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+      const regex = new RegExp(`\\b${escapedWord}\\b`, "gi")
+      fixedSentence = fixedSentence.replace(regex, `<span class="ea-highlight">${correctedWord}</span>`)
+    })
 
     if (!explanations.includes(explanation)) {
       explanations.push(explanation)

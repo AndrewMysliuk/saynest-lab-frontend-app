@@ -14,8 +14,7 @@
           <v-button label="Toggle History" buttonStyle="regular" @click="isSidebarOpen = !isSidebarOpen" />
         </div>
 
-        <div class="conversation__description" v-if="getLastModelFullAnswer && !isHold">
-          <!-- <p v-if="audioElementRef" v-animate-text="{ text: getLastModelFullAnswer }" /> -->
+        <div class="conversation__description" v-if="getLastModelFullAnswer">
           <p class="--cursor" v-word-click="handleWordClick">{{ getLastModelFullAnswer }}</p>
 
           <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" />
@@ -24,11 +23,6 @@
         <div class="conversation__description" v-else-if="!isLoading && !isHold">
           <i class="fa-solid fa-keyboard" />
           <p>Press and hold Spacebar to start recording</p>
-        </div>
-
-        <div v-else-if="isHold" class="conversation__description">
-          <i class="fa-solid fa-volume-high" />
-          <p>Recording in progress... Speak now!</p>
         </div>
 
         <div v-else-if="isLoading" class="conversation__description">
@@ -60,6 +54,10 @@
 
         <div class="conversation__visualization --client" v-if="isHold">
           <canvas ref="clientCanvasRef" />
+        </div>
+
+        <div class="conversation__visualization --prompt" v-if="isHold && getConversationResponse?.conversation_history?.length && !isLoading">
+          <p>Recording in progress... Speak now!</p>
         </div>
 
         <div class="conversation__visualization --prompt" v-else-if="!isHold && getConversationResponse?.conversation_history?.length && !isLoading">
@@ -103,6 +101,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
+    const controller = new AbortController()
     const clientCanvasRef = ref<HTMLCanvasElement | null>(null)
     const audioElementRef = ref<HTMLAudioElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
@@ -194,17 +193,22 @@ export default defineComponent({
           prompt_id: getSelectedPrompt.value?.id,
         })
 
-        await conversationStore.fetchConversation({
-          whisper: { audio_file: audioBlob },
-          gpt_model: { model: "gpt-4o", max_tokens: 350 },
-          tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
-          // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
-          system: {
-            session_id: _id,
-            prompt_id: getSelectedPrompt.value?.id,
-            global_prompt: getSelectedPrompt.value?.finally_prompt,
+        await conversationStore.fetchConversation(
+          {
+            whisper: { audio_file: audioBlob },
+            gpt_model: { model: "gpt-4o", max_tokens: 350 },
+            tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+            // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
+            system: {
+              session_id: _id,
+              prompt_id: getSelectedPrompt.value?.id,
+              global_prompt: getSelectedPrompt.value?.finally_prompt,
+            },
+            target_language: "en",
+            user_native_language: "uk",
           },
-        })
+          controller.signal
+        )
       } catch (error) {
         console.error("Error simulating greeting:", error)
       } finally {
@@ -216,7 +220,6 @@ export default defineComponent({
       if (e.code === "Space" && !isHold.value && !isLoading.value) {
         e.preventDefault()
         isHold.value = true
-        conversationStore.resetLastModelFullAnswer()
         audioPlayer.interruptAndClear()
         await startRecording()
       }
@@ -264,17 +267,22 @@ export default defineComponent({
           try {
             errorAnalysisStore.resetLastModelTip()
 
-            await conversationStore.fetchConversation({
-              whisper: { audio_file: audioBlob },
-              gpt_model: { model: "gpt-4o", max_tokens: 350 },
-              tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
-              // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
-              system: {
-                session_id: getConversationResponse.value?.session_id ?? "",
-                prompt_id: getSelectedPrompt.value?.id,
-                global_prompt: getSelectedPrompt.value?.finally_prompt,
+            await conversationStore.fetchConversation(
+              {
+                whisper: { audio_file: audioBlob },
+                gpt_model: { model: "gpt-4o", max_tokens: 350 },
+                tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+                // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
+                system: {
+                  session_id: getConversationResponse.value?.session_id ?? "",
+                  prompt_id: getSelectedPrompt.value?.id,
+                  global_prompt: getSelectedPrompt.value?.finally_prompt,
+                },
+                target_language: "en",
+                user_native_language: "uk",
               },
-            })
+              controller.signal
+            )
 
             await errorAnalysisStore.fetchErrorAnalysis({
               gpt_payload: {
@@ -351,6 +359,7 @@ export default defineComponent({
     )
 
     onBeforeUnmount(async () => {
+      controller.abort()
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
     })

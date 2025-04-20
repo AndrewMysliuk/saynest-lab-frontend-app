@@ -1,38 +1,48 @@
 <template>
   <div>
-    <div class="history --loader" v-if="!isReady">
-      <div class="conversation__description">
-        <span class="--pulse" />
-        <p>Please Stand By...</p>
+    <div>
+      <div class="history --loader" v-if="!isReady">
+        <div class="conversation__description">
+          <span class="--pulse" />
+          <p>Please Stand By...</p>
+        </div>
       </div>
-    </div>
 
-    <div class="dashboard" v-else>
-      <h1>Prompts</h1>
+      <div class="dashboard" v-else>
+        <h1>Prompts</h1>
 
-      <div class="dashboard__wrapper">
-        <div class="dashboard__card" v-for="(prompt, index) in getPromptList" :key="index" @click="selectPrompt(prompt)">
-          <h3 class="dashboard__card-title">{{ prompt.title }}</h3>
+        <div class="dashboard__wrapper">
+          <div class="dashboard__card" v-for="(prompt, index) in getPromptList" :key="index" @click="selectPrompt(prompt)">
+            <h3 class="dashboard__card-title">{{ prompt.title }}</h3>
 
-          <br />
+            <br />
 
-          <p class="dashboard__card-description">{{ prompt.description }}</p>
+            <p class="dashboard__card-description">{{ prompt.description }}</p>
+          </div>
         </div>
       </div>
     </div>
+
+    <v-modal v-model="isPrepModalOpen" is-curtain>
+      <PrepModal />
+    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onBeforeMount, ref } from "vue"
-import { useRouter } from "vue-router"
+import { computed, defineComponent, onBeforeMount, ref } from "vue"
 import { promptStore } from "@/app"
 import { IPromptScenario } from "@/shared/types"
+import { PrepModal } from "./ui"
 
 export default defineComponent({
+  components: {
+    PrepModal,
+  },
+
   setup() {
-    const router = useRouter()
     const isReady = ref<boolean>(false)
+    const isPrepModalOpen = ref<boolean>(false)
 
     const getPromptList = computed(() => promptStore.getPromptList)
 
@@ -54,14 +64,12 @@ export default defineComponent({
 
     const selectPrompt = (prompt: IPromptScenario) => {
       promptStore.setPrompt(prompt)
-
-      nextTick(() => {
-        router.push({ name: "sendbox.conversation" })
-      })
+      isPrepModalOpen.value = true
     }
 
     return {
       isReady,
+      isPrepModalOpen,
       getPromptList,
       selectPrompt,
     }

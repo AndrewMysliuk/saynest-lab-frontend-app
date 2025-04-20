@@ -9,6 +9,8 @@
         {{ getSelectedPrompt?.description }}
       </p>
 
+      <v-button label="Start Conversation" button-style="info" @click="$router.push({ name: 'sendbox.conversation' })" />
+
       <br /><br />
 
       <!-- Dictionary Section -->
@@ -34,14 +36,6 @@
           <p><strong>Phrase:</strong> {{ entry.phrase }}</p>
           <p><strong>Translation:</strong> {{ entry.translation }}</p>
           <p><strong>Meaning:</strong> {{ entry.meaning }}</p>
-        </div>
-      </div>
-
-      <div v-if="getModelTips.length">
-        <h4>Suggestions</h4>
-
-        <div class="prompt__modal-separator" v-for="(item, index) in getModelTips" :key="index">
-          <div class="conversation__warning" v-html="item" />
         </div>
       </div>
     </div>

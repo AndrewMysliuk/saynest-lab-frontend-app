@@ -2,7 +2,7 @@ import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
 import { useConversationStore, usePromptStore, useScenarioSimulationStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore } from "@/shared/store"
-import { animateTextDirective, wordClickDirective } from "@/shared/directives"
+import { wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
 
@@ -11,7 +11,6 @@ import { createAudioPlayer } from "@/shared/lib"
 
 export const app = createApp(App)
 
-app.directive("animate-text", animateTextDirective)
 app.directive("word-click", wordClickDirective)
 
 components.forEach((element) => {

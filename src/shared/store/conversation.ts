@@ -16,7 +16,7 @@ export const useConversationStore = defineStore("conversationStore", () => {
   const getGptResponses = computed(() => gptResponses.value)
   const getIsLoading = computed(() => isLoading.value)
 
-  const fetchConversation = async (payload: IConversationPayload) => {
+  const fetchConversation = async (payload: IConversationPayload, abortSignal: AbortSignal) => {
     isLoading.value = true
     gptResponses.value = []
     resetLastModelFullAnswer()
@@ -28,23 +28,27 @@ export const useConversationStore = defineStore("conversationStore", () => {
       },
     })
 
-    await createConversationHandler(payload, (data) => {
-      switch (data.type) {
-        case StreamEventEnum.TRANSCRIPTION:
-          gptResponses.value.push({ type: data.type, role: data.role, content: data.content, audio_url: data.audio_url })
-          break
-        case StreamEventEnum.GPT_RESPONSE:
-          gptResponses.value.push({ type: data.type, role: data.role, content: data.content })
-          typewriterHandler(data.content)
-          break
-        case StreamEventEnum.TTS_CHUNK:
-          audioPlayer.addToQueue(data.audioChunk)
-          break
-        case StreamEventEnum.ERROR:
-          console.error("AI Error:", data.content)
-          break
-      }
-    })
+    await createConversationHandler(
+      payload,
+      (data) => {
+        switch (data.type) {
+          case StreamEventEnum.TRANSCRIPTION:
+            gptResponses.value.push({ type: data.type, role: data.role, content: data.content, audio_url: data.audio_url })
+            break
+          case StreamEventEnum.GPT_RESPONSE:
+            gptResponses.value.push({ type: data.type, role: data.role, content: data.content })
+            typewriterHandler(data.content)
+            break
+          case StreamEventEnum.TTS_CHUNK:
+            audioPlayer.addToQueue(data.audioChunk)
+            break
+          case StreamEventEnum.ERROR:
+            console.error("AI Error:", data.content)
+            break
+        }
+      },
+      abortSignal
+    )
       .then((response: IConversationResponse) => {
         conversationResponse.value = response
       })

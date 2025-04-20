@@ -22,13 +22,16 @@ export const useErrorAnalysisStore = defineStore("errorAnalysisStore", () => {
   const fetchErrorAnalysis = async (payload: IErrorAnalysisRequest) => {
     await errorAnalysisHandler(payload)
       .then((response: IErrorAnalysisEntity | null) => {
-        if (response && response.has_errors) {
-          sessionErrors.value.push(response)
+        if (response) {
           lastSessionError.value = response
 
-          const format = formatCorrections(response)
-          lastModelTip.value = format
-          modelTips.value.push(format)
+          if (response.has_errors) {
+            sessionErrors.value.push(response)
+
+            const format = formatCorrections(response)
+            lastModelTip.value = format
+            modelTips.value.push(format)
+          }
         }
       })
       .catch((error: unknown) => {

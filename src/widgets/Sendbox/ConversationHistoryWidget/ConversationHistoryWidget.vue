@@ -33,7 +33,7 @@
             <div>
               <div class="history__highlight">
                 <div class="history__item-details" v-if="getCurrentReview.suggestion?.length">
-                  <p style="cursor: pointer"><i class="fas fa-lightbulb"></i> <b>Suggestion:</b></p>
+                  <p><i class="fas fa-lightbulb"></i> <b>Suggestion: </b></p>
                   <ul class="suggestion-list">
                     <li v-for="(item, index) in getCurrentReview.suggestion" :key="index">
                       {{ item }}
@@ -44,39 +44,9 @@
 
               <div class="history__highlight" v-if="getCurrentReview.conclusion">
                 <div class="history__item-details">
-                  <p style="cursor: pointer"><i class="fas fa-check-circle"></i> <b>Conclusion:</b> {{ getCurrentReview.conclusion }}</p>
+                  <p><i class="fas fa-check-circle"></i> <b>Conclusion: </b> {{ getCurrentReview.conclusion }}</p>
                 </div>
               </div>
-            </div>
-
-            <br />
-
-            <!-- Metrics -->
-            <div class="history__metrics" v-if="getCurrentReview.metrics">
-              <h4 class="history__section-title">Metrics</h4>
-              <ul>
-                <li>
-                  <b title="The proportion of meaningful (content) words compared to the total number of words."> Lexical Density: </b>
-                  {{ (getCurrentReview.metrics.lexical_density * 100).toFixed(2) }}%
-                  <small class="hint">— How rich the speech is in meaningful words</small>
-                </li>
-                <li v-if="getCurrentReview.metrics.filler_word.length">
-                  <b title="Number of filler words like 'uh', 'like', 'you know'."> Filler Words: </b>
-                  {{ getCurrentReview.metrics.filler_word_count }}
-                  ({{ getCurrentReview.metrics.filler_word.join(", ") }})
-                  <small class="hint">— Words that fill gaps but add little meaning</small>
-                </li>
-                <li>
-                  <b title="A score from 0 to 1 measuring how logically and clearly ideas are connected."> Coherence Score: </b>
-                  {{ (getCurrentReview.metrics.coherence_score * 100).toFixed(2) }}%
-                  <small class="hint">— Logical flow and clarity of speech</small>
-                </li>
-                <li v-if="getCurrentReview.metrics?.vocabulary_range">
-                  <b title="Ratio of unique words to total words used."> Vocabulary Range: </b>
-                  {{ (getCurrentReview.metrics.vocabulary_range * 100).toFixed(2) }}%
-                  <small class="hint">— How varied the vocabulary is</small>
-                </li>
-              </ul>
             </div>
 
             <br />
@@ -155,15 +125,19 @@
                       User Message: <b>{{ analysis.last_user_message }}</b>
                     </h3>
 
+                    <h3 class="history__error-message">
+                      How to improve: <b>{{ analysis.improve_user_answer }}</b>
+                    </h3>
+
                     <ul class="history__issue-list">
                       <li v-for="(issue, i) in analysis.issues" :key="i" class="history__issue">
                         <p>
-                          <strong>💬 Original:</strong>
+                          <strong>💬 Original: </strong>
                           <span v-html="highlightWords(issue.original_text, issue.error_words, 'error')"></span>
                         </p>
 
                         <p>
-                          <strong>✨ Suggestion:</strong>
+                          <strong>✨ Suggestion: </strong>
                           <span v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')"></span>
                         </p>
                         <p><strong>💡 Explanation:</strong> {{ issue.explanation }}</p>
@@ -184,9 +158,15 @@
                 <ul class="history__vocab-list">
                   <li v-for="(word, i) in getCurrentReview.vocabulary" :key="i" class="history__vocab-item">
                     <div class="history__vocab-header">
-                      <span class="history__vocab-word">{{ word.word }} </span>
-                      <span class="history__badge history__badge--level">{{ word.frequency_level }}</span>
-                      <span class="history__vocab-word" style="margin-left: auto">({{ word.meanings?.[0].synonyms.join(", ") }})</span>
+                      <div style="display: flex; align-items: center; gap: 8px">
+                        <b>User said: </b>
+                        <span class="history__vocab-word">{{ word.word }} </span>
+                        <span class="history__badge history__badge--level"> {{ word.frequency_level }}</span>
+                      </div>
+                      <div>
+                        <b>Synonyms: </b>
+                        <span class="history__vocab-word" style="margin-left: auto">({{ word.meanings?.[0].synonyms.join(", ") }})</span>
+                      </div>
                     </div>
 
                     <ul class="history__meaning-list">

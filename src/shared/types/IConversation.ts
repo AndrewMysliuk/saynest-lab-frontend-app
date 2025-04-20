@@ -40,6 +40,8 @@ export interface IConversationPayload {
     global_prompt: string
     prompt_id: string
   }
+  target_language: string
+  user_native_language: string
 }
 
 export enum StreamEventEnum {
