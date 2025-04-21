@@ -60,8 +60,8 @@
                     <i :class="goal.is_covered ? 'fas fa-check text-green' : 'fas fa-times text-red'"></i>
                     <b>{{ goal.goal }}</b>
                   </div>
-                  <div class="goal-evidence" v-if="goal.evidence">
-                    {{ goal.evidence }}
+                  <div class="goal-evidence" v-if="goal.quote_from_dialogue">
+                    {{ goal.quote_from_dialogue }}
                   </div>
                 </li>
               </ul>
@@ -79,8 +79,8 @@
                     <b>{{ word.word }}</b>
                     <span>— {{ word.is_used ? "Used" : "Not used" }}</span>
                   </div>
-                  <div class="used-context" v-if="word.usage_context">
-                    {{ word.usage_context }}
+                  <div class="used-context" v-if="word.quote_from_dialogue">
+                    {{ word.quote_from_dialogue }}
                   </div>
                 </li>
               </ul>
@@ -98,8 +98,8 @@
                     <b>{{ phrase.phrase }}</b>
                     <span>— {{ phrase.is_used ? "Used" : "Not used" }}</span>
                   </div>
-                  <div class="used-context" v-if="phrase.usage_context">
-                    {{ phrase.usage_context }}
+                  <div class="used-context" v-if="phrase.quote_from_dialogue">
+                    {{ phrase.quote_from_dialogue }}
                   </div>
                 </li>
               </ul>

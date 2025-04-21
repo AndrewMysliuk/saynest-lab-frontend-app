@@ -13,7 +13,7 @@
 
         <div class="dashboard__wrapper">
           <div class="dashboard__card" v-for="(prompt, index) in getPromptList" :key="index" @click="selectPrompt(prompt)">
-            <h3 class="dashboard__card-title">{{ prompt.title }}</h3>
+            <h3 class="dashboard__card-title">{{ prompt.title }} ({{ prompt.level }})</h3>
 
             <br />
 

@@ -18,19 +18,19 @@ export interface ILevelDiagnosis {
 export interface IUserGoalEvaluation {
   goal: string
   is_covered: boolean
-  evidence?: string
+  quote_from_dialogue?: string
 }
 
 export interface IVocabularyUsage {
   word: string
   is_used: boolean
-  usage_context?: string
+  quote_from_dialogue?: string
 }
 
 export interface IExpressionUsage {
   phrase: string
   is_used: boolean
-  usage_context?: string
+  quote_from_dialogue?: string
 }
 
 export interface IStatistics {
