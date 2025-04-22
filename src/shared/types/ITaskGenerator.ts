@@ -33,6 +33,7 @@ export interface IMultipleChoiceTask {
 
 export interface IGenericTask<T = IFillBlankTask | IMultipleChoiceTask> {
   id: string // Уникальный ID задания
+  topic_title: string
   type: TaskTypeEnum // Тип задания (fill_blank, multiple_choice, и т.д.)
   mode: TaskModeEnum
   target_language: string // Язык, который изучается
@@ -44,6 +45,7 @@ export interface ITaskGeneratorRequest {
   // user_id: string
   // organization_id: string
   session_id: string
+  topic_title: string
   type: TaskTypeEnum // например: "fill_blank", "multiple_choice" и т.д.
   mode: TaskModeEnum
   target_language: string // Язык, который изучается

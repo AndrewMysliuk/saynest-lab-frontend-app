@@ -1,7 +1,7 @@
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
-import { useConversationStore, usePromptStore, useScenarioSimulationStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore } from "@/shared/store"
+import { useConversationStore, usePromptStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore, useTaskGeneratorStore } from "@/shared/store"
 import { wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
@@ -23,8 +23,8 @@ app.use(router)
 // Audio Player
 export const audioPlayer = createAudioPlayer()
 export const conversationStore = useConversationStore()
-export const scenarioSimulationStore = useScenarioSimulationStore()
 export const promptStore = usePromptStore()
 export const errorAnalysisStore = useErrorAnalysisStore()
 export const vocabularyTrackerStore = useVocabularyTrackerStore()
 export const communicationReviewStore = useCommunicationReviewStore()
+export const taskGeneratorStore = useTaskGeneratorStore()

@@ -109,13 +109,14 @@
 
         <div class="history__tabs-wrapper">
           <div class="history__tabs">
-            <button :class="{ active: activeTab === 'errors' }" @click="activeTab = 'errors'">Mistakes</button>
-            <button :class="{ active: activeTab === 'vocab' }" @click="activeTab = 'vocab'">Vocabulary</button>
-            <button :class="{ active: activeTab === 'dialogue' }" @click="activeTab = 'dialogue'">Conversation</button>
+            <button :class="{ active: activeTab === 'ERRORS' }" @click="activeTab = 'ERRORS'">Mistakes</button>
+            <button :class="{ active: activeTab === 'VOCAB' }" @click="activeTab = 'VOCAB'">Vocabulary</button>
+            <button :class="{ active: activeTab === 'DIALOGUE' }" @click="activeTab = 'DIALOGUE'">Conversation</button>
+            <button v-if="issueTopics.length" :class="{ active: activeTab === 'TASKS' }" @click="activeTab = 'TASKS'">Tasks</button>
           </div>
 
           <div class="history__tab-content">
-            <div v-if="activeTab === 'errors'">
+            <div v-if="activeTab === 'ERRORS'">
               <div class="history__errors" v-if="getCurrentReview.error_analysis?.length">
                 <h2 class="history__errors-title">Mistakes Summary</h2>
 
@@ -151,7 +152,7 @@
               </div>
             </div>
 
-            <div v-else-if="activeTab === 'vocab'">
+            <div v-else-if="activeTab === 'VOCAB'">
               <div class="history__vocab" v-if="getCurrentReview.vocabulary?.length">
                 <h2 class="history__vocab-title">Vocabulary Highlights</h2>
 
@@ -182,7 +183,7 @@
               </div>
             </div>
 
-            <div v-else-if="activeTab === 'dialogue'">
+            <div v-else-if="activeTab === 'DIALOGUE'">
               <div class="history__dialogue" v-if="getCurrentReview.history?.messages?.length">
                 <h2 class="history__dialogue-title">Conversation</h2>
 
@@ -201,6 +202,52 @@
                     <audio v-if="msg.audio_url" class="history__audio" :src="`${VITE_API_CORE_URL}${msg.audio_url}`" controls />
                   </li>
                 </ul>
+              </div>
+            </div>
+
+            <div v-else-if="activeTab === 'TASKS'" class="history__dialogue">
+              <div v-for="task in getTasksList" :key="task.id" class="history__task-block">
+                <h3 class="history__task-title">{{ task.topic_title }}</h3>
+
+                <div v-if="isMultipleChoiceTask(task)">
+                  <div v-for="sentence in task.task.sentences" :key="sentence.id" class="history__sentence">
+                    <p class="history__prompt">{{ sentence.prompt }}</p>
+                    <div class="history__options">
+                      <label
+                        v-for="option in sentence.options"
+                        :key="option"
+                        class="history__option"
+                        :class="{
+                          correct: isTaskChecked(task.id) && option === sentence.answer,
+                          wrong: isTaskChecked(task.id) && selectedAnswersMap[task.id]?.[sentence.id] === option && option !== sentence.answer,
+                        }"
+                      >
+                        <input type="radio" :name="`task-${task.id}-sentence-${sentence.id}`" :value="option" v-model="selectedAnswersMap[task.id][sentence.id]" :disabled="isTaskChecked(task.id)" />
+                        {{ option }}
+                      </label>
+                    </div>
+
+                    <p v-if="isTaskChecked(task.id)" class="history__explanation">
+                      {{ sentence.explanation }}
+                    </p>
+                  </div>
+                </div>
+
+                <button class="history__button" @click="checkTask(task.id)" :disabled="isTaskChecked(task.id)">Check</button>
+                <p v-if="isTaskChecked(task.id)" class="history__result">Correct: {{ getCorrectCount(task) }} / {{ task.task.sentences.length }}</p>
+              </div>
+
+              <br /><br />
+
+              <label class="history__label" for="task-select">Select topic:</label>
+
+              <div class="history__task-row">
+                <select id="task-select" v-model="selectedTopic" class="history__select">
+                  <option v-for="topic in issueTopics" :key="topic" :value="topic">
+                    {{ topic }}
+                  </option>
+                </select>
+                <button class="history__button" @click="generateTask">{{ isLoading ? "Loading..." : "Generate Task" }}</button>
               </div>
             </div>
           </div>
@@ -249,10 +296,11 @@
 </template>
 
 <script lang="ts">
-import { communicationReviewStore } from "@/app"
+import { communicationReviewStore, taskGeneratorStore } from "@/app"
 import { useRoute, useRouter } from "vue-router"
-import { IStatistics, IWord } from "@/shared/types"
-import { defineComponent, onBeforeMount, computed, ref } from "vue"
+import { IGenericTask, IMultipleChoiceTask, IStatistics, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
+import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, reactive } from "vue"
+import { taskGeneratorHandler } from "@/shared/api"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
@@ -260,12 +308,19 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
-    const isReady = ref(false)
-    const activeTab = ref<"errors" | "vocab" | "dialogue">("errors")
+    const controller = new AbortController()
+    const isReady = ref<boolean>(false)
+    const isLoading = ref<boolean>(false)
+    const activeTab = ref<"ERRORS" | "VOCAB" | "DIALOGUE" | "TASKS">("ERRORS")
+    const selectedTopic = ref<string>("")
+    const selectedAnswersMap = reactive<Record<string, Record<number, string>>>({})
+    const checkedTasks = ref<Set<string>>(new Set())
 
     const isSingle = computed(() => !!route.params.id)
     const getReviewsList = computed(() => communicationReviewStore.getReviewsList)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
+    const getTasksList = computed(() => taskGeneratorStore.getTasksList)
+    const issueTopics = computed(() => (getCurrentReview.value ? getCurrentReview.value.error_analysis.flatMap((item) => item.issues?.map((issue) => issue?.topic_titles) || []).filter(Boolean) : []))
 
     onBeforeMount(async () => {
       if (!getCurrentReview.value) {
@@ -277,6 +332,8 @@ export default defineComponent({
       if (!getReviewsList.value.length) {
         await setupOnloadMethods()
       }
+
+      selectedAnswersMap["0fbec595-0fd7-43d7-9eb4-295c77c5e722"] = {}
 
       isReady.value = true
     })
@@ -301,6 +358,18 @@ export default defineComponent({
 
     const openDetails = (review: IStatistics) => {
       communicationReviewStore.setCurrentReview(review)
+
+      selectedTopic.value = issueTopics.value?.[0] ?? ""
+      taskGeneratorStore.resetTaskList()
+      activeTab.value = "ERRORS"
+
+      Object.keys(selectedAnswersMap).forEach((key) => {
+        delete selectedAnswersMap[key]
+      })
+
+      for (const key in selectedAnswersMap) {
+        delete selectedAnswersMap[key]
+      }
 
       router.push({
         name: "sendbox.conversation-history",
@@ -329,18 +398,78 @@ export default defineComponent({
       })
     }
 
+    const generateTask = async () => {
+      if (!getCurrentReview.value || isLoading.value) return
+
+      try {
+        isLoading.value = true
+
+        const task = await taskGeneratorHandler(
+          {
+            session_id: getCurrentReview.value.session_id,
+            topic_title: selectedTopic.value,
+            type: TaskTypeEnum.MULTIPLE_CHOICE,
+            mode: TaskModeEnum.WRITE,
+            target_language: "en",
+            user_language: "uk",
+            task_sentences_count: 10,
+          },
+          controller.signal
+        )
+
+        taskGeneratorStore.setTaskToList(task)
+
+        selectedAnswersMap[task.id] = {}
+      } catch (error: unknown) {
+        console.log(error)
+      } finally {
+        isLoading.value = false
+      }
+    }
+
+    const isTaskChecked = (taskId: string) => checkedTasks.value.has(taskId)
+    const isMultipleChoiceTask = (task: IGenericTask): task is IGenericTask<IMultipleChoiceTask> => {
+      return task.type === TaskTypeEnum.MULTIPLE_CHOICE
+    }
+
+    const getCorrectCount = (task: IGenericTask): number => {
+      const answers = selectedAnswersMap[task.id] || {}
+      return task.task.sentences.reduce((acc, sentence) => {
+        return answers[sentence.id] === sentence.answer ? acc + 1 : acc
+      }, 0)
+    }
+
+    const checkTask = (taskId: string) => {
+      checkedTasks.value.add(taskId)
+    }
+
+    onBeforeUnmount(() => {
+      controller.abort()
+    })
+
     return {
       isReady,
       isSingle,
       activeTab,
+      isLoading,
+      selectedTopic,
       getReviewsList,
       getCurrentReview,
+      getTasksList,
+      issueTopics,
+      selectedAnswersMap,
       formatDate,
       formatDuration,
       openDetails,
       deleteReview,
       highlightWords,
+      generateTask,
+      isTaskChecked,
+      isMultipleChoiceTask,
+      checkTask,
+      getCorrectCount,
       VITE_API_CORE_URL,
+      TaskTypeEnum,
     }
   },
 })

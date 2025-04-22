@@ -358,7 +358,7 @@ export default defineComponent({
       }
     )
 
-    onBeforeUnmount(async () => {
+    onBeforeUnmount(() => {
       controller.abort()
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)

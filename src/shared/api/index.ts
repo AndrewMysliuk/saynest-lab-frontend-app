@@ -1,5 +1,4 @@
 export * from "./conversation"
-export * from "./scenario_simulation"
 export * from "./task_generator"
 export * from "./error_analysis"
 export * from "./vocabulary_tracker"
