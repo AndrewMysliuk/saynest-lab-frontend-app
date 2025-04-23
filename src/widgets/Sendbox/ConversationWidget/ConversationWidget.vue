@@ -86,6 +86,7 @@ import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMou
 import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip } from "@/shared/components"
+import { retryWithAdaptiveParams } from "@/shared/utils"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebarSendbox, InfoModal } from "./ui"
@@ -284,17 +285,39 @@ export default defineComponent({
               controller.signal
             )
 
-            await errorAnalysisStore.fetchErrorAnalysis({
-              gpt_payload: {
-                model: "gpt-4o",
-                max_tokens: 1000,
-                messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
+            await retryWithAdaptiveParams(
+              errorAnalysisStore.fetchErrorAnalysis,
+              {
+                gpt_payload: {
+                  model: "gpt-4o",
+                  max_tokens: 1000,
+                  messages: getConversationResponse.value.conversation_history.map((item) => ({
+                    role: item.role,
+                    content: item.content,
+                  })),
+                },
+                session_id: getConversationResponse.value?.session_id ?? "",
+                target_language: "en",
+                user_language: "uk",
+                prompt_id: getSelectedPrompt.value?.id ?? "",
               },
-              session_id: getConversationResponse.value?.session_id ?? "",
-              target_language: "en",
-              user_language: "uk",
-              prompt_id: getSelectedPrompt.value?.id ?? "",
-            })
+              {
+                retries: 3,
+                delayMs: 1000,
+                onRetry: (attempt, error) => {
+                  console.warn(`Attempt ${attempt} failed. Error:`, error)
+                },
+                adaptParams: (params) => {
+                  return {
+                    ...params,
+                    gpt_payload: {
+                      ...params.gpt_payload,
+                      max_tokens: params?.gpt_payload?.max_tokens ? params?.gpt_payload?.max_tokens + 100 : 1000,
+                    },
+                  }
+                },
+              }
+            )
           } catch (error) {
             console.error("Error fetching conversation:", error)
           } finally {
