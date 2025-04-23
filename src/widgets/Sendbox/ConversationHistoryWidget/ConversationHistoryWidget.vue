@@ -110,7 +110,7 @@
         <div class="history__tabs-wrapper">
           <div class="history__tabs">
             <button :class="{ active: activeTab === 'ERRORS' }" @click="activeTab = 'ERRORS'">Mistakes</button>
-            <button :class="{ active: activeTab === 'VOCAB' }" @click="activeTab = 'VOCAB'">Vocabulary</button>
+            <button v-if="getCurrentReview.vocabulary?.length" :class="{ active: activeTab === 'VOCAB' }" @click="activeTab = 'VOCAB'">Repeated Words</button>
             <button :class="{ active: activeTab === 'DIALOGUE' }" @click="activeTab = 'DIALOGUE'">Conversation</button>
             <button v-if="issueTopics.length" :class="{ active: activeTab === 'TASKS' }" @click="activeTab = 'TASKS'">Tasks</button>
           </div>
@@ -167,6 +167,10 @@
                       <div>
                         <b>Synonyms: </b>
                         <span class="history__vocab-word" style="margin-left: auto">({{ word.meanings?.[0].synonyms.join(", ") }})</span>
+                      </div>
+                      <div>
+                        <b>Repeated Count: </b>
+                        <span>{{ word.repeated_count }}</span>
                       </div>
                     </div>
 
@@ -320,7 +324,16 @@ export default defineComponent({
     const getReviewsList = computed(() => communicationReviewStore.getReviewsList)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
     const getTasksList = computed(() => taskGeneratorStore.getTasksList)
-    const issueTopics = computed(() => (getCurrentReview.value ? getCurrentReview.value.error_analysis.flatMap((item) => item.issues?.map((issue) => issue?.topic_titles) || []).filter(Boolean) : []))
+    const issueTopics = computed(() => {
+      if (!getCurrentReview.value) return []
+
+      const topics = getCurrentReview.value.error_analysis
+        .flatMap((item) => item.issues?.map((issue) => issue?.topic_titles) || [])
+        .filter(Boolean)
+        .flat()
+
+      return [...new Set(topics)]
+    })
 
     onBeforeMount(async () => {
       if (!getCurrentReview.value) {
@@ -399,7 +412,7 @@ export default defineComponent({
     }
 
     const generateTask = async () => {
-      if (!getCurrentReview.value || isLoading.value) return
+      if (!getCurrentReview.value || isLoading.value || !selectedTopic.value) return
 
       try {
         isLoading.value = true

@@ -605,6 +605,12 @@
     }
   }
 
+  &__task-block {
+    &:not(:first-child) {
+      margin-top: rem(32px);
+    }
+  }
+
   &__task-title {
     font-weight: bold;
     margin-bottom: 12px;

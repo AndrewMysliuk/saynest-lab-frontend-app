@@ -287,7 +287,7 @@ export default defineComponent({
             await errorAnalysisStore.fetchErrorAnalysis({
               gpt_payload: {
                 model: "gpt-4o",
-                max_tokens: 600,
+                max_tokens: 1000,
                 messages: getConversationResponse.value.conversation_history.map((item) => ({ role: item.role, content: item.content })),
               },
               session_id: getConversationResponse.value?.session_id ?? "",
@@ -359,6 +359,7 @@ export default defineComponent({
     )
 
     onBeforeUnmount(() => {
+      document.body.style.overflow = ""
       controller.abort()
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)

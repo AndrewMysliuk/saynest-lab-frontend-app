@@ -42,6 +42,19 @@ export interface IVocabularyEntity {
   created_at: Date
 }
 
+export interface IVocabularyFillersEntity {
+  language: string
+  translation_language: string
+  word: string
+  frequency_level: VocabularyFrequencyLevelEnum
+  meanings: IMeaningEntity[]
+  repeated_count: number
+}
+
+export interface IVocabularyFillersEntityWrapper {
+  entries: IVocabularyFillersEntity[]
+}
+
 export interface IWordExplanationRequest {
   session_id: string
   language: string
