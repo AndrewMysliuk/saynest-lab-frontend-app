@@ -32,8 +32,8 @@ export interface IMeaningEntity {
 export interface IVocabularyEntity {
   _id: string
   session_id: string
-  language: string
-  translation_language: string
+  target_language: string
+  explanation_language: string
   word: string
   frequency_level: VocabularyFrequencyLevelEnum
   meanings: IMeaningEntity[]
@@ -43,8 +43,8 @@ export interface IVocabularyEntity {
 }
 
 export interface IVocabularyFillersEntity {
-  language: string
-  translation_language: string
+  target_language: string
+  explanation_language: string
   word: string
   frequency_level: VocabularyFrequencyLevelEnum
   meanings: IMeaningEntity[]
@@ -57,7 +57,7 @@ export interface IVocabularyFillersEntityWrapper {
 
 export interface IWordExplanationRequest {
   session_id: string
-  language: string
-  translation_language: string
+  target_language: string
+  explanation_language: string
   word: string
 }

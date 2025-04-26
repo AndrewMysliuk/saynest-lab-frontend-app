@@ -73,7 +73,14 @@
       </div>
     </div>
 
-    <TheWordTooltip :language="tooltip.language" :translation-language="tooltip.translation_language" :word="tooltip.word" :position="tooltip.position" :show="tooltip.show" @close="hideTooltip" />
+    <TheWordTooltip
+      :language="tooltip.target_language"
+      :translation-language="tooltip.explanation_language"
+      :word="tooltip.word"
+      :position="tooltip.position"
+      :show="tooltip.show"
+      @close="hideTooltip"
+    />
 
     <v-modal v-model="isModalInfoOpen" is-curtain>
       <InfoModal />
@@ -116,8 +123,8 @@ export default defineComponent({
     let cleanupCanvas: (() => void) | null = null
     const tooltip = ref<ITooltip>({
       show: false,
-      language: "en",
-      translation_language: "uk",
+      target_language: "en",
+      explanation_language: "uk",
       word: "",
       position: { x: 0, y: 0 },
     })
@@ -155,9 +162,12 @@ export default defineComponent({
             session_id: getConversationResponse.value?.session_id,
             prompt_id: getSelectedPrompt.value?.id,
             topic_title: getSelectedPrompt.value.title ?? "",
-            language: "en",
-            user_language: "uk",
+            target_language: "en",
+            explanation_language: "uk",
           })
+
+          conversationStore.resetAll()
+          errorAnalysisStore.resetAll()
 
           router.push({
             name: "sendbox.conversation-history",
@@ -198,7 +208,7 @@ export default defineComponent({
           {
             whisper: { audio_file: audioBlob },
             gpt_model: { model: "gpt-4o", max_tokens: 350 },
-            tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+            tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
             // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
             system: {
               session_id: _id,
@@ -206,7 +216,7 @@ export default defineComponent({
               global_prompt: getSelectedPrompt.value?.finally_prompt,
             },
             target_language: "en",
-            user_native_language: "uk",
+            explanation_language: "uk",
           },
           controller.signal
         )
@@ -272,7 +282,7 @@ export default defineComponent({
               {
                 whisper: { audio_file: audioBlob },
                 gpt_model: { model: "gpt-4o", max_tokens: 350 },
-                tts: { model: "tts-1", voice: "alloy", response_format: "mp3" },
+                tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
                 // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
                 system: {
                   session_id: getConversationResponse.value?.session_id ?? "",
@@ -280,7 +290,7 @@ export default defineComponent({
                   global_prompt: getSelectedPrompt.value?.finally_prompt,
                 },
                 target_language: "en",
-                user_native_language: "uk",
+                explanation_language: "uk",
               },
               controller.signal
             )
@@ -298,7 +308,7 @@ export default defineComponent({
                 },
                 session_id: getConversationResponse.value?.session_id ?? "",
                 target_language: "en",
-                user_language: "uk",
+                explanation_language: "uk",
                 prompt_id: getSelectedPrompt.value?.id ?? "",
               },
               {

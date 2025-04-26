@@ -41,7 +41,7 @@ export interface IConversationPayload {
     prompt_id: string
   }
   target_language: string
-  user_native_language: string
+  explanation_language: string
 }
 
 export enum StreamEventEnum {

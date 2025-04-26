@@ -64,11 +64,19 @@ export const useConversationStore = defineStore("conversationStore", () => {
     lastModelFullAnswer.value = ""
   }
 
+  const resetAll = () => {
+    conversationResponse.value = { session_id: "", conversation_history: [], last_model_response: "" }
+    lastModelFullAnswer.value = ""
+    gptResponses.value = []
+    isLoading.value = false
+  }
+
   return {
     getConversationResponse,
     getLastModelFullAnswer,
     getGptResponses,
     getIsLoading,
+    resetAll,
     fetchConversation,
     resetLastModelFullAnswer,
   }

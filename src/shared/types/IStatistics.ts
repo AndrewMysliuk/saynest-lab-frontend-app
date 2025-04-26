@@ -38,8 +38,8 @@ export interface IStatistics {
   prompt_id: string
   session_id: string
   topic_title: string
-  language: string
-  user_language: string
+  target_language: string
+  explanation_language: string
   history: IStatisticsHistory
   error_analysis: IErrorAnalysisEntity[]
   vocabulary: IVocabularyFillersEntity[]
@@ -57,6 +57,6 @@ export interface IStatisticsGenerateRequest {
   session_id: string
   prompt_id: string
   topic_title: string
-  language: string
-  user_language: string
+  target_language: string
+  explanation_language: string
 }

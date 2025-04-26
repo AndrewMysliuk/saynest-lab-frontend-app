@@ -100,8 +100,8 @@ export default defineComponent({
         await vocabularyTrackerStore.fetchWordAudio({
           session_id: getConversationResponse.value?.session_id ?? "",
           word: props.word,
-          language: props.language,
-          translation_language: props.translationLanguage,
+          target_language: props.language,
+          explanation_language: props.translationLanguage,
         })
 
         if (getCurrentWord.value && getCurrentWord.value.audio_base64) {
@@ -119,8 +119,8 @@ export default defineComponent({
         await vocabularyTrackerStore.fetchWordExplanation({
           session_id: getConversationResponse.value?.session_id ?? "",
           word: props.word,
-          language: props.language,
-          translation_language: props.translationLanguage,
+          target_language: props.language,
+          explanation_language: props.translationLanguage,
         })
       } catch (error: unknown) {
         console.log(error)

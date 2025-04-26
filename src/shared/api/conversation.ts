@@ -11,7 +11,7 @@ export const createConversationHandler = async (payload: IConversationPayload, o
     formData.append("tts", JSON.stringify(payload.tts))
     formData.append("system", JSON.stringify(payload.system))
     formData.append("target_language", JSON.stringify(payload.target_language))
-    formData.append("user_native_language", JSON.stringify(payload.user_native_language))
+    formData.append("explanation_language", JSON.stringify(payload.explanation_language))
 
     const response = await fetch(`${VITE_API_CORE_URL}/api/conversation`, {
       method: "POST",

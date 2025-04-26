@@ -39,11 +39,19 @@ export const useErrorAnalysisStore = defineStore("errorAnalysisStore", () => {
       })
   }
 
+  const resetAll = () => {
+    lastModelTip.value = ""
+    modelTips.value = []
+    lastSessionError.value = null
+    sessionErrors.value = []
+  }
+
   return {
     getLastModelTip,
     getModelTips,
     getSessionErrors,
     getLastSessionError,
+    resetAll,
     resetLastModelTip,
     fetchErrorAnalysis,
   }

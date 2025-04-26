@@ -14,7 +14,7 @@
         <div class="history__item --no-cursor">
           <div class="history__item-info">
             <div class="history__item-meta">
-              <span class="history__badge">{{ getCurrentReview.language }}</span>
+              <span class="history__badge">{{ getCurrentReview.target_language }}</span>
               <span class="history__badge history__badge--level">{{ getCurrentReview.user_cefr_level.level }}</span>
             </div>
 
@@ -268,7 +268,7 @@
                 <h2 class="history__item-title">{{ review.topic_title }}</h2>
 
                 <div class="history__item-meta">
-                  <span class="history__badge">{{ review.language }}</span>
+                  <span class="history__badge">{{ review.target_language }}</span>
                   <span class="history__badge history__badge--level">{{ review.user_cefr_level.level }}</span>
                 </div>
 
@@ -346,8 +346,6 @@ export default defineComponent({
         await setupOnloadMethods()
       }
 
-      selectedAnswersMap["0fbec595-0fd7-43d7-9eb4-295c77c5e722"] = {}
-
       isReady.value = true
     })
 
@@ -424,7 +422,7 @@ export default defineComponent({
             type: TaskTypeEnum.MULTIPLE_CHOICE,
             mode: TaskModeEnum.WRITE,
             target_language: "en",
-            user_language: "uk",
+            explanation_language: "uk",
             task_sentences_count: 10,
           },
           controller.signal

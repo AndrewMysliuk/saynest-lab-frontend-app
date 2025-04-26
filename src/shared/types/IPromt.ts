@@ -30,11 +30,11 @@ export interface IPromptMeta {
 export interface IPromptGoal {
   phrase: string
   translation: string
-  transcription_language?: string
 }
 
 export interface IPromptScenario {
   id: string
+  module: string
   title: string
   description: string
   level: VocabularyFrequencyLevelEnum
@@ -45,4 +45,13 @@ export interface IPromptScenario {
   meta: IPromptMeta
   finally_prompt: string
   goals: IPromptGoal[]
+}
+
+export interface IModuleScenario {
+  id: string
+  title: string
+  description: string
+  level: VocabularyFrequencyLevelEnum[]
+  tags: string[]
+  scenarios: string[]
 }

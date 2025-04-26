@@ -6,7 +6,7 @@ export interface ITooltipPosition {
 export interface ITooltip {
   show: boolean
   word: string
-  language: string
-  translation_language: string
+  target_language: string
+  explanation_language: string
   position: ITooltipPosition
 }
