@@ -9,14 +9,35 @@ export function formatCorrections(data: IErrorAnalysisEntity): string {
   const sortedIssues = [...data.issues].sort((a, b) => b.original_text.length - a.original_text.length)
 
   sortedIssues.forEach((issue) => {
-    const { error_words, corrected_words, explanation } = issue
+    const { original_text, corrected_text, explanation } = issue
 
-    error_words.forEach((errorWord, index) => {
-      const correctedWord = corrected_words[index]?.value || errorWord.value
-      const escapedWord = errorWord.value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-      const regex = new RegExp(`\\b${escapedWord}\\b`, "gi")
-      fixedSentence = fixedSentence.replace(regex, `<span class="ea-highlight">${correctedWord}</span>`)
-    })
+    const originalWords = original_text.split(/\s+/)
+    const correctedWords = corrected_text.split(/\s+/)
+
+    let highlightedText = ""
+    let i = 0,
+      j = 0
+
+    while (i < originalWords.length && j < correctedWords.length) {
+      if (originalWords[i].toLowerCase() === correctedWords[j].toLowerCase()) {
+        highlightedText += correctedWords[j] + " "
+        i++
+        j++
+      } else {
+        highlightedText += `<span class="ea-highlight">${correctedWords[j]}</span> `
+        j++
+      }
+    }
+
+    while (j < correctedWords.length) {
+      highlightedText += `<span class="ea-highlight">${correctedWords[j]}</span> `
+      j++
+    }
+
+    const escapedOriginal = original_text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    const regex = new RegExp(escapedOriginal, "i")
+
+    fixedSentence = fixedSentence.replace(regex, highlightedText.trim())
 
     if (!explanations.includes(explanation)) {
       explanations.push(explanation)
