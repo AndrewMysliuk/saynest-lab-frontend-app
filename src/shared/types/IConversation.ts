@@ -84,6 +84,8 @@ export type ConversationStreamEvent = IHistoryStreamEvent | IGptResponseStreamEv
 
 export interface IConversationHistory {
   session_id: string
+  user_id: string | null
+  organization_id: string | null
   pair_id: string
   role: GPTRoleType
   content: string

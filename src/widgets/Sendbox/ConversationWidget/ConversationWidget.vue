@@ -6,7 +6,7 @@
 
     <div class="room__body">
       <div class="conversation" v-if="!isReviewGenerating">
-        <div class="conversation__analyser" v-if="getUserHistory?.length > getSelectedPrompt?.meta?.max_turns || getLastSessionError?.is_end">
+        <div class="conversation__analyser" v-if="(getUserHistory?.length > getSelectedPrompt?.meta?.max_turns || getLastSessionError?.is_end) && getIsLogged">
           <v-button label="Analyse Conversation" buttonStyle="action" @click="analyseUserConversation" />
         </div>
 
@@ -90,7 +90,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore } from "@/app"
+import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
@@ -129,6 +129,7 @@ export default defineComponent({
       position: { x: 0, y: 0 },
     })
 
+    const getIsLogged = computed(() => authStore.getIsLogged)
     const getIsLoading = computed(() => conversationStore.getIsLoading)
     const getConversationResponse = computed(() => conversationStore.getConversationResponse)
     const getUserHistory = computed(() => getConversationResponse.value.conversation_history?.filter((item) => item.role === "user"))
@@ -408,6 +409,7 @@ export default defineComponent({
       isHold,
       isReviewGenerating,
       getSelectedPrompt,
+      getIsLogged,
       getIsLoading,
       getUserHistory,
       getLastModelFullAnswer,

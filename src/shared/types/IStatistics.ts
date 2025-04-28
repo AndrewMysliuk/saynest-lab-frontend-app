@@ -36,6 +36,8 @@ export interface IExpressionUsage {
 export interface IStatistics {
   _id: string
   prompt_id: string
+  user_id: string
+  organization_id: string
   session_id: string
   topic_title: string
   target_language: string

@@ -1,5 +1,5 @@
-import ConversationWidget from "./ConversationWidget"
-import ConversationDashboardWidget from "./ConversationDashboardWidget"
-import ConversationHistoryWidget from "./ConversationHistoryWidget"
+import ConversationWidgetSendbox from "./ConversationWidget"
+import ConversationDashboardWidgetSendbox from "./ConversationDashboardWidget"
+import ConversationHistoryWidgetSendbox from "./ConversationHistoryWidget"
 
-export { ConversationWidget, ConversationDashboardWidget, ConversationHistoryWidget }
+export { ConversationWidgetSendbox, ConversationDashboardWidgetSendbox, ConversationHistoryWidgetSendbox }

@@ -1,5 +1,5 @@
-import ConversationPage from "./ConversationPage"
-import ConversationDashboardPage from "./ConversationDashboardPage"
-import ConversationHistoryPage from "./ConversationHistoryPage"
+import ConversationPageSendbox from "./ConversationPage"
+import ConversationDashboardPageSendbox from "./ConversationDashboardPage"
+import ConversationHistoryPageSendbox from "./ConversationHistoryPage"
 
-export { ConversationPage, ConversationDashboardPage, ConversationHistoryPage }
+export { ConversationPageSendbox, ConversationDashboardPageSendbox, ConversationHistoryPageSendbox }

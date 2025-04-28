@@ -20,19 +20,10 @@ export interface IssueItem {
   topic_titles: string
 }
 
-export interface IErrorAnalysisModelEntity {
-  issues: IssueItem[]
-  has_errors: boolean
-  is_end: boolean
-  improve_user_answer: string
-  suggestion_message: string
-  detected_language: string
-  is_target_language: boolean
-  sentence_structure: ErrorAnalysisSentenceStructureEnum
-}
-
 export interface IErrorAnalysisEntity {
   session_id: string
+  user_id: string | null
+  organization_id: string | null
   improve_user_answer: string
   last_user_message: string
   suggestion_message: string

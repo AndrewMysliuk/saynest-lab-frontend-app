@@ -1,9 +1,12 @@
-import { RouteRecordRaw } from "vue-router"
+import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from "vue-router"
 import MainLayout from "@/layouts/MainLayout.vue"
 import sendbox from "./sendbox"
+import auth from "./auth"
+import { authStore } from ".."
 
 // Routers
 const childrenComponents: RouteRecordRaw[] = [
+  ...auth,
   ...sendbox,
   {
     path: "/:pathMatch(.*)*",
@@ -21,7 +24,11 @@ export const routes: RouteRecordRaw[] = [
       name: "sendbox.conversation-dashboard",
     },
 
-    // beforeEnter: async (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {},
+    beforeEnter: (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      authStore.initializeAuthStore()
+
+      next()
+    },
 
     children: childrenComponents,
   },

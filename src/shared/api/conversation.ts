@@ -1,4 +1,5 @@
 import { IConversationPayload, IConversationResponse, ConversationStreamEvent, StreamEventEnum } from "@/shared/types"
+import { authenticatedFetch } from "../config"
 
 const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
@@ -13,7 +14,7 @@ export const createConversationHandler = async (payload: IConversationPayload, o
     formData.append("target_language", JSON.stringify(payload.target_language))
     formData.append("explanation_language", JSON.stringify(payload.explanation_language))
 
-    const response = await fetch(`${VITE_API_CORE_URL}/api/conversation`, {
+    const response = await authenticatedFetch(`${VITE_API_CORE_URL}/api/conversation`, {
       method: "POST",
       body: formData,
       signal: abortSignal,

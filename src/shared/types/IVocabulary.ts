@@ -31,6 +31,8 @@ export interface IMeaningEntity {
 
 export interface IVocabularyEntity {
   _id: string
+  user_id: string
+  organization_id: string
   session_id: string
   target_language: string
   explanation_language: string
