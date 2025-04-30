@@ -127,7 +127,7 @@
                     </h3>
 
                     <h3 class="history__error-message">
-                      How to improve: <b>{{ analysis.improve_user_answer }}</b>
+                      How to improve: <b>{{ analysis.improve_user_answer.corrected_text }}</b>
                     </h3>
 
                     <ul class="history__issue-list">
@@ -145,8 +145,6 @@
                         <p v-if="issue.topic_titles"><strong>🏷 Topic:</strong> {{ issue.topic_titles }}</p>
                       </li>
                     </ul>
-
-                    <p v-if="analysis.suggestion_message" class="history__issue-summary"><i class="fas fa-comment-alt"></i> {{ analysis.suggestion_message }}</p>
                   </li>
                 </ul>
               </div>

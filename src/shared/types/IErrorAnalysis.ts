@@ -1,10 +1,5 @@
 import { IGPTPayload } from "./IGPT"
-
-export enum ErrorAnalysisSentenceStructureEnum {
-  SIMPLE = "SIMPLE",
-  COMPOUND = "COMPOUND",
-  COMPLEX = "COMPLEX",
-}
+import { VocabularyFrequencyLevelEnum } from "./IVocabulary"
 
 export interface IWord {
   id: number
@@ -20,20 +15,24 @@ export interface IssueItem {
   topic_titles: string
 }
 
+export interface IErrorImproveUserAnswer {
+  corrected_text: string
+  cefr_level: VocabularyFrequencyLevelEnum
+  explanation: string
+}
+
 export interface IErrorAnalysisEntity {
   session_id: string
   user_id: string | null
   organization_id: string | null
-  improve_user_answer: string
-  last_user_message: string
-  suggestion_message: string
-  detected_language: string
-  is_target_language: boolean
   prompt_id: string
-  sentence_structure: ErrorAnalysisSentenceStructureEnum
   issues: IssueItem[]
   has_errors: boolean
   is_end: boolean
+  improve_user_answer: IErrorImproveUserAnswer
+  detected_language: string
+  is_target_language: boolean
+  last_user_message: string
   updated_at: Date
   created_at: Date
 }
