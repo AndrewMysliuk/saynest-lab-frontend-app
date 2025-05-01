@@ -122,29 +122,41 @@
 
                 <ul class="history__errors-list">
                   <li v-for="(analysis, index) in getCurrentReview.error_analysis" :key="index" class="history__error-group">
-                    <h3 class="history__error-message">
-                      User Message: <b>{{ analysis.last_user_message }}</b>
-                    </h3>
+                    <div>
+                      <h3 class="history__error-message">
+                        User Message: <b>{{ analysis.last_user_message }}</b>
+                      </h3>
 
-                    <h3 class="history__error-message">
-                      How to improve: <b>{{ analysis.improve_user_answer.corrected_text }}</b>
-                    </h3>
+                      <ul class="history__issue-list">
+                        <li v-for="(issue, i) in analysis.issues" :key="i" class="history__issue">
+                          <p>
+                            <strong>💬 Original: </strong>
+                            <span v-html="highlightWords(issue.original_text, issue.error_words, 'error')"></span>
+                          </p>
 
-                    <ul class="history__issue-list">
-                      <li v-for="(issue, i) in analysis.issues" :key="i" class="history__issue">
-                        <p>
-                          <strong>💬 Original: </strong>
-                          <span v-html="highlightWords(issue.original_text, issue.error_words, 'error')"></span>
-                        </p>
+                          <p>
+                            <strong>✨ Suggestion: </strong>
+                            <span v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')"></span>
+                          </p>
+                          <p><strong>💡 Explanation:</strong> {{ issue.explanation }}</p>
+                          <p v-if="issue.topic_titles"><strong>🏷 Topic:</strong> {{ issue.topic_titles }}</p>
+                        </li>
+                      </ul>
+                    </div>
 
-                        <p>
-                          <strong>✨ Suggestion: </strong>
-                          <span v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')"></span>
-                        </p>
-                        <p><strong>💡 Explanation:</strong> {{ issue.explanation }}</p>
-                        <p v-if="issue.topic_titles"><strong>🏷 Topic:</strong> {{ issue.topic_titles }}</p>
-                      </li>
-                    </ul>
+                    <br /><br />
+
+                    <div>
+                      <h3 class="history__error-message"><b>How to improve?</b></h3>
+
+                      <ul class="history__issue-list">
+                        <li class="history__issue --green">
+                          <p><strong>Improved Answer:</strong> {{ analysis.improve_user_answer.corrected_text }}</p>
+                          <p><strong>CEFR Level:</strong> {{ analysis.improve_user_answer.cefr_level }}</p>
+                          <p><strong>Explanation:</strong> {{ analysis.improve_user_answer.explanation }}</p>
+                        </li>
+                      </ul>
+                    </div>
                   </li>
                 </ul>
               </div>

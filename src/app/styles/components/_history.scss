@@ -258,6 +258,10 @@
     padding: 12px;
     border-radius: 10px;
 
+    &.--green {
+      background: #e9fbe8;
+    }
+
     p {
       margin: 4px 0;
       font-size: 14px;
