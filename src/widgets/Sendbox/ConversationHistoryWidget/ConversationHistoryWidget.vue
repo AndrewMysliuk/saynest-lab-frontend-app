@@ -213,7 +213,7 @@
 
                     <p class="history__message-content">{{ msg.content }}</p>
 
-                    <audio v-if="msg.audio_url" class="history__audio" :src="`${VITE_API_CORE_URL}${msg.audio_url}`" controls />
+                    <audio v-if="msg.audio_url" class="history__audio" :src="msg.audio_url" controls />
                   </li>
                 </ul>
               </div>
@@ -315,8 +315,6 @@ import { useRoute, useRouter } from "vue-router"
 import { IGenericTask, IMultipleChoiceTask, IStatistics, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
 import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, reactive } from "vue"
 import { taskGeneratorHandler } from "@/shared/api"
-
-const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
 export default defineComponent({
   setup() {
@@ -489,7 +487,6 @@ export default defineComponent({
       isMultipleChoiceTask,
       checkTask,
       getCorrectCount,
-      VITE_API_CORE_URL,
       TaskTypeEnum,
     }
   },

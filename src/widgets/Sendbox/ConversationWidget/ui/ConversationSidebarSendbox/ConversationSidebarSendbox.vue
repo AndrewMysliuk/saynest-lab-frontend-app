@@ -17,7 +17,7 @@
             {{ conversationItem.content }}
           </div>
 
-          <audio v-if="conversationItem.audio_url" :src="`${VITE_API_CORE_URL}${conversationItem.audio_url}`" controls />
+          <audio v-if="conversationItem.audio_url" :src="conversationItem.audio_url" controls />
         </div>
       </div>
     </div>
@@ -27,8 +27,6 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue"
 import { conversationStore } from "@/app"
-
-const VITE_API_CORE_URL: string = import.meta.env.VITE_API_CORE_URL
 
 export default defineComponent({
   setup() {
@@ -48,7 +46,6 @@ export default defineComponent({
     return {
       currenSection,
       getConversationHistory,
-      VITE_API_CORE_URL,
     }
   },
 })

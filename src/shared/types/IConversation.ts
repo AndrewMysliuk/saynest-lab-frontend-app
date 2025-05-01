@@ -89,7 +89,8 @@ export interface IConversationHistory {
   pair_id: string
   role: GPTRoleType
   content: string
-  audio_url?: string
+  audio_url: string
+  audio_path: string
   updated_at: Date
   created_at: Date
 }
