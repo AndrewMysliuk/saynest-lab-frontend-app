@@ -6,11 +6,11 @@ docker_build:
 	docker build -t $(IMAGE_NAME) .
 
 docker_run_local:
-	docker run -d -p $(PORT):443 -p 80:80 \
+	docker run -d -p $(PORT):80 \
 		--name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 docker_run_server:
-	docker run -d -p $(PORT):443 -p 80:80 \
+	docker run -d -p $(PORT):80 \
 		--name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 stop:

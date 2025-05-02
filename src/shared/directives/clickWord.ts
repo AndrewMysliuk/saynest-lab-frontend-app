@@ -10,7 +10,7 @@ function getWordAtPoint(_elem: HTMLElement, x: number, y: number): string | null
   let offset: number | null = null
 
   if ("caretPositionFromPoint" in document) {
-    const pos = document.caretPositionFromPoint(x, y)
+    const pos = (document as Document & { caretPositionFromPoint?: any }).caretPositionFromPoint?.(x, y)
     if (!pos || pos.offsetNode.nodeType !== Node.TEXT_NODE) return null
     node = pos.offsetNode
     offset = pos.offset
@@ -23,7 +23,7 @@ function getWordAtPoint(_elem: HTMLElement, x: number, y: number): string | null
     return null
   }
 
-  const text = node.textContent
+  const text = node?.textContent
   if (!text || offset === null) return null
 
   const left = text.slice(0, offset).search(/\S+$/)
