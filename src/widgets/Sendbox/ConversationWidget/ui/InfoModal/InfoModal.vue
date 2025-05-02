@@ -12,11 +12,11 @@
       <br /><br />
 
       <!-- Dictionary Section -->
-      <div v-if="getSelectedPrompt?.dictionary?.length">
+      <div v-if="getSelectedPrompt?.user_content.dictionary?.length">
         <h4>Dictionary</h4>
         <br />
 
-        <div class="prompt__modal-word" v-for="(entry, index) in getSelectedPrompt.dictionary" :key="'dict-' + index">
+        <div class="prompt__modal-word" v-for="(entry, index) in getSelectedPrompt.user_content.dictionary" :key="'dict-' + index">
           <p><strong>Word:</strong> {{ entry.word }}</p>
           <p><strong>Translation:</strong> {{ entry.translation }}</p>
           <p><strong>Meaning:</strong> {{ entry.meaning }}</p>
@@ -26,11 +26,11 @@
       <br /><br />
 
       <!-- Phrases Section -->
-      <div v-if="getSelectedPrompt?.phrases?.length">
+      <div v-if="getSelectedPrompt?.user_content.phrases?.length">
         <h4>Phrases</h4>
         <br />
 
-        <div class="prompt__modal-word" v-for="(entry, index) in getSelectedPrompt.phrases" :key="'phrase-' + index">
+        <div class="prompt__modal-word" v-for="(entry, index) in getSelectedPrompt.user_content.phrases" :key="'phrase-' + index">
           <p><strong>Phrase:</strong> {{ entry.phrase }}</p>
           <p><strong>Translation:</strong> {{ entry.translation }}</p>
           <p><strong>Meaning:</strong> {{ entry.meaning }}</p>

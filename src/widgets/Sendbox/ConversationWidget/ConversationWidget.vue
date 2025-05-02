@@ -34,7 +34,7 @@
         <div class="prompt-goals">
           <div class="prompt-goals__title">💬 Conversation Goals</div>
 
-          <div v-for="(goal, index) in getSelectedPrompt.goals" :key="index" class="prompt-goals__item">
+          <div v-for="(goal, index) in getSelectedPrompt.user_content.goals" :key="index" class="prompt-goals__item">
             <details class="prompt-goals__accordion">
               <summary class="prompt-goals__phrase">• {{ goal.phrase }}</summary>
               <div class="prompt-goals__details">

@@ -66,7 +66,7 @@
               <div class="dashboard__scenario-section">
                 <h4>Goals</h4>
                 <ul class="dashboard__scenario-list">
-                  <li v-for="goal in scenario.goals" :key="goal.phrase">
+                  <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                     {{ goal.phrase }} — <i>{{ goal.translation }}</i>
                   </li>
                 </ul>
@@ -75,7 +75,7 @@
               <div class="dashboard__scenario-section">
                 <h4>Dictionary</h4>
                 <ul class="dashboard__scenario-list">
-                  <li v-for="word in scenario.dictionary" :key="word.word">
+                  <li v-for="word in scenario.user_content.dictionary" :key="word.word">
                     <b>{{ word.word }}</b> ({{ word.translation }}) — {{ word.meaning }}
                   </li>
                 </ul>
@@ -84,7 +84,7 @@
               <div class="dashboard__scenario-section">
                 <h4>Phrases</h4>
                 <ul class="dashboard__scenario-list">
-                  <li v-for="phrase in scenario.phrases" :key="phrase.phrase">
+                  <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
                     "{{ phrase.phrase }}" — <i>{{ phrase.translation }}</i>
                   </li>
                 </ul>
