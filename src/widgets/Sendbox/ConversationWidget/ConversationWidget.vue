@@ -89,7 +89,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, nextTick, watch } from "vue"
+import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch } from "vue"
 import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip } from "@/shared/components"
@@ -117,6 +117,7 @@ export default defineComponent({
     const isReviewGenerating = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     const isHold = ref<boolean>(false)
+    const isCancelled = ref<boolean>(false)
     let mediaRecorder: MediaRecorder | null = null
     let mediaStream: MediaStream | null = null
     let audioChunks: BlobPart[] = []
@@ -141,9 +142,9 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {
-        nextTick(() => {
+        setTimeout(() => {
           router.push({ name: "sendbox.conversation-dashboard" })
-        })
+        }, 100)
       } else {
         await simulateGreeting()
       }
@@ -232,8 +233,16 @@ export default defineComponent({
       if (e.code === "Space" && !isHold.value && !isLoading.value) {
         e.preventDefault()
         isHold.value = true
+        isCancelled.value = false
         audioPlayer.interruptAndClear()
         await startRecording()
+      }
+
+      if (e.code === "Escape" && isHold.value) {
+        e.preventDefault()
+        isCancelled.value = true
+        await stopRecording()
+        isHold.value = false
       }
     }
 
@@ -266,7 +275,12 @@ export default defineComponent({
         }
 
         mediaRecorder.onstop = async () => {
-          if (audioChunks.length === 0) return
+          if (audioChunks.length === 0 || isCancelled.value) {
+            audioChunks = []
+            isCancelled.value = false
+            if (cleanupCanvas) await cleanupCanvas()
+            return
+          }
 
           const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
           audioChunks = []
