@@ -1,6 +1,6 @@
 <template>
   <div class="auth">
-    <form class="auth__form" @submit.prevent="loginCaptchaExecute">
+    <form class="auth__form" @submit.prevent="onSubmit">
       <h2 class="auth__title">Login</h2>
 
       <div class="auth__field">
@@ -14,7 +14,7 @@
       </div>
 
       <div class="auth__field" v-if="isProduction">
-        <VueHcaptcha ref="loginCaptchaRef" :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
+        <VueHcaptcha :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
       </div>
 
       <div class="auth__footer">
@@ -42,29 +42,18 @@ export default defineComponent({
     const loginCaptchaRef = ref<any>()
     const email = ref<string>("")
     const password = ref<string>("")
-
-    const loginCaptchaExecute = () => {
-      if (!isProduction) {
-        return onSubmit("fake-dev-captcha-token")
-      }
-
-      if (email.value && password.value) {
-        loginCaptchaRef.value?.execute()
-      }
-    }
+    const captchaToken = ref<string>("")
 
     const loginCodeCaptcha = (token: string) => {
-      if (token) {
-        onSubmit(token)
-      }
+      captchaToken.value = token
     }
 
-    const onSubmit = async (token: string) => {
+    const onSubmit = async () => {
       try {
         await authStore.fetchLogin({
           email: email.value,
           password: password.value,
-          hcaptcha_token: token,
+          hcaptcha_token: captchaToken.value,
         })
       } catch (error: unknown) {
         alert("Something Went Wrong")
@@ -75,7 +64,7 @@ export default defineComponent({
       loginCaptchaRef,
       email,
       password,
-      loginCaptchaExecute,
+      onSubmit,
       loginCodeCaptcha,
       CAPTCHA_SITE_KEY,
       isProduction,
