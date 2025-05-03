@@ -33,6 +33,12 @@ jobs:
         run: |
           gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
 
+      - name: Build frontend app
+        run: |
+          VITE_API_CORE_URL=${{ secrets.VITE_API_CORE_URL }} \
+          VITE_CAPTCHA_SITE_KEY=${{ secrets.VITE_CAPTCHA_SITE_KEY }} \
+          yarn build
+
       - name: Build and Push Docker Image
         run: |
           docker buildx build \
