@@ -14,7 +14,7 @@
       </div>
 
       <div class="auth__field" v-if="isProduction">
-        <VueHcaptcha ref="loginCaptchaRef" :sitekey="CAPTCHA_SITE_KEY" size="invisible" @verify="loginCodeCaptcha" />
+        <VueHcaptcha ref="loginCaptchaRef" :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
       </div>
 
       <div class="auth__footer">
