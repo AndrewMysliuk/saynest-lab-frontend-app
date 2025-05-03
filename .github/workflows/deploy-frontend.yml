@@ -33,6 +33,9 @@ jobs:
         run: |
           gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
 
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
       - name: Build frontend app
         run: |
           VITE_API_CORE_URL=${{ secrets.VITE_API_CORE_URL }} \
