@@ -9,10 +9,6 @@ docker_run_local:
 	docker run -d -p $(PORT):80 \
 		--name $(CONTAINER_NAME) $(IMAGE_NAME)
 
-docker_run_server:
-	docker run -d -p $(PORT):80 \
-		--name $(CONTAINER_NAME) $(IMAGE_NAME)
-
 stop:
 	docker stop $(CONTAINER_NAME)
 	docker rm $(CONTAINER_NAME)
