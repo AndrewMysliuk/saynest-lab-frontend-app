@@ -39,6 +39,7 @@ jobs:
       - name: Build frontend app
         run: |
           VITE_API_CORE_URL=${{ secrets.VITE_API_CORE_URL }} \
+          VITE_K_SERVICE=${{ secrets.VITE_K_SERVICE }} \
           VITE_CAPTCHA_SITE_KEY=${{ secrets.VITE_CAPTCHA_SITE_KEY }} \
           yarn build
 
