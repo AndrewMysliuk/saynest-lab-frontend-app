@@ -1,7 +1,7 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { IStatistics, IStatisticsGenerateRequest } from "../types"
-import { deleteReviewHandler, generateConversationReviewHandler, getReviewHandler, reviewsListHandler } from "../api"
+import { IStatistics, IStatisticsGenerateRequest, IStatisticsUpdateAudioUrl } from "../types"
+import { deleteReviewHandler, generateConversationReviewHandler, getReviewHandler, reviewsListHandler, updateAudioUrlHandler } from "../api"
 
 export const useCommunicationReviewStore = defineStore("communicationReviewStore", () => {
   const reviewsList = ref<IStatistics[]>([])
@@ -62,6 +62,18 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
       })
   }
 
+  const fetchUpdateAudioUrl = async (dto: IStatisticsUpdateAudioUrl) => {
+    await updateAudioUrlHandler(dto)
+      .then((response: string) => {
+        if (currentReview.value && currentReview.value.history?.messages) {
+          currentReview.value.history.messages = currentReview.value.history.messages.map((item) => (item.pair_id === dto.pair_id && item.role === dto.role ? { ...item, audio_url: response } : item))
+        }
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
   return {
     getReviewsList,
     getCurrentReview,
@@ -70,5 +82,6 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
     fetchReviewsList,
     fetchReviewById,
     fetchDeleteReviewById,
+    fetchUpdateAudioUrl,
   }
 })

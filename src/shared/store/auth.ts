@@ -28,7 +28,7 @@ export const useAuthStore = defineStore("authStore", () => {
       localStorage.setItem("access_token", response.access_token)
       isLogged.value = true
 
-      router.push({ name: "sendbox.conversation-dashboard" })
+      router.push({ name: "platform.conversation-dashboard" })
     } catch (error: unknown) {
       throw error
     }
@@ -42,7 +42,7 @@ export const useAuthStore = defineStore("authStore", () => {
       localStorage.setItem("access_token", response.access_token)
       isLogged.value = true
 
-      router.push({ name: "sendbox.conversation-dashboard" })
+      router.push({ name: "platform.conversation-dashboard" })
     } catch (error: unknown) {
       throw error
     }

@@ -1,9 +1,6 @@
 @use "common/media";
 @use "common/base";
+@use "common/tailwind";
 
 @use "components/room";
-@use "components/dashboard";
 @use "components/conversation";
-@use "components/prompt";
-@use "components/history";
-@use "components/auth";

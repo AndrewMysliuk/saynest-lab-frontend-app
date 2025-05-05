@@ -11,7 +11,7 @@ const auth: RouteRecordRaw[] = [
       const isLogged = authStore.getIsLogged
 
       if (isLogged) {
-        next({ name: "sendbox.conversation-dashboard" })
+        next({ name: "platform.conversation-dashboard" })
         return
       }
 
@@ -28,6 +28,12 @@ const auth: RouteRecordRaw[] = [
         name: "auth.login",
         component: async () => await import("@/pages").then((module) => module.LoginPageAuth),
       },
+
+      // {
+      //   path: "/auth/signup",
+      //   name: "auth.signup",
+      //   component: async () => await import("@/pages").then((module) => module.SignupPageAuth),
+      // },
     ],
   },
 ]

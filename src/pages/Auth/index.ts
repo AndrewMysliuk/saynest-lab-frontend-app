@@ -1,3 +1,4 @@
 import LoginPageAuth from "./LoginPage"
+import SignupPageAuth from "./SignupPage"
 
-export { LoginPageAuth }
+export { LoginPageAuth, SignupPageAuth }

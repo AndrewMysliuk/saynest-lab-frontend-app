@@ -1,4 +1,4 @@
-import { ConversationWidgetSendbox, ConversationDashboardWidgetSendbox, ConversationHistoryWidgetSendbox } from "./Sendbox"
-import { LoginWidgetAuth } from "./Auth"
+import { ConversationWidgetPlatform, ConversationDashboardWidgetPlatform, ConversationHistoryWidgetPlatform } from "./Platform"
+import { LoginWidgetAuth, SignupWidgetAuth } from "./Auth"
 
-export { LoginWidgetAuth, ConversationWidgetSendbox, ConversationDashboardWidgetSendbox, ConversationHistoryWidgetSendbox }
+export { LoginWidgetAuth, SignupWidgetAuth, ConversationWidgetPlatform, ConversationDashboardWidgetPlatform, ConversationHistoryWidgetPlatform }

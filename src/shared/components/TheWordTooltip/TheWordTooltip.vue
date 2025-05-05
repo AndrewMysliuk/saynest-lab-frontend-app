@@ -1,26 +1,32 @@
 <template>
   <transition name="fade">
-    <div v-if="isVisible" class="tooltip-word" :class="{ '--loading': isLoading }" :style="style" @mouseover="cancelHide" @mouseout="onMouseOut">
+    <div v-if="isVisible" :style="style" class="absolute z-50 max-w-xs bg-zinc-900 text-white rounded-xl shadow-xl p-4 text-sm" @mouseover="cancelHide" @mouseout="onMouseOut">
       <div v-if="!isLoading">
-        <div class="tooltip-word__header">
-          <span class="tooltip-word__word">{{ word }}</span>
-          <span class="tooltip-word__icons">
-            <i class="tooltip-word__icon fas fa-volume-up" title="Проиграть" @click.stop="fetchWordAudio" />
-            <i class="tooltip-word__icon fas fa-copy" title="Копировать" @click.stop="copyWord" />
-          </span>
+        <!-- Header -->
+        <div class="flex items-start justify-between mb-2">
+          <span class="text-base font-semibold">{{ word }}</span>
+          <div class="flex items-center gap-3">
+            <button @click.stop="fetchWordAudio" title="Play" class="text-white hover:text-primary">
+              <i class="fas fa-volume-up text-base" />
+            </button>
+            <button @click.stop="copyWord" title="Copy" class="text-white hover:text-primary">
+              <i class="fas fa-copy text-base" />
+            </button>
+          </div>
         </div>
 
-        <div class="tooltip-word__body" v-if="getCurrentWord">
-          <div v-for="meaning in getCurrentWord.meanings" :key="meaning.meaning" class="tooltip-word__meaning">
-            <div class="tooltip-word__pos">{{ meaning.part_of_speech }}</div>
-            <div class="tooltip-word__translation">{{ meaning.translation }}</div>
-            <div class="tooltip-word__description">{{ meaning.meaning }}</div>
-            <div v-if="meaning.synonyms.length" class="tooltip-word__synonyms"><strong>Synonyms:</strong> {{ meaning.synonyms.join(", ") }}</div>
+        <!-- Meanings -->
+        <div v-if="getCurrentWord" class="space-y-4">
+          <div v-for="(meaning, index) in getCurrentWord.meanings" :key="index" class="border-t border-white/10 pt-2 first:border-none first:pt-0">
+            <div class="italic text-sky-400 mb-0.5">{{ meaning.part_of_speech }}</div>
+            <div class="text-yellow-400 font-medium">{{ meaning.translation }}</div>
+            <div class="text-white/80 mt-1">{{ meaning.meaning }}</div>
+            <div v-if="meaning.synonyms?.length" class="mt-1 text-white/60"><span class="font-semibold text-white">Synonyms:</span> {{ meaning.synonyms.join(", ") }}</div>
           </div>
         </div>
       </div>
 
-      <div v-else>Loading...</div>
+      <div v-else class="text-white/70">Loading...</div>
     </div>
   </transition>
 </template>
@@ -179,4 +185,4 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" src="./TheWordTooltip.scss" />
+<!-- <style lang="scss" src="./TheWordTooltip.scss" /> -->

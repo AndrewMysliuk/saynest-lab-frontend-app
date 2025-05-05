@@ -1,4 +1,4 @@
-import { ConversationPageSendbox, ConversationDashboardPageSendbox, ConversationHistoryPageSendbox } from "./Sendbox"
-import { LoginPageAuth } from "./Auth"
+import { ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform } from "./Platform"
+import { LoginPageAuth, SignupPageAuth } from "./Auth"
 
-export { LoginPageAuth, ConversationPageSendbox, ConversationDashboardPageSendbox, ConversationHistoryPageSendbox }
+export { LoginPageAuth, SignupPageAuth, ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform }

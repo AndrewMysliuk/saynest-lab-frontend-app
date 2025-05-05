@@ -62,3 +62,10 @@ export interface IStatisticsGenerateRequest {
   target_language: string
   explanation_language: string
 }
+
+export interface IStatisticsUpdateAudioUrl {
+  id: string
+  session_id: string
+  pair_id: string
+  role: string
+}

@@ -1,6 +1,6 @@
 import { axios } from "../config"
 import { AxiosResponse } from "axios"
-import { IStatistics, IStatisticsGenerateRequest } from "../types"
+import { IStatistics, IStatisticsGenerateRequest, IStatisticsUpdateAudioUrl } from "../types"
 
 export const generateConversationReviewHandler = async (payload: IStatisticsGenerateRequest): Promise<IStatistics> => {
   try {
@@ -58,6 +58,24 @@ export const deleteReviewHandler = async (review_id: string): Promise<boolean> =
     })
 
     const { data }: { data: boolean } = response
+
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
+export const updateAudioUrlHandler = async (dto: IStatisticsUpdateAudioUrl): Promise<string> => {
+  try {
+    const response: AxiosResponse = await axios({
+      url: "/api/communication-review/update-audio-url",
+      method: "POST",
+      data: {
+        ...dto,
+      },
+    })
+
+    const { data }: { data: string } = response
 
     return data
   } catch (error: unknown) {

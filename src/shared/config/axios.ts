@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   baseURL,
 })
 
-const refreshAxios = axios.create({
+const publicAxios = axios.create({
   withCredentials: true,
   baseURL,
 })
@@ -93,4 +93,4 @@ axiosInstance.interceptors.response.use(
   }
 )
 
-export { axiosInstance as axios, refreshAxios as refreshAxios }
+export { axiosInstance as axios, publicAxios }

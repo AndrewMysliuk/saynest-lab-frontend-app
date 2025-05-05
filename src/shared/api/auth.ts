@@ -1,4 +1,4 @@
-import { axios, refreshAxios } from "../config"
+import { axios, publicAxios } from "../config"
 import { AxiosResponse } from "axios"
 import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse } from "../types"
 
@@ -40,7 +40,7 @@ export const loginHandler = async (payload: ILoginRequest): Promise<ILoginRespon
 
 export const refreshAccessTokenHandler = async (): Promise<string> => {
   try {
-    const response: AxiosResponse = await refreshAxios({
+    const response: AxiosResponse = await publicAxios({
       url: "/api/auth/refresh",
       method: "GET",
     })

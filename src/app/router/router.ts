@@ -1,13 +1,13 @@
 import { NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from "vue-router"
 import MainLayout from "@/layouts/MainLayout.vue"
-import sendbox from "./sendbox"
+import platform from "./platform"
 import auth from "./auth"
 import { authStore } from ".."
 
 // Routers
 const childrenComponents: RouteRecordRaw[] = [
   ...auth,
-  ...sendbox,
+  ...platform,
   {
     path: "/:pathMatch(.*)*",
     redirect: "/",
@@ -21,7 +21,7 @@ export const routes: RouteRecordRaw[] = [
     component: MainLayout,
 
     redirect: {
-      name: "sendbox.conversation-dashboard",
+      name: "platform.conversation-dashboard",
     },
 
     beforeEnter: (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
