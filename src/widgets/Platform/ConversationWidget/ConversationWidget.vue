@@ -120,7 +120,7 @@ export default defineComponent({
     const isSidebarOpen = ref<boolean>(false)
     const isGoalsOpen = ref<boolean>(false)
     const isReviewGenerating = ref<boolean>(false)
-    const isLoading = ref<boolean>(false)
+    const isLoading = ref<boolean>(true)
     const isHold = ref<boolean>(false)
     const isCancelled = ref<boolean>(false)
     const isGoalsToggle = ref<boolean>(false)
