@@ -52,6 +52,8 @@ export interface IPromptMeta {
   estimated_duration_minutes: number
   max_turns: number
   model_end_behavior: string
+  target_language: string
+  explanation_language: string
 }
 
 export interface IModuleScenario {

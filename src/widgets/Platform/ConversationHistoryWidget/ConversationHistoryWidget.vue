@@ -352,7 +352,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, reactive, nextTick } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { communicationReviewStore, taskGeneratorStore } from "@/app"
+import { communicationReviewStore, promptStore, taskGeneratorStore } from "@/app"
 import { IConversationHistory, IGenericTask, IMultipleChoiceTask, IStatistics, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
 import { taskGeneratorHandler } from "@/shared/api"
 import { TheLoader } from "@/shared/components"
@@ -377,6 +377,7 @@ export default defineComponent({
     const getReviewsList = computed(() => communicationReviewStore.getReviewsList)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
     const getTasksList = computed(() => taskGeneratorStore.getTasksList)
+    const getPromptList = computed(() => promptStore.getPromptList)
     const issueTopics = computed(() => {
       if (!getCurrentReview.value) return []
 
@@ -474,8 +475,8 @@ export default defineComponent({
             topic_title: selectedTopic.value,
             type: TaskTypeEnum.MULTIPLE_CHOICE,
             mode: TaskModeEnum.WRITE,
-            target_language: "en",
-            explanation_language: "uk",
+            target_language: getPromptList.value.find((item) => item.id === getCurrentReview.value?.prompt_id)?.meta?.target_language || "",
+            explanation_language: getPromptList.value.find((item) => item.id === getCurrentReview.value?.prompt_id)?.meta?.explanation_language || "",
             task_sentences_count: 10,
           },
           controller.signal

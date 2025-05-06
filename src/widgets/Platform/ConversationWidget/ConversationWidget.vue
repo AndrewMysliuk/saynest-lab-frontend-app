@@ -25,7 +25,7 @@
             @click="analyseUserConversation"
             class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-medium"
           >
-            Analyse
+            Finish and Analyse Conversation
           </button>
 
           <button
@@ -130,8 +130,8 @@ export default defineComponent({
     let cleanupCanvas: (() => void) | null = null
     const tooltip = ref<ITooltip>({
       show: false,
-      target_language: "en",
-      explanation_language: "uk",
+      target_language: "",
+      explanation_language: "",
       word: "",
       position: { x: 0, y: 0 },
     })
@@ -152,6 +152,9 @@ export default defineComponent({
           router.push({ name: "platform.conversation-dashboard" })
         }, 100)
       } else {
+        tooltip.value.target_language = getSelectedPrompt.value.meta.target_language
+        tooltip.value.explanation_language = getSelectedPrompt.value.meta.explanation_language
+
         await simulateGreeting()
       }
     })
@@ -168,10 +171,10 @@ export default defineComponent({
 
           await communicationReviewStore.generateConversationReview({
             session_id: getConversationResponse.value?.session_id,
-            prompt_id: getSelectedPrompt.value?.id,
+            prompt_id: getSelectedPrompt.value.id,
             topic_title: getSelectedPrompt.value.title ?? "",
-            target_language: "en",
-            explanation_language: "uk",
+            target_language: getSelectedPrompt.value.meta.target_language,
+            explanation_language: getSelectedPrompt.value.meta.explanation_language,
           })
 
           conversationStore.resetAll()
@@ -223,8 +226,8 @@ export default defineComponent({
               prompt_id: getSelectedPrompt.value?.id,
               global_prompt: getSelectedPrompt.value?.finally_prompt,
             },
-            target_language: "en",
-            explanation_language: "uk",
+            target_language: getSelectedPrompt.value.meta.target_language,
+            explanation_language: getSelectedPrompt.value.meta.explanation_language,
           },
           controller.signal
         )
@@ -310,8 +313,8 @@ export default defineComponent({
                   prompt_id: getSelectedPrompt.value?.id,
                   global_prompt: getSelectedPrompt.value?.finally_prompt,
                 },
-                target_language: "en",
-                explanation_language: "uk",
+                target_language: getSelectedPrompt.value.meta.target_language,
+                explanation_language: getSelectedPrompt.value.meta.explanation_language,
               },
               controller.signal
             )
@@ -328,8 +331,8 @@ export default defineComponent({
                   })),
                 },
                 session_id: getConversationResponse.value?.session_id ?? "",
-                target_language: "en",
-                explanation_language: "uk",
+                target_language: getSelectedPrompt.value.meta.target_language,
+                explanation_language: getSelectedPrompt.value.meta.explanation_language,
                 prompt_id: getSelectedPrompt.value?.id ?? "",
               },
               {
