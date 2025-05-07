@@ -148,11 +148,11 @@
                       <div class="text-sm space-y-1 leading-relaxed">
                         <p>
                           <span class="font-semibold text-gray-600">Original:</span>
-                          <span class="ml-1 text-red-600" v-html="highlightWords(issue.original_text, issue.error_words, 'error')" />
+                          <span class="ml-1" v-html="highlightWords(issue.original_text, issue.error_words, 'error')" />
                         </p>
                         <p>
                           <span class="font-semibold text-gray-600">Suggestion:</span>
-                          <span class="ml-1 text-green-700" v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')" />
+                          <span class="ml-1" v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')" />
                         </p>
                         <p class="text-gray-700"><span class="font-semibold">Explanation:</span> {{ issue.explanation }}</p>
                         <p v-if="issue.topic_titles" class="text-gray-600"><span class="font-semibold">Topic:</span> {{ issue.topic_titles }}</p>
@@ -458,7 +458,7 @@ export default defineComponent({
       const regex = new RegExp(`\\b(${escapedWords.join("|")})\\b`, "gi")
 
       return text.replace(regex, (match) => {
-        const cls = type === "error" ? "highlight-error" : "highlight-correct"
+        const cls = type === "error" ? "text-red-600 font-semibold" : "text-green-700 font-semibold"
         return `<span class="${cls}">${match}</span>`
       })
     }
