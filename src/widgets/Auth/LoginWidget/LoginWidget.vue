@@ -55,6 +55,7 @@ import { isProduction } from "@/shared/utils"
 import { ILoginRequest } from "@/shared/types"
 
 const CAPTCHA_SITE_KEY = import.meta.env.VITE_CAPTCHA_SITE_KEY as string
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string
 
 export default defineComponent({
   components: {
@@ -78,14 +79,13 @@ export default defineComponent({
         }
       }, 100)
 
-      console.log(CAPTCHA_SITE_KEY)
-      console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
+      console.log(GOOGLE_CLIENT_ID)
     })
 
     const tryInitGoogle = () => {
       if (window.google?.accounts?.id && googleDiv.value) {
         window.google.accounts.id.initialize({
-          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          client_id: GOOGLE_CLIENT_ID,
           callback: handleCredentialResponse,
         })
 
