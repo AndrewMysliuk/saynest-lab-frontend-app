@@ -77,6 +77,8 @@ export default defineComponent({
           clearInterval(interval)
         }
       }, 100)
+
+      console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
     })
 
     const tryInitGoogle = () => {
