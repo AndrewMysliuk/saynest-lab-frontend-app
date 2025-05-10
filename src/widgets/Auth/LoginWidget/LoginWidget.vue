@@ -3,7 +3,7 @@
     <form class="w-full max-w-md bg-surface p-8 rounded-xl shadow-soft space-y-6" @submit.prevent="onSubmit">
       <h2 class="text-2xl font-semibold text-text-base text-center">Login</h2>
 
-      <div ref="googleDiv"></div>
+      <div ref="googleDiv" class="flex justify-center" />
 
       <div>
         <label for="email" class="block text-sm font-medium text-text-muted">Email</label>
@@ -38,10 +38,22 @@
       </div>
 
       <div class="flex justify-between gap-4">
-        <button type="button" @click="$router.push({ name: 'auth.signup' })" class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition">
+        <button
+          type="button"
+          @click="$router.push({ name: 'auth.signup' })"
+          :disabled="isGoogleProcessing"
+          class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           Sign Up
         </button>
-        <button type="submit" class="w-1/2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryDark transition-colors duration-200">Log In</button>
+
+        <button
+          type="submit"
+          :disabled="isGoogleProcessing"
+          class="w-1/2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryDark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Log In
+        </button>
       </div>
     </form>
   </div>
@@ -71,6 +83,7 @@ export default defineComponent({
       hcaptcha_token: "",
     })
     const errorMessage = ref<string | null>(null)
+    const isGoogleProcessing = ref<boolean>(false)
 
     onMounted(() => {
       const interval = setInterval(() => {
@@ -99,12 +112,15 @@ export default defineComponent({
 
     const handleCredentialResponse = async (response: any) => {
       try {
+        isGoogleProcessing.value = true
         errorMessage.value = null
+
         await authStore.fetchGoogle(response.credential)
       } catch (error: unknown) {
         errorMessage.value = "Something went wrong. Please try again."
       } finally {
         setTimeout(() => {
+          isGoogleProcessing.value = false
           errorMessage.value = null
         }, 3000)
       }
@@ -115,6 +131,8 @@ export default defineComponent({
     }
 
     const onSubmit = async () => {
+      if (isGoogleProcessing) return
+
       try {
         errorMessage.value = null
         await authStore.fetchLogin(loginPayload.value)
@@ -133,6 +151,7 @@ export default defineComponent({
 
     return {
       googleDiv,
+      isGoogleProcessing,
       loginCaptchaRef,
       loginPayload,
       errorMessage,

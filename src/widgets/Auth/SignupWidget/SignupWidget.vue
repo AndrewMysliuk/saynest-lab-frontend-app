@@ -3,7 +3,7 @@
     <form class="w-full max-w-md bg-surface p-8 rounded-xl shadow-soft space-y-6" @submit.prevent="onSubmit">
       <h2 class="text-2xl font-semibold text-text-base text-center">Sign Up</h2>
 
-      <div ref="googleDiv"></div>
+      <div ref="googleDiv" class="flex justify-center" />
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
@@ -106,10 +106,22 @@
       </div>
 
       <div class="flex justify-between gap-4">
-        <button type="button" @click="$router.push({ name: 'auth.login' })" class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition">
+        <button
+          type="button"
+          @click="$router.push({ name: 'auth.login' })"
+          :disabled="isGoogleProcessing"
+          class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           Log In
         </button>
-        <button type="submit" class="w-1/2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryDark transition-colors duration-200">Sign Up</button>
+
+        <button
+          type="submit"
+          :disabled="isGoogleProcessing"
+          class="w-1/2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryDark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Sign Up
+        </button>
       </div>
     </form>
   </div>
@@ -147,6 +159,7 @@ export default defineComponent({
       alpha_2,
     }))
     const errorMessages = ref<Record<string, string>>({})
+    const isGoogleProcessing = ref<boolean>(false)
 
     onMounted(() => {
       const interval = setInterval(() => {
@@ -175,12 +188,15 @@ export default defineComponent({
 
     const handleCredentialResponse = async (response: any) => {
       try {
+        isGoogleProcessing.value = true
         errorMessages.value = {}
+
         await authStore.fetchGoogle(response.credential)
       } catch (error: unknown) {
         errorMessages.value._global = "Something went wrong. Please try again."
       } finally {
         setTimeout(() => {
+          isGoogleProcessing.value = false
           errorMessages.value = {}
         }, 3000)
       }
@@ -222,6 +238,7 @@ export default defineComponent({
     return {
       googleDiv,
       loginCaptchaRef,
+      isGoogleProcessing,
       sigupPayload,
       repeatPassword,
       countryOptions,
