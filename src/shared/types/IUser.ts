@@ -24,6 +24,7 @@ export interface IUserEntity {
   is_email_confirmed: boolean
   first_name: string
   last_name: string
+  explanation_language: string | null
   country: string
   role: UserRoleEnum
   status: UserStatusEnum
@@ -40,4 +41,20 @@ export interface IUserCreateRequest {
   country: string
   role: UserRoleEnum
   organization_id: string
+}
+
+export interface IUserSettings {
+  phone?: string
+  avatar_url?: string
+}
+
+export interface IUserUpdateRequest {
+  first_name?: string
+  last_name?: string
+  email?: string
+  explanation_language?: string
+  country?: string
+  role?: UserRoleEnum
+  status?: UserStatusEnum
+  settings?: Partial<IUserSettings>
 }

@@ -1,8 +1,9 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { registerHandler, loginHandler, refreshAccessTokenHandler, logoutHandler } from "../api"
-import { ILoginRequest, IRegisterRequest } from "../types"
+import { userStore } from "@/app"
 import router from "@/app/router"
+import { registerHandler, loginHandler, refreshAccessTokenHandler, logoutHandler, googleHandler } from "../api"
+import { ILoginRequest, IRegisterRequest } from "../types"
 
 export const useAuthStore = defineStore("authStore", () => {
   const isLogged = ref<boolean>(false)
@@ -20,12 +21,32 @@ export const useAuthStore = defineStore("authStore", () => {
     }
   }
 
+  const fetchGoogle = async (id_token: string) => {
+    try {
+      const response = await googleHandler(id_token)
+
+      accessToken.value = response.access_token
+      localStorage.setItem("access_token", response.access_token)
+
+      userStore.setUserData(response.user)
+
+      isLogged.value = true
+
+      router.push({ name: "platform.conversation-dashboard" })
+    } catch (error: unknown) {
+      throw error
+    }
+  }
+
   const fetchRegister = async (payload: IRegisterRequest) => {
     try {
       const response = await registerHandler(payload)
 
       accessToken.value = response.access_token
       localStorage.setItem("access_token", response.access_token)
+
+      userStore.setUserData(response.user)
+
       isLogged.value = true
 
       router.push({ name: "platform.conversation-dashboard" })
@@ -40,6 +61,9 @@ export const useAuthStore = defineStore("authStore", () => {
 
       accessToken.value = response.access_token
       localStorage.setItem("access_token", response.access_token)
+
+      userStore.setUserData(response.user)
+
       isLogged.value = true
 
       router.push({ name: "platform.conversation-dashboard" })
@@ -81,5 +105,6 @@ export const useAuthStore = defineStore("authStore", () => {
     fetchLogin,
     fetchRefreshAccessToken,
     fetchLogout,
+    fetchGoogle,
   }
 })

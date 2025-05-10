@@ -29,11 +29,11 @@ const auth: RouteRecordRaw[] = [
         component: async () => await import("@/pages").then((module) => module.LoginPageAuth),
       },
 
-      // {
-      //   path: "/auth/signup",
-      //   name: "auth.signup",
-      //   component: async () => await import("@/pages").then((module) => module.SignupPageAuth),
-      // },
+      {
+        path: "/auth/signup",
+        name: "auth.signup",
+        component: async () => await import("@/pages").then((module) => module.SignupPageAuth),
+      },
     ],
   },
 ]

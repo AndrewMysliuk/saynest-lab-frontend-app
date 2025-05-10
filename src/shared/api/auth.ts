@@ -1,8 +1,26 @@
 import { axios, publicAxios } from "../config"
 import { AxiosResponse } from "axios"
-import { ILoginRequest, ILoginResponse, IRegisterRequest, IRegisterResponse } from "../types"
+import { ILoginRequest, IRegisterRequest, IAuthResponse } from "../types"
 
-export const registerHandler = async (payload: IRegisterRequest): Promise<IRegisterResponse> => {
+export const googleHandler = async (id_token: string): Promise<IAuthResponse> => {
+  try {
+    const response: AxiosResponse = await axios({
+      url: "/api/auth/google",
+      method: "POST",
+      data: {
+        id_token,
+      },
+    })
+
+    const { data }: { data: IAuthResponse } = response
+
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
+export const registerHandler = async (payload: IRegisterRequest): Promise<IAuthResponse> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/auth/register",
@@ -12,7 +30,7 @@ export const registerHandler = async (payload: IRegisterRequest): Promise<IRegis
       },
     })
 
-    const { data }: { data: IRegisterResponse } = response
+    const { data }: { data: IAuthResponse } = response
 
     return data
   } catch (error: unknown) {
@@ -20,7 +38,7 @@ export const registerHandler = async (payload: IRegisterRequest): Promise<IRegis
   }
 }
 
-export const loginHandler = async (payload: ILoginRequest): Promise<ILoginResponse> => {
+export const loginHandler = async (payload: ILoginRequest): Promise<IAuthResponse> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/auth/login",
@@ -30,7 +48,7 @@ export const loginHandler = async (payload: ILoginRequest): Promise<ILoginRespon
       },
     })
 
-    const { data }: { data: ILoginResponse } = response
+    const { data }: { data: IAuthResponse } = response
 
     return data
   } catch (error: unknown) {

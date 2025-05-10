@@ -3,6 +3,8 @@
     <form class="w-full max-w-md bg-surface p-8 rounded-xl shadow-soft space-y-6" @submit.prevent="onSubmit">
       <h2 class="text-2xl font-semibold text-text-base text-center">Login</h2>
 
+      <div ref="googleDiv"></div>
+
       <div>
         <label for="email" class="block text-sm font-medium text-text-muted">Email</label>
         <input
@@ -31,10 +33,14 @@
         <VueHcaptcha :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
       </div>
 
+      <div v-if="errorMessage" class="text-sm text-red-600 bg-red-100 border border-red-200 rounded-md p-3">
+        {{ errorMessage }}
+      </div>
+
       <div class="flex justify-between gap-4">
-        <!-- <button type="button" @click="$router.push({ name: 'auth.signup' })" class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition">
+        <button type="button" @click="$router.push({ name: 'auth.signup' })" class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition">
           Sign Up
-        </button> -->
+        </button>
         <button type="submit" class="w-1/2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryDark transition-colors duration-200">Log In</button>
       </div>
     </form>
@@ -44,7 +50,7 @@
 <script lang="ts">
 import VueHcaptcha from "@hcaptcha/vue3-hcaptcha"
 import { authStore } from "@/app"
-import { defineComponent, ref } from "vue"
+import { defineComponent, onMounted, ref } from "vue"
 import { isProduction } from "@/shared/utils"
 import { ILoginRequest } from "@/shared/types"
 
@@ -56,12 +62,52 @@ export default defineComponent({
   },
 
   setup() {
+    const googleDiv = ref<HTMLDivElement | null>(null)
     const loginCaptchaRef = ref<any>()
     const loginPayload = ref<ILoginRequest>({
       email: "",
       password: "",
       hcaptcha_token: "",
     })
+    const errorMessage = ref<string | null>(null)
+
+    onMounted(() => {
+      const interval = setInterval(() => {
+        if (tryInitGoogle()) {
+          clearInterval(interval)
+        }
+      }, 100)
+    })
+
+    const tryInitGoogle = () => {
+      if (window.google?.accounts?.id && googleDiv.value) {
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          callback: handleCredentialResponse,
+        })
+
+        window.google.accounts.id.renderButton(googleDiv.value, {
+          theme: "outline",
+          size: "large",
+        })
+
+        return true
+      }
+      return false
+    }
+
+    const handleCredentialResponse = async (response: any) => {
+      try {
+        errorMessage.value = null
+        await authStore.fetchGoogle(response.credential)
+      } catch (error: unknown) {
+        errorMessage.value = "Something went wrong. Please try again."
+      } finally {
+        setTimeout(() => {
+          errorMessage.value = null
+        }, 3000)
+      }
+    }
 
     const loginCodeCaptcha = (token: string) => {
       loginPayload.value.hcaptcha_token = token
@@ -69,15 +115,26 @@ export default defineComponent({
 
     const onSubmit = async () => {
       try {
+        errorMessage.value = null
         await authStore.fetchLogin(loginPayload.value)
-      } catch (error: unknown) {
-        alert("Something Went Wrong")
+      } catch (error: any) {
+        if (error?.response?.status === 401) {
+          errorMessage.value = "Invalid email or password"
+        } else {
+          errorMessage.value = "Something went wrong. Please try again."
+        }
+      } finally {
+        setTimeout(() => {
+          errorMessage.value = null
+        }, 3000)
       }
     }
 
     return {
+      googleDiv,
       loginCaptchaRef,
       loginPayload,
+      errorMessage,
       onSubmit,
       loginCodeCaptcha,
       CAPTCHA_SITE_KEY,

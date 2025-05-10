@@ -12,6 +12,9 @@ declare global {
   interface HTMLElement {
     _cleanup?: () => void
   }
+  interface Window {
+    google: typeof google
+  }
 }
 
 export {}

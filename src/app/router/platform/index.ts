@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from "vue-router"
-import { authStore } from "@/app"
+import { authStore, userStore } from "@/app"
 import PlatformLayout from "@/layouts/PlatformLayout.vue"
 
 const platform: RouteRecordRaw[] = [
@@ -7,12 +7,17 @@ const platform: RouteRecordRaw[] = [
     path: "/platform",
     name: "platform",
     component: PlatformLayout,
-    beforeEnter: (_to, _from, next) => {
+    beforeEnter: async (_to, _from, next) => {
       const isLogged = authStore.getIsLogged
+      const currentUser = userStore.getCurrentUser
 
       if (!isLogged) {
         next({ name: "auth.login" })
         return
+      }
+
+      if (!currentUser) {
+        await userStore.fetchGetUser()
       }
 
       next()

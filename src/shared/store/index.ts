@@ -5,5 +5,6 @@ import { useVocabularyTrackerStore } from "./vocabulary_tracker"
 import { useCommunicationReviewStore } from "./communication_review"
 import { useTaskGeneratorStore } from "./task_generator"
 import { useAuthStore } from "./auth"
+import { useUserStore } from "./user"
 
-export { useConversationStore, usePromptStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore, useTaskGeneratorStore, useAuthStore }
+export { useConversationStore, usePromptStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore, useTaskGeneratorStore, useAuthStore, useUserStore }
