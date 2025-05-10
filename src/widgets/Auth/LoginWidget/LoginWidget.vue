@@ -131,7 +131,7 @@ export default defineComponent({
     }
 
     const onSubmit = async () => {
-      if (isGoogleProcessing) return
+      if (isGoogleProcessing.value) return
 
       try {
         errorMessage.value = null
