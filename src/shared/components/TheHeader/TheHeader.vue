@@ -16,7 +16,7 @@
       </nav>
 
       <div class="flex items-center space-x-4">
-        <div v-if="getIsLogged" class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold cursor-pointer" @click="isUserModalOpen = true">
+        <div v-if="getIsLogged" id="USER_PROFILE_INFO_CLICK" class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold cursor-pointer" @click="isUserModalOpen = true">
           {{ getUserInitials }}
         </div>
 
