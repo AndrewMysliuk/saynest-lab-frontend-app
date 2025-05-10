@@ -78,6 +78,7 @@ export default defineComponent({
         }
       }, 100)
 
+      console.log(CAPTCHA_SITE_KEY)
       console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
     })
 
