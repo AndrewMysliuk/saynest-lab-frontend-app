@@ -6,10 +6,20 @@ import { wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
 
-import { components } from "@/shared/config"
+import { components, gtmConfig } from "@/shared/config"
 import { createAudioPlayer } from "@/shared/lib"
+import { createGtm } from "@gtm-support/vue-gtm"
 
 export const app = createApp(App)
+
+app.use(
+  createGtm({
+    id: gtmConfig.id,
+    enabled: gtmConfig.enabled,
+    debug: gtmConfig.debug,
+    vueRouter: router,
+  })
+)
 
 app.directive("word-click", wordClickDirective)
 

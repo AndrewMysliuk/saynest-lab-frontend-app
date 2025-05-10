@@ -9,6 +9,15 @@ const router = createRouter({
 
 router.afterEach((to) => {
   document.title = (to?.meta?.title as string) || "OpenAI Speak Mate Frontend"
+
+  if (typeof window !== "undefined") {
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({
+      event: "pageview",
+      page_path: to.fullPath,
+      page_title: document.title,
+    })
+  }
 })
 
 export default router
