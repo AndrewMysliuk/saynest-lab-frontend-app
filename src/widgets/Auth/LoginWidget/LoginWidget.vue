@@ -113,7 +113,7 @@ export default defineComponent({
               window.dataLayer = window.dataLayer || []
               window.dataLayer.push({
                 event: "GOOGLE_LOGIN_CLICK",
-                method: 'google_button',
+                method: "google_button",
                 location: "login_form",
               })
             })
