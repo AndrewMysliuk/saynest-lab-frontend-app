@@ -181,6 +181,21 @@ export default defineComponent({
           size: "large",
         })
 
+        setTimeout(() => {
+          const button = googleDiv.value?.querySelector('div[role="button"]')
+
+          if (button) {
+            button.addEventListener("click", () => {
+              window.dataLayer = window.dataLayer || []
+              window.dataLayer.push({
+                event: "GOOGLE_SIGNUP_CLICK",
+                method: 'google_button',
+                location: "signup_form",
+              })
+            })
+          }
+        }, 500)
+
         return true
       }
       return false
