@@ -78,8 +78,6 @@ export default defineComponent({
           clearInterval(interval)
         }
       }, 100)
-
-      console.log(GOOGLE_CLIENT_ID)
     })
 
     const tryInitGoogle = () => {
