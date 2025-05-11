@@ -20,18 +20,18 @@ export interface IUserContent {
 
 export interface IPromptGoal {
   phrase: string
-  translation: string
+  translation: Record<string, string>
 }
 
 export interface IDictionaryEntry {
   word: string
-  translation: string
+  translation: Record<string, string>
   meaning: string
 }
 
 export interface IPhraseEntry {
   phrase: string
-  translation: string
+  translation: Record<string, string>
   meaning: string
 }
 
@@ -41,11 +41,11 @@ export interface IModelBehavior {
 }
 
 export interface IScenarioDetails {
-  allowed_languages: string[]
   setting: string
   situation: string
   goal: string
   steps: string[]
+  optional_steps: string[]
 }
 
 export interface IPromptMeta {
@@ -54,6 +54,24 @@ export interface IPromptMeta {
   model_end_behavior: string
   target_language: string
   explanation_language: string
+  question_count_range: {
+    min: number
+    max: number
+  } | null
+}
+
+// Modules
+export enum ModuleTypeEnum {
+  STRUCTURED = "STRUCTURED",
+  FLAT = "FLAT",
+}
+
+export interface IModuleSubmodules {
+  id: string
+  title: string
+  description: string
+  tips: string[]
+  scenarios: string[]
 }
 
 export interface IModuleScenario {
@@ -62,5 +80,7 @@ export interface IModuleScenario {
   description: string
   level: VocabularyFrequencyLevelEnum[]
   tags: string[]
+  type: ModuleTypeEnum
   scenarios: string[]
+  submodules: IModuleSubmodules[]
 }

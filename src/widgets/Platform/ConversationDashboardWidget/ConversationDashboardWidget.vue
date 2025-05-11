@@ -73,7 +73,7 @@
                   <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
                   <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
                     <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
-                      {{ goal.phrase }} — <i>{{ goal.translation }}</i>
+                      {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
                     </li>
                   </ul>
                 </div>
@@ -82,7 +82,7 @@
                   <h4 class="text-md font-semibold text-text-base mb-2">Dictionary</h4>
                   <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
                     <li v-for="word in scenario.user_content.dictionary" :key="word.word">
-                      <b>{{ word.word }}</b> ({{ word.translation }}) — {{ word.meaning }}
+                      <b>{{ word.word }}</b> ({{ word.translation[getUserTranslateLanguage] }}) — {{ word.meaning }}
                     </li>
                   </ul>
                 </div>
@@ -91,7 +91,7 @@
                   <h4 class="text-md font-semibold text-text-base mb-2">Phrases</h4>
                   <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
                     <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
-                      "{{ phrase.phrase }}" — <i>{{ phrase.translation }}</i>
+                      "{{ phrase.phrase }}" — <i>{{ phrase.translation[getUserTranslateLanguage] }}</i>
                     </li>
                   </ul>
                 </div>
@@ -107,7 +107,7 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, ref } from "vue"
 import { useRouter } from "vue-router"
-import { promptStore } from "@/app"
+import { promptStore, userStore } from "@/app"
 import { TheLoader } from "@/shared/components"
 import { IPromptScenario } from "@/shared/types"
 
@@ -124,6 +124,7 @@ export default defineComponent({
 
     const getModuleList = computed(() => promptStore.getModuleList)
     const getPromptList = computed(() => promptStore.getPromptList)
+    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
 
     onBeforeMount(async () => {
       if (!getModuleList.value.length) {
@@ -167,6 +168,7 @@ export default defineComponent({
       expandedScenario,
       getModuleList,
       getPromptList,
+      getUserTranslateLanguage,
       toggleExpand,
       openScenarios,
       selectPrompt,

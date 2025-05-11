@@ -11,7 +11,7 @@
         <div v-for="(goal, index) in getSelectedPrompt.user_content.goals" :key="index" class="mb-4">
           <details class="group">
             <summary class="cursor-pointer text-base font-medium text-text-base transition hover:text-primary">• {{ goal.phrase }}</summary>
-            <p class="ml-4 mt-1 text-sm text-gray-500">{{ goal.translation }}</p>
+            <p class="ml-4 mt-1 text-sm text-gray-500">{{ goal.translation[getUserTranslateLanguage] }}</p>
           </details>
         </div>
       </div>
@@ -93,7 +93,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore } from "@/app"
+import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip, TheLoader } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
@@ -145,6 +145,7 @@ export default defineComponent({
     const getLastSessionError = computed(() => errorAnalysisStore.getLastSessionError)
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
+    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
 
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {
@@ -153,7 +154,7 @@ export default defineComponent({
         }, 100)
       } else {
         tooltip.value.target_language = getSelectedPrompt.value.meta.target_language
-        tooltip.value.explanation_language = getSelectedPrompt.value.meta.explanation_language
+        tooltip.value.explanation_language = getUserTranslateLanguage.value
 
         await simulateGreeting()
       }
@@ -174,7 +175,7 @@ export default defineComponent({
             prompt_id: getSelectedPrompt.value.id,
             topic_title: getSelectedPrompt.value.title ?? "",
             target_language: getSelectedPrompt.value.meta.target_language,
-            explanation_language: getSelectedPrompt.value.meta.explanation_language,
+            explanation_language: getUserTranslateLanguage.value,
           })
 
           conversationStore.resetAll()
@@ -227,7 +228,7 @@ export default defineComponent({
               global_prompt: getSelectedPrompt.value?.finally_prompt,
             },
             target_language: getSelectedPrompt.value.meta.target_language,
-            explanation_language: getSelectedPrompt.value.meta.explanation_language,
+            explanation_language: getUserTranslateLanguage.value,
           },
           controller.signal
         )
@@ -314,7 +315,7 @@ export default defineComponent({
                   global_prompt: getSelectedPrompt.value?.finally_prompt,
                 },
                 target_language: getSelectedPrompt.value.meta.target_language,
-                explanation_language: getSelectedPrompt.value.meta.explanation_language,
+                explanation_language: getUserTranslateLanguage.value,
               },
               controller.signal
             )
@@ -332,7 +333,7 @@ export default defineComponent({
                 },
                 session_id: getConversationResponse.value?.session_id ?? "",
                 target_language: getSelectedPrompt.value.meta.target_language,
-                explanation_language: getSelectedPrompt.value.meta.explanation_language,
+                explanation_language: getUserTranslateLanguage.value,
                 prompt_id: getSelectedPrompt.value?.id ?? "",
               },
               {
@@ -451,6 +452,7 @@ export default defineComponent({
       getLastModelTip,
       getLastSessionError,
       getConversationResponse,
+      getUserTranslateLanguage,
       hideTooltip,
       handleWordClick,
       analyseUserConversation,

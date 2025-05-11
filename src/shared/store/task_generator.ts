@@ -1,21 +1,43 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { IGenericTask } from "../types"
+import { IGenericTaskEntity, ITaskGeneratorRequest } from "../types"
+import { listByReviewHandler, setCompletedHandler, taskGeneratorHandler } from "../api"
 
 export const useTaskGeneratorStore = defineStore("taskGeneratorStore", () => {
-  const tasksList = ref<IGenericTask[]>([])
+  const tasksList = ref<IGenericTaskEntity[]>([])
 
   const getTasksList = computed(() => tasksList.value)
 
-  const setTaskToList = (task: IGenericTask) => {
-    const taskIndex = tasksList.value.findIndex((item) => item.id === task.id)
+  const fetchTasksByReviewId = async (reviewId: string) => {
+    await listByReviewHandler(reviewId)
+      .then((response: IGenericTaskEntity[]) => {
+        tasksList.value = response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
 
-    if (taskIndex === -1) {
-      tasksList.value.push(task)
-      return
-    }
+  const fetchSetCompleted = async (taskId: string) => {
+    await setCompletedHandler(taskId)
+      .then(() => {
+        tasksList.value = tasksList.value.map((item) => (item._id === taskId ? { ...item, is_completed: true } : item))
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
 
-    tasksList.value = tasksList.value.map((item) => (item.id === task.id ? task : item))
+  const fetchTaskGenerator = async (payload: ITaskGeneratorRequest, abortSignal?: AbortSignal) => {
+    return await taskGeneratorHandler(payload, abortSignal)
+      .then((response: IGenericTaskEntity) => {
+        tasksList.value.push(response)
+
+        return response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
   }
 
   const resetTaskList = () => {
@@ -24,7 +46,9 @@ export const useTaskGeneratorStore = defineStore("taskGeneratorStore", () => {
 
   return {
     getTasksList,
-    setTaskToList,
+    fetchTasksByReviewId,
+    fetchSetCompleted,
+    fetchTaskGenerator,
     resetTaskList,
   }
 })

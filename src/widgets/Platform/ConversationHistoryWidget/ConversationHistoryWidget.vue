@@ -155,7 +155,7 @@
                           <span class="ml-1" v-html="highlightWords(issue.corrected_text, issue.corrected_words, 'correct')" />
                         </p>
                         <p class="text-gray-700"><span class="font-semibold">Explanation:</span> {{ issue.explanation }}</p>
-                        <p v-if="issue.topic_titles" class="text-gray-600"><span class="font-semibold">Topic:</span> {{ issue.topic_titles }}</p>
+                        <p v-if="issue.topic_titles" class="text-gray-600"><span class="font-semibold">Topic:</span> {{ issue.topic_titles.join(", ") }}</p>
                       </div>
                     </li>
                   </ul>
@@ -233,7 +233,7 @@
             </div>
 
             <div v-else-if="activeTab === 'TASKS'" class="space-y-10">
-              <div v-for="task in getTasksList" :key="task.id" class="space-y-6 bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
+              <div v-for="task in getTasksList" :key="task._id" class="space-y-6 bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
                 <h3 class="text-lg font-semibold text-gray-800">{{ task.topic_title }}</h3>
 
                 <!-- Multiple Choice Block -->
@@ -247,33 +247,33 @@
                         :key="option"
                         class="flex items-center space-x-2 p-2 rounded-md border cursor-pointer transition-all duration-150"
                         :class="{
-                          'bg-green-50 border-green-300': isTaskChecked(task.id) && option === sentence.answer,
-                          'bg-red-50 border-red-300': isTaskChecked(task.id) && selectedAnswersMap[task.id]?.[sentence.id] === option && option !== sentence.answer,
-                          'border-gray-300 hover:bg-gray-50': !isTaskChecked(task.id),
+                          'bg-green-50 border-green-300': isTaskChecked(task._id) && option === sentence.answer,
+                          'bg-red-50 border-red-300': isTaskChecked(task._id) && selectedAnswersMap[task._id]?.[sentence.id] === option && option !== sentence.answer,
+                          'border-gray-300 hover:bg-gray-50': !isTaskChecked(task._id),
                         }"
                       >
                         <input
                           type="radio"
-                          :name="`task-${task.id}-sentence-${sentence.id}`"
+                          :name="`task-${task._id}-sentence-${sentence.id}`"
                           :value="option"
                           class="accent-primary"
-                          v-model="selectedAnswersMap[task.id][sentence.id]"
-                          :disabled="isTaskChecked(task.id)"
+                          v-model="selectedAnswersMap[task._id][sentence.id]"
+                          :disabled="isTaskChecked(task._id)"
                         />
                         <span>{{ option }}</span>
                       </label>
                     </div>
 
-                    <p v-if="isTaskChecked(task.id)" class="text-sm text-gray-600 mt-2 italic">
+                    <p v-if="isTaskChecked(task._id)" class="text-sm text-gray-600 mt-2 italic">
                       {{ sentence.explanation }}
                     </p>
                   </div>
                 </div>
 
                 <div class="flex items-center justify-between">
-                  <button class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primaryDark transition" @click="checkTask(task.id)" :disabled="isTaskChecked(task.id)">Check</button>
+                  <button class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primaryDark transition" @click="checkTask(task._id)" :disabled="isTaskChecked(task._id)">Check</button>
 
-                  <p v-if="isTaskChecked(task.id)" class="text-sm text-gray-800 font-medium">Correct: {{ getCorrectCount(task) }} / {{ task.task.sentences.length }}</p>
+                  <p v-if="isTaskChecked(task._id)" class="text-sm text-gray-800 font-medium">Correct: {{ getCorrectCount(task) }} / {{ task.task.sentences.length }}</p>
                 </div>
               </div>
 
@@ -353,8 +353,7 @@
 import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, reactive, nextTick } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { communicationReviewStore, promptStore, taskGeneratorStore } from "@/app"
-import { IConversationHistory, IGenericTask, IMultipleChoiceTask, IStatistics, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
-import { taskGeneratorHandler } from "@/shared/api"
+import { IConversationHistory, IGenericTaskEntity, IMultipleChoiceTask, IStatistics, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
 import { TheLoader } from "@/shared/components"
 
 export default defineComponent({
@@ -421,8 +420,10 @@ export default defineComponent({
       return `${mins}m ${secs}s`
     }
 
-    const openDetails = (review: IStatistics) => {
+    const openDetails = async (review: IStatistics) => {
       communicationReviewStore.setCurrentReview(review)
+
+      await taskGeneratorStore.fetchTasksByReviewId(review._id).catch((error: unknown) => console.log(error))
 
       selectedTopic.value = issueTopics.value?.[0] ?? ""
       taskGeneratorStore.resetTaskList()
@@ -469,9 +470,9 @@ export default defineComponent({
       try {
         isLoading.value = true
 
-        const task = await taskGeneratorHandler(
+        const task = await taskGeneratorStore.fetchTaskGenerator(
           {
-            session_id: getCurrentReview.value.session_id,
+            review_id: getCurrentReview.value._id,
             topic_title: selectedTopic.value,
             type: TaskTypeEnum.MULTIPLE_CHOICE,
             mode: TaskModeEnum.WRITE,
@@ -482,9 +483,7 @@ export default defineComponent({
           controller.signal
         )
 
-        taskGeneratorStore.setTaskToList(task)
-
-        selectedAnswersMap[task.id] = {}
+        selectedAnswersMap[task._id] = {}
       } catch (error: unknown) {
         console.log(error)
       } finally {
@@ -492,20 +491,31 @@ export default defineComponent({
       }
     }
 
-    const isTaskChecked = (taskId: string) => checkedTasks.value.has(taskId)
-    const isMultipleChoiceTask = (task: IGenericTask): task is IGenericTask<IMultipleChoiceTask> => {
+    const isTaskChecked = (taskId: string) => {
+      const isChecked = checkedTasks.value.has(taskId)
+      const isCompleted = getTasksList.value?.find((item) => item._id === taskId)?.is_completed || false
+
+      return isChecked || isCompleted
+    }
+
+    const isMultipleChoiceTask = (task: IGenericTaskEntity): task is IGenericTaskEntity<IMultipleChoiceTask> => {
       return task.type === TaskTypeEnum.MULTIPLE_CHOICE
     }
 
-    const getCorrectCount = (task: IGenericTask): number => {
-      const answers = selectedAnswersMap[task.id] || {}
+    const getCorrectCount = (task: IGenericTaskEntity): number => {
+      const answers = selectedAnswersMap[task._id] || {}
       return task.task.sentences.reduce((acc, sentence) => {
         return answers[sentence.id] === sentence.answer ? acc + 1 : acc
       }, 0)
     }
 
-    const checkTask = (taskId: string) => {
-      checkedTasks.value.add(taskId)
+    const checkTask = async (taskId: string) => {
+      try {
+        await taskGeneratorStore.fetchSetCompleted(taskId)
+        checkedTasks.value.add(taskId)
+      } catch (error: unknown) {
+        console.log(error)
+      }
     }
 
     const handleAudioError = async (e: Event, msg: IConversationHistory) => {

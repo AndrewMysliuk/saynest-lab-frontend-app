@@ -31,20 +31,24 @@ export interface IMultipleChoiceTask {
   sentences: IMultipleChoiceSentence[]
 }
 
-export interface IGenericTask<T = IFillBlankTask | IMultipleChoiceTask> {
-  id: string // Уникальный ID задания
-  topic_title: string
+export interface IGenericTaskEntity<T = IFillBlankTask | IMultipleChoiceTask> {
+  _id: string
   type: TaskTypeEnum // Тип задания (fill_blank, multiple_choice, и т.д.)
   mode: TaskModeEnum
+  topic_title: string
   target_language: string
   explanation_language: string
   task: T
+  is_completed: boolean
+  review_id: string
+  user_id: string
+  organization_id: string
+  created_at: Date
+  updated_at: Date
 }
 
 export interface ITaskGeneratorRequest {
-  // user_id: string
-  // organization_id: string
-  session_id: string
+  review_id: string
   topic_title: string
   type: TaskTypeEnum // например: "fill_blank", "multiple_choice" и т.д.
   mode: TaskModeEnum
