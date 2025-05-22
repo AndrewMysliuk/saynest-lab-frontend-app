@@ -2,7 +2,7 @@ import { IConversationHistory } from "./IConversation"
 import { IErrorAnalysisEntity } from "./IErrorAnalysis"
 import { IVocabularyFillersEntity, VocabularyFrequencyLevelEnum } from "./IVocabulary"
 
-export interface IStatisticsHistory {
+export interface ICommunicationReviewHistory {
   start_time: Date // Время начала сессии
   duration_seconds: number // Продолжительность
   user_utterances_count: number // Сколько реплик у пользователя
@@ -33,7 +33,7 @@ export interface IExpressionUsage {
   quote_from_dialogue?: string
 }
 
-export interface IStatistics {
+export interface ICommunicationReview {
   _id: string
   prompt_id: string
   user_id: string
@@ -42,7 +42,7 @@ export interface IStatistics {
   topic_title: string
   target_language: string
   explanation_language: string
-  history: IStatisticsHistory
+  history: ICommunicationReviewHistory
   error_analysis: IErrorAnalysisEntity[]
   vocabulary: IVocabularyFillersEntity[]
   suggestion: string[]
@@ -55,7 +55,7 @@ export interface IStatistics {
   created_at: Date
 }
 
-export interface IStatisticsGenerateRequest {
+export interface ICommunicationReviewGenerateRequest {
   session_id: string
   prompt_id: string
   topic_title: string
@@ -63,7 +63,7 @@ export interface IStatisticsGenerateRequest {
   explanation_language: string
 }
 
-export interface IStatisticsUpdateAudioUrl {
+export interface ICommunicationReviewUpdateAudioUrl {
   id: string
   session_id: string
   pair_id: string

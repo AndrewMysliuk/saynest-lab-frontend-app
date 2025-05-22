@@ -43,6 +43,11 @@ const platform: RouteRecordRaw[] = [
         name: "platform.conversation-history",
         component: async () => await import("@/pages").then((module) => module.ConversationHistoryPagePlatform),
       },
+      {
+        path: "/platform/user-progress",
+        name: "platform.user-progress",
+        component: async () => await import("@/pages").then((module) => module.UserProgressPagePlatform),
+      },
     ],
   },
 ]

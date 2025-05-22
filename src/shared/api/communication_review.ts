@@ -1,8 +1,8 @@
 import { axios } from "../config"
 import { AxiosResponse } from "axios"
-import { IStatistics, IStatisticsGenerateRequest, IStatisticsUpdateAudioUrl } from "../types"
+import { ICommunicationReview, ICommunicationReviewGenerateRequest, ICommunicationReviewUpdateAudioUrl } from "../types"
 
-export const generateConversationReviewHandler = async (payload: IStatisticsGenerateRequest): Promise<IStatistics> => {
+export const generateConversationReviewHandler = async (payload: ICommunicationReviewGenerateRequest): Promise<ICommunicationReview> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/communication-review",
@@ -12,7 +12,7 @@ export const generateConversationReviewHandler = async (payload: IStatisticsGene
       },
     })
 
-    const { data }: { data: IStatistics } = response
+    const { data }: { data: ICommunicationReview } = response
 
     return data
   } catch (error: unknown) {
@@ -20,14 +20,14 @@ export const generateConversationReviewHandler = async (payload: IStatisticsGene
   }
 }
 
-export const reviewsListHandler = async (): Promise<IStatistics[]> => {
+export const reviewsListHandler = async (): Promise<ICommunicationReview[]> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/communication-review",
       method: "GET",
     })
 
-    const { data }: { data: IStatistics[] } = response
+    const { data }: { data: ICommunicationReview[] } = response
 
     return data
   } catch (error: unknown) {
@@ -35,14 +35,14 @@ export const reviewsListHandler = async (): Promise<IStatistics[]> => {
   }
 }
 
-export const getReviewHandler = async (review_id: string): Promise<IStatistics> => {
+export const getReviewHandler = async (review_id: string): Promise<ICommunicationReview> => {
   try {
     const response: AxiosResponse = await axios({
       url: `/api/communication-review/${review_id}`,
       method: "GET",
     })
 
-    const { data }: { data: IStatistics } = response
+    const { data }: { data: ICommunicationReview } = response
 
     return data
   } catch (error: unknown) {
@@ -65,7 +65,7 @@ export const deleteReviewHandler = async (review_id: string): Promise<boolean> =
   }
 }
 
-export const updateAudioUrlHandler = async (dto: IStatisticsUpdateAudioUrl): Promise<string> => {
+export const updateAudioUrlHandler = async (dto: ICommunicationReviewUpdateAudioUrl): Promise<string> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/communication-review/update-audio-url",

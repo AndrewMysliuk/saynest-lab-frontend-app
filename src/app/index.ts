@@ -1,7 +1,17 @@
 import { createApp } from "vue"
 import { createPinia } from "pinia"
 import router from "@/app/router"
-import { useConversationStore, usePromptStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore, useTaskGeneratorStore, useAuthStore, useUserStore } from "@/shared/store"
+import {
+  useConversationStore,
+  usePromptStore,
+  useErrorAnalysisStore,
+  useVocabularyTrackerStore,
+  useCommunicationReviewStore,
+  useTaskGeneratorStore,
+  useAuthStore,
+  useUserStore,
+  useUserProgressStore,
+} from "@/shared/store"
 import { wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
@@ -42,3 +52,4 @@ export const communicationReviewStore = useCommunicationReviewStore()
 export const taskGeneratorStore = useTaskGeneratorStore()
 export const authStore = useAuthStore()
 export const userStore = useUserStore()
+export const userProgressStore = useUserProgressStore()

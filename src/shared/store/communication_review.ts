@@ -1,22 +1,22 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { IStatistics, IStatisticsGenerateRequest, IStatisticsUpdateAudioUrl } from "../types"
+import { ICommunicationReview, ICommunicationReviewGenerateRequest, ICommunicationReviewUpdateAudioUrl } from "../types"
 import { deleteReviewHandler, generateConversationReviewHandler, getReviewHandler, reviewsListHandler, updateAudioUrlHandler } from "../api"
 
 export const useCommunicationReviewStore = defineStore("communicationReviewStore", () => {
-  const reviewsList = ref<IStatistics[]>([])
-  const currentReview = ref<IStatistics | null>(null)
+  const reviewsList = ref<ICommunicationReview[]>([])
+  const currentReview = ref<ICommunicationReview | null>(null)
 
   const getReviewsList = computed(() => reviewsList.value)
   const getCurrentReview = computed(() => currentReview.value)
 
-  const setCurrentReview = (review: IStatistics) => {
+  const setCurrentReview = (review: ICommunicationReview) => {
     currentReview.value = review
   }
 
-  const generateConversationReview = async (payload: IStatisticsGenerateRequest) => {
+  const generateConversationReview = async (payload: ICommunicationReviewGenerateRequest) => {
     await generateConversationReviewHandler(payload)
-      .then((response: IStatistics) => {
+      .then((response: ICommunicationReview) => {
         currentReview.value = response
 
         const alreadyExists = reviewsList.value.some((r) => r._id === response._id)
@@ -32,7 +32,7 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
 
   const fetchReviewsList = async () => {
     await reviewsListHandler()
-      .then((response: IStatistics[]) => {
+      .then((response: ICommunicationReview[]) => {
         reviewsList.value = response
       })
       .catch((error: unknown) => {
@@ -42,7 +42,7 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
 
   const fetchReviewById = async (review_id: string) => {
     await getReviewHandler(review_id)
-      .then((response: IStatistics) => {
+      .then((response: ICommunicationReview) => {
         currentReview.value = response
       })
       .catch((error: unknown) => {
@@ -62,7 +62,7 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
       })
   }
 
-  const fetchUpdateAudioUrl = async (dto: IStatisticsUpdateAudioUrl) => {
+  const fetchUpdateAudioUrl = async (dto: ICommunicationReviewUpdateAudioUrl) => {
     await updateAudioUrlHandler(dto)
       .then((response: string) => {
         if (currentReview.value && currentReview.value.history?.messages) {

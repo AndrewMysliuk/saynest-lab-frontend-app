@@ -353,7 +353,8 @@
 import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, reactive, nextTick } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { communicationReviewStore, promptStore, taskGeneratorStore } from "@/app"
-import { IConversationHistory, IGenericTaskEntity, IMultipleChoiceTask, IStatistics, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
+import { formatDuration } from "@/shared/lib"
+import { IConversationHistory, IGenericTaskEntity, IMultipleChoiceTask, ICommunicationReview, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
 import { TheLoader } from "@/shared/components"
 
 export default defineComponent({
@@ -414,13 +415,7 @@ export default defineComponent({
       return new Date(date).toLocaleString()
     }
 
-    const formatDuration = (seconds: number) => {
-      const mins = Math.floor(seconds / 60)
-      const secs = seconds % 60
-      return `${mins}m ${secs}s`
-    }
-
-    const openDetails = async (review: IStatistics) => {
+    const openDetails = async (review: ICommunicationReview) => {
       communicationReviewStore.setCurrentReview(review)
 
       await taskGeneratorStore.fetchTasksByReviewId(review._id).catch((error: unknown) => console.log(error))

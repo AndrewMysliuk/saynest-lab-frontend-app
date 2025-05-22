@@ -16,7 +16,12 @@
       </nav>
 
       <div class="flex items-center space-x-4">
-        <div v-if="getIsLogged" id="USER_PROFILE_INFO_CLICK" class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold cursor-pointer" @click="isUserModalOpen = true">
+        <div
+          v-if="getIsLogged"
+          id="USER_PROFILE_INFO_CLICK"
+          class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold cursor-pointer"
+          @click="isUserModalOpen = true"
+        >
           {{ getUserInitials }}
         </div>
 
@@ -60,6 +65,7 @@ export default defineComponent({
       [
         { label: "Conversation", router: { name: "platform.conversation-dashboard" } },
         getIsLogged.value ? { label: "Conversation History", router: { name: "platform.conversation-history" } } : null,
+        getIsLogged.value ? { label: "User Progress", router: { name: "platform.user-progress" } } : null,
       ].filter(Boolean)
     )
 

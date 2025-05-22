@@ -6,5 +6,6 @@ import { useCommunicationReviewStore } from "./communication_review"
 import { useTaskGeneratorStore } from "./task_generator"
 import { useAuthStore } from "./auth"
 import { useUserStore } from "./user"
+import { useUserProgressStore } from "./user_progress"
 
-export { useConversationStore, usePromptStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore, useTaskGeneratorStore, useAuthStore, useUserStore }
+export { useConversationStore, usePromptStore, useErrorAnalysisStore, useVocabularyTrackerStore, useCommunicationReviewStore, useTaskGeneratorStore, useAuthStore, useUserStore, useUserProgressStore }
