@@ -21,6 +21,21 @@ export const taskGeneratorHandler = async (payload: ITaskGeneratorRequest, abort
   }
 }
 
+export const getTaskHandler = async (taskId: string): Promise<IGenericTaskEntity | null> => {
+  try {
+    const response: AxiosResponse = await axios({
+      url: `/api/task-generator/${taskId}`,
+      method: "GET",
+    })
+
+    const { data }: { data: IGenericTaskEntity | null } = response
+
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
 export const setCompletedHandler = async (taskId: string): Promise<void> => {
   try {
     await axios({

@@ -1,12 +1,14 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { IGenericTaskEntity, ITaskGeneratorRequest } from "../types"
-import { listByReviewHandler, setCompletedHandler, taskGeneratorHandler } from "../api"
+import { getTaskHandler, listByReviewHandler, setCompletedHandler, taskGeneratorHandler } from "../api"
 
 export const useTaskGeneratorStore = defineStore("taskGeneratorStore", () => {
   const tasksList = ref<IGenericTaskEntity[]>([])
+  const currentTask = ref<IGenericTaskEntity | null>(null)
 
   const getTasksList = computed(() => tasksList.value)
+  const getCurrentTask = computed(() => currentTask.value)
 
   const fetchTasksByReviewId = async (reviewId: string) => {
     await listByReviewHandler(reviewId)
@@ -40,15 +42,27 @@ export const useTaskGeneratorStore = defineStore("taskGeneratorStore", () => {
       })
   }
 
+  const fetchTask = async (taskId: string) => {
+    await getTaskHandler(taskId)
+      .then((response: IGenericTaskEntity | null) => {
+        currentTask.value = response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
   const resetTaskList = () => {
     tasksList.value.length = 0
   }
 
   return {
     getTasksList,
+    getCurrentTask,
     fetchTasksByReviewId,
     fetchSetCompleted,
     fetchTaskGenerator,
+    fetchTask,
     resetTaskList,
   }
 })
