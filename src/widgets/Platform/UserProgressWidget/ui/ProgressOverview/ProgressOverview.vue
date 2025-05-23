@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <div class="bg-white rounded-xl shadow p-4 flex flex-col items-center">
-      <span class="text-gray-500 text-sm mb-1">Total Sessions</span>
+      <span class="text-gray-500 text-sm mb-1">Finished Sessions</span>
       <span class="text-2xl font-semibold">
         {{ totalSessions }}
       </span>

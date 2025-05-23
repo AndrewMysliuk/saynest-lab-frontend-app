@@ -27,6 +27,7 @@ export default defineComponent({
       return Object.entries(completedPrompts.value)
         .sort(([, a], [, b]) => b - a)
         .map(([key, value]) => ({ key, value }))
+        .slice(0, 5)
     })
 
     return {

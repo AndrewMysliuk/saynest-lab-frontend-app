@@ -36,7 +36,7 @@ export default defineComponent({
   setup() {
     const errorStats = computed<IUserProgressErrorStats[]>(() => userProgressStore.getCurrentUserProgress?.error_stats || [])
 
-    const sortedErrors = computed(() => [...errorStats.value].sort((a, b) => b.total_count - a.total_count))
+    const sortedErrors = computed(() => [...errorStats.value].sort((a, b) => b.total_count - a.total_count).slice(0, 5))
 
     const trendEmoji = {
       UP: "🔺",

@@ -36,7 +36,7 @@ export default defineComponent({
   setup() {
     const fillerWords = computed<IUserProgressFillerWordsUsage[]>(() => userProgressStore.getCurrentUserProgress?.filler_words_usage || [])
 
-    const sortedFillerWords = computed(() => [...fillerWords.value].sort((a, b) => b.total_count - a.total_count))
+    const sortedFillerWords = computed(() => [...fillerWords.value].sort((a, b) => b.total_count - a.total_count).slice(0, 5))
 
     const trendEmoji = {
       UP: "🔺",

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TheLoader v-if="!isReady" />
+    <TheLoader v-if="getIsPageLoading" />
 
     <div class="pt-16" v-else>
       <div v-if="isModules" class="px-6 py-10">
@@ -105,9 +105,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, ref } from "vue"
+import { computed, defineComponent, ref } from "vue"
 import { useRouter } from "vue-router"
-import { promptStore, userStore } from "@/app"
+import { commonStore, promptStore, userStore } from "@/app"
 import { TheLoader } from "@/shared/components"
 import { IPromptScenario } from "@/shared/types"
 
@@ -118,29 +118,13 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
-    const isReady = ref<boolean>(false)
     const isModules = ref<boolean>(true)
     const expandedScenario = ref<number | null>(null)
 
+    const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
     const getModuleList = computed(() => promptStore.getModuleList)
     const getPromptList = computed(() => promptStore.getPromptList)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
-
-    onBeforeMount(async () => {
-      if (!getModuleList.value.length) {
-        await setupOnloadMethods()
-      }
-
-      isReady.value = true
-    })
-
-    const setupOnloadMethods = async () => {
-      try {
-        await promptStore.fetchModuleList()
-      } catch (error) {
-        console.error("Error in setupOnloadMethods:", error)
-      }
-    }
 
     const toggleExpand = (index: number) => {
       expandedScenario.value = expandedScenario.value === index ? null : index
@@ -163,7 +147,7 @@ export default defineComponent({
     }
 
     return {
-      isReady,
+      getIsPageLoading,
       isModules,
       expandedScenario,
       getModuleList,

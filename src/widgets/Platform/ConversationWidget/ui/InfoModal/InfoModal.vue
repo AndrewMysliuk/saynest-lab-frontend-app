@@ -13,7 +13,7 @@
         <p>
           <span class="font-semibold text-gray-700">Word:</span> <span class="text-blue-700 font-medium">{{ entry.word }}</span>
         </p>
-        <p><span class="font-semibold text-gray-700">Translation:</span> {{ entry.translation }}</p>
+        <p><span class="font-semibold text-gray-700">Translation:</span> {{ entry.translation[getUserTranslateLanguage] }}</p>
         <p><span class="font-semibold text-gray-700">Meaning:</span> {{ entry.meaning }}</p>
       </div>
     </div>
@@ -25,7 +25,7 @@
         <p>
           <span class="font-semibold text-gray-700">Phrase:</span> <span class="text-yellow-700 font-medium">{{ entry.phrase }}</span>
         </p>
-        <p><span class="font-semibold text-gray-700">Translation:</span> {{ entry.translation }}</p>
+        <p><span class="font-semibold text-gray-700">Translation:</span> {{ entry.translation[getUserTranslateLanguage] }}</p>
         <p><span class="font-semibold text-gray-700">Meaning:</span> {{ entry.meaning }}</p>
       </div>
     </div>
@@ -40,16 +40,18 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
-import { promptStore, errorAnalysisStore } from "@/app"
+import { promptStore, errorAnalysisStore, userStore } from "@/app"
 
 export default defineComponent({
   setup() {
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
     const getModelTips = computed(() => errorAnalysisStore.getModelTips)
+    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
 
     return {
       getSelectedPrompt,
       getModelTips,
+      getUserTranslateLanguage,
     }
   },
 })

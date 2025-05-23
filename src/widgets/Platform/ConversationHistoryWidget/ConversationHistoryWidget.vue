@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TheLoader v-if="!isReady" />
+    <TheLoader v-if="!isReady || getIsPageLoading" />
 
     <div class="pt-16" v-else>
       <div class="px-6 py-10" v-if="isSingle && getCurrentReview">
@@ -233,49 +233,7 @@
             </div>
 
             <div v-else-if="activeTab === 'TASKS'" class="space-y-10">
-              <div v-for="task in getTasksList" :key="task._id" class="space-y-6 bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-800">{{ task.topic_title }}</h3>
-
-                <!-- Multiple Choice Block -->
-                <div v-if="isMultipleChoiceTask(task)" class="space-y-6">
-                  <div v-for="sentence in task.task.sentences" :key="sentence.id">
-                    <p class="font-medium text-gray-800 mb-2">{{ sentence.prompt }}</p>
-
-                    <div class="space-y-2">
-                      <label
-                        v-for="option in sentence.options"
-                        :key="option"
-                        class="flex items-center space-x-2 p-2 rounded-md border cursor-pointer transition-all duration-150"
-                        :class="{
-                          'bg-green-50 border-green-300': isTaskChecked(task._id) && option === sentence.answer,
-                          'bg-red-50 border-red-300': isTaskChecked(task._id) && selectedAnswersMap[task._id]?.[sentence.id] === option && option !== sentence.answer,
-                          'border-gray-300 hover:bg-gray-50': !isTaskChecked(task._id),
-                        }"
-                      >
-                        <input
-                          type="radio"
-                          :name="`task-${task._id}-sentence-${sentence.id}`"
-                          :value="option"
-                          class="accent-primary"
-                          v-model="selectedAnswersMap[task._id][sentence.id]"
-                          :disabled="isTaskChecked(task._id)"
-                        />
-                        <span>{{ option }}</span>
-                      </label>
-                    </div>
-
-                    <p v-if="isTaskChecked(task._id)" class="text-sm text-gray-600 mt-2 italic">
-                      {{ sentence.explanation }}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="flex items-center justify-between">
-                  <button class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primaryDark transition" @click="checkTask(task._id)" :disabled="isTaskChecked(task._id)">Check</button>
-
-                  <p v-if="isTaskChecked(task._id)" class="text-sm text-gray-800 font-medium">Correct: {{ getCorrectCount(task) }} / {{ task.task.sentences.length }}</p>
-                </div>
-              </div>
+              <TheTask />
 
               <div class="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
                 <label for="task-select" class="block font-medium text-gray-700 mb-2">Select topic:</label>
@@ -350,16 +308,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, reactive, nextTick } from "vue"
+import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, nextTick } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { communicationReviewStore, promptStore, taskGeneratorStore } from "@/app"
+import { commonStore, communicationReviewStore, promptStore, taskGeneratorStore } from "@/app"
 import { formatDuration } from "@/shared/lib"
-import { IConversationHistory, IGenericTaskEntity, IMultipleChoiceTask, ICommunicationReview, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
-import { TheLoader } from "@/shared/components"
+import { IConversationHistory, ICommunicationReview, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
+import { TheLoader, TheTask } from "@/shared/components"
 
 export default defineComponent({
   components: {
     TheLoader,
+    TheTask,
   },
 
   setup() {
@@ -370,14 +329,12 @@ export default defineComponent({
     const isLoading = ref<boolean>(false)
     const activeTab = ref<"ERRORS" | "VOCAB" | "DIALOGUE" | "TASKS">("ERRORS")
     const selectedTopic = ref<string>("")
-    const selectedAnswersMap = reactive<Record<string, Record<number, string>>>({})
-    const checkedTasks = ref<Set<string>>(new Set())
 
+    const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
     const isSingle = computed(() => !!route.params.id)
     const getReviewsList = computed(() => communicationReviewStore.getReviewsList)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
-    const getTasksList = computed(() => taskGeneratorStore.getTasksList)
-    const getPromptList = computed(() => promptStore.getPromptList)
+    const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
     const issueTopics = computed(() => {
       if (!getCurrentReview.value) return []
 
@@ -389,53 +346,18 @@ export default defineComponent({
       return [...new Set(topics)]
     })
 
-    onBeforeMount(async () => {
+    onBeforeMount(() => {
       if (!getCurrentReview.value) {
         router.push({
           name: "platform.conversation-history",
         })
       }
 
-      if (!getReviewsList.value.length) {
-        await setupOnloadMethods()
-      }
-
       isReady.value = true
     })
 
-    const setupOnloadMethods = async () => {
-      try {
-        await communicationReviewStore.fetchReviewsList()
-      } catch (error) {
-        console.error("Error in setupOnloadMethods:", error)
-      }
-    }
-
     const formatDate = (date: Date | string) => {
       return new Date(date).toLocaleString()
-    }
-
-    const openDetails = async (review: ICommunicationReview) => {
-      communicationReviewStore.setCurrentReview(review)
-
-      await taskGeneratorStore.fetchTasksByReviewId(review._id).catch((error: unknown) => console.log(error))
-
-      selectedTopic.value = issueTopics.value?.[0] ?? ""
-      taskGeneratorStore.resetTaskList()
-      activeTab.value = "ERRORS"
-
-      Object.keys(selectedAnswersMap).forEach((key) => {
-        delete selectedAnswersMap[key]
-      })
-
-      for (const key in selectedAnswersMap) {
-        delete selectedAnswersMap[key]
-      }
-
-      router.push({
-        name: "platform.conversation-history",
-        params: { id: review._id },
-      })
     }
 
     const deleteReview = async (id: string) => {
@@ -459,57 +381,46 @@ export default defineComponent({
       })
     }
 
+    const openDetails = async (review: ICommunicationReview) => {
+      communicationReviewStore.setCurrentReview(review)
+
+      await taskGeneratorStore.fetchTasksByReviewId(review._id).catch((error: unknown) => console.log(error))
+
+      selectedTopic.value = issueTopics.value?.[0] ?? ""
+      activeTab.value = "ERRORS"
+
+      router.push({
+        name: "platform.conversation-history",
+        params: { id: review._id },
+      })
+    }
+
     const generateTask = async () => {
       if (!getCurrentReview.value || isLoading.value || !selectedTopic.value) return
 
       try {
         isLoading.value = true
 
-        const task = await taskGeneratorStore.fetchTaskGenerator(
+        if (!Object.keys(getSelectedPrompt.value).length) {
+          await promptStore.fetchPromptById(getCurrentReview.value.prompt_id)
+        }
+
+        await taskGeneratorStore.fetchTaskGenerator(
           {
             review_id: getCurrentReview.value._id,
             topic_title: selectedTopic.value,
             type: TaskTypeEnum.MULTIPLE_CHOICE,
             mode: TaskModeEnum.WRITE,
-            target_language: getPromptList.value.find((item) => item.id === getCurrentReview.value?.prompt_id)?.meta?.target_language || "",
-            explanation_language: getPromptList.value.find((item) => item.id === getCurrentReview.value?.prompt_id)?.meta?.explanation_language || "",
+            target_language: getSelectedPrompt.value?.meta?.target_language || "",
+            explanation_language: getSelectedPrompt.value?.meta?.explanation_language || "",
             task_sentences_count: 10,
           },
           controller.signal
         )
-
-        selectedAnswersMap[task._id] = {}
       } catch (error: unknown) {
         console.log(error)
       } finally {
         isLoading.value = false
-      }
-    }
-
-    const isTaskChecked = (taskId: string) => {
-      const isChecked = checkedTasks.value.has(taskId)
-      const isCompleted = getTasksList.value?.find((item) => item._id === taskId)?.is_completed || false
-
-      return isChecked || isCompleted
-    }
-
-    const isMultipleChoiceTask = (task: IGenericTaskEntity): task is IGenericTaskEntity<IMultipleChoiceTask> => {
-      return task.type === TaskTypeEnum.MULTIPLE_CHOICE
-    }
-
-    const getCorrectCount = (task: IGenericTaskEntity): number => {
-      const answers = selectedAnswersMap[task._id] || {}
-      return task.task.sentences.reduce((acc, sentence) => {
-        return answers[sentence.id] === sentence.answer ? acc + 1 : acc
-      }, 0)
-    }
-
-    const checkTask = async (taskId: string) => {
-      try {
-        await taskGeneratorStore.fetchSetCompleted(taskId)
-        checkedTasks.value.add(taskId)
-      } catch (error: unknown) {
-        console.log(error)
       }
     }
 
@@ -550,19 +461,14 @@ export default defineComponent({
       selectedTopic,
       getReviewsList,
       getCurrentReview,
-      getTasksList,
       issueTopics,
-      selectedAnswersMap,
+      getIsPageLoading,
       formatDate,
       formatDuration,
       openDetails,
       deleteReview,
       highlightWords,
       generateTask,
-      isTaskChecked,
-      isMultipleChoiceTask,
-      checkTask,
-      getCorrectCount,
       handleAudioError,
       TaskTypeEnum,
     }

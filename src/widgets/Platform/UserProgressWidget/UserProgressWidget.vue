@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, computed } from "vue"
+import { defineComponent, computed, ref, onBeforeMount } from "vue"
 import { userProgressStore } from "@/app"
 import { TheLoader } from "@/shared/components"
 import { ProgressOverview, CefrProgressChart, ErrorStatsList, FillerWordsList, CompletedPromptsList, TasksTimeline, DayStreakProgress } from "./ui"

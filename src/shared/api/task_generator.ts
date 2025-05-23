@@ -36,11 +36,14 @@ export const getTaskHandler = async (taskId: string): Promise<IGenericTaskEntity
   }
 }
 
-export const setCompletedHandler = async (taskId: string): Promise<void> => {
+export const setCompletedHandler = async (taskId: string, answers: Record<number, string>): Promise<void> => {
   try {
     await axios({
       url: `/api/task-generator/${taskId}/completed`,
       method: "PATCH",
+      data: {
+        answers,
+      },
     })
   } catch (error: unknown) {
     throw error

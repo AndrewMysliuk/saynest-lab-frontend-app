@@ -40,6 +40,7 @@ export interface IGenericTaskEntity<T = IFillBlankTask | IMultipleChoiceTask> {
   explanation_language: string
   task: T
   is_completed: boolean
+  user_answers: Record<number, string>
   review_id: string
   user_id: string
   organization_id: string

@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from "vue-router"
-import { authStore, userStore } from "@/app"
+import { authStore, commonStore, communicationReviewStore, promptStore, userStore } from "@/app"
 import PlatformLayout from "@/layouts/PlatformLayout.vue"
 
 const platform: RouteRecordRaw[] = [
@@ -16,9 +16,15 @@ const platform: RouteRecordRaw[] = [
         return
       }
 
+      commonStore.setIsPageLoading(true)
+
       if (!currentUser) {
         await userStore.fetchGetUser()
       }
+
+      await Promise.all([communicationReviewStore.fetchReviewsList(), promptStore.fetchModuleList()]).catch((error: unknown) => console.error("Error in setupOnloadMethods:", error))
+
+      commonStore.setIsPageLoading(false)
 
       next()
     },
