@@ -6,11 +6,13 @@ import { getPromptByIdHandler, getModuleScenariosHandler, getModuleListHandler }
 export const usePromptStore = defineStore("promptStore", () => {
   const moduleList = ref<IModuleScenario[]>([])
   const promptList = ref<IPromptScenario[]>([])
+  const currentModule = ref<IModuleScenario>({} as IModuleScenario)
   const selectedPrompt = ref<IPromptScenario>({} as IPromptScenario)
 
   const getModuleList = computed(() => moduleList.value)
   const getPromptList = computed(() => promptList.value)
   const getSelectedPrompt = computed(() => selectedPrompt.value)
+  const getCurrentModule = computed(() => currentModule.value)
 
   const setPrompt = (prompt: IPromptScenario) => {
     selectedPrompt.value = prompt
@@ -29,6 +31,8 @@ export const usePromptStore = defineStore("promptStore", () => {
   const fetchModuleScenarios = async (module_id: string) => {
     await getModuleScenariosHandler(module_id)
       .then((response: IPromptScenario[]) => {
+        currentModule.value = moduleList.value.find((module) => module.id === module_id) || ({} as IModuleScenario)
+
         promptList.value = response
       })
       .catch((error: unknown) => {
@@ -50,6 +54,7 @@ export const usePromptStore = defineStore("promptStore", () => {
     getPromptList,
     getSelectedPrompt,
     getModuleList,
+    getCurrentModule,
     setPrompt,
     fetchModuleScenarios,
     fetchPromptById,

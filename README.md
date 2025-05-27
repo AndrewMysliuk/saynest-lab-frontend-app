@@ -1,4 +1,4 @@
-# OpenAI Speak Mate Frontend
+# Saynest Labs Frontend
 
 ### Install Dependencies
 

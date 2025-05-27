@@ -8,7 +8,7 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
-  document.title = (to?.meta?.title as string) || "OpenAI Speak Mate Frontend"
+  document.title = (to?.meta?.title as string) || "Saynest Labs"
 
   if (typeof window !== "undefined") {
     // GA4 pageview

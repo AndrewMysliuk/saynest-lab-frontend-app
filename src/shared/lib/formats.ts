@@ -61,3 +61,10 @@ export const formatDuration = (seconds: number) => {
   const secs = seconds % 60
   return `${mins}m ${secs}s`
 }
+
+export const formatTagLabel = (tag: string): string => {
+  return tag
+    .split("_")
+    .map((word) => word.charAt(0) + word.slice(1))
+    .join(" ")
+}

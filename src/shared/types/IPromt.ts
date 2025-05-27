@@ -2,7 +2,6 @@ import { VocabularyFrequencyLevelEnum } from "./IVocabulary"
 
 export interface IPromptScenario {
   id: string
-  module: string
   title: string
   description: string
   level: VocabularyFrequencyLevelEnum
@@ -71,6 +70,8 @@ export interface IModuleSubmodules {
   title: string
   description: string
   tips: string[]
+  tags?: string[]
+  difficulty?: string
   scenarios: string[]
 }
 
