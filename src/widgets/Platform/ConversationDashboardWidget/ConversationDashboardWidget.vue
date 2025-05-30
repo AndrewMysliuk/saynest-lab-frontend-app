@@ -12,7 +12,7 @@
           <div
             v-for="(module, index) in getModuleList"
             :key="index"
-            @click="openScenarios(module.id)"
+            @click="openScenarios(module._id)"
             class="cursor-pointer bg-white rounded-2xl p-6 border border-gray-200 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col h-full"
           >
             <div class="flex items-center justify-between mb-3 h-[32px]">
@@ -72,18 +72,18 @@
             <div class="space-y-6">
               <div
                 v-for="scenario in getScenariosForSubmodule(submodule.id)"
-                :key="scenario.id"
+                :key="scenario._id"
                 @click="selectPrompt(scenario)"
                 class="ml-2 bg-stone-50 hover:bg-stone-100 transition-colors duration-200 rounded-xl p-6 border border-stone-200 shadow-sm cursor-pointer relative"
-                :class="expandedScenario === scenario.id ? 'ring-2 ring-primary/30' : ''"
+                :class="expandedScenario === scenario._id ? 'ring-2 ring-primary/30' : ''"
               >
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                   <h3 class="text-lg font-semibold text-gray-800">{{ scenario.title }}</h3>
                   <div class="flex flex-wrap gap-2 text-xs items-center">
                     <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
-                    <span v-if="getCurrentUserProgress[scenario.id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
-                      Completed {{ getCurrentUserProgress[scenario.id] }}x
+                    <span v-if="getCurrentUserProgress[scenario._id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
+                      Completed {{ getCurrentUserProgress[scenario._id] }}x
                     </span>
                     <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
                   </div>
@@ -91,12 +91,12 @@
 
                 <p class="text-sm text-text-muted mb-4">{{ scenario.description }}</p>
 
-                <button @click.prevent.stop="toggleExpand(scenario.id)" class="text-sm text-primary font-medium hover:underline">
-                  {{ expandedScenario === scenario.id ? "Hide Details" : "Show Details" }}
+                <button @click.prevent.stop="toggleExpand(scenario._id)" class="text-sm text-primary font-medium hover:underline">
+                  {{ expandedScenario === scenario._id ? "Hide Details" : "Show Details" }}
                 </button>
 
                 <transition name="fade">
-                  <div v-if="expandedScenario === scenario.id" class="mt-6 border-t border-gray-100 pt-5 space-y-6">
+                  <div v-if="expandedScenario === scenario._id" class="mt-6 border-t border-gray-100 pt-5 space-y-6">
                     <!-- Goals -->
                     <div>
                       <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
@@ -146,7 +146,9 @@
               <div class="flex flex-wrap gap-2 text-xs items-center">
                 <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
-                <span v-if="getCurrentUserProgress[scenario.id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full"> Completed {{ getCurrentUserProgress[scenario.id] }}x </span>
+                <span v-if="getCurrentUserProgress[scenario._id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
+                  Completed {{ getCurrentUserProgress[scenario._id] }}x
+                </span>
                 <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
               </div>
             </div>
@@ -202,7 +204,7 @@ import { computed, defineComponent, ref } from "vue"
 import { useRouter } from "vue-router"
 import { commonStore, promptStore, userProgressStore, userStore } from "@/app"
 import { TheLoader } from "@/shared/components"
-import { IPromptScenario, ModuleTypeEnum } from "@/shared/types"
+import { IPromptScenarioEntity, ModuleTypeEnum } from "@/shared/types"
 import { formatTagLabel } from "@/shared/lib"
 
 export default defineComponent({
@@ -242,10 +244,10 @@ export default defineComponent({
       if (!submodule) return []
 
       const scenarioIds = new Set(submodule.scenarios)
-      return getPromptList.value.filter((s) => scenarioIds.has(s.id))
+      return getPromptList.value.filter((s) => scenarioIds.has(s._id))
     }
 
-    const selectPrompt = (prompt: IPromptScenario) => {
+    const selectPrompt = (prompt: IPromptScenarioEntity) => {
       promptStore.setPrompt(prompt)
 
       router.push({ name: "platform.conversation" })

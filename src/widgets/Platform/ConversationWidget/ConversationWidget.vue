@@ -175,7 +175,7 @@ export default defineComponent({
 
           await communicationReviewStore.generateConversationReview({
             session_id: getConversationResponse.value?.session_id,
-            prompt_id: getSelectedPrompt.value.id,
+            prompt_id: getSelectedPrompt.value._id,
             topic_title: getSelectedPrompt.value.title ?? "",
             target_language: getSelectedPrompt.value.meta.target_language,
             explanation_language: getUserTranslateLanguage.value,
@@ -215,8 +215,7 @@ export default defineComponent({
 
         const { _id } = await createSessionHandler({
           type: SessionTypeEnum.SPEACKING,
-          system_prompt: getSelectedPrompt.value?.finally_prompt,
-          prompt_id: getSelectedPrompt.value?.id,
+          prompt_id: getSelectedPrompt.value?._id,
         })
 
         await conversationStore.fetchConversation(
@@ -227,8 +226,7 @@ export default defineComponent({
             // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
             system: {
               session_id: _id,
-              prompt_id: getSelectedPrompt.value?.id,
-              global_prompt: getSelectedPrompt.value?.finally_prompt,
+              prompt_id: getSelectedPrompt.value?._id,
             },
             target_language: getSelectedPrompt.value.meta.target_language,
             explanation_language: getUserTranslateLanguage.value,
@@ -314,8 +312,7 @@ export default defineComponent({
                 // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
                 system: {
                   session_id: getConversationResponse.value?.session_id ?? "",
-                  prompt_id: getSelectedPrompt.value?.id,
-                  global_prompt: getSelectedPrompt.value?.finally_prompt,
+                  prompt_id: getSelectedPrompt.value?._id,
                 },
                 target_language: getSelectedPrompt.value.meta.target_language,
                 explanation_language: getUserTranslateLanguage.value,
@@ -337,7 +334,7 @@ export default defineComponent({
                 session_id: getConversationResponse.value?.session_id ?? "",
                 target_language: getSelectedPrompt.value.meta.target_language,
                 explanation_language: getUserTranslateLanguage.value,
-                prompt_id: getSelectedPrompt.value?.id ?? "",
+                prompt_id: getSelectedPrompt.value?._id ?? "",
               },
               {
                 retries: 3,

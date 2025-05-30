@@ -1,46 +1,59 @@
 import { axios } from "../config"
 import { AxiosResponse } from "axios"
-import { IModuleScenario, IPromptScenario } from "../types"
+import { IModuleFilters, IModuleScenarioEntity, IPromptFilters, IPromptScenarioEntity } from "../types"
 
-export const getPromptByIdHandler = async (id: string): Promise<IPromptScenario> => {
+export const getScenarioByIdHandler = async (id: string): Promise<IPromptScenarioEntity> => {
   try {
     const response: AxiosResponse = await axios({
-      url: `/api/prompts-library/${id}`,
+      url: `/api/prompts-library/scenario/${id}`,
       method: "GET",
     })
 
-    const { data }: { data: IPromptScenario } = response
-
+    const { data }: { data: IPromptScenarioEntity } = response
     return data
   } catch (error: unknown) {
     throw error
   }
 }
 
-export const getModuleListHandler = async (): Promise<IModuleScenario[]> => {
+export const listScenariosHandler = async (query: IPromptFilters): Promise<IPromptScenarioEntity[]> => {
   try {
     const response: AxiosResponse = await axios({
-      url: "/api/prompts-library/module",
+      url: "/api/prompts-library/scenarios",
       method: "GET",
+      params: query,
     })
 
-    const { data }: { data: IModuleScenario[] } = response
-
+    const { data }: { data: IPromptScenarioEntity[] } = response
     return data
   } catch (error: unknown) {
     throw error
   }
 }
 
-export const getModuleScenariosHandler = async (module_id: string): Promise<IPromptScenario[]> => {
+export const listModulesHandler = async (query?: IModuleFilters): Promise<IModuleScenarioEntity[]> => {
   try {
     const response: AxiosResponse = await axios({
-      url: `/api/prompts-library/module/${module_id}`,
+      url: "/api/prompts-library/modules",
+      method: "GET",
+      params: query,
+    })
+
+    const { data }: { data: IModuleScenarioEntity[] } = response
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
+export const getModuleScenariosHandler = async (module_id: string): Promise<IPromptScenarioEntity[]> => {
+  try {
+    const response: AxiosResponse = await axios({
+      url: `/api/prompts-library/module/${module_id}/scenarios`,
       method: "GET",
     })
 
-    const { data }: { data: IPromptScenario[] } = response
-
+    const { data }: { data: IPromptScenarioEntity[] } = response
     return data
   } catch (error: unknown) {
     throw error

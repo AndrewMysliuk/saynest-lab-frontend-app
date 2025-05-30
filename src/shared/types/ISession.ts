@@ -27,6 +27,5 @@ export interface ISessionEntity {
 
 export interface ISessionCreateRequest {
   type: SessionTypeEnum
-  system_prompt: string
   prompt_id: string
 }
