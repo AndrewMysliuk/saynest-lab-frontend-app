@@ -21,7 +21,7 @@
       <div class="conversation" v-if="!isReviewGenerating">
         <div class="absolute top-4 right-4 z-10 flex gap-2">
           <button
-            v-if="(getUserHistory?.length > getSelectedPrompt?.meta?.max_turns || getLastSessionError?.is_end) && getIsLogged"
+            v-if="(getUserHistory?.length > getSelectedPrompt?.meta?.max_turns || getSessionIsEnd) && getIsLogged"
             @click="analyseUserConversation"
             class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-medium"
           >
@@ -142,7 +142,7 @@ export default defineComponent({
     const getUserHistory = computed(() => getConversationResponse.value.conversation_history?.filter((item) => item.role === "user"))
     const getLastModelFullAnswer = computed(() => conversationStore.getLastModelFullAnswer)
     const getLastModelTip = computed(() => errorAnalysisStore.getLastModelTip)
-    const getLastSessionError = computed(() => errorAnalysisStore.getLastSessionError)
+    const getSessionIsEnd = computed(() => errorAnalysisStore.getSessionIsEnd)
     const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
@@ -153,6 +153,9 @@ export default defineComponent({
           router.push({ name: "platform.conversation-dashboard" })
         }, 100)
       } else {
+        conversationStore.resetAll()
+        errorAnalysisStore.resetAll()
+
         tooltip.value.target_language = getSelectedPrompt.value.meta.target_language
         tooltip.value.explanation_language = getUserTranslateLanguage.value
 
@@ -450,9 +453,9 @@ export default defineComponent({
       getUserHistory,
       getLastModelFullAnswer,
       getLastModelTip,
-      getLastSessionError,
       getConversationResponse,
       getUserTranslateLanguage,
+      getSessionIsEnd,
       hideTooltip,
       handleWordClick,
       analyseUserConversation,

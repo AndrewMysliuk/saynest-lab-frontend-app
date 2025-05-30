@@ -33,7 +33,7 @@
               >
                 Structured Module
               </span>
-              <span v-else class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full border border-gray-300"> Practice Sandbox </span>
+              <span v-else class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full border border-gray-300"> Open Practice </span>
             </div>
 
             <div class="flex flex-wrap gap-2 overflow-hidden">
@@ -79,9 +79,13 @@
               >
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
                   <h3 class="text-lg font-semibold text-gray-800">{{ scenario.title }}</h3>
-                  <div class="flex items-center gap-3 text-xs text-gray-500">
-                    <span><b>Level:</b> {{ scenario.level }}</span>
-                    <span v-if="getCurrentUserProgress[scenario.id]" class="text-green-600 font-semibold"> ✅ {{ getCurrentUserProgress[scenario.id] }}x Completed </span>
+                  <div class="flex flex-wrap gap-2 text-xs items-center">
+                    <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
+
+                    <span v-if="getCurrentUserProgress[scenario.id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
+                      Completed {{ getCurrentUserProgress[scenario.id] }}x
+                    </span>
+                    <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
                   </div>
                 </div>
 
@@ -139,9 +143,11 @@
           >
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
               <h3 class="text-xl font-semibold text-gray-800">{{ scenario.title }}</h3>
-              <div class="flex flex-wrap gap-3 text-xs text-gray-500">
-                <span><b>Level:</b> {{ scenario.level }}</span>
-                <span v-if="getCurrentUserProgress[scenario.id]" class="text-green-600 font-semibold"> ✅ {{ getCurrentUserProgress[scenario.id] }}x Completed </span>
+              <div class="flex flex-wrap gap-2 text-xs items-center">
+                <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
+
+                <span v-if="getCurrentUserProgress[scenario.id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full"> Completed {{ getCurrentUserProgress[scenario.id] }}x </span>
+                <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
               </div>
             </div>
 

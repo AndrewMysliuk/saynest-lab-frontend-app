@@ -22,7 +22,7 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
         const alreadyExists = reviewsList.value.some((r) => r._id === response._id)
 
         if (!alreadyExists) {
-          reviewsList.value.push(response)
+          reviewsList.value.unshift(response)
         }
       })
       .catch((error: unknown) => {

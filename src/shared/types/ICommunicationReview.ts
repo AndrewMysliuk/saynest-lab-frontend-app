@@ -33,6 +33,18 @@ export interface IExpressionUsage {
   quote_from_dialogue?: string
 }
 
+export interface IInconsistentTurns {
+  question: string
+  user_response: string
+  comment: string // объяснение, почему ответ не соответствует вопросу
+}
+
+export interface IConsistencyReview {
+  consistency_score: number // от 0 до 100
+  summary: string // краткое ревью, на explanation_language
+  inconsistent_turns: IInconsistentTurns[]
+}
+
 export interface ICommunicationReview {
   _id: string
   prompt_id: string
@@ -51,6 +63,7 @@ export interface ICommunicationReview {
   goals_coverage: IUserGoalEvaluation[]
   vocabulary_used: IVocabularyUsage[]
   phrases_used: IExpressionUsage[]
+  consistency_review: IConsistencyReview
   updated_at: Date
   created_at: Date
 }

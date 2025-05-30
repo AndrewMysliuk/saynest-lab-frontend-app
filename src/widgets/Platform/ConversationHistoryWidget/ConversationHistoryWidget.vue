@@ -49,6 +49,31 @@
             <p class="text-sm text-green-900">{{ getCurrentReview.conclusion }}</p>
           </div>
 
+          <!-- CONSISTENCY REVIEW -->
+          <div
+            v-if="getCurrentReview.consistency_review"
+            :class="{
+              'bg-red-50 border-red-500 text-red-800': getCurrentReview.consistency_review.consistency_score < 40,
+              'bg-yellow-50 border-yellow-500 text-yellow-800': getCurrentReview.consistency_review.consistency_score >= 40 && getCurrentReview.consistency_review.consistency_score < 70,
+              'bg-green-50 border-green-500 text-green-800': getCurrentReview.consistency_review.consistency_score >= 70,
+            }"
+            class="border-l-4 p-4 rounded-md"
+          >
+            <p class="font-semibold mb-1"><i class="fas fa-balance-scale mr-2"></i>Consistency Review:</p>
+            <p class="text-sm mb-2">{{ getCurrentReview.consistency_review.summary }}</p>
+
+            <div v-if="getCurrentReview.consistency_review.inconsistent_turns.length > 0" class="mt-2">
+              <p class="font-semibold text-sm mb-1">Inconsistencies:</p>
+              <ul class="text-xs list-disc pl-5">
+                <li v-for="(turn, index) in getCurrentReview.consistency_review.inconsistent_turns" :key="index">
+                  <p><strong>Q:</strong> {{ turn.question }}</p>
+                  <p><strong>A:</strong> {{ turn.user_response }}</p>
+                  <p><strong>Comment:</strong> {{ turn.comment }}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+
           <div v-if="getCurrentReview.goals_coverage?.length" class="mt-8">
             <h4 class="text-lg font-semibold text-text-base mb-4">User Goals</h4>
             <ul class="space-y-3">
@@ -100,6 +125,7 @@
         <div>
           <div class="flex justify-center mt-8 space-x-2">
             <button
+              v-if="getCurrentReview?.error_analysis?.length"
               @click="activeTab = 'ERRORS'"
               :class="['px-4 py-2 rounded-full text-sm font-medium transition', activeTab === 'ERRORS' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
             >
@@ -387,7 +413,7 @@ export default defineComponent({
       await taskGeneratorStore.fetchTasksByReviewId(review._id).catch((error: unknown) => console.log(error))
 
       selectedTopic.value = issueTopics.value?.[0] ?? ""
-      activeTab.value = "ERRORS"
+      activeTab.value = getCurrentReview.value?.error_analysis?.length ? "ERRORS" : "DIALOGUE"
 
       router.push({
         name: "platform.conversation-history",
