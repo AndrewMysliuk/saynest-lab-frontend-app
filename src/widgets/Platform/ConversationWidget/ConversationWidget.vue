@@ -65,7 +65,7 @@
         </div>
 
         <div class="conversation__visualization --prompt" v-if="isHold && getConversationResponse?.conversation_history?.length && !isLoading">
-          <p>Recording in progress... Speak now!</p>
+          <p>Recording in progress... Speak now! (Press Esc to cancel the recording) Duration: {{ recordingDuration }}s</p>
         </div>
 
         <div class="conversation__visualization --prompt" v-else-if="!isHold && getConversationResponse?.conversation_history?.length && !isLoading">
@@ -135,6 +135,8 @@ export default defineComponent({
       word: "",
       position: { x: 0, y: 0 },
     })
+    const recordingDuration = ref<number>(0)
+    let recordingTimer: number | null = null
 
     const getIsLogged = computed(() => authStore.getIsLogged)
     const getIsLoading = computed(() => conversationStore.getIsLoading)
@@ -143,7 +145,7 @@ export default defineComponent({
     const getLastModelFullAnswer = computed(() => conversationStore.getLastModelFullAnswer)
     const getLastModelTip = computed(() => errorAnalysisStore.getLastModelTip)
     const getSessionIsEnd = computed(() => errorAnalysisStore.getSessionIsEnd)
-    const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
+    const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
 
@@ -166,6 +168,7 @@ export default defineComponent({
     onMounted(() => {
       window.addEventListener("keydown", handleKeyDown)
       window.addEventListener("keyup", handleKeyUp)
+      window.addEventListener("beforeunload", handleBeforeUnload)
     })
 
     const analyseUserConversation = async () => {
@@ -240,6 +243,12 @@ export default defineComponent({
       }
     }
 
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = ""
+      return ""
+    }
+
     const handleKeyDown = async (e: KeyboardEvent) => {
       if (e.code === "Space" && !isHold.value && !isLoading.value) {
         e.preventDefault()
@@ -296,8 +305,7 @@ export default defineComponent({
           const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
           audioChunks = []
 
-          const recordingDuration = Date.now() - (recordingStartTime ?? 0)
-          if (recordingDuration < 125) return
+          if (recordingDuration.value * 1000 < 125) return
 
           isLoading.value = true
 
@@ -362,6 +370,18 @@ export default defineComponent({
           if (cleanupCanvas) await cleanupCanvas()
         }
 
+        recordingDuration.value = 0
+
+        recordingTimer = window.setInterval(async () => {
+          recordingDuration.value = Math.floor((Date.now() - recordingStartTime) / 1000)
+
+          if (recordingDuration.value >= 60 && isHold.value) {
+            isCancelled.value = true
+            await stopRecording()
+            isHold.value = false
+          }
+        }, 1000)
+
         mediaRecorder.start()
       } catch (error: unknown) {
         console.log(error)
@@ -382,6 +402,11 @@ export default defineComponent({
       if (cleanupCanvas) {
         await cleanupCanvas()
         cleanupCanvas = null
+      }
+
+      if (recordingTimer) {
+        clearInterval(recordingTimer)
+        recordingTimer = null
       }
 
       mediaRecorder = null
@@ -431,10 +456,12 @@ export default defineComponent({
       controller.abort()
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
+      window.removeEventListener("beforeunload", handleBeforeUnload)
     })
 
     return {
       tooltip,
+      recordingDuration,
       clientCanvasRef,
       audioElementRef,
       isModalInfoOpen,

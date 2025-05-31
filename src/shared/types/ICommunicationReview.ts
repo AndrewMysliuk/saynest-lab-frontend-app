@@ -82,3 +82,17 @@ export interface ICommunicationReviewUpdateAudioUrl {
   pair_id: string
   role: string
 }
+
+export interface ICommunicationReviewFilters {
+  from_date?: Date
+  to_date?: Date
+  limit?: number
+  offset?: number
+}
+
+export interface ICommunicationReviewParams {
+  offset: number
+  limit: number
+  hasMore: boolean
+  isLoading: boolean
+}

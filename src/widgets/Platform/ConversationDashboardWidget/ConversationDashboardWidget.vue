@@ -1,14 +1,38 @@
 <template>
   <div>
-    <TheLoader v-if="getIsPageLoading" />
+    <TheLoader v-if="getIsPageLoading || isLoading" />
 
     <div class="pt-16" v-else>
-      <div v-if="isModules" class="px-6 py-10">
-        <div class="mb-6">
-          <h1 class="text-3xl font-bold text-text-base">Modules</h1>
+      <div v-if="isOverview" class="px-6 py-10">
+        <div class="flex items-center gap-6 mb-6">
+          <h1 :class="['text-3xl font-bold cursor-pointer', activeTab === PromptLibraryTabsEnum.MODULES ? 'text-primary' : 'text-gray-400']" @click="toggleTabs(PromptLibraryTabsEnum.MODULES)">
+            Modules
+          </h1>
+          <h1 :class="['text-3xl font-bold cursor-pointer', activeTab === PromptLibraryTabsEnum.SCENARIOS ? 'text-primary' : 'text-gray-400']" @click="toggleTabs(PromptLibraryTabsEnum.SCENARIOS)">
+            All Scenarios
+          </h1>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+          <input
+            :value="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules : searchQueryScenarios"
+            @input="onSearchInput"
+            type="text"
+            placeholder="Search..."
+            class="flex-1 border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 transition"
+          />
+          <button
+            v-if="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules.length : searchQueryScenarios.length"
+            @click="clearSearch"
+            class="text-gray-400 hover:text-gray-600 transition text-lg font-bold"
+            title="Clear search"
+            type="button"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div v-if="activeTab === PromptLibraryTabsEnum.MODULES" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="(module, index) in getModuleList"
             :key="index"
@@ -42,13 +66,81 @@
               </span>
             </div>
           </div>
+
+          <p v-if="!getModuleList.length" class="text-sm text-center text-gray-400 italic w-full col-span-full">No modules found.</p>
         </div>
+
+        <div v-if="activeTab === PromptLibraryTabsEnum.SCENARIOS" class="space-y-8">
+          <div
+            v-for="(scenario, index) in getPromptList"
+            :key="scenario._id"
+            @click="selectPrompt(scenario)"
+            class="bg-stone-50 hover:bg-stone-100 transition-colors duration-200 rounded-xl p-6 border border-stone-200 shadow-sm cursor-pointer relative"
+            :class="expandedScenario === index ? 'ring-2 ring-primary/30' : ''"
+          >
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+              <h3 class="text-xl font-semibold text-gray-800">{{ scenario.title }}</h3>
+              <div class="flex flex-wrap gap-2 text-xs items-center">
+                <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
+
+                <span v-if="getCurrentUserProgress[scenario._id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
+                  Completed {{ getCurrentUserProgress[scenario._id] }}x
+                </span>
+                <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
+              </div>
+            </div>
+
+            <p class="text-sm text-text-muted mb-5">{{ scenario.description }}</p>
+
+            <button @click.prevent.stop="toggleExpand(index)" class="text-sm text-primary font-medium hover:underline">
+              {{ expandedScenario === index ? "Hide Details" : "Show Details" }}
+            </button>
+
+            <transition name="fade">
+              <div v-if="expandedScenario === index" class="mt-6 border-t border-gray-100 pt-5 space-y-6">
+                <!-- Goals -->
+                <div>
+                  <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
+                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
+                    <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
+                      {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Dictionary -->
+                <div>
+                  <h4 class="text-md font-semibold text-text-base mb-2">Dictionary</h4>
+                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
+                    <li v-for="word in scenario.user_content.dictionary" :key="word.word">
+                      <b>{{ word.word }}</b> ({{ word.translation[getUserTranslateLanguage] }}) — {{ word.meaning }}
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Phrases -->
+                <div>
+                  <h4 class="text-md font-semibold text-text-base mb-2">Phrases</h4>
+                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
+                    <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
+                      "{{ phrase.phrase }}" — <i>{{ phrase.translation[getUserTranslateLanguage] }}</i>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </transition>
+          </div>
+
+          <p v-if="!getPromptList.length" class="text-sm text-center text-gray-400 italic">No scenarios found.</p>
+        </div>
+
+        <div ref="loadMoreTrigger" class="h-1" />
       </div>
 
       <div class="px-6 py-10" v-else>
         <div class="flex items-center justify-between mb-8">
           <h1 class="text-3xl font-bold text-text-base">Scenarios</h1>
-          <button type="button" class="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primaryDark transition-colors" @click="isModules = true">← Back to Modules</button>
+          <button type="button" class="bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primaryDark transition-colors" @click="isOverview = true">← Back to Modules</button>
         </div>
 
         <div v-if="isStructuredModule" class="space-y-12">
@@ -135,7 +227,7 @@
 
         <div v-else class="space-y-8">
           <div
-            v-for="(scenario, index) in getPromptList"
+            v-for="(scenario, index) in getModulePromptList"
             :key="index"
             @click="selectPrompt(scenario)"
             class="bg-stone-50 hover:bg-stone-100 transition-colors duration-200 rounded-xl p-6 border border-stone-200 shadow-sm cursor-pointer relative"
@@ -200,12 +292,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue"
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { commonStore, promptStore, userProgressStore, userStore } from "@/app"
 import { TheLoader } from "@/shared/components"
 import { IPromptScenarioEntity, ModuleTypeEnum } from "@/shared/types"
 import { formatTagLabel } from "@/shared/lib"
+import { PromptLibraryTabsEnum } from "./types"
 
 export default defineComponent({
   components: {
@@ -214,16 +307,48 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
-    const isModules = ref<boolean>(true)
+    const isLoading = ref<boolean>(false)
+    const searchQueryModules = ref<string>("")
+    const searchQueryScenarios = ref<string>("")
+    const isOverview = ref<boolean>(true)
+    const activeTab = ref<PromptLibraryTabsEnum>(PromptLibraryTabsEnum.MODULES)
     const expandedScenario = ref<string | number | null>(null)
+    const loadMoreTrigger = ref<HTMLElement | null>(null)
+    const observer = ref<IntersectionObserver | null>(null)
+    let debounceTimeout: ReturnType<typeof setTimeout> | null = null
 
     const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
     const getModuleList = computed(() => promptStore.getModuleList)
     const getPromptList = computed(() => promptStore.getPromptList)
+    const getModuleParams = computed(() => promptStore.getModuleParams)
+    const getPromptParams = computed(() => promptStore.getPromptParams)
+    const getModulePromptList = computed(() => promptStore.getModulePromptList)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
     const isStructuredModule = computed(() => getCurrentModule.value?.type === ModuleTypeEnum.STRUCTURED)
+
+    onMounted(() => {
+      observer.value = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          const hasSearch = activeTab.value === PromptLibraryTabsEnum.MODULES ? searchQueryModules.value.trim() !== "" : searchQueryScenarios.value.trim() !== ""
+
+          if (hasSearch) return
+
+          if (activeTab.value === PromptLibraryTabsEnum.MODULES && getModuleParams.value.hasMore) {
+            promptStore.fetchModuleList(true)
+          }
+
+          if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS && getPromptParams.value.hasMore) {
+            promptStore.fetchScenariosList(true, { is_module_only: false })
+          }
+        }
+      })
+
+      if (loadMoreTrigger.value) {
+        observer.value.observe(loadMoreTrigger.value)
+      }
+    })
 
     const toggleExpand = (index: number | string) => {
       expandedScenario.value = expandedScenario.value === index ? null : index
@@ -231,11 +356,15 @@ export default defineComponent({
 
     const openScenarios = async (module_id: string) => {
       try {
+        isLoading.value = true
+
         await Promise.all([promptStore.fetchModuleScenarios(module_id), userProgressStore.fetchCurrentUserProgress()])
 
-        isModules.value = false
+        isOverview.value = false
       } catch (error: unknown) {
         console.log(error)
+      } finally {
+        isLoading.value = false
       }
     }
 
@@ -243,32 +372,95 @@ export default defineComponent({
       const submodule = getCurrentModule.value?.submodules.find((sm) => sm.id === submoduleId)
       if (!submodule) return []
 
-      const scenarioIds = new Set(submodule.scenarios)
-      return getPromptList.value.filter((s) => scenarioIds.has(s._id))
+      return submodule.scenarios.map((scenarioId) => getModulePromptList.value.find((s) => s._id === scenarioId)).filter((s): s is IPromptScenarioEntity => s !== undefined)
     }
 
     const selectPrompt = (prompt: IPromptScenarioEntity) => {
       promptStore.setPrompt(prompt)
 
+      clearSearch()
+
       router.push({ name: "platform.conversation" })
     }
 
+    const toggleTabs = (tab: PromptLibraryTabsEnum) => {
+      activeTab.value = tab
+    }
+
+    const onSearchInput = async (e: Event) => {
+      const target = e.target as HTMLInputElement
+      const val = target.value
+
+      if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
+        searchQueryModules.value = val
+      } else {
+        searchQueryScenarios.value = val
+      }
+
+      if (debounceTimeout) clearTimeout(debounceTimeout)
+
+      debounceTimeout = setTimeout(() => {
+        handleSearchInput(val)
+      }, 300)
+    }
+
+    const handleSearchInput = async (query: string) => {
+      if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
+        promptStore.resetModuleParams()
+        await promptStore.fetchModuleList(false, {
+          title: query,
+        })
+      } else if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS) {
+        promptStore.resetPromptParams()
+        await promptStore.fetchScenariosList(false, {
+          title: query,
+          is_module_only: false,
+        })
+      }
+    }
+
+    const clearSearch = () => {
+      if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
+        searchQueryModules.value = ""
+        promptStore.resetModuleParams()
+        promptStore.fetchModuleList(false)
+      } else {
+        searchQueryScenarios.value = ""
+        promptStore.resetPromptParams()
+        promptStore.fetchScenariosList(false, { is_module_only: false })
+      }
+    }
+
+    onBeforeUnmount(() => {
+      observer.value?.disconnect()
+    })
+
     return {
+      isOverview,
+      isLoading,
+      activeTab,
+      searchQueryModules,
+      searchQueryScenarios,
+      loadMoreTrigger,
       getIsPageLoading,
-      isModules,
       expandedScenario,
-      getModuleList,
       getPromptList,
+      getModuleList,
+      getModulePromptList,
       getUserTranslateLanguage,
       getCurrentUserProgress,
       getCurrentModule,
       isStructuredModule,
+      clearSearch,
+      onSearchInput,
       toggleExpand,
+      toggleTabs,
       openScenarios,
       selectPrompt,
       getScenariosForSubmodule,
       formatTagLabel,
       ModuleTypeEnum,
+      PromptLibraryTabsEnum,
     }
   },
 })

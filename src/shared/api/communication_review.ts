@@ -1,6 +1,6 @@
 import { axios } from "../config"
 import { AxiosResponse } from "axios"
-import { ICommunicationReview, ICommunicationReviewGenerateRequest, ICommunicationReviewUpdateAudioUrl } from "../types"
+import { ICommunicationReview, ICommunicationReviewFilters, ICommunicationReviewGenerateRequest, ICommunicationReviewUpdateAudioUrl } from "../types"
 
 export const generateConversationReviewHandler = async (payload: ICommunicationReviewGenerateRequest): Promise<ICommunicationReview> => {
   try {
@@ -20,11 +20,12 @@ export const generateConversationReviewHandler = async (payload: ICommunicationR
   }
 }
 
-export const reviewsListHandler = async (): Promise<ICommunicationReview[]> => {
+export const reviewsListHandler = async (query?: ICommunicationReviewFilters): Promise<ICommunicationReview[]> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/communication-review",
       method: "GET",
+      params: query,
     })
 
     const { data }: { data: ICommunicationReview[] } = response

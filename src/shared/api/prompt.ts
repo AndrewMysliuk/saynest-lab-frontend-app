@@ -16,7 +16,7 @@ export const getScenarioByIdHandler = async (id: string): Promise<IPromptScenari
   }
 }
 
-export const listScenariosHandler = async (query: IPromptFilters): Promise<IPromptScenarioEntity[]> => {
+export const listScenariosHandler = async (query?: IPromptFilters): Promise<IPromptScenarioEntity[]> => {
   try {
     const response: AxiosResponse = await axios({
       url: "/api/prompts-library/scenarios",

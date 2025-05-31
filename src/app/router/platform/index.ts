@@ -22,7 +22,14 @@ const platform: RouteRecordRaw[] = [
         await userStore.fetchGetUser()
       }
 
-      await Promise.all([communicationReviewStore.fetchReviewsList(), promptStore.fetchModuleList()]).catch((error: unknown) => console.error("Error in setupOnloadMethods:", error))
+      // Reset Infinite Load Params
+      communicationReviewStore.resetReviewsParams()
+      promptStore.resetModuleParams()
+      promptStore.resetPromptParams()
+
+      await Promise.all([communicationReviewStore.fetchReviewsList(false), promptStore.fetchModuleList(false), promptStore.fetchScenariosList(false, { is_module_only: false })]).catch(
+        (error: unknown) => console.error("Error in setupOnloadMethods:", error)
+      )
 
       commonStore.setIsPageLoading(false)
 

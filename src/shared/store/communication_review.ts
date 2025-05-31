@@ -1,17 +1,33 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { ICommunicationReview, ICommunicationReviewGenerateRequest, ICommunicationReviewUpdateAudioUrl } from "../types"
+import { ICommunicationReview, ICommunicationReviewFilters, ICommunicationReviewGenerateRequest, ICommunicationReviewParams, ICommunicationReviewUpdateAudioUrl } from "../types"
 import { deleteReviewHandler, generateConversationReviewHandler, getReviewHandler, reviewsListHandler, updateAudioUrlHandler } from "../api"
 
 export const useCommunicationReviewStore = defineStore("communicationReviewStore", () => {
   const reviewsList = ref<ICommunicationReview[]>([])
   const currentReview = ref<ICommunicationReview | null>(null)
+  const reviewsParams = ref<ICommunicationReviewParams>({
+    offset: 0,
+    limit: 20,
+    hasMore: true,
+    isLoading: false,
+  })
 
   const getReviewsList = computed(() => reviewsList.value)
   const getCurrentReview = computed(() => currentReview.value)
+  const getReviewsParams = computed(() => reviewsParams.value)
 
   const setCurrentReview = (review: ICommunicationReview) => {
     currentReview.value = review
+  }
+
+  const resetReviewsParams = () => {
+    reviewsParams.value = {
+      offset: 0,
+      limit: 20,
+      hasMore: true,
+      isLoading: false,
+    }
   }
 
   const generateConversationReview = async (payload: ICommunicationReviewGenerateRequest) => {
@@ -30,14 +46,39 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
       })
   }
 
-  const fetchReviewsList = async () => {
-    await reviewsListHandler()
-      .then((response: ICommunicationReview[]) => {
+  const fetchReviewsList = async (isLoadMore = false, query?: ICommunicationReviewFilters) => {
+    try {
+      if (reviewsParams.value.isLoading) return
+
+      reviewsParams.value.isLoading = true
+
+      if (!isLoadMore) {
+        reviewsList.value = []
+        resetReviewsParams()
+      }
+
+      const limit = query?.limit ?? reviewsParams.value.limit
+      const offset = query?.offset ?? reviewsParams.value.offset
+
+      const response = await reviewsListHandler({
+        ...query,
+        limit,
+        offset,
+      })
+
+      if (isLoadMore) {
+        reviewsList.value = [...reviewsList.value, ...response]
+      } else {
         reviewsList.value = response
-      })
-      .catch((error: unknown) => {
-        throw error
-      })
+      }
+
+      reviewsParams.value.offset = offset + limit
+      reviewsParams.value.hasMore = response.length === limit
+    } catch (error) {
+      console.error("fetchReviewsList error:", error)
+    } finally {
+      reviewsParams.value.isLoading = false
+    }
   }
 
   const fetchReviewById = async (review_id: string) => {
@@ -77,7 +118,9 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
   return {
     getReviewsList,
     getCurrentReview,
+    getReviewsParams,
     setCurrentReview,
+    resetReviewsParams,
     generateConversationReview,
     fetchReviewsList,
     fetchReviewById,

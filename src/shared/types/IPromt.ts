@@ -73,6 +73,13 @@ export interface IPromptFilters {
   offset?: number
 }
 
+export interface IPromptParams {
+  offset: number
+  limit: number
+  hasMore: boolean
+  isLoading: boolean
+}
+
 // Modules
 export enum ModuleTypeEnum {
   STRUCTURED = "STRUCTURED",
@@ -111,4 +118,11 @@ export interface IModuleFilters {
   organization_id?: string
   limit?: number
   offset?: number
+}
+
+export interface IModuleParams {
+  offset: number
+  limit: number
+  hasMore: boolean
+  isLoading: boolean
 }

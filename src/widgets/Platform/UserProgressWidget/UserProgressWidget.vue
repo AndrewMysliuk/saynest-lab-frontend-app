@@ -4,7 +4,7 @@
 
     <div class="pt-16" v-else>
       <div class="px-6 py-10">
-        <h1 class="text-3xl font-bold text-text-base mb-6">User Progress</h1>
+        <h1 class="text-3xl font-bold text-text-base mb-6">Progress</h1>
 
         <div class="bg-stone-50 rounded-2xl p-6 border border-stone-200 shadow-sm space-y-6">
           <ProgressOverview />

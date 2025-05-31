@@ -325,6 +325,8 @@
               </div>
             </div>
           </div>
+
+          <div ref="loadMoreTrigger" class="h-1" />
         </div>
 
         <p v-else class="text-center text-text-muted text-sm italic">You don't have any conversation reviews yet.</p>
@@ -334,7 +336,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, nextTick } from "vue"
+import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, nextTick, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { commonStore, communicationReviewStore, promptStore, taskGeneratorStore } from "@/app"
 import { formatDuration } from "@/shared/lib"
@@ -350,6 +352,8 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const router = useRouter()
+    const loadMoreTrigger = ref<HTMLElement | null>(null)
+    const observer = ref<IntersectionObserver | null>(null)
     const controller = new AbortController()
     const isReady = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
@@ -360,7 +364,8 @@ export default defineComponent({
     const isSingle = computed(() => !!route.params.id)
     const getReviewsList = computed(() => communicationReviewStore.getReviewsList)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
-    const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
+    const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
+    const getReviewsParams = computed(() => communicationReviewStore.getReviewsParams)
     const issueTopics = computed(() => {
       if (!getCurrentReview.value) return []
 
@@ -380,6 +385,18 @@ export default defineComponent({
       }
 
       isReady.value = true
+    })
+
+    onMounted(() => {
+      observer.value = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && getReviewsParams.value.hasMore) {
+          communicationReviewStore.fetchReviewsList(true)
+        }
+      })
+
+      if (loadMoreTrigger.value) {
+        observer.value.observe(loadMoreTrigger.value)
+      }
     })
 
     const formatDate = (date: Date | string) => {
@@ -477,12 +494,14 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       controller.abort()
+      observer.value?.disconnect()
     })
 
     return {
       isReady,
       isSingle,
       activeTab,
+      loadMoreTrigger,
       isLoading,
       selectedTopic,
       getReviewsList,

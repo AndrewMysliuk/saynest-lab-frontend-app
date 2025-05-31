@@ -44,7 +44,7 @@ import { promptStore, errorAnalysisStore, userStore } from "@/app"
 
 export default defineComponent({
   setup() {
-    const getSelectedPrompt = computed(() => promptStore.getSelectedPrompt)
+    const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getModelTips = computed(() => errorAnalysisStore.getModelTips)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
 

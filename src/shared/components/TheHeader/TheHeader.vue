@@ -65,7 +65,7 @@ export default defineComponent({
       [
         { label: "Conversation", router: { name: "platform.conversation-dashboard" } },
         getIsLogged.value ? { label: "Conversation History", router: { name: "platform.conversation-history" } } : null,
-        getIsLogged.value ? { label: "User Progress", router: { name: "platform.user-progress" } } : null,
+        getIsLogged.value ? { label: "Progress", router: { name: "platform.user-progress" } } : null,
       ].filter(Boolean)
     )
 
