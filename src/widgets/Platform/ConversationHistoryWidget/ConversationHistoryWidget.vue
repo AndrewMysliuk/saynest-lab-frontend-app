@@ -338,7 +338,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, nextTick, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { commonStore, communicationReviewStore, promptStore, taskGeneratorStore } from "@/app"
+import { commonStore, communicationReviewStore, promptStore, taskGeneratorStore, userStore } from "@/app"
 import { formatDuration } from "@/shared/lib"
 import { IConversationHistory, ICommunicationReview, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
 import { TheLoader, TheTask } from "@/shared/components"
