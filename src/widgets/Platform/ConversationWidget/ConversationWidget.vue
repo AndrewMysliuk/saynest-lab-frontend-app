@@ -147,7 +147,7 @@ export default defineComponent({
     const getSessionIsEnd = computed(() => errorAnalysisStore.getSessionIsEnd)
     const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
+    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
 
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {

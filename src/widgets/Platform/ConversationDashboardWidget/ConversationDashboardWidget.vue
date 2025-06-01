@@ -83,8 +83,8 @@
               <div class="flex flex-wrap gap-2 text-xs items-center">
                 <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
-                <span v-if="getCurrentUserProgress[scenario._id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
-                  Completed {{ getCurrentUserProgress[scenario._id] }}x
+                <span v-if="getCurrentUserProgress[scenario.name]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
+                  Completed {{ getCurrentUserProgress[scenario.name] }}x
                 </span>
                 <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
               </div>
@@ -174,8 +174,8 @@
                   <div class="flex flex-wrap gap-2 text-xs items-center">
                     <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
-                    <span v-if="getCurrentUserProgress[scenario._id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
-                      Completed {{ getCurrentUserProgress[scenario._id] }}x
+                    <span v-if="getCurrentUserProgress[scenario.name]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
+                      Completed {{ getCurrentUserProgress[scenario.name] }}x
                     </span>
                     <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
                   </div>
@@ -238,8 +238,8 @@
               <div class="flex flex-wrap gap-2 text-xs items-center">
                 <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
-                <span v-if="getCurrentUserProgress[scenario._id]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
-                  Completed {{ getCurrentUserProgress[scenario._id] }}x
+                <span v-if="getCurrentUserProgress[scenario.name]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
+                  Completed {{ getCurrentUserProgress[scenario.name] }}x
                 </span>
                 <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
               </div>
@@ -323,7 +323,7 @@ export default defineComponent({
     const getModuleParams = computed(() => promptStore.getModuleParams)
     const getPromptParams = computed(() => promptStore.getPromptParams)
     const getModulePromptList = computed(() => promptStore.getModulePromptList)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "uk")
+    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
     const isStructuredModule = computed(() => getCurrentModule.value?.type === ModuleTypeEnum.STRUCTURED)

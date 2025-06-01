@@ -7,8 +7,8 @@
       </span>
     </div>
     <div class="bg-white rounded-xl shadow p-4 flex flex-col items-center">
-      <span class="text-gray-500 text-sm mb-1">Avg Session Duration</span>
-      <span class="text-2xl font-semibold"> {{ avgDuration }} </span>
+      <span class="text-gray-500 text-sm mb-1">Total Session Duration</span>
+      <span class="text-2xl font-semibold"> {{ totalDuration }} </span>
     </div>
   </div>
 </template>
@@ -22,11 +22,11 @@ export default defineComponent({
   setup() {
     const userProgress = computed(() => userProgressStore.getCurrentUserProgress)
     const totalSessions = computed(() => userProgress.value?.total_sessions ?? 0)
-    const avgDuration = computed(() => formatDuration(userProgress.value?.avg_session_duration ?? 0))
+    const totalDuration = computed(() => formatDuration(userProgress.value?.total_session_duration ?? 0))
 
     return {
       totalSessions,
-      avgDuration,
+      totalDuration,
     }
   },
 })

@@ -366,6 +366,7 @@ export default defineComponent({
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
     const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getReviewsParams = computed(() => communicationReviewStore.getReviewsParams)
+    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
     const issueTopics = computed(() => {
       if (!getCurrentReview.value) return []
 
@@ -455,7 +456,7 @@ export default defineComponent({
             type: TaskTypeEnum.MULTIPLE_CHOICE,
             mode: TaskModeEnum.WRITE,
             target_language: getSelectedPrompt.value?.meta?.target_language || "",
-            explanation_language: getSelectedPrompt.value?.meta?.explanation_language || "",
+            explanation_language: getUserTranslateLanguage.value,
             task_sentences_count: 10,
           },
           controller.signal
