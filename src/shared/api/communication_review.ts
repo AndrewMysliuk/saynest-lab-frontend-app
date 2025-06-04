@@ -66,6 +66,21 @@ export const deleteReviewHandler = async (review_id: string): Promise<boolean> =
   }
 }
 
+export const deleteAllHistoryHandler = async (): Promise<boolean> => {
+  try {
+    const response: AxiosResponse = await axios({
+      url: "/api/communication-review/all-history",
+      method: "DELETE",
+    })
+
+    const { data }: { data: boolean } = response
+
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
 export const updateAudioUrlHandler = async (dto: ICommunicationReviewUpdateAudioUrl): Promise<string> => {
   try {
     const response: AxiosResponse = await axios({

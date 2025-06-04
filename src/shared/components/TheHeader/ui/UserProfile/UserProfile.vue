@@ -75,16 +75,46 @@
         <button type="submit" :disabled="!isChanged" class="px-4 py-2 bg-primary text-white rounded-md transition hover:bg-primaryDark disabled:opacity-50 disabled:cursor-not-allowed">Save</button>
       </div>
     </form>
+
+    <div class="flex flex-col gap-2 mt-8 border-t pt-4">
+      <button type="button" @click="isDeleteHistoryModalOpen = true" class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition">Delete All Conversation History</button>
+
+      <button type="button" @click="isDeleteAccountModalOpen = true" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">Delete Account</button>
+    </div>
+
+    <v-modal v-model="isDeleteHistoryModalOpen">
+      <TheConfirmation
+        title="Delete All Conversation History"
+        description="Are you sure you want to delete your all conversation history? This action cannot be undone."
+        @accept="onDeleteConversation"
+        @cancel="isDeleteHistoryModalOpen = false"
+      />
+    </v-modal>
+
+    <v-modal v-model="isDeleteAccountModalOpen">
+      <TheConfirmation
+        title="Delete Account"
+        description="Are you sure you want to delete your account? This action cannot be undone."
+        @accept="onDeleteAccount"
+        @cancel="isDeleteAccountModalOpen = false"
+      />
+    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { userStore } from "@/app"
+import { communicationReviewStore, userStore } from "@/app"
 import { computed, ref, defineComponent, reactive } from "vue"
+import TheConfirmation from "../../../TheConfirmation"
 import CountryList from "@/shared/json_data/countries.json"
 import LanguagesList from "@/shared/json_data/languages.json"
+import { deleteAllHistoryHandler } from "@/shared/api"
 
 export default defineComponent({
+  components: {
+    TheConfirmation,
+  },
+
   setup(_, { emit }) {
     const errorMessages = ref<Record<string, string>>({})
     const countryOptions = CountryList.map(({ name, alpha_2 }) => ({
@@ -95,6 +125,8 @@ export default defineComponent({
       language,
       language_iso,
     }))
+    const isDeleteHistoryModalOpen = ref<boolean>(false)
+    const isDeleteAccountModalOpen = ref<boolean>(false)
 
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const isChanged = computed(() => {
@@ -136,13 +168,39 @@ export default defineComponent({
       }
     }
 
+    const onDeleteConversation = async () => {
+      try {
+        await deleteAllHistoryHandler()
+
+        communicationReviewStore.setReviewList([])
+      } catch (error: unknown) {
+        console.log(error)
+      } finally {
+        isDeleteHistoryModalOpen.value = false
+      }
+    }
+
+    const onDeleteAccount = () => {
+      try {
+        // TODO
+      } catch (error: unknown) {
+        console.log(error)
+      } finally {
+        isDeleteAccountModalOpen.value = false
+      }
+    }
+
     return {
       form,
       isChanged,
+      isDeleteHistoryModalOpen,
+      isDeleteAccountModalOpen,
       errorMessages,
       countryOptions,
       languageOptions,
       getCurrentUser,
+      onDeleteConversation,
+      onDeleteAccount,
       onSubmit,
     }
   },

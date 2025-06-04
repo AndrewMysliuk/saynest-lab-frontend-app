@@ -17,6 +17,10 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
   const getCurrentReview = computed(() => currentReview.value)
   const getReviewsParams = computed(() => reviewsParams.value)
 
+  const setReviewList = (review: ICommunicationReview[]) => {
+    reviewsList.value = review
+  }
+
   const setCurrentReview = (review: ICommunicationReview) => {
     currentReview.value = review
   }
@@ -120,6 +124,7 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
     getCurrentReview,
     getReviewsParams,
     setCurrentReview,
+    setReviewList,
     resetReviewsParams,
     generateConversationReview,
     fetchReviewsList,

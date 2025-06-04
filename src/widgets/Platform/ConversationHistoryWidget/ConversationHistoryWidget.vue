@@ -332,6 +332,10 @@
         <p v-else class="text-center text-text-muted text-sm italic">You don't have any conversation reviews yet.</p>
       </div>
     </div>
+
+    <v-modal v-model="isDeleteModalOpen">
+      <TheConfirmation title="Delete Review" description="Are you sure you want to delete review? This action cannot be undone." @accept="confirmDeleteReview" @cancel="isDeleteModalOpen = false" />
+    </v-modal>
   </div>
 </template>
 
@@ -341,12 +345,13 @@ import { useRoute, useRouter } from "vue-router"
 import { commonStore, communicationReviewStore, promptStore, taskGeneratorStore, userStore } from "@/app"
 import { formatDuration } from "@/shared/lib"
 import { IConversationHistory, ICommunicationReview, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
-import { TheLoader, TheTask } from "@/shared/components"
+import { TheLoader, TheTask, TheConfirmation } from "@/shared/components"
 
 export default defineComponent({
   components: {
     TheLoader,
     TheTask,
+    TheConfirmation,
   },
 
   setup() {
@@ -359,6 +364,8 @@ export default defineComponent({
     const isLoading = ref<boolean>(false)
     const activeTab = ref<"ERRORS" | "VOCAB" | "DIALOGUE" | "TASKS">("ERRORS")
     const selectedTopic = ref<string>("")
+    const isDeleteModalOpen = ref<boolean>(false)
+    const selectedReviewId = ref<string>("")
 
     const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
     const isSingle = computed(() => !!route.params.id)
@@ -404,11 +411,18 @@ export default defineComponent({
       return new Date(date).toLocaleString()
     }
 
-    const deleteReview = async (id: string) => {
+    const deleteReview = (id: string) => {
+      selectedReviewId.value = id
+      isDeleteModalOpen.value = true
+    }
+
+    const confirmDeleteReview = async () => {
       try {
-        await communicationReviewStore.fetchDeleteReviewById(id)
+        await communicationReviewStore.fetchDeleteReviewById(selectedReviewId.value)
       } catch (error) {
         console.error("Error deleting review:", error)
+      } finally {
+        isDeleteModalOpen.value = false
       }
     }
 
@@ -501,6 +515,7 @@ export default defineComponent({
     return {
       isReady,
       isSingle,
+      isDeleteModalOpen,
       activeTab,
       loadMoreTrigger,
       isLoading,
@@ -513,6 +528,7 @@ export default defineComponent({
       formatDuration,
       openDetails,
       deleteReview,
+      confirmDeleteReview,
       highlightWords,
       generateTask,
       handleAudioError,
