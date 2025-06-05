@@ -151,6 +151,13 @@ export default defineComponent({
       try {
         errorMessage.value = null
         await authStore.fetchLogin(loginPayload.value)
+
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: "BASIC_LOGIN_CLICK",
+          method: "login_button",
+          location: "login_form",
+        })
       } catch (error: any) {
         if (error?.response?.status === 401) {
           errorMessage.value = "Invalid email or password"

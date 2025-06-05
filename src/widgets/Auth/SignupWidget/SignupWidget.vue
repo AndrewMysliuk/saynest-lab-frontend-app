@@ -234,6 +234,13 @@ export default defineComponent({
         }
 
         await authStore.fetchRegister(sigupPayload.value)
+
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: "BASIC_SIGNUP_CLICK",
+          method: "signup_button",
+          location: "signup_form",
+        })
       } catch (error: any) {
         if (error.response?.status === 400 && error.response.data?.error?.fieldErrors) {
           const fields = error.response.data.error.fieldErrors

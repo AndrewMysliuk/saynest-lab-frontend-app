@@ -374,6 +374,7 @@ export default defineComponent({
     const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getReviewsParams = computed(() => communicationReviewStore.getReviewsParams)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getCurrentUser = computed(() => userStore.getCurrentUser)
     const issueTopics = computed(() => {
       if (!getCurrentReview.value) return []
 
@@ -458,6 +459,14 @@ export default defineComponent({
 
       try {
         isLoading.value = true
+
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: "TASK_GENERATED",
+          scenario_name: getSelectedPrompt.value.name,
+          scenario_id: getSelectedPrompt.value._id,
+          user_id: getCurrentUser.value?._id,
+        })
 
         if (!Object.keys(getSelectedPrompt.value).length) {
           await promptStore.fetchPromptById(getCurrentReview.value.prompt_id)

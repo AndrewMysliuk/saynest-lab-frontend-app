@@ -320,10 +320,12 @@ export default defineComponent({
     const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
     const getModuleList = computed(() => promptStore.getModuleList)
     const getPromptList = computed(() => promptStore.getPromptList)
+    const getCurrentPrompt = computed(() => promptStore.getCurrentPrompt)
     const getModuleParams = computed(() => promptStore.getModuleParams)
     const getPromptParams = computed(() => promptStore.getPromptParams)
     const getModulePromptList = computed(() => promptStore.getModulePromptList)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
     const isStructuredModule = computed(() => getCurrentModule.value?.type === ModuleTypeEnum.STRUCTURED)
@@ -358,6 +360,14 @@ export default defineComponent({
       try {
         isLoading.value = true
 
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: "MODULE_OPENED",
+          module_name: getCurrentModule.value.name,
+          module_id: getCurrentModule.value._id,
+          user_id: getCurrentUser.value?._id,
+        })
+
         await Promise.all([promptStore.fetchModuleScenarios(module_id), userProgressStore.fetchCurrentUserProgress()])
 
         isOverview.value = false
@@ -376,8 +386,15 @@ export default defineComponent({
     }
 
     const selectPrompt = (prompt: IPromptScenarioEntity) => {
-      promptStore.setPrompt(prompt)
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: "SCENARIO_STARTED",
+        scenario_name: getCurrentPrompt.value.name,
+        scenario_id: getCurrentPrompt.value._id,
+        user_id: getCurrentUser.value?._id,
+      })
 
+      promptStore.setPrompt(prompt)
       clearSearch()
 
       router.push({ name: "platform.conversation" })

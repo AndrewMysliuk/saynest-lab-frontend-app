@@ -31,12 +31,13 @@
           <button
             v-if="getConversationResponse?.conversation_history?.length"
             @click="toggleSidebar"
+            id="CONVERSATION_HISTORY_CLICKED"
             class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition text-sm font-medium"
           >
             Toggle History
           </button>
 
-          <button @click="toggleGoals" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition text-sm font-medium">Toggle Goals</button>
+          <button id="CONVERSATION_GOALS_CLICKED" @click="toggleGoals" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition text-sm font-medium">Toggle Goals</button>
         </div>
 
         <div class="conversation__description" v-if="getLastModelFullAnswer">
@@ -148,6 +149,7 @@ export default defineComponent({
     const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getCurrentUser = computed(() => userStore.getCurrentUser)
 
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {
@@ -175,6 +177,14 @@ export default defineComponent({
       if (getConversationResponse.value) {
         try {
           isReviewGenerating.value = true
+
+          window.dataLayer = window.dataLayer || []
+          window.dataLayer.push({
+            event: "SCENARIO_COMPLETED",
+            scenario_name: getSelectedPrompt.value.name,
+            scenario_id: getSelectedPrompt.value._id,
+            user_id: getCurrentUser.value?._id,
+          })
 
           await communicationReviewStore.generateConversationReview({
             session_id: getConversationResponse.value?.session_id,
