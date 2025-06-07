@@ -77,9 +77,7 @@
     </form>
 
     <div class="flex flex-col gap-2 mt-8 border-t pt-4">
-      <button type="button" @click="isDeleteHistoryModalOpen = true" class="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition">Delete All Conversation History</button>
-
-      <button type="button" @click="isDeleteAccountModalOpen = true" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">Delete Account</button>
+      <button type="button" @click="isDeleteHistoryModalOpen = true" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">Delete All Conversation History</button>
     </div>
 
     <v-modal v-model="isDeleteHistoryModalOpen">
@@ -88,15 +86,6 @@
         description="Are you sure you want to delete your all conversation history? This action cannot be undone."
         @accept="onDeleteConversation"
         @cancel="isDeleteHistoryModalOpen = false"
-      />
-    </v-modal>
-
-    <v-modal v-model="isDeleteAccountModalOpen">
-      <TheConfirmation
-        title="Delete Account"
-        description="Are you sure you want to delete your account? This action cannot be undone."
-        @accept="onDeleteAccount"
-        @cancel="isDeleteAccountModalOpen = false"
       />
     </v-modal>
   </div>
@@ -126,7 +115,6 @@ export default defineComponent({
       language_iso,
     }))
     const isDeleteHistoryModalOpen = ref<boolean>(false)
-    const isDeleteAccountModalOpen = ref<boolean>(false)
 
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const isChanged = computed(() => {
@@ -180,27 +168,15 @@ export default defineComponent({
       }
     }
 
-    const onDeleteAccount = () => {
-      try {
-        // TODO
-      } catch (error: unknown) {
-        console.log(error)
-      } finally {
-        isDeleteAccountModalOpen.value = false
-      }
-    }
-
     return {
       form,
       isChanged,
       isDeleteHistoryModalOpen,
-      isDeleteAccountModalOpen,
       errorMessages,
       countryOptions,
       languageOptions,
       getCurrentUser,
       onDeleteConversation,
-      onDeleteAccount,
       onSubmit,
     }
   },

@@ -13,7 +13,7 @@ export interface IOrganizationEntity {
   _id: string
   owner_id: string
   name: string
-  plan_id: string | null
+  subscription_id: string | null
   status: OrganizationStatusEnum
   settings: IOrganizationSettings
   updated_at: Date
