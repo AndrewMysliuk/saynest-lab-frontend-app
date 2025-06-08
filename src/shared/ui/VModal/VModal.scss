@@ -30,6 +30,15 @@
       bottom: 0;
       width: rem(720px);
     }
+
+    .--is-standart {
+      .v-modal__content {
+        top: auto;
+        right: auto;
+        bottom: auto;
+        width: auto;
+      }
+    }
   }
 
   &__background {
@@ -38,6 +47,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 103;
     background: rgba(63, 80, 166, 0.35);
   }
 

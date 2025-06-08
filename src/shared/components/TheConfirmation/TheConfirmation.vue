@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="flex items-center justify-center bg-opacity-50">
     <div class="bg-white rounded-xl shadow-lg w-[400px] max-w-full p-6">
       <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ title }}</h3>
       <p class="text-gray-600 mb-6">{{ description }}</p>

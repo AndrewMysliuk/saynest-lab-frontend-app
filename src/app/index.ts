@@ -10,8 +10,11 @@ import {
   useTaskGeneratorStore,
   useAuthStore,
   useUserStore,
+  useOrgStore,
   useUserProgressStore,
   useCommonStore,
+  usePlansStore,
+  useSubscriptionStore,
 } from "@/shared/store"
 import { wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
@@ -55,3 +58,6 @@ export const authStore = useAuthStore()
 export const userStore = useUserStore()
 export const userProgressStore = useUserProgressStore()
 export const commonStore = useCommonStore()
+export const orgStore = useOrgStore()
+export const plansStore = usePlansStore()
+export const subscriptionStore = useSubscriptionStore()

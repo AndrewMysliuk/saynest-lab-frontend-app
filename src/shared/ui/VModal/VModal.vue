@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" @enter="startEnterAnimation" @afterEnter="endEnterAnimation" @leave="startLeaveAnimation" @afterLeave="endLeaveAnimation">
-    <div v-if="modelValue" class="v-modal" :class="{ '--is-curtain': isCurtain }">
+    <div v-if="modelValue" class="v-modal" :class="{ '--is-curtain': isCurtain, '--is-standart': !isCurtain }">
       <div class="v-modal__background" @click="closeModal" />
 
       <div class="v-modal__content">

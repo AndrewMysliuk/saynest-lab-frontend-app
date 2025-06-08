@@ -17,6 +17,18 @@
     }
   }
 
+  &.--is-notification {
+    min-height: calc(100vh - 61px);
+
+    .room__body {
+      min-height: calc(100vh - 61px);
+
+      .conversation {
+        min-height: calc(100vh - rem(48px) - 61px);
+      }
+    }
+  }
+
   &__body {
     padding: rem(24px 40px);
     background: #f9f9f9;

@@ -1,5 +1,5 @@
 <template>
-  <div class="room" :class="{ '--sidebar-opened': isSidebarOpen, '--goals-opened': isGoalsOpen }">
+  <div class="room" :class="{ '--sidebar-opened': isSidebarOpen, '--goals-opened': isGoalsOpen, '--is-notification': getIsExpiredVisible || getIsTrialVisible }">
     <transition name="slide-left">
       <ConversationSidebar v-if="isSidebarOpen" />
     </transition>
@@ -94,7 +94,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore } from "@/app"
+import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip, TheLoader } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
@@ -150,6 +150,8 @@ export default defineComponent({
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
     const getCurrentUser = computed(() => userStore.getCurrentUser)
+    const getIsExpiredVisible = computed(() => subscriptionStore.getIsExpiredVisible)
+    const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
 
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {
@@ -205,6 +207,7 @@ export default defineComponent({
           console.error("Error analysing user conversation:", error)
         } finally {
           isReviewGenerating.value = false
+          orgStore.updateTrialUsage("review")
         }
       }
     }
@@ -230,6 +233,8 @@ export default defineComponent({
           type: SessionTypeEnum.SPEACKING,
           prompt_id: getSelectedPrompt.value?._id,
         })
+
+        orgStore.updateTrialUsage("session")
 
         await conversationStore.fetchConversation(
           {
@@ -490,6 +495,8 @@ export default defineComponent({
       getConversationResponse,
       getUserTranslateLanguage,
       getSessionIsEnd,
+      getIsExpiredVisible,
+      getIsTrialVisible,
       hideTooltip,
       handleWordClick,
       analyseUserConversation,

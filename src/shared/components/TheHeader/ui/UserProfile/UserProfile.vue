@@ -76,6 +76,49 @@
       </div>
     </form>
 
+    <div v-if="getCurrentSubscription && getCurrentPlan" class="mt-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+      <h2 class="text-xl font-bold mb-4 text-gray-800">Your Subscription</h2>
+
+      <div class="mb-2 text-gray-700">
+        <span class="font-medium">Plan:</span> {{ getCurrentPlan.name }} — {{ getCurrentPlan.amount }} {{ getCurrentPlan.currency }} /
+        {{ getCurrentPlan.billing_period.toLowerCase() }}
+      </div>
+
+      <div class="mb-2 text-gray-700">
+        <span class="font-medium">Status: </span>
+        <span
+          :class="{
+            'text-green-600': getCurrentSubscription.status === SubscriptionTypeEnum.ACTIVE || getCurrentSubscription.status === SubscriptionTypeEnum.TRIALING,
+            'text-yellow-600': getCurrentSubscription.status === SubscriptionTypeEnum.PAST_DUE,
+            'text-red-600': getCurrentSubscription.status === SubscriptionTypeEnum.CANCELLED,
+          }"
+        >
+          {{ getCurrentSubscription.status }}
+        </span>
+      </div>
+
+      <div class="mb-2 text-gray-700"><span class="font-medium">Started at:</span> {{ formatDate(getCurrentSubscription.start_date) }}</div>
+
+      <div class="mb-2 text-gray-700"><span class="font-medium">Next Payment:</span> {{ formatDate(getCurrentSubscription.next_payment_date) }}</div>
+
+      <button
+        v-if="getCurrentSubscription.status === SubscriptionTypeEnum.TRIALING"
+        type="button"
+        class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+        @click="unlockFullAccess"
+      >
+        Unlock Full Access
+      </button>
+      <button
+        v-if="getCurrentSubscription.status === SubscriptionTypeEnum.ACTIVE"
+        @click="isUnsubscribedConfirmOpened = true"
+        type="button"
+        class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+      >
+        Cancel Subscription
+      </button>
+    </div>
+
     <div class="flex flex-col gap-2 mt-8 border-t pt-4">
       <button type="button" @click="isDeleteHistoryModalOpen = true" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">Delete All Conversation History</button>
     </div>
@@ -88,16 +131,27 @@
         @cancel="isDeleteHistoryModalOpen = false"
       />
     </v-modal>
+
+    <v-modal v-model="isUnsubscribedConfirmOpened">
+      <TheConfirmation
+        title="Cancel Subscription"
+        description="Are you sure you want to cancel your current subscription? You will lose access to all premium features after the end of the billing period."
+        @accept="cancelSubscription"
+        @cancel="isUnsubscribedConfirmOpened = false"
+      />
+    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { communicationReviewStore, userStore } from "@/app"
+import { communicationReviewStore, plansStore, subscriptionStore, userStore } from "@/app"
 import { computed, ref, defineComponent, reactive } from "vue"
-import TheConfirmation from "../../../TheConfirmation"
+import { deleteAllHistoryHandler } from "@/shared/api"
+import { formatDate } from "@/shared/lib"
+import { SubscriptionTypeEnum } from "@/shared/types"
 import CountryList from "@/shared/json_data/countries.json"
 import LanguagesList from "@/shared/json_data/languages.json"
-import { deleteAllHistoryHandler } from "@/shared/api"
+import TheConfirmation from "../../../TheConfirmation"
 
 export default defineComponent({
   components: {
@@ -115,7 +169,10 @@ export default defineComponent({
       language_iso,
     }))
     const isDeleteHistoryModalOpen = ref<boolean>(false)
+    const isUnsubscribedConfirmOpened = ref<boolean>(false)
 
+    const getCurrentSubscription = computed(() => subscriptionStore.getCurrentSubscription)
+    const getCurrentPlan = computed(() => plansStore.getPlansList.find((item) => item._id === getCurrentSubscription.value?.plan_id))
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const isChanged = computed(() => {
       const user = getCurrentUser.value
@@ -168,16 +225,31 @@ export default defineComponent({
       }
     }
 
+    const cancelSubscription = () => {
+      // TODO
+    }
+
+    const unlockFullAccess = () => {
+      // TODO
+    }
+
     return {
       form,
       isChanged,
       isDeleteHistoryModalOpen,
+      isUnsubscribedConfirmOpened,
       errorMessages,
       countryOptions,
       languageOptions,
       getCurrentUser,
+      getCurrentSubscription,
+      getCurrentPlan,
       onDeleteConversation,
+      cancelSubscription,
+      unlockFullAccess,
       onSubmit,
+      formatDate,
+      SubscriptionTypeEnum,
     }
   },
 })

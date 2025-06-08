@@ -1,4 +1,4 @@
-import { ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform, UserProgressPagePlatform } from "./Platform"
+import { ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform, UserProgressPagePlatform, TariffPlansPagePlatform } from "./Platform"
 import { LoginPageAuth, SignupPageAuth } from "./Auth"
 
-export { LoginPageAuth, SignupPageAuth, ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform, UserProgressPagePlatform }
+export { LoginPageAuth, SignupPageAuth, ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform, UserProgressPagePlatform, TariffPlansPagePlatform }

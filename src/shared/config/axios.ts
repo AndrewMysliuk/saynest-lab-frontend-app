@@ -1,5 +1,6 @@
 import axios from "axios"
 import { authStore } from "@/app"
+import router from "@/app/router"
 
 const baseURL = import.meta.env.VITE_API_CORE_URL ?? ""
 
@@ -17,6 +18,11 @@ let isRefreshing = false
 let failedQueue: any[] = []
 let refreshRetryCount = 0
 const MAX_REFRESH_RETRIES = 2
+
+export const SUBSCRIPTION_INACTIVE = "PADDLE.SUBSCRIPTION_INACTIVE"
+export const TRIAL_SESSION_COUNT_EXPIRED = "ORG.TRIAL_SESSION_COUNT_EXPIRED"
+export const TRIAL_REVIEW_COUNT_EXPIRED = "ORG.TRIAL_REVIEW_COUNT_EXPIRED"
+export const TRIAL_TASK_COUNT_EXPIRED = "ORG.TRIAL_TASK_COUNT_EXPIRED"
 
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach((prom) => {
@@ -44,6 +50,11 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
+
+    if (error.response?.status === 403 && [SUBSCRIPTION_INACTIVE, TRIAL_SESSION_COUNT_EXPIRED, TRIAL_REVIEW_COUNT_EXPIRED, TRIAL_TASK_COUNT_EXPIRED].includes(error.response?.data?.code)) {
+      router.push({ name: "platform.tariff-plans" })
+      return Promise.reject(error)
+    }
 
     if (error.response?.status === 401 && authStore.getIsLogged) {
       if (!originalRequest._retry) {

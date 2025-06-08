@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from "vue-router"
-import { authStore, commonStore, communicationReviewStore, promptStore, userStore } from "@/app"
+import { authStore, commonStore, communicationReviewStore, orgStore, plansStore, promptStore, userStore } from "@/app"
 import PlatformLayout from "@/layouts/PlatformLayout.vue"
+import { subscriptionCheckMiddleware } from "@/shared/middleware"
 
 const platform: RouteRecordRaw[] = [
   {
@@ -22,14 +23,20 @@ const platform: RouteRecordRaw[] = [
         await userStore.fetchGetUser()
       }
 
+      await subscriptionCheckMiddleware()
+
       // Reset Infinite Load Params
       communicationReviewStore.resetReviewsParams()
       promptStore.resetModuleParams()
       promptStore.resetPromptParams()
 
-      await Promise.all([communicationReviewStore.fetchReviewsList(false), promptStore.fetchModuleList(false), promptStore.fetchScenariosList(false, { is_module_only: false })]).catch(
-        (error: unknown) => console.error("Error in setupOnloadMethods:", error)
-      )
+      await Promise.all([
+        orgStore.fetchOrgById(),
+        communicationReviewStore.fetchReviewsList(false),
+        promptStore.fetchModuleList(false),
+        promptStore.fetchScenariosList(false, { is_module_only: false }),
+        plansStore.fetchPlansList(),
+      ]).catch((error: unknown) => console.error("Error in setupOnloadMethods:", error))
 
       commonStore.setIsPageLoading(false)
 
@@ -60,6 +67,11 @@ const platform: RouteRecordRaw[] = [
         path: "/platform/user-progress",
         name: "platform.user-progress",
         component: async () => await import("@/pages").then((module) => module.UserProgressPagePlatform),
+      },
+      {
+        path: "/platform/tariff-plans",
+        name: "platform.tariff-plans",
+        component: async () => await import("@/pages").then((module) => module.TariffPlansPagePlatform),
       },
     ],
   },

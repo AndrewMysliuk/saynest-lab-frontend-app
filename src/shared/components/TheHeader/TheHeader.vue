@@ -1,6 +1,11 @@
 <template>
   <div>
-    <header class="fixed top-0 left-0 w-full z-50 bg-background border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+    <header
+      :class="[
+        'fixed left-0 w-full z-50 bg-background border-b border-gray-200 px-4 py-3 flex items-center justify-between transition-all duration-300',
+        getIsExpiredVisible || getIsTrialVisible ? 'top-[61px]' : 'top-0',
+      ]"
+    >
       <nav>
         <ul class="flex space-x-4">
           <li v-for="(tab, index) in tabList" :key="index">
@@ -41,7 +46,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue"
-import { authStore, userStore } from "@/app"
+import { authStore, subscriptionStore, userStore } from "@/app"
 import { UserProfile } from "./ui"
 
 export default defineComponent({
@@ -52,6 +57,8 @@ export default defineComponent({
   setup() {
     const isUserModalOpen = ref<boolean>(false)
 
+    const getIsExpiredVisible = computed(() => subscriptionStore.getIsExpiredVisible)
+    const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
     const getIsLogged = computed(() => authStore.getIsLogged)
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getUserInitials = computed(() => {
@@ -66,6 +73,7 @@ export default defineComponent({
         { label: "Conversation", router: { name: "platform.conversation-dashboard" } },
         getIsLogged.value ? { label: "Conversation History", router: { name: "platform.conversation-history" } } : null,
         getIsLogged.value ? { label: "Progress", router: { name: "platform.user-progress" } } : null,
+        { label: "Tariff Plans", router: { name: "platform.tariff-plans" } },
       ].filter(Boolean)
     )
 
@@ -80,6 +88,8 @@ export default defineComponent({
     return {
       isUserModalOpen,
       tabList,
+      getIsExpiredVisible,
+      getIsTrialVisible,
       getIsLogged,
       getCurrentUser,
       getUserInitials,
