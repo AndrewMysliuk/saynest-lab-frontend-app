@@ -18,9 +18,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue"
+import { computed, defineComponent, onBeforeMount, onMounted } from "vue"
 import { orgStore, plansStore, subscriptionStore, userStore } from "@/app"
 import { TheNotification } from "@/shared/components"
+import { useRouter } from "vue-router"
 
 export default defineComponent({
   components: {
@@ -28,10 +29,12 @@ export default defineComponent({
   },
 
   setup() {
+    const router = useRouter()
+
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getCurrentOrg = computed(() => orgStore.getCurrentOrg)
+    const getCurrentPlan = computed(() => plansStore.getCurrentPlan)
     const getCurrentSubscription = computed(() => subscriptionStore.getCurrentSubscription)
-    const getCurrentPlan = computed(() => plansStore.getPlansList.find((item) => item._id === getCurrentSubscription.value?.plan_id))
     const trialInfoMessage = computed(() => {
       const org = getCurrentOrg.value
       const plan = getCurrentPlan.value
@@ -47,6 +50,12 @@ export default defineComponent({
     })
     const getIsExpiredVisible = computed(() => subscriptionStore.getIsExpiredVisible)
     const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
+
+    onBeforeMount(() => {
+      if (!getCurrentSubscription.value) {
+        router.push({ name: "platform.tariff-plans" })
+      }
+    })
 
     onMounted(() => {
       hotjarUserData()

@@ -172,7 +172,7 @@ export default defineComponent({
     const isUnsubscribedConfirmOpened = ref<boolean>(false)
 
     const getCurrentSubscription = computed(() => subscriptionStore.getCurrentSubscription)
-    const getCurrentPlan = computed(() => plansStore.getPlansList.find((item) => item._id === getCurrentSubscription.value?.plan_id))
+    const getCurrentPlan = computed(() => plansStore.getCurrentPlan)
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const isChanged = computed(() => {
       const user = getCurrentUser.value

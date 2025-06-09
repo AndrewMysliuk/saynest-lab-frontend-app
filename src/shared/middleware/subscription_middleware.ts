@@ -1,4 +1,4 @@
-import { subscriptionStore } from "@/app"
+import { plansStore, subscriptionStore } from "@/app"
 import { SubscriptionTypeEnum } from "../types"
 
 export const subscriptionCheckMiddleware = async (): Promise<void> => {
@@ -7,8 +7,11 @@ export const subscriptionCheckMiddleware = async (): Promise<void> => {
 
     if (!subscription || ![SubscriptionTypeEnum.ACTIVE, SubscriptionTypeEnum.TRIALING].includes(subscription.status)) {
       subscriptionStore.setIsExpiredVisible(true)
+
       return
     }
+
+    await plansStore.fetchPlanById(subscription.plan_id)
 
     subscriptionStore.setIsExpiredVisible(false)
   } catch (error) {

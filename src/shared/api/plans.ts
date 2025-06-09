@@ -16,3 +16,18 @@ export const getPublicPlanListHandler = async (): Promise<IPlanEntity[]> => {
     throw error
   }
 }
+
+export const getPlanByIdHandler = async (plan_id: string): Promise<IPlanEntity | null> => {
+  try {
+    const response: AxiosResponse = await axios({
+      url: `/api/plan/${plan_id}`,
+      method: "GET",
+    })
+
+    const { data }: { data: IPlanEntity | null } = response
+
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
