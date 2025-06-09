@@ -14,23 +14,31 @@
     <div :class="[getIsExpiredVisible || getIsTrialVisible ? 'pt-[64px]' : '']">
       <router-view />
     </div>
+
+    <v-modal :model-value="!getUserLegalTC || !getUserLegalPP || !getUserLegalRP">
+      <TheLegal />
+    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, onMounted } from "vue"
 import { orgStore, plansStore, subscriptionStore, userStore } from "@/app"
-import { TheNotification } from "@/shared/components"
+import { TheNotification, TheLegal } from "@/shared/components"
 import { useRouter } from "vue-router"
 
 export default defineComponent({
   components: {
     TheNotification,
+    TheLegal,
   },
 
   setup() {
     const router = useRouter()
 
+    const getUserLegalTC = computed(() => userStore.getUserLegal?.is_accept_terms_and_conditions)
+    const getUserLegalPP = computed(() => userStore.getUserLegal?.is_accept_privacy_policy)
+    const getUserLegalRP = computed(() => userStore.getUserLegal?.is_accept_refund_policy)
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getCurrentOrg = computed(() => orgStore.getCurrentOrg)
     const getCurrentPlan = computed(() => plansStore.getCurrentPlan)
@@ -71,6 +79,9 @@ export default defineComponent({
     }
 
     return {
+      getUserLegalTC,
+      getUserLegalPP,
+      getUserLegalRP,
       getIsExpiredVisible,
       getIsTrialVisible,
       trialInfoMessage,
