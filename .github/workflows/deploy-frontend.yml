@@ -12,7 +12,7 @@ jobs:
 
     env:
       PROJECT_ID: speak-mate-mvp
-      REGION: europe-central2
+      REGION: europe-west1
       REPO_NAME: frontend-image
       IMAGE_NAME: frontend
       SERVICE_NAME: frontend
