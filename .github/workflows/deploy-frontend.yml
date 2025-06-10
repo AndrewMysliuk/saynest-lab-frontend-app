@@ -13,7 +13,7 @@ jobs:
     env:
       PROJECT_ID: speak-mate-mvp
       REGION: europe-west1
-      REPO_NAME: frontend-image
+      REPO_NAME: saynestlab-frontend-image
       IMAGE_NAME: frontend
       SERVICE_NAME: frontend
 
