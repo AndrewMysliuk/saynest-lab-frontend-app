@@ -15,7 +15,7 @@ jobs:
       REGION: europe-west1
       REPO_NAME: saynestlab-frontend-image
       IMAGE_NAME: frontend
-      SERVICE_NAME: frontend
+      SERVICE_NAME: saynestlab-frontend
 
     steps:
       - name: Checkout code
