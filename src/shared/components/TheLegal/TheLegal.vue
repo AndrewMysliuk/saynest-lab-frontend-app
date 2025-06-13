@@ -9,7 +9,7 @@
             <input type="checkbox" v-model="isAcceptTerms" class="rounded border-gray-300 focus:ring-indigo-500 cursor-pointer mt-1" />
             <span>
               I accept the
-              <a href="https://saynest-labs.tilda.ws/terms-and-conditions" target="_blank" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">
+              <a href="https://saynestlab.com/terms-and-conditions" target="_blank" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">
                 Terms and Conditions
               </a>
             </span>
@@ -19,9 +19,7 @@
             <input type="checkbox" v-model="isAcceptPrivacy" class="rounded border-gray-300 focus:ring-indigo-500 cursor-pointer mt-1" />
             <span>
               I accept the
-              <a href="https://saynest-labs.tilda.ws/privacy-policy" target="_blank" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">
-                Privacy Policy
-              </a>
+              <a href="https://saynestlab.com/privacy-policy" target="_blank" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"> Privacy Policy </a>
             </span>
           </label>
 
@@ -29,9 +27,7 @@
             <input type="checkbox" v-model="isAcceptRefund" class="rounded border-gray-300 focus:ring-indigo-500 cursor-pointer mt-1" />
             <span>
               I accept the
-              <a href="https://saynest-labs.tilda.ws/refund-policy" target="_blank" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">
-                Refund Policy
-              </a>
+              <a href="https://saynestlab.com/refund-policy" target="_blank" class="text-indigo-600 hover:underline focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"> Refund Policy </a>
             </span>
           </label>
         </div>
