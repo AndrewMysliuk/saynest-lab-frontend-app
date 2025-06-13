@@ -9,6 +9,21 @@ const childrenComponents: RouteRecordRaw[] = [
   ...auth,
   ...platform,
   {
+    path: "/terms-and-conditions",
+    name: "terms-and-conditions",
+    component: () => import("@/pages").then((module) => module.TermsAndConditions),
+  },
+  {
+    path: "/privacy-policy",
+    name: "privacy-policy",
+    component: () => import("@/pages").then((module) => module.PrivacyPolicy),
+  },
+  {
+    path: "/refund-policy",
+    name: "refund-policy",
+    component: () => import("@/pages").then((module) => module.RefundPolicy),
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },
