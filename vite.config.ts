@@ -1,6 +1,8 @@
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import eslintPlugin from "vite-plugin-eslint"
+// import path from "path"
+// import fs from "fs"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -23,6 +25,11 @@ export default defineConfig({
     },
   },
   server: {
+    // https: {
+    //   key: fs.readFileSync(path.resolve(__dirname, "ssl/key.pem")),
+    //   cert: fs.readFileSync(path.resolve(__dirname, "ssl/cert.pem")),
+    // },
+    // host: "app.saynestlab.com",
     host: "0.0.0.0",
     port: 3000,
   },

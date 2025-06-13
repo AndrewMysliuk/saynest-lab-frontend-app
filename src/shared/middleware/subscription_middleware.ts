@@ -5,13 +5,15 @@ export const subscriptionCheckMiddleware = async (): Promise<void> => {
   try {
     const subscription = await subscriptionStore.fetchCurrentSubscription()
 
+    if (subscription) {
+      await plansStore.fetchPlanById(subscription.plan_id)
+    }
+
     if (!subscription || ![SubscriptionTypeEnum.ACTIVE, SubscriptionTypeEnum.TRIALING].includes(subscription.status)) {
       subscriptionStore.setIsExpiredVisible(true)
 
       return
     }
-
-    await plansStore.fetchPlanById(subscription.plan_id)
 
     subscriptionStore.setIsExpiredVisible(false)
   } catch (error) {

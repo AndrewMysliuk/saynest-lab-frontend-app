@@ -26,6 +26,10 @@ import { computed, defineComponent, onBeforeMount, onMounted } from "vue"
 import { orgStore, plansStore, subscriptionStore, userStore } from "@/app"
 import { TheNotification, TheLegal } from "@/shared/components"
 import { useRouter } from "vue-router"
+import { subscriptionCheckMiddleware } from "@/shared/middleware"
+
+const VITE_PADDLE_TOKEN: string = import.meta.env.VITE_PADDLE_TOKEN
+const VITE_DEV: boolean = import.meta.env.DEV
 
 export default defineComponent({
   components: {
@@ -67,6 +71,7 @@ export default defineComponent({
 
     onMounted(() => {
       hotjarUserData()
+      paddleSetup()
     })
 
     const hotjarUserData = () => {
@@ -74,6 +79,23 @@ export default defineComponent({
         window.hj("identify", getCurrentUser.value._id, {
           explanation_language: getCurrentUser.value.explanation_language,
           country: getCurrentUser.value.country,
+        })
+      }
+    }
+
+    const paddleSetup = () => {
+      if (window.Paddle) {
+        const environment = VITE_DEV ? "sandbox" : "production"
+        window.Paddle.Environment.set(environment)
+        window.Paddle.Initialize({
+          token: VITE_PADDLE_TOKEN,
+          eventCallback: function (data: any) {
+            if (data?.name === "checkout.completed") {
+              setTimeout(() => {
+                subscriptionCheckMiddleware()
+              }, 1000)
+            }
+          },
         })
       }
     }

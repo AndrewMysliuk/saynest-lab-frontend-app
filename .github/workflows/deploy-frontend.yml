@@ -43,6 +43,7 @@ jobs:
           VITE_CAPTCHA_SITE_KEY=${{ secrets.VITE_CAPTCHA_SITE_KEY }} \
           VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }} \
           VITE_GTM_ID=${{ secrets.VITE_GTM_ID }} \
+          VITE_PADDLE_TOKEN=${{ secrets.VITE_PADDLE_TOKEN }} \
           yarn build
 
       - name: Build and Push Docker Image

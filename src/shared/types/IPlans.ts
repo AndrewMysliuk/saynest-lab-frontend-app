@@ -20,12 +20,17 @@ export interface IPlanTrialInfo {
   task_limit: number
 }
 
+export interface IPlanPaddlePriceIds {
+  trial: string
+  no_trial: string
+}
+
 export interface IPlanEntity {
   _id: string
   name: PlanNameEnum
   description: string
   features: string[]
-  paddle_price_id: string
+  paddle_price_ids: IPlanPaddlePriceIds
   currency: string
   amount: number
   is_public: boolean

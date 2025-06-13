@@ -1,7 +1,7 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { ISubscriptionEntity, SubscriptionTypeEnum } from "../types"
-import { getSubsByOrgIdHandler } from "../api"
+import { activateFromTrialSubscriptionHandler, cancelSubscriptionHandler, changePlanSubscriptionHandler, getSubsByOrgIdHandler, recancelSubscriptionHandler } from "../api"
 
 export const useSubscriptionStore = defineStore("subscriptionStore", () => {
   const currentSubscription = ref<ISubscriptionEntity | null>(null)
@@ -36,6 +36,58 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
       })
   }
 
+  const fetchCancelSubscription = async () => {
+    return cancelSubscriptionHandler()
+      .then((response: ISubscriptionEntity | null) => {
+        currentSubscription.value = response
+
+        return response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
+  const fetchRecancelSubscription = async () => {
+    return recancelSubscriptionHandler()
+      .then((response: ISubscriptionEntity | null) => {
+        currentSubscription.value = response
+
+        return response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
+  const fetchActivateFromTrialSubscription = async () => {
+    return activateFromTrialSubscriptionHandler()
+      .then((response: ISubscriptionEntity | null) => {
+        currentSubscription.value = response
+
+        setIsTrialVisible(false)
+
+        return response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
+  const fetchChangePlanSubscription = async (plan_id: string) => {
+    return changePlanSubscriptionHandler(plan_id)
+      .then((response: ISubscriptionEntity | null) => {
+        currentSubscription.value = response
+
+        setIsTrialVisible(false)
+
+        return response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
   return {
     getCurrentSubscription,
     getIsExpiredVisible,
@@ -43,5 +95,9 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
     setIsTrialVisible,
     setIsExpiredVisible,
     fetchCurrentSubscription,
+    fetchCancelSubscription,
+    fetchRecancelSubscription,
+    fetchActivateFromTrialSubscription,
+    fetchChangePlanSubscription,
   }
 })

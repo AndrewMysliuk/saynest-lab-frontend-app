@@ -80,17 +80,17 @@
       <h2 class="text-xl font-bold mb-4 text-gray-800">Your Subscription</h2>
 
       <div class="mb-2 text-gray-700">
-        <span class="font-medium">Plan:</span> {{ getCurrentPlan.name }} — {{ getCurrentPlan.amount }} {{ getCurrentPlan.currency }} /
-        {{ getCurrentPlan.billing_period.toLowerCase() }}
+        <span class="font-medium">Plan:</span>
+        {{ getCurrentPlan.name }} — {{ getCurrentPlan.amount }} {{ getCurrentPlan.currency }} / {{ getCurrentPlan.billing_period.toLowerCase() }}
       </div>
 
       <div class="mb-2 text-gray-700">
         <span class="font-medium">Status: </span>
         <span
           :class="{
-            'text-green-600': getCurrentSubscription.status === SubscriptionTypeEnum.ACTIVE || getCurrentSubscription.status === SubscriptionTypeEnum.TRIALING,
-            'text-yellow-600': getCurrentSubscription.status === SubscriptionTypeEnum.PAST_DUE,
-            'text-red-600': getCurrentSubscription.status === SubscriptionTypeEnum.CANCELLED,
+            'text-green-600': isActiveOrTrialing,
+            'text-yellow-600': isPastDue,
+            'text-red-600': isCancelled,
           }"
         >
           {{ getCurrentSubscription.status }}
@@ -99,24 +99,45 @@
 
       <div class="mb-2 text-gray-700"><span class="font-medium">Started at:</span> {{ formatDate(getCurrentSubscription.start_date) }}</div>
 
-      <div class="mb-2 text-gray-700"><span class="font-medium">Next Payment:</span> {{ formatDate(getCurrentSubscription.next_payment_date) }}</div>
+      <div v-if="!isPendingCancel && !isCancelled" class="mb-2 text-gray-700"><span class="font-medium">Next Payment:</span> {{ formatDate(getCurrentSubscription.next_payment_date ?? "") }}</div>
 
-      <button
-        v-if="getCurrentSubscription.status === SubscriptionTypeEnum.TRIALING"
-        type="button"
-        class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
-        @click="unlockFullAccess"
-      >
-        Unlock Full Access
-      </button>
-      <button
-        v-if="getCurrentSubscription.status === SubscriptionTypeEnum.ACTIVE"
-        @click="isUnsubscribedConfirmOpened = true"
-        type="button"
-        class="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
-      >
-        Cancel Subscription
-      </button>
+      <div v-if="isPendingCancel" class="p-4 border border-yellow-300 bg-yellow-100 rounded-lg text-yellow-800 mt-4">
+        <p class="mb-2">
+          Subscription will be cancelled on
+          <strong>{{ formatDate(getCurrentSubscription.scheduled_cancel_at ?? "") }}</strong
+          >.
+        </p>
+        <button @click="recancelSubscription" type="button" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Resume Subscription</button>
+      </div>
+
+      <div v-if="isPastDue" class="p-4 border border-red-300 bg-red-100 rounded-lg text-red-800 mt-4">
+        <p class="mb-2 font-medium">Payment Failed</p>
+        <p>Please update your payment method to keep your subscription active.</p>
+        <button @click="updatePaymentDetailsLink" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Update Payment Method</button>
+      </div>
+
+      <div v-if="isCancelled" class="p-4 border border-gray-300 bg-gray-100 rounded-lg text-gray-700 mt-4">
+        <p class="mb-2 font-medium">Your subscription has been cancelled.</p>
+        <p>You can always pick a new plan to continue using premium features.</p>
+        <router-link :to="{ name: 'platform.tariff-plans' }">
+          <button class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Choose a New Plan</button>
+        </router-link>
+      </div>
+
+      <div class="flex flex-col gap-4 mt-4">
+        <button v-if="isTrialing && !isPendingCancel" type="button" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition" @click="isActiveFromTrialOpen = true">
+          Unlock Full Access
+        </button>
+
+        <button
+          v-if="(isTrialing || isActive) && !isPendingCancel"
+          @click="isUnsubscribedConfirmOpened = true"
+          type="button"
+          class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+        >
+          Cancel Subscription
+        </button>
+      </div>
     </div>
 
     <div class="flex flex-col gap-2 mt-8 border-t pt-4">
@@ -140,13 +161,22 @@
         @cancel="isUnsubscribedConfirmOpened = false"
       />
     </v-modal>
+
+    <v-modal v-model="isActiveFromTrialOpen">
+      <TheConfirmation
+        title="End Trial Early"
+        description="Do you want to end your trial and start your full subscription now? This action cannot be undone — you’ll be charged immediately and won’t be able to return to the trial."
+        @accept="unlockFullAccess"
+        @cancel="isActiveFromTrialOpen = false"
+      />
+    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { communicationReviewStore, plansStore, subscriptionStore, userStore } from "@/app"
 import { computed, ref, defineComponent, reactive } from "vue"
-import { deleteAllHistoryHandler } from "@/shared/api"
+import { deleteAllHistoryHandler, getPaymentDetailsLinkHandler } from "@/shared/api"
 import { formatDate } from "@/shared/lib"
 import { SubscriptionTypeEnum } from "@/shared/types"
 import CountryList from "@/shared/json_data/countries.json"
@@ -170,10 +200,18 @@ export default defineComponent({
     }))
     const isDeleteHistoryModalOpen = ref<boolean>(false)
     const isUnsubscribedConfirmOpened = ref<boolean>(false)
+    const isActiveFromTrialOpen = ref<boolean>(false)
 
     const getCurrentSubscription = computed(() => subscriptionStore.getCurrentSubscription)
     const getCurrentPlan = computed(() => plansStore.getCurrentPlan)
     const getCurrentUser = computed(() => userStore.getCurrentUser)
+    const isActive = computed(() => getCurrentSubscription.value?.status === SubscriptionTypeEnum.ACTIVE)
+    const isTrialing = computed(() => getCurrentSubscription.value?.status === SubscriptionTypeEnum.TRIALING)
+    const isCancelled = computed(() => getCurrentSubscription.value?.status === SubscriptionTypeEnum.CANCELLED)
+    const isPastDue = computed(() => getCurrentSubscription.value?.status === SubscriptionTypeEnum.PAST_DUE)
+    const isPendingCancel = computed(() => getCurrentSubscription.value?.is_pending_cancel)
+    const isActiveOrTrialing = computed(() => isActive.value || isTrialing.value)
+
     const isChanged = computed(() => {
       const user = getCurrentUser.value
       if (!user) return false
@@ -225,12 +263,42 @@ export default defineComponent({
       }
     }
 
-    const cancelSubscription = () => {
-      // TODO
+    const cancelSubscription = async () => {
+      try {
+        await subscriptionStore.fetchCancelSubscription()
+      } catch (error: unknown) {
+        console.log(error)
+      } finally {
+        isUnsubscribedConfirmOpened.value = false
+      }
     }
 
-    const unlockFullAccess = () => {
-      // TODO
+    const recancelSubscription = async () => {
+      try {
+        await subscriptionStore.fetchRecancelSubscription()
+      } catch (error: unknown) {
+        console.log(error)
+      }
+    }
+
+    const unlockFullAccess = async () => {
+      try {
+        await subscriptionStore.fetchActivateFromTrialSubscription()
+      } catch (error: unknown) {
+        console.log(error)
+      } finally {
+        isActiveFromTrialOpen.value = false
+      }
+    }
+
+    const updatePaymentDetailsLink = async () => {
+      try {
+        const url = await getPaymentDetailsLinkHandler()
+
+        window.open(url, "_blank")
+      } catch (error: unknown) {
+        console.log(error)
+      }
     }
 
     return {
@@ -238,15 +306,24 @@ export default defineComponent({
       isChanged,
       isDeleteHistoryModalOpen,
       isUnsubscribedConfirmOpened,
+      isActiveFromTrialOpen,
       errorMessages,
       countryOptions,
       languageOptions,
       getCurrentUser,
       getCurrentSubscription,
       getCurrentPlan,
+      isActive,
+      isTrialing,
+      isCancelled,
+      isPastDue,
+      isPendingCancel,
+      isActiveOrTrialing,
       onDeleteConversation,
       cancelSubscription,
       unlockFullAccess,
+      recancelSubscription,
+      updatePaymentDetailsLink,
       onSubmit,
       formatDate,
       SubscriptionTypeEnum,

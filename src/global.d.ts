@@ -15,6 +15,7 @@ declare global {
   interface Window {
     google: typeof google
     hj: typeof hj
+    Paddle: typeof Paddle
   }
 }
 
