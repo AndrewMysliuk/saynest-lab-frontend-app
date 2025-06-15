@@ -28,6 +28,15 @@ export default {
       boxShadow: {
         soft: "0 2px 8px rgba(0,0,0,0.05)",
       },
+      animation: {
+        marquee: "marquee 30s linear infinite",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
+      },
     },
   },
   plugins: [],

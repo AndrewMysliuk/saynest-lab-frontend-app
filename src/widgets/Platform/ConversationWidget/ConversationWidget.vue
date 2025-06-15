@@ -5,7 +5,7 @@
     </transition>
 
     <transition name="slide-left">
-      <div v-if="isGoalsOpen" class="absolute top-0 left-0 h-full w-80 bg-white border-r border-gray-200 p-6 shadow-xl overflow-y-auto z-20">
+      <div v-if="isGoalsOpen && getSelectedPrompt.user_content.goals" class="absolute top-0 left-0 h-full w-80 bg-white border-r border-gray-200 p-6 shadow-xl overflow-y-auto z-20">
         <h2 class="text-xl font-bold text-gray-800 mb-6">Conversation Goals</h2>
 
         <div v-for="(goal, index) in getSelectedPrompt.user_content.goals" :key="index" class="mb-4">
@@ -119,7 +119,7 @@ export default defineComponent({
     const audioElementRef = ref<HTMLAudioElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
     const isSidebarOpen = ref<boolean>(false)
-    const isGoalsOpen = ref<boolean>(false)
+    const isGoalsOpen = ref<boolean>(true)
     const isReviewGenerating = ref<boolean>(false)
     const isLoading = ref<boolean>(true)
     const isHold = ref<boolean>(false)

@@ -27,6 +27,7 @@ import { orgStore, plansStore, subscriptionStore, userStore } from "@/app"
 import { TheNotification, TheLegal } from "@/shared/components"
 import { useRouter } from "vue-router"
 import { subscriptionCheckMiddleware } from "@/shared/middleware"
+import { formatDateTime } from "@/shared/lib"
 
 const VITE_PADDLE_TOKEN: string = import.meta.env.VITE_PADDLE_TOKEN
 const VITE_DEV: boolean = import.meta.env.DEV
@@ -51,14 +52,16 @@ export default defineComponent({
       const org = getCurrentOrg.value
       const plan = getCurrentPlan.value
 
-      if (!org || !plan) {
+      const trialEndsAt = getCurrentSubscription.value?.trial_dates?.ends_at
+
+      if (!org || !plan || !trialEndsAt) {
         return ""
       }
 
       const { session_count, review_count, task_count } = org.trial_usage
-      const { session_limit, review_limit, task_limit } = plan.trial_info
+      const { session_count_limit, review_count_limit, task_count_limit } = plan.trial_info
 
-      return `You have a trial period: ${session_count}/${session_limit} sessions, ${review_count}/${review_limit} reviews, ${task_count}/${task_limit} tasks. You can switch to a full plan anytime.`
+      return `Your trial is active until ${formatDateTime(trialEndsAt)}. You’ve used ${session_count}/${session_count_limit} sessions, ${review_count}/${review_count_limit} reviews, and ${task_count}/${task_count_limit} tasks. You can upgrade to a full plan at any time.`
     })
     const getIsExpiredVisible = computed(() => subscriptionStore.getIsExpiredVisible)
     const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
