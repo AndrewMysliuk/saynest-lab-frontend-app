@@ -96,7 +96,7 @@ export default defineComponent({
             if (data?.name === "checkout.completed") {
               setTimeout(() => {
                 subscriptionCheckMiddleware()
-              }, 1000)
+              }, 3000)
             }
           },
         })
