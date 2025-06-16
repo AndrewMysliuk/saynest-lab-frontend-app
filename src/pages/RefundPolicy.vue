@@ -2,13 +2,13 @@
   <section class="min-h-screen bg-white text-gray-800 flex items-start justify-center px-4 pt-16">
     <div class="max-w-3xl w-full">
       <h1 class="text-4xl font-bold mb-2">Refund Policy for Saynest Lab</h1>
-      <p class="text-sm text-gray-500 mb-8">Last updated: June 10, 2025</p>
+      <p class="text-sm text-gray-500 mb-8">Last updated: June 16, 2025</p>
 
       <p class="mb-4">We offer a <strong>3-day free trial</strong> so you can explore the platform and decide if it’s right for you. During the trial, you can use up to:</p>
 
       <ul class="list-disc list-inside mb-4">
-        <li>10 sessions (any activity)</li>
-        <li>10 AI-generated conversation reviews</li>
+        <li>20 sessions (any activity)</li>
+        <li>20 AI-generated conversation reviews</li>
         <li>20 AI-generated tasks</li>
       </ul>
 

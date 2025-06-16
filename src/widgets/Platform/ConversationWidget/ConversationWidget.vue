@@ -343,7 +343,7 @@ export default defineComponent({
               controller.signal
             )
 
-            await retryWithAdaptiveParams(
+            retryWithAdaptiveParams(
               errorAnalysisStore.fetchErrorAnalysis,
               {
                 gpt_payload: {
