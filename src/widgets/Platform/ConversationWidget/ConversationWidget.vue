@@ -240,8 +240,8 @@ export default defineComponent({
           {
             whisper: { audio_file: audioBlob },
             gpt_model: { model: "gpt-4o", max_tokens: 350 },
-            tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
-            // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
+            // tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
+            tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.6 } },
             system: {
               session_id: _id,
               prompt_id: getSelectedPrompt.value?._id,
@@ -331,8 +331,8 @@ export default defineComponent({
               {
                 whisper: { audio_file: audioBlob },
                 gpt_model: { model: "gpt-4o", max_tokens: 350 },
-                tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
-                // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.3, similarity_boost: 0.6 } },
+                // tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
+                tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.6 } },
                 system: {
                   session_id: getConversationResponse.value?.session_id ?? "",
                   prompt_id: getSelectedPrompt.value?._id,
