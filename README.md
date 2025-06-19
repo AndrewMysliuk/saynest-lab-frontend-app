@@ -1,4 +1,4 @@
-# Saynest Labs Frontend
+# Saynest Lab Frontend
 
 ### Install Dependencies
 
