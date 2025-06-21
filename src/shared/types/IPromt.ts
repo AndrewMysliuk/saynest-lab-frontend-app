@@ -64,10 +64,12 @@ export interface IPromptMeta {
 }
 
 export interface IPromptFilters {
+  search?: string
   title?: string
   is_module_only?: boolean
   user_id?: string
   organization_id?: string
+  target_language?: string
   limit?: number
   offset?: number
 }
@@ -112,9 +114,12 @@ export interface IModuleScenarioEntity {
 }
 
 export interface IModuleFilters {
+  search?: string
   title?: string
   user_id?: string
   organization_id?: string
+  target_language?: string
+  tag?: string
   limit?: number
   offset?: number
 }

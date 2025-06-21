@@ -425,12 +425,12 @@ export default defineComponent({
       if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
         promptStore.resetModuleParams()
         await promptStore.fetchModuleList(false, {
-          title: query,
+          search: query,
         })
       } else if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS) {
         promptStore.resetPromptParams()
         await promptStore.fetchScenariosList(false, {
-          title: query,
+          search: query,
           is_module_only: false,
         })
       }
