@@ -24,7 +24,7 @@
       <h2 class="text-xl font-semibold mt-6 mb-2">4. Payments and Free Trial</h2>
       <p class="mb-4">
         Our Service is provided on a subscription basis:<br />
-        • €13/month subscription fee (MVP phase)<br />
+        • €14.99/month subscription fee (MVP phase)<br />
         • 3-day free trial, which includes: 20 sessions, 20 reviews, and 20 tasks<br />
         After the trial, the subscription automatically starts unless canceled before the trial ends.<br />
         We reserve the right to update pricing in the future as the product evolves.
