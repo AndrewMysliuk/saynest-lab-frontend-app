@@ -101,7 +101,7 @@
                 <!-- Goals -->
                 <div>
                   <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
-                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
+                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1" v-if="scenario.user_content.goals">
                     <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                       {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
                     </li>
@@ -192,7 +192,7 @@
                     <!-- Goals -->
                     <div>
                       <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
-                      <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
+                      <ul class="list-disc list-inside text-sm text-text-muted space-y-1" v-if="scenario.user_content.goals">
                         <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                           {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
                         </li>
@@ -256,7 +256,7 @@
                 <!-- Goals -->
                 <div>
                   <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
-                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
+                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1" scenario.user_content.goals>
                     <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                       {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
                     </li>
