@@ -239,6 +239,7 @@ export default defineComponent({
           console.error("Error analysing user conversation:", error)
         } finally {
           isReviewGenerating.value = false
+          isReviewModalOpen.value = false
           orgStore.updateTrialUsage("review")
         }
       }
