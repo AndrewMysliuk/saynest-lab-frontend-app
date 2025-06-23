@@ -19,14 +19,17 @@
 
     <div class="room__body">
       <div class="conversation" v-if="!isReviewGenerating">
-        <div class="absolute top-4 right-4 z-10 flex gap-2">
+        <div class="absolute top-4 left-0 z-10 flex gap-2">
           <button
-            v-if="(getUserHistory?.length > getSelectedPrompt?.meta?.max_turns || getSessionIsEnd) && getIsLogged"
-            @click="analyseUserConversation"
-            class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-medium"
+            @click="$router.push({ name: 'platform.conversation-dashboard' })"
+            class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium"
           >
-            Finish and Analyse Conversation
+            ← Back to Dashboard
           </button>
+        </div>
+
+        <div class="absolute top-4 right-4 z-10 flex gap-2">
+          <button @click="handleReviewModalToggle" class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-medium">Finish and Analyse Conversation</button>
 
           <button
             v-if="getConversationResponse?.conversation_history?.length"
@@ -89,6 +92,15 @@
     <v-modal v-model="isModalInfoOpen" is-curtain>
       <InfoModal />
     </v-modal>
+
+    <v-modal v-model="isReviewModalOpen">
+      <TheConfirmation
+        title="Submit Review Early"
+        description="The conversation is still in progress. Are you sure you want to end it and submit your review now? You won't be able to return and continue later."
+        @accept="analyseUserConversation"
+        @cancel="isReviewModalOpen = false"
+      />
+    </v-modal>
   </div>
 </template>
 
@@ -96,7 +108,7 @@
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch } from "vue"
 import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore } from "@/app"
 import { useRouter } from "vue-router"
-import { TheWordTooltip, TheLoader } from "@/shared/components"
+import { TheWordTooltip, TheConfirmation, TheLoader } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import helloRecord from "@/shared/assets/records/hello_record.wav"
@@ -110,6 +122,7 @@ export default defineComponent({
     InfoModal,
     TheLoader,
     TheWordTooltip,
+    TheConfirmation,
   },
 
   setup() {
@@ -125,6 +138,7 @@ export default defineComponent({
     const isHold = ref<boolean>(false)
     const isCancelled = ref<boolean>(false)
     const isGoalsToggle = ref<boolean>(false)
+    const isReviewModalOpen = ref<boolean>(false)
     let mediaRecorder: MediaRecorder | null = null
     let mediaStream: MediaStream | null = null
     let audioChunks: BlobPart[] = []
@@ -457,6 +471,17 @@ export default defineComponent({
       isSidebarOpen.value = !isSidebarOpen.value
     }
 
+    const handleReviewModalToggle = () => {
+      if (!getIsLogged.value) return
+
+      if (getUserHistory.value?.length > getSelectedPrompt.value?.meta?.max_turns || getSessionIsEnd.value) {
+        analyseUserConversation()
+        return
+      }
+
+      isReviewModalOpen.value = true
+    }
+
     watch(
       () => audioPlayer.audioElement.value,
       (newElement) => {
@@ -480,6 +505,7 @@ export default defineComponent({
       clientCanvasRef,
       audioElementRef,
       isModalInfoOpen,
+      isReviewModalOpen,
       isSidebarOpen,
       isGoalsOpen,
       isLoading,
@@ -487,16 +513,15 @@ export default defineComponent({
       isHold,
       isReviewGenerating,
       getSelectedPrompt,
-      getIsLogged,
       getIsLoading,
       getUserHistory,
       getLastModelFullAnswer,
       getLastModelTip,
       getConversationResponse,
       getUserTranslateLanguage,
-      getSessionIsEnd,
       getIsExpiredVisible,
       getIsTrialVisible,
+      handleReviewModalToggle,
       hideTooltip,
       handleWordClick,
       analyseUserConversation,
