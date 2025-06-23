@@ -48,6 +48,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
+    right: 0;
     width: 100%;
     height: rem(80px);
     background-color: transparent;
@@ -64,6 +65,13 @@
 
     p {
       font-size: rem(24px);
+    }
+
+    &.--client {
+      bottom: rem(-24px);
+      left: rem(-40px);
+      right: rem(-40px);
+      width: auto;
     }
   }
 

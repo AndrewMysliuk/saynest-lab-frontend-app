@@ -5,7 +5,7 @@
     </transition>
 
     <transition name="slide-left">
-      <div v-if="isGoalsOpen && getSelectedPrompt.user_content.goals" class="absolute top-0 left-0 h-full w-80 bg-white border-r border-gray-200 p-6 shadow-xl overflow-y-auto z-20">
+      <div v-if="isGoalsOpen && getSelectedPrompt?.user_content?.goals" class="absolute top-0 left-0 h-full w-80 bg-white border-r border-gray-200 p-6 shadow-xl overflow-y-auto z-20">
         <h2 class="text-xl font-bold text-gray-800 mb-6">Conversation Goals</h2>
 
         <div v-for="(goal, index) in getSelectedPrompt.user_content.goals" :key="index" class="mb-4">
@@ -68,12 +68,30 @@
           <canvas ref="clientCanvasRef" />
         </div>
 
-        <div class="conversation__visualization --prompt" v-if="isHold && getConversationResponse?.conversation_history?.length && !isLoading">
-          <p>Recording in progress... Speak now! (Press Esc to cancel the recording) Duration: {{ recordingDuration }}s</p>
-        </div>
+        <div v-if="!isLoading && getConversationResponse?.conversation_history?.length" class="conversation__visualization --prompt flex justify-center items-center gap-6 mt-4">
+          <button v-if="!isHold" @click="startRecordingFromButton" class="w-16 h-16 rounded-full bg-indigo-600 text-white text-xl flex items-center justify-center shadow-md" title="Start recording">
+            <i class="fa-solid fa-microphone" />
+          </button>
 
-        <div class="conversation__visualization --prompt" v-else-if="!isHold && getConversationResponse?.conversation_history?.length && !isLoading">
-          <p>Press and hold Spacebar to interrupt and start recording</p>
+          <div v-if="isHold" class="min-w-[48px] text-right text-sm text-gray-600 font-medium">{{ recordingDuration }}s</div>
+
+          <button
+            v-if="isHold"
+            @click="stopRecordingFromButton"
+            class="w-16 h-16 rounded-full bg-orange-500 text-white text-xl flex items-center justify-center shadow-md relative"
+            title="Stop recording"
+          >
+            <i class="fa-solid fa-stop" />
+          </button>
+
+          <button
+            v-if="isHold"
+            @click="cancelRecordingFromButton"
+            class="w-10 h-10 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition flex items-center justify-center"
+            title="Cancel (Escape)"
+          >
+            <i class="fa-solid fa-trash" />
+          </button>
         </div>
       </div>
 
@@ -303,6 +321,31 @@ export default defineComponent({
       }
     }
 
+    const startRecordingFromButton = async () => {
+      if (!isHold.value && !isLoading.value) {
+        isHold.value = true
+        isCancelled.value = false
+        audioPlayer.interruptAndClear()
+        await startRecording()
+      }
+    }
+
+    const stopRecordingFromButton = async () => {
+      if (isHold.value) {
+        isCancelled.value = false
+        await stopRecording()
+        isHold.value = false
+      }
+    }
+
+    const cancelRecordingFromButton = async () => {
+      if (isHold.value) {
+        isCancelled.value = true
+        await stopRecording()
+        isHold.value = false
+      }
+    }
+
     const startRecording = async () => {
       if (isLoading.value || mediaRecorder) return
 
@@ -521,6 +564,9 @@ export default defineComponent({
       getUserTranslateLanguage,
       getIsExpiredVisible,
       getIsTrialVisible,
+      startRecordingFromButton,
+      stopRecordingFromButton,
+      cancelRecordingFromButton,
       handleReviewModalToggle,
       hideTooltip,
       handleWordClick,

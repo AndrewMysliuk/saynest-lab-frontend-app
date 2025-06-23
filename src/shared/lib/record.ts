@@ -49,9 +49,10 @@ export const initializeCanvasForConversation = (canvas: HTMLCanvasElement | null
 
     for (let i = 0; i < bufferLength; i++) {
       const amplitude = Math.abs(dataArray[i])
-      const barHeight = amplitude * canvas.height
+      const barHeight = amplitude * canvas.height * 2.5
 
-      ctx.fillStyle = "#4caf50"
+      const hue = 160 + amplitude * 100
+      ctx.fillStyle = `hsl(${hue}, 70%, 60%)`
       ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight)
       x += barWidth + 1
     }
