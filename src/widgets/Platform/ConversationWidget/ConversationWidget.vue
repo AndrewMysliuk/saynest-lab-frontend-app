@@ -20,10 +20,7 @@
     <div class="room__body">
       <div class="conversation" v-if="!isReviewGenerating">
         <div class="absolute top-4 left-0 z-10 flex gap-2">
-          <button
-            @click="$router.push({ name: 'platform.conversation-dashboard' })"
-            class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium"
-          >
+          <button @click="goToDashboard" class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium">
             ← Back to Dashboard
           </button>
         </div>
@@ -129,10 +126,32 @@ import { useRouter } from "vue-router"
 import { TheWordTooltip, TheConfirmation, TheLoader } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
-import helloRecord from "@/shared/assets/records/hello_record.wav"
 import { ConversationSidebar, InfoModal } from "./ui"
 import { ITooltip, SessionTypeEnum } from "@/shared/types"
 import { createSessionHandler } from "@/shared/api"
+import helloRecordEn from "@/shared/assets/records/hello_record_en.wav"
+import helloRecordBg from "@/shared/assets/records/hello_record_bg.wav"
+import helloRecordDe from "@/shared/assets/records/hello_record_de.wav"
+import helloRecordEs from "@/shared/assets/records/hello_record_es.wav"
+
+const FILE_LANGUAGE = [
+  {
+    file: helloRecordEn,
+    language: "English",
+  },
+  {
+    file: helloRecordBg,
+    language: "Bulgarisch",
+  },
+  {
+    file: helloRecordDe,
+    language: "German",
+  },
+  {
+    file: helloRecordEs,
+    language: "Spanish",
+  },
+]
 
 export default defineComponent({
   components: {
@@ -255,7 +274,11 @@ export default defineComponent({
 
     const simulateGreeting = async () => {
       try {
-        const response = await fetch(helloRecord)
+        const targetFileLanguage = FILE_LANGUAGE.find((item) => item.language === getSelectedPrompt.value.meta.target_language)
+
+        if (!targetFileLanguage) throw new Error("missing greeting audio file")
+
+        const response = await fetch(targetFileLanguage?.file)
         const audioBlob = await response.blob()
 
         if (!audioBlob) return
@@ -526,6 +549,13 @@ export default defineComponent({
       isReviewModalOpen.value = true
     }
 
+    const goToDashboard = () => {
+      conversationStore.resetAll()
+      errorAnalysisStore.resetAll()
+
+      router.push({ name: "platform.conversation-dashboard" })
+    }
+
     watch(
       () => audioPlayer.audioElement.value,
       (newElement) => {
@@ -565,6 +595,7 @@ export default defineComponent({
       getUserTranslateLanguage,
       getIsExpiredVisible,
       getIsTrialVisible,
+      goToDashboard,
       startRecordingFromButton,
       stopRecordingFromButton,
       cancelRecordingFromButton,
