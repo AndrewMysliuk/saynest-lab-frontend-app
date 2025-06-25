@@ -21,8 +21,8 @@ export const useErrorAnalysisStore = defineStore("errorAnalysisStore", () => {
     lastModelTip.value = ""
   }
 
-  const fetchErrorAnalysis = async (payload: IErrorAnalysisRequest) => {
-    await errorAnalysisHandler(payload)
+  const fetchErrorAnalysis = async (payload: IErrorAnalysisRequest, abortSignal?: AbortSignal) => {
+    await errorAnalysisHandler(payload, abortSignal)
       .then((response: IErrorAnalysisEntity | null) => {
         if (response) {
           lastSessionError.value = response

@@ -449,6 +449,7 @@ export default defineComponent({
               {
                 retries: 3,
                 delayMs: 1000,
+                signal: controller.signal,
                 onRetry: (attempt, error) => {
                   console.warn(`Attempt ${attempt} failed. Error:`, error)
                 },
@@ -558,6 +559,7 @@ export default defineComponent({
     const goToDashboard = () => {
       conversationStore.resetAll()
       errorAnalysisStore.resetAll()
+      urlAudioPlayer.stop()
 
       router.push({ name: "platform.conversation-dashboard" })
     }
