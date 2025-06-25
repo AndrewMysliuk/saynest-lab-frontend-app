@@ -42,7 +42,7 @@ export const useConversationStore = defineStore("conversationStore", () => {
             setTimeout(() => {
               gptResponses.value.push({ type: data.type, role: data.role, content: data.content })
               typewriterHandler(data.content)
-            }, 2000)
+            }, 1000)
             break
           case StreamEventEnum.TTS_CHUNK:
             // audioPlayer.addToQueue(data.audioChunk)
