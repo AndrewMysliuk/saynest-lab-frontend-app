@@ -1,6 +1,6 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { audioPlayer } from "@/app"
+import { urlAudioPlayer } from "@/app"
 import { createConversationHandler } from "../api"
 import { IConversationResponse, IConversationPayload, StreamEventEnum, ConversationShortResponse } from "../types"
 import { createTypewriterStream } from "../utils"
@@ -8,11 +8,13 @@ import { createTypewriterStream } from "../utils"
 export const useConversationStore = defineStore("conversationStore", () => {
   const conversationResponse = ref<IConversationResponse>({ session_id: "", conversation_history: [], last_model_response: "" })
   const lastModelFullAnswer = ref<string>("")
+  const lastModelAudioUrl = ref<string>("")
   const gptResponses = ref<ConversationShortResponse[]>([])
   const isLoading = ref<boolean>(false)
 
   const getConversationResponse = computed(() => conversationResponse.value)
   const getLastModelFullAnswer = computed(() => lastModelFullAnswer.value)
+  const getLastModelAudioUrl = computed(() => lastModelAudioUrl.value)
   const getGptResponses = computed(() => gptResponses.value)
   const getIsLoading = computed(() => isLoading.value)
 
@@ -36,11 +38,19 @@ export const useConversationStore = defineStore("conversationStore", () => {
             gptResponses.value.push({ type: data.type, role: data.role, content: data.content, audio_url: data.audio_url })
             break
           case StreamEventEnum.GPT_RESPONSE:
-            gptResponses.value.push({ type: data.type, role: data.role, content: data.content })
-            typewriterHandler(data.content)
+            // SetTimeout only for google TTS
+            setTimeout(() => {
+              gptResponses.value.push({ type: data.type, role: data.role, content: data.content })
+              typewriterHandler(data.content)
+            }, 2000)
             break
           case StreamEventEnum.TTS_CHUNK:
-            audioPlayer.addToQueue(data.audioChunk)
+            // audioPlayer.addToQueue(data.audioChunk)
+            break
+          case StreamEventEnum.TTS_LINK:
+            lastModelAudioUrl.value = data.audioUrl
+
+            urlAudioPlayer.playUrl(data.audioUrl)
             break
           case StreamEventEnum.ERROR:
             console.error("AI Error:", data.content)
@@ -67,6 +77,7 @@ export const useConversationStore = defineStore("conversationStore", () => {
   const resetAll = () => {
     conversationResponse.value = { session_id: "", conversation_history: [], last_model_response: "" }
     lastModelFullAnswer.value = ""
+    lastModelAudioUrl.value = ""
     gptResponses.value = []
     isLoading.value = false
   }
@@ -74,6 +85,7 @@ export const useConversationStore = defineStore("conversationStore", () => {
   return {
     getConversationResponse,
     getLastModelFullAnswer,
+    getLastModelAudioUrl,
     getGptResponses,
     getIsLoading,
     resetAll,

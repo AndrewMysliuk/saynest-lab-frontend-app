@@ -25,6 +25,12 @@ export interface ITTSElevenLabsPayload {
   voice_settings?: IVoiceSettings
 }
 
+export interface ITTSGooglePayload {
+  input?: string
+  language_code: string
+  response_format: string
+}
+
 export interface IConversationWhisper {
   audio_file: Blob
   prompt?: string
@@ -34,7 +40,8 @@ export interface IConversationPayload {
   whisper: IConversationWhisper
   gpt_model: IGPTPayload
   // tts: ITTSPayload
-  tts: ITTSElevenLabsPayload
+  // tts: ITTSElevenLabsPayload
+  tts: ITTSGooglePayload
   system: {
     session_id: string
     prompt_id: string
@@ -48,6 +55,7 @@ export enum StreamEventEnum {
   GPT_RESPONSE = "GPT_RESPONSE",
   GPT_FULL_RESPONSE = "GPT_FULL_RESPONSE",
   TTS_CHUNK = "TTS_CHUNK",
+  TTS_LINK = "TTS_LINK",
   ERROR = "ERROR",
   COMPLETE = "COMPLETE",
   HEARTBEAT = "HEARTBEAT",
@@ -66,10 +74,18 @@ export interface IGptResponseStreamEvent {
   content: string
 }
 
+// ElevenLabs + OpenAI TTS
 export interface ITtsChunkStreamEvent {
   type: StreamEventEnum.TTS_CHUNK
   role: "assistant"
   audioChunk: string
+}
+
+// Only Google TTS
+export interface ITtsLinkStreamEvent {
+  type: StreamEventEnum.TTS_LINK
+  role: "assistant"
+  audioUrl: string
 }
 
 export interface IErrorStreamEvent {
@@ -84,7 +100,7 @@ export interface IHeartbeatStreamEvent {
 
 export type ConversationShortResponse = IGptResponseStreamEvent | IHistoryStreamEvent
 
-export type ConversationStreamEvent = IHistoryStreamEvent | IGptResponseStreamEvent | ITtsChunkStreamEvent | IErrorStreamEvent | IHeartbeatStreamEvent
+export type ConversationStreamEvent = IHistoryStreamEvent | IGptResponseStreamEvent | ITtsChunkStreamEvent | ITtsLinkStreamEvent | IErrorStreamEvent | IHeartbeatStreamEvent
 
 export interface IConversationHistory {
   session_id: string

@@ -21,7 +21,7 @@ import App from "./index.vue"
 import "./index.scss"
 
 import { components, gtmConfig } from "@/shared/config"
-import { createAudioPlayer } from "@/shared/lib"
+import { createAudioPlayer, createUrlAudioPlayer } from "@/shared/lib"
 import { createGtm } from "@gtm-support/vue-gtm"
 
 export const app = createApp(App)
@@ -46,6 +46,7 @@ app.use(router)
 
 // Audio Player
 export const audioPlayer = createAudioPlayer()
+export const urlAudioPlayer = createUrlAudioPlayer()
 
 // Storages
 export const conversationStore = useConversationStore()

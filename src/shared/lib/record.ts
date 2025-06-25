@@ -159,3 +159,33 @@ export const createAudioPlayer = () => {
 
   return { addToQueue, interruptAndClear, audioElement }
 }
+
+// Google TTS Url
+export const createUrlAudioPlayer = () => {
+  const audioElement = ref<HTMLAudioElement | null>(new Audio())
+
+  const playUrl = (url: string) => {
+    if (!audioElement.value) return
+
+    audioElement.value.pause()
+    audioElement.value.currentTime = 0
+    audioElement.value.src = url
+    audioElement.value.load()
+
+    audioElement.value.play().catch((error) => {
+      console.error("Audio playback error:", error)
+    })
+  }
+
+  const stop = () => {
+    if (!audioElement.value) return
+    audioElement.value.pause()
+    audioElement.value.currentTime = 0
+  }
+
+  return {
+    playUrl,
+    stop,
+    audioElement,
+  }
+}

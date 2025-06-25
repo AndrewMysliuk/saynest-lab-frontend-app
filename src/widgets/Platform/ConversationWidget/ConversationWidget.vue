@@ -121,7 +121,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch } from "vue"
-import { conversationStore, audioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore } from "@/app"
+import { conversationStore, audioPlayer, urlAudioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheWordTooltip, TheConfirmation, TheLoader } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
@@ -194,6 +194,7 @@ export default defineComponent({
     const getIsLoading = computed(() => conversationStore.getIsLoading)
     const getConversationResponse = computed(() => conversationStore.getConversationResponse)
     const getUserHistory = computed(() => getConversationResponse.value.conversation_history?.filter((item) => item.role === "user"))
+    const getLastModelAudioUrl = computed(() => conversationStore.getLastModelAudioUrl)
     const getLastModelFullAnswer = computed(() => conversationStore.getLastModelFullAnswer)
     const getLastModelTip = computed(() => errorAnalysisStore.getLastModelTip)
     const getSessionIsEnd = computed(() => errorAnalysisStore.getSessionIsEnd)
@@ -265,11 +266,12 @@ export default defineComponent({
     }
 
     const repeatLastAudio = async () => {
-      if (!audioElementRef.value) return
+      // if (!audioElementRef.value) return
 
-      audioElementRef.value.pause()
-      audioElementRef.value.currentTime = 0
-      audioElementRef.value.play()
+      // audioElementRef.value.pause()
+      // audioElementRef.value.currentTime = 0
+      // audioElementRef.value.play()
+      urlAudioPlayer.playUrl(getLastModelAudioUrl.value)
     }
 
     const simulateGreeting = async () => {
@@ -297,7 +299,8 @@ export default defineComponent({
             whisper: { audio_file: audioBlob },
             gpt_model: { model: "gpt-4o", max_tokens: 350 },
             // tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
-            tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.6 } },
+            // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.6 } },
+            tts: { response_format: "mp3", language_code: "" },
             system: {
               session_id: _id,
               prompt_id: getSelectedPrompt.value?._id,
@@ -325,7 +328,8 @@ export default defineComponent({
         e.preventDefault()
         isHold.value = true
         isCancelled.value = false
-        audioPlayer.interruptAndClear()
+        // audioPlayer.interruptAndClear()
+        urlAudioPlayer.stop()
         await startRecording()
       }
 
@@ -349,7 +353,8 @@ export default defineComponent({
       if (!isHold.value && !isLoading.value) {
         isHold.value = true
         isCancelled.value = false
-        audioPlayer.interruptAndClear()
+        // audioPlayer.interruptAndClear()
+        urlAudioPlayer.stop()
         await startRecording()
       }
     }
@@ -413,7 +418,8 @@ export default defineComponent({
                 whisper: { audio_file: audioBlob },
                 gpt_model: { model: "gpt-4o", max_tokens: 350 },
                 // tts: { model: "tts-1", voice: "nova", response_format: "mp3" },
-                tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.6 } },
+                // tts: { voice: "EXAVITQu4vr4xnSDxMaL", model: "eleven_flash_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.6 } },
+                tts: { response_format: "mp3", language_code: "" },
                 system: {
                   session_id: getConversationResponse.value?.session_id ?? "",
                   prompt_id: getSelectedPrompt.value?._id,
