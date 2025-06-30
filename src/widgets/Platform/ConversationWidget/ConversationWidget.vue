@@ -1,5 +1,5 @@
 <template>
-  <div class="room" :class="{ '--sidebar-opened': isSidebarOpen, '--goals-opened': isGoalsOpen, '--is-notification': getIsExpiredVisible || getIsTrialVisible }">
+  <div class="room" :class="{ '--sidebar-opened': isSidebarOpen, '--goals-opened': isGoalsOpen, '--is-word-info': getIsWordModalOpen, '--is-notification': getIsExpiredVisible || getIsTrialVisible }">
     <transition name="slide-left">
       <ConversationSidebar v-if="isSidebarOpen" />
     </transition>
@@ -41,7 +41,9 @@
         </div>
 
         <div class="conversation__description" v-if="getLastModelFullAnswer">
-          <p class="--cursor" v-word-click="handleWordClick">{{ getLastModelFullAnswer }}</p>
+          <p class="--cursor">
+            <TheInteractiveText :text="getLastModelFullAnswer" @click-word="handleWordClick" @select-text="handleWordSelection" />
+          </p>
 
           <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" />
         </div>
@@ -57,7 +59,7 @@
           <i class="fa-solid fa-repeat" />
         </div>
 
-        <div class="conversation__info" @click="isModalInfoOpen = true">
+        <div class="conversation__info" @click="openModalInfo">
           <i class="fa-regular fa-circle-question" />
         </div>
 
@@ -95,15 +97,6 @@
       <TheLoader v-else message="Review Generation In Progress..." />
     </div>
 
-    <TheWordTooltip
-      :language="tooltip.target_language"
-      :translation-language="tooltip.explanation_language"
-      :word="tooltip.word"
-      :position="tooltip.position"
-      :show="tooltip.show"
-      @close="hideTooltip"
-    />
-
     <v-modal v-model="isModalInfoOpen" is-curtain>
       <InfoModal />
     </v-modal>
@@ -121,18 +114,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch } from "vue"
-import { conversationStore, audioPlayer, urlAudioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore } from "@/app"
+import { conversationStore, audioPlayer, urlAudioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore, vocabularyStore } from "@/app"
 import { useRouter } from "vue-router"
-import { TheWordTooltip, TheConfirmation, TheLoader } from "@/shared/components"
+import { TheConfirmation, TheLoader, TheInteractiveText } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
 import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
 import { ConversationSidebar, InfoModal } from "./ui"
-import { ITooltip, SessionTypeEnum } from "@/shared/types"
+import { SessionTypeEnum } from "@/shared/types"
 import { createSessionHandler } from "@/shared/api"
 import helloRecordEn from "@/shared/assets/records/hello_record_en.wav"
 import helloRecordBg from "@/shared/assets/records/hello_record_bg.wav"
 import helloRecordDe from "@/shared/assets/records/hello_record_de.wav"
 import helloRecordEs from "@/shared/assets/records/hello_record_es.wav"
+import LanguagesList from "@/shared/json_data/languages.json"
 
 const FILE_LANGUAGE = [
   {
@@ -158,7 +152,7 @@ export default defineComponent({
     ConversationSidebar,
     InfoModal,
     TheLoader,
-    TheWordTooltip,
+    TheInteractiveText,
     TheConfirmation,
   },
 
@@ -180,13 +174,6 @@ export default defineComponent({
     let mediaStream: MediaStream | null = null
     let audioChunks: BlobPart[] = []
     let cleanupCanvas: (() => void) | null = null
-    const tooltip = ref<ITooltip>({
-      show: false,
-      target_language: "",
-      explanation_language: "",
-      word: "",
-      position: { x: 0, y: 0 },
-    })
     const recordingDuration = ref<number>(0)
     let recordingTimer: number | null = null
 
@@ -204,6 +191,7 @@ export default defineComponent({
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getIsExpiredVisible = computed(() => subscriptionStore.getIsExpiredVisible)
     const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
+    const getIsWordModalOpen = computed(() => vocabularyStore.getIsWordModalOpen)
 
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {
@@ -213,9 +201,6 @@ export default defineComponent({
       } else {
         conversationStore.resetAll()
         errorAnalysisStore.resetAll()
-
-        tooltip.value.target_language = getSelectedPrompt.value.meta.target_language
-        tooltip.value.explanation_language = getUserTranslateLanguage.value
 
         await simulateGreeting()
       }
@@ -515,26 +500,6 @@ export default defineComponent({
       mediaRecorder = null
     }
 
-    const hideTooltip = () => {
-      tooltip.value.show = false
-    }
-
-    const handleWordClick = (word: string, event: MouseEvent) => {
-      tooltip.value.show = false
-
-      setTimeout(() => {
-        tooltip.value = {
-          ...tooltip.value,
-          show: true,
-          word,
-          position: {
-            x: event.clientX + window.scrollX,
-            y: event.clientY + window.scrollY + 20,
-          },
-        }
-      }, 10)
-    }
-
     const toggleGoals = () => {
       if (isSidebarOpen.value) isSidebarOpen.value = false
       isGoalsOpen.value = !isGoalsOpen.value
@@ -564,6 +529,40 @@ export default defineComponent({
       router.push({ name: "platform.conversation-dashboard" })
     }
 
+    const handleWordClick = async (word: string) => {
+      if (!word) return
+
+      try {
+        isSidebarOpen.value = false
+        isGoalsOpen.value = false
+
+        vocabularyStore.setIsWordModalOpen(true)
+
+        const languageISO = LanguagesList.find((item) => item.language === getSelectedPrompt.value.meta.target_language)?.language_iso || "en"
+
+        await vocabularyStore.lookupWordMethod({
+          word,
+          target_language: languageISO,
+          native_language: getUserTranslateLanguage.value,
+        })
+      } catch (error: unknown) {
+        vocabularyStore.setIsWordModalOpen(false)
+      }
+    }
+
+    const handleWordSelection = (phrase: string) => {
+      isSidebarOpen.value = false
+      isGoalsOpen.value = false
+
+      vocabularyStore.setSelectedPhrase(phrase)
+      vocabularyStore.setIsWordModalOpen(true)
+    }
+
+    const openModalInfo = () => {
+      vocabularyStore.setIsWordModalOpen(false)
+      isModalInfoOpen.value = true
+    }
+
     watch(
       () => audioPlayer.audioElement.value,
       (newElement) => {
@@ -576,16 +575,17 @@ export default defineComponent({
     onBeforeUnmount(() => {
       document.body.style.overflow = ""
       controller.abort()
+      vocabularyStore.setIsWordModalOpen(false)
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
       window.removeEventListener("beforeunload", handleBeforeUnload)
     })
 
     return {
-      tooltip,
       recordingDuration,
       clientCanvasRef,
       audioElementRef,
+      getIsWordModalOpen,
       isModalInfoOpen,
       isReviewModalOpen,
       isSidebarOpen,
@@ -603,13 +603,14 @@ export default defineComponent({
       getUserTranslateLanguage,
       getIsExpiredVisible,
       getIsTrialVisible,
+      openModalInfo,
       goToDashboard,
+      handleWordClick,
+      handleWordSelection,
       startRecordingFromButton,
       stopRecordingFromButton,
       cancelRecordingFromButton,
       handleReviewModalToggle,
-      hideTooltip,
-      handleWordClick,
       analyseUserConversation,
       repeatLastAudio,
       toggleGoals,

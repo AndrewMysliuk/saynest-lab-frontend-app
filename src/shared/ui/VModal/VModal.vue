@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" @enter="startEnterAnimation" @afterEnter="endEnterAnimation" @leave="startLeaveAnimation" @afterLeave="endLeaveAnimation">
-    <div v-if="modelValue" class="v-modal" :class="{ '--is-curtain': isCurtain, '--is-standart': !isCurtain }">
+    <div v-if="modelValue" class="v-modal" :class="{ '--is-curtain': isCurtain, '--is-info': isInfo, '--is-standart': !isCurtain && !isInfo }">
       <div class="v-modal__background" @click="closeModal" />
 
       <div class="v-modal__content">
@@ -26,6 +26,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+
+    isInfo: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup(props, { emit }) {
@@ -36,7 +41,7 @@ export default defineComponent({
     const startEnterAnimation = (el: Element, done: () => void) => {
       document.body.style.overflow = "hidden"
 
-      if (props.isCurtain) {
+      if (props.isCurtain || props.isInfo) {
         el.classList.add("--slide-from-right")
         setTimeout(done, 300)
 
@@ -47,13 +52,13 @@ export default defineComponent({
     }
 
     const endEnterAnimation = (el: Element) => {
-      if (props.isCurtain) {
+      if (props.isCurtain || props.isInfo) {
         el.classList.remove("--slide-from-right")
       }
     }
 
     const startLeaveAnimation = (el: Element, done: () => void) => {
-      if (props.isCurtain) {
+      if (props.isCurtain || props.isInfo) {
         el.classList.add("--slide-out-right")
         setTimeout(done, 300)
 
@@ -64,7 +69,7 @@ export default defineComponent({
     }
 
     const endLeaveAnimation = (el: Element) => {
-      if (props.isCurtain) {
+      if (props.isCurtain || props.isInfo) {
         el.classList.remove("--slide-out-right")
       }
 

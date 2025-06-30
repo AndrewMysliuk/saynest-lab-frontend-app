@@ -73,6 +73,7 @@ export default defineComponent({
         { label: "Conversation", router: { name: "platform.conversation-dashboard" } },
         getIsLogged.value ? { label: "Conversation History", router: { name: "platform.conversation-history" } } : null,
         getIsLogged.value ? { label: "Progress", router: { name: "platform.user-progress" } } : null,
+        getIsLogged.value ? { label: "Vocabulary", router: { name: "platform.vocabulary" } } : null,
         { label: "Tariff Plans", router: { name: "platform.tariff-plans" } },
       ].filter(Boolean)
     )

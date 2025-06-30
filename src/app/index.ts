@@ -5,7 +5,7 @@ import {
   useConversationStore,
   usePromptStore,
   useErrorAnalysisStore,
-  useVocabularyTrackerStore,
+  useVocabularyStore,
   useCommunicationReviewStore,
   useTaskGeneratorStore,
   useAuthStore,
@@ -16,7 +16,6 @@ import {
   usePlansStore,
   useSubscriptionStore,
 } from "@/shared/store"
-import { wordClickDirective } from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
 
@@ -35,8 +34,6 @@ app.use(
   })
 )
 
-app.directive("word-click", wordClickDirective)
-
 components.forEach((element) => {
   app.component(element.name as string, element)
 })
@@ -52,7 +49,7 @@ export const urlAudioPlayer = createUrlAudioPlayer()
 export const conversationStore = useConversationStore()
 export const promptStore = usePromptStore()
 export const errorAnalysisStore = useErrorAnalysisStore()
-export const vocabularyTrackerStore = useVocabularyTrackerStore()
+export const vocabularyStore = useVocabularyStore()
 export const communicationReviewStore = useCommunicationReviewStore()
 export const taskGeneratorStore = useTaskGeneratorStore()
 export const authStore = useAuthStore()

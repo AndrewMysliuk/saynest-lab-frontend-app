@@ -1,4 +1,4 @@
-import { ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform, UserProgressPagePlatform, TariffPlansPagePlatform } from "./Platform"
+import { ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform, UserProgressPagePlatform, TariffPlansPagePlatform, VocabularyPagePlatform } from "./Platform"
 import { LoginPageAuth, SignupPageAuth } from "./Auth"
 
 // Policies
@@ -14,6 +14,7 @@ export {
   ConversationHistoryPagePlatform,
   UserProgressPagePlatform,
   TariffPlansPagePlatform,
+  VocabularyPagePlatform,
   TermsAndConditions,
   PrivacyPolicy,
   RefundPolicy,

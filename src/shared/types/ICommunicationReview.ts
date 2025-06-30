@@ -1,6 +1,6 @@
 import { IConversationHistory } from "./IConversation"
 import { IErrorAnalysisEntity } from "./IErrorAnalysis"
-import { IVocabularyFillersEntity, VocabularyFrequencyLevelEnum } from "./IVocabulary"
+import { VocabularyFrequencyLevelEnum } from "./IVocabulary"
 
 export interface ICommunicationReviewHistory {
   start_time: Date // Время начала сессии
@@ -56,7 +56,6 @@ export interface ICommunicationReview {
   explanation_language: string
   history: ICommunicationReviewHistory
   error_analysis: IErrorAnalysisEntity[]
-  vocabulary: IVocabularyFillersEntity[]
   suggestion: string[]
   conclusion: string
   user_cefr_level: ILevelDiagnosis

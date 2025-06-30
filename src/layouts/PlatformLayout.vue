@@ -18,13 +18,17 @@
     <v-modal :model-value="!getUserLegalTC || !getUserLegalPP || !getUserLegalRP">
       <TheLegal />
     </v-modal>
+
+    <v-modal :model-value="getIsWordModalOpen" @update:model-value="closeWordInfoModal" is-info>
+      <TheWordInfo />
+    </v-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, onMounted } from "vue"
-import { orgStore, plansStore, subscriptionStore, userStore } from "@/app"
-import { TheNotification, TheLegal } from "@/shared/components"
+import { orgStore, plansStore, subscriptionStore, userStore, vocabularyStore } from "@/app"
+import { TheNotification, TheLegal, TheWordInfo } from "@/shared/components"
 import { useRouter } from "vue-router"
 import { subscriptionCheckMiddleware } from "@/shared/middleware"
 import { formatDateTime } from "@/shared/lib"
@@ -36,6 +40,7 @@ export default defineComponent({
   components: {
     TheNotification,
     TheLegal,
+    TheWordInfo,
   },
 
   setup() {
@@ -65,6 +70,7 @@ export default defineComponent({
     })
     const getIsExpiredVisible = computed(() => subscriptionStore.getIsExpiredVisible)
     const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
+    const getIsWordModalOpen = computed(() => vocabularyStore.getIsWordModalOpen)
 
     onBeforeMount(() => {
       if (!getCurrentSubscription.value) {
@@ -103,13 +109,19 @@ export default defineComponent({
       }
     }
 
+    const closeWordInfoModal = () => {
+      vocabularyStore.setIsWordModalOpen(false)
+    }
+
     return {
       getUserLegalTC,
       getUserLegalPP,
       getUserLegalRP,
       getIsExpiredVisible,
       getIsTrialVisible,
+      getIsWordModalOpen,
       trialInfoMessage,
+      closeWordInfoModal,
     }
   },
 })

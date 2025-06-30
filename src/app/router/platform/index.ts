@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from "vue-router"
-import { authStore, commonStore, communicationReviewStore, orgStore, plansStore, promptStore, userStore } from "@/app"
+import { authStore, commonStore, communicationReviewStore, orgStore, plansStore, promptStore, userStore, vocabularyStore } from "@/app"
 import PlatformLayout from "@/layouts/PlatformLayout.vue"
 import { subscriptionCheckMiddleware } from "@/shared/middleware"
 
@@ -33,6 +33,7 @@ const platform: RouteRecordRaw[] = [
       await Promise.all([
         orgStore.fetchOrgById(),
         communicationReviewStore.fetchReviewsList(false),
+        vocabularyStore.listUserWordsMethod(false),
         promptStore.fetchModuleList(false),
         promptStore.fetchScenariosList(false, { is_module_only: false }),
         plansStore.fetchPlansList(),
@@ -72,6 +73,11 @@ const platform: RouteRecordRaw[] = [
         path: "/platform/tariff-plans",
         name: "platform.tariff-plans",
         component: async () => await import("@/pages").then((module) => module.TariffPlansPagePlatform),
+      },
+      {
+        path: "/platform/vocabulary",
+        name: "platform.vocabulary",
+        component: async () => await import("@/pages").then((module) => module.VocabularyPagePlatform),
       },
     ],
   },

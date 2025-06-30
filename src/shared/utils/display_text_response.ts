@@ -27,3 +27,11 @@ export function createTypewriterStream({ delayPerChar = 20, onChar, onChunkCompl
     processQueue()
   }
 }
+
+export const normalizeTrim = (str: string) =>
+  str
+    .replace(/\s+/g, " ") // collapse multiple spaces
+    .replace(/[\u00A0\u200B]+/g, "") // remove non-breaking and zero-width spaces
+    .replace(/[.,!?;:"'()\[\]{}\-–—…]/g, "") // remove common punctuation
+    .trim()
+    .toLowerCase()

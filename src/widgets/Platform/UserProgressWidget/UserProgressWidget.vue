@@ -21,8 +21,6 @@
         <div class="mt-4 bg-stone-50 rounded-2xl p-6 border border-stone-200 shadow-sm flex flex-col gap-6 md:flex-row md:gap-4">
           <ErrorStatsList />
 
-          <FillerWordsList />
-
           <CompletedPromptsList />
         </div>
 
@@ -38,7 +36,7 @@
 import { defineComponent, computed, ref, onBeforeMount } from "vue"
 import { userProgressStore } from "@/app"
 import { TheLoader } from "@/shared/components"
-import { ProgressOverview, CefrProgressChart, ErrorStatsList, FillerWordsList, CompletedPromptsList, TasksTimeline, DayStreakProgress } from "./ui"
+import { ProgressOverview, CefrProgressChart, ErrorStatsList, CompletedPromptsList, TasksTimeline, DayStreakProgress } from "./ui"
 
 export default defineComponent({
   components: {
@@ -46,7 +44,6 @@ export default defineComponent({
     ProgressOverview,
     CefrProgressChart,
     ErrorStatsList,
-    FillerWordsList,
     CompletedPromptsList,
     TasksTimeline,
     DayStreakProgress,

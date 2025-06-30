@@ -41,6 +41,30 @@
     }
   }
 
+  &.--is-info {
+    top: 0;
+    left: auto;
+    right: 0;
+    bottom: 0;
+    width: rem(480px);
+
+    .v-modal__background {
+      top: 0;
+      left: auto;
+      right: 0;
+      bottom: 0;
+      width: rem(480px);
+      background: none;
+    }
+
+    .v-modal__content {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: rem(480px);
+    }
+  }
+
   &__background {
     position: fixed;
     top: 0;

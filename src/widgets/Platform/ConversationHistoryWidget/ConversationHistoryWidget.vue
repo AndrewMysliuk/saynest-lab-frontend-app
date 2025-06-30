@@ -133,14 +133,6 @@
             </button>
 
             <button
-              v-if="getCurrentReview.vocabulary?.length"
-              @click="activeTab = 'VOCAB'"
-              :class="['px-4 py-2 rounded-full text-sm font-medium transition', activeTab === 'VOCAB' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
-            >
-              Repeated Words
-            </button>
-
-            <button
               @click="activeTab = 'DIALOGUE'"
               :class="['px-4 py-2 rounded-full text-sm font-medium transition', activeTab === 'DIALOGUE' ? 'bg-primary text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200']"
             >
@@ -192,40 +184,6 @@
                     <p><span class="font-semibold">Improved Answer:</span> {{ analysis.improve_user_answer.corrected_text }}</p>
                     <p><span class="font-semibold">CEFR Level:</span> {{ analysis.improve_user_answer.cefr_level }}</p>
                     <p><span class="font-semibold">Explanation:</span> {{ analysis.improve_user_answer.explanation }}</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div v-else-if="activeTab === 'VOCAB' && getCurrentReview.vocabulary?.length" class="space-y-10">
-              <h2 class="text-2xl font-bold text-text-base">Vocabulary Highlights</h2>
-
-              <ul class="grid sm:grid-cols-2 gap-6">
-                <li v-for="(word, i) in getCurrentReview.vocabulary" :key="i" class="bg-white border border-gray-200 rounded-xl p-6 space-y-5 shadow-sm">
-                  <!-- Word Header -->
-                  <div class="flex items-center justify-between">
-                    <div class="text-lg font-semibold text-gray-800">
-                      User said: <span class="text-blue-600">{{ word.word }}</span>
-                    </div>
-                    <span class="text-xs bg-gray-100 text-gray-700 rounded px-2 py-0.5 font-medium">{{ word.frequency_level }}</span>
-                  </div>
-
-                  <!-- Synonyms -->
-                  <div>
-                    <p class="text-sm text-gray-600">
-                      <strong>Synonyms: </strong>
-                      <span class="text-blue-700 font-medium">{{ word.meanings?.[0]?.synonyms?.join(", ") || "—" }}</span>
-                    </p>
-                    <p class="text-sm text-gray-600 mt-1"><strong>Repeated: </strong> {{ word.repeated_count }} times</p>
-                  </div>
-
-                  <!-- Meaning Box -->
-                  <div class="bg-blue-50 border border-blue-100 rounded-md px-4 py-3 space-y-2 text-sm text-gray-800">
-                    <template v-for="(meaning, j) in word.meanings" :key="j">
-                      <p><strong class="text-gray-700">Part of Speech:</strong> {{ meaning.part_of_speech }}</p>
-                      <p><strong class="text-gray-700">Translation:</strong> {{ meaning.translation }}</p>
-                      <p><strong class="text-gray-700">Meaning:</strong> {{ meaning.meaning }}</p>
-                    </template>
                   </div>
                 </li>
               </ul>

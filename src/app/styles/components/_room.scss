@@ -17,6 +17,12 @@
     }
   }
 
+  &.--is-word-info {
+    .room__body {
+      padding: rem(24px 520px 24px 40px);
+    }
+  }
+
   &.--is-notification {
     min-height: calc(100vh - 61px);
 
