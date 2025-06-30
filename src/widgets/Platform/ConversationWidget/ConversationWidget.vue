@@ -536,6 +536,7 @@ export default defineComponent({
         isSidebarOpen.value = false
         isGoalsOpen.value = false
 
+        vocabularyStore.setSelectedPhrase("")
         vocabularyStore.setIsWordModalOpen(true)
 
         const languageISO = LanguagesList.find((item) => item.language === getSelectedPrompt.value.meta.target_language)?.language_iso || "en"
@@ -554,6 +555,7 @@ export default defineComponent({
       isSidebarOpen.value = false
       isGoalsOpen.value = false
 
+      vocabularyStore.setSelectedWord(null)
       vocabularyStore.setSelectedPhrase(phrase)
       vocabularyStore.setIsWordModalOpen(true)
     }
