@@ -14,13 +14,16 @@
             <span class="bg-gray-200 text-xs text-gray-800 px-2 py-0.5 rounded-full">
               {{ getCurrentReview.target_language }}
             </span>
-            <span class="bg-green-100 text-xs text-green-800 font-medium px-2 py-0.5 rounded-full">
+            <span v-if="getCurrentReview.user_ielts_mark" class="bg-blue-100 text-xs text-blue-800 font-medium px-2 py-0.5 rounded-full">
+              IELTS: {{ getCurrentReview.user_ielts_mark.toFixed(1).replace(".", ",") }}
+            </span>
+            <span v-else-if="getCurrentReview.user_cefr_level" class="bg-green-100 text-xs text-green-800 font-medium px-2 py-0.5 rounded-full">
               {{ getCurrentReview.user_cefr_level.level }}
             </span>
           </div>
 
           <!-- EVALUATION TEXT -->
-          <p class="italic text-sm text-text-muted">
+          <p class="italic text-sm text-text-muted" v-if="getCurrentReview.user_cefr_level">
             {{ getCurrentReview.user_cefr_level.reasons }}
           </p>
 
@@ -69,6 +72,66 @@
                   <p><strong>Q:</strong> {{ turn.question }}</p>
                   <p><strong>A:</strong> {{ turn.user_response }}</p>
                   <p><strong>Comment:</strong> {{ turn.comment }}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div v-if="getCurrentReview.band_breakdown" class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md">
+            <p class="font-semibold text-blue-800 mb-2"><i class="fas fa-chart-bar mr-2"></i>IELTS Band Breakdown:</p>
+            <ul class="list-disc list-inside text-sm text-blue-900 space-y-1">
+              <li><strong>Fluency & Coherence:</strong> {{ getCurrentReview.band_breakdown.fluency }}</li>
+              <li><strong>Lexical Resource:</strong> {{ getCurrentReview.band_breakdown.lexical }}</li>
+              <li><strong>Grammatical Range & Accuracy:</strong> {{ getCurrentReview.band_breakdown.grammar }}</li>
+            </ul>
+          </div>
+
+          <div v-if="getCurrentReview.part1" class="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-md">
+            <p class="font-semibold text-indigo-800 mb-2"><i class="fas fa-comments mr-2"></i>IELTS Part 1 Feedback:</p>
+
+            <p class="text-sm text-indigo-900 mb-2">
+              {{ getCurrentReview.part1.summary }}
+            </p>
+
+            <div v-if="getCurrentReview.part1.highlights?.length">
+              <p class="font-semibold text-indigo-800 text-sm mb-1">Highlights:</p>
+              <ul class="list-disc list-inside text-sm text-indigo-900 space-y-1">
+                <li v-for="(item, index) in getCurrentReview.part1.highlights" :key="index">
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div v-if="getCurrentReview.part2" class="bg-purple-50 border-l-4 border-purple-400 p-4 rounded-md">
+            <p class="font-semibold text-purple-800 mb-2"><i class="fas fa-microphone mr-2"></i>IELTS Part 2 Feedback:</p>
+
+            <p class="text-sm text-purple-900 mb-2">
+              {{ getCurrentReview.part2.summary }}
+            </p>
+
+            <div v-if="getCurrentReview.part2.highlights?.length">
+              <p class="font-semibold text-purple-800 text-sm mb-1">Highlights:</p>
+              <ul class="list-disc list-inside text-sm text-purple-900 space-y-1">
+                <li v-for="(item, index) in getCurrentReview.part2.highlights" :key="index">
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div v-if="getCurrentReview.part3" class="bg-pink-50 border-l-4 border-pink-400 p-4 rounded-md">
+            <p class="font-semibold text-pink-800 mb-2"><i class="fas fa-chalkboard-teacher mr-2"></i>IELTS Part 3 Feedback:</p>
+
+            <p class="text-sm text-pink-900 mb-2">
+              {{ getCurrentReview.part3.summary }}
+            </p>
+
+            <div v-if="getCurrentReview.part3.highlights?.length">
+              <p class="font-semibold text-pink-800 text-sm mb-1">Highlights:</p>
+              <ul class="list-disc list-inside text-sm text-pink-900 space-y-1">
+                <li v-for="(item, index) in getCurrentReview.part3.highlights" :key="index">
+                  {{ item }}
                 </li>
               </ul>
             </div>
@@ -257,12 +320,16 @@
                   <span class="bg-gray-200 text-xs text-gray-800 px-2 py-0.5 rounded-full">
                     {{ review.target_language }}
                   </span>
-                  <span class="bg-green-100 text-xs text-green-800 font-medium px-2 py-0.5 rounded-full">
-                    {{ review.user_cefr_level.level }}
+                  <!-- IELTS or CEFR tag -->
+                  <span v-if="review.user_ielts_mark" class="bg-blue-100 text-xs text-blue-800 font-semibold px-2 py-0.5 rounded-full">
+                    IELTS: {{ review.user_ielts_mark.toFixed(1).replace(".", ",") }}
+                  </span>
+                  <span v-else class="bg-green-100 text-xs text-green-800 font-medium px-2 py-0.5 rounded-full">
+                    {{ review.user_cefr_level?.level }}
                   </span>
                 </div>
 
-                <p class="text-sm italic text-text-muted mb-3">
+                <p class="text-sm italic text-text-muted mb-3" v-if="review.user_cefr_level">
                   {{ review.user_cefr_level.reasons }}
                 </p>
 

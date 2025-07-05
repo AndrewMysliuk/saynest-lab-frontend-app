@@ -45,7 +45,7 @@
             <TheInteractiveText :text="getLastModelFullAnswer" @click-word="handleWordClick" @select-text="handleWordSelection" />
           </p>
 
-          <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" />
+          <!-- <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" /> -->
         </div>
 
         <div class="conversation__description" v-else-if="!isLoading && !isHold">
@@ -163,7 +163,7 @@ export default defineComponent({
     const audioElementRef = ref<HTMLAudioElement | null>(null)
     const isModalInfoOpen = ref<boolean>(false)
     const isSidebarOpen = ref<boolean>(false)
-    const isGoalsOpen = ref<boolean>(true)
+    const isGoalsOpen = ref<boolean>(false)
     const isReviewGenerating = ref<boolean>(false)
     const isLoading = ref<boolean>(true)
     const isHold = ref<boolean>(false)
@@ -463,7 +463,10 @@ export default defineComponent({
         recordingTimer = window.setInterval(async () => {
           recordingDuration.value = Math.floor((Date.now() - recordingStartTime) / 1000)
 
-          if (recordingDuration.value >= 60 && isHold.value) {
+          const isIelts = getSelectedPrompt.value.meta.is_it_ielts
+          const durationValue = isIelts ? 180 : 60
+
+          if (recordingDuration.value >= durationValue && isHold.value) {
             isCancelled.value = true
             await stopRecording()
             isHold.value = false

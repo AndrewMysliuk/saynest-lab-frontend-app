@@ -100,6 +100,7 @@
 import { computed, defineComponent, nextTick, ref } from "vue"
 import { promptStore, userStore, vocabularyStore } from "@/app"
 import { IUserWordTierEnum } from "@/shared/types"
+import LanguagesList from "@/shared/json_data/languages.json"
 import TheLoader from "../TheLoader"
 
 export default defineComponent({
@@ -139,14 +140,14 @@ export default defineComponent({
     })
     const googleTranslatePhraseUrl = computed(() => {
       const text = getSelectedPhrase.value || ""
-      const sl = getSelectedPrompt.value.meta.target_language
+      const sl = LanguagesList.find((item) => item.language.toLowerCase() === getSelectedPrompt.value.meta.target_language.toLowerCase())?.language_iso
       const tl = getUserTranslateLanguage.value
       return `https://translate.google.com/?sl=${sl}&tl=${tl}&text=${encode(text)}&op=translate`
     })
 
     const deepLPhraseUrl = computed(() => {
       const text = getSelectedPhrase.value || ""
-      const sl = getSelectedPrompt.value.meta.target_language
+      const sl = LanguagesList.find((item) => item.language.toLowerCase() === getSelectedPrompt.value.meta.target_language.toLowerCase())?.language_iso
       const tl = getUserTranslateLanguage.value
       return `https://www.deepl.com/translator#${sl}/${tl}/${encode(text)}`
     })

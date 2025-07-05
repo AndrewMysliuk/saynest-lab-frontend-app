@@ -1,6 +1,6 @@
 <template>
   <div ref="textContainerRef" class="interactive-text" @mouseup="handleTextSelection">
-    <template v-for="(word, index) in tokenizedWords" :key="index">
+    <template v-for="(word, _index) in tokenizedWords" :key="_index">
       <span
         class="word select-text cursor-pointer px-0.5 rounded selection:bg-yellow-300 selection:text-black"
         :class="['hover:bg-yellow-100', highlightColor(word)]"
@@ -8,7 +8,6 @@
       >
         {{ word }}
       </span>
-      <span v-if="index < tokenizedWords.length - 1"> </span>
     </template>
   </div>
 </template>
@@ -104,3 +103,9 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.word::after {
+  content: " ";
+}
+</style>
