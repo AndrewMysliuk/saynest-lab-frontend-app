@@ -32,7 +32,7 @@
             <p><i class="fas fa-calendar-alt mr-1"></i> {{ formatDate(getPublicReview.created_at) }}</p>
             <p><i class="fas fa-clock mr-1"></i> {{ formatDuration(getPublicReview.history.duration_seconds) }}</p>
             <p><i class="fas fa-comments mr-1"></i> <b>Messages:</b> {{ getPublicReview.history.messages.length - 2 }}</p>
-            <p><i class="fas fa-user mr-1"></i> <b>You:</b> {{ getPublicReview.history.user_utterances_count - 1 }}</p>
+            <p><i class="fas fa-user mr-1"></i> <b>User:</b> {{ getPublicReview.history.user_utterances_count - 1 }}</p>
             <p><i class="fas fa-robot mr-1"></i> <b>AI:</b> {{ getPublicReview.history.model_utterances_count }}</p>
           </div>
 
