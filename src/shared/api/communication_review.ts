@@ -1,4 +1,4 @@
-import { axios } from "../config"
+import { axios, publicAxios } from "../config"
 import { AxiosResponse } from "axios"
 import { ICommunicationReview, ICommunicationReviewFilters, ICommunicationReviewGenerateRequest, ICommunicationReviewUpdateAudioUrl } from "../types"
 
@@ -92,6 +92,36 @@ export const updateAudioUrlHandler = async (dto: ICommunicationReviewUpdateAudio
     })
 
     const { data }: { data: string } = response
+
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
+export const generateReviewPublicIdHandler = async (review_id: string): Promise<string> => {
+  try {
+    const response: AxiosResponse = await axios({
+      url: `/api/communication-review/${review_id}/generate-public-id`,
+      method: "GET",
+    })
+
+    const { data }: { data: string } = response
+
+    return data
+  } catch (error: unknown) {
+    throw error
+  }
+}
+
+export const getReviewByPublicIdHandler = async (public_id: string): Promise<ICommunicationReview> => {
+  try {
+    const response: AxiosResponse = await publicAxios({
+      url: `/api/communication-review/public/${public_id}`,
+      method: "GET",
+    })
+
+    const { data }: { data: ICommunicationReview } = response
 
     return data
   } catch (error: unknown) {

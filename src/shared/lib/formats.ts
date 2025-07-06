@@ -1,4 +1,4 @@
-import { IErrorAnalysisEntity } from "../types"
+import { IErrorAnalysisEntity, IWord } from "../types"
 
 export function formatCorrections(data: IErrorAnalysisEntity): string {
   if (!data.has_errors || !data.issues.length) return ""
@@ -85,5 +85,18 @@ export const formatDateTime = (date: Date | string) => {
   return d.toLocaleString(undefined, {
     dateStyle: "medium",
     timeStyle: "medium",
+  })
+}
+
+export const highlightWords = (text: string, words: IWord[], type: "error" | "correct") => {
+  if (!words?.length) return text
+
+  const uniqueWords = [...new Set(words.map((w) => w.value))]
+  const escapedWords = uniqueWords.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+  const regex = new RegExp(`\\b(${escapedWords.join("|")})\\b`, "gi")
+
+  return text.replace(regex, (match) => {
+    const cls = type === "error" ? "text-red-600 font-semibold" : "text-green-700 font-semibold"
+    return `<span class="${cls}">${match}</span>`
   })
 }

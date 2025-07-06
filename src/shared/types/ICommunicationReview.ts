@@ -51,6 +51,7 @@ export interface ICommunicationReview {
   user_id: string
   organization_id: string
   session_id: string
+  public_id: string | null
   topic_title: string
   target_language: string
   explanation_language: string

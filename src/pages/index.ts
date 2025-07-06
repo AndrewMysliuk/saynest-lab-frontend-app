@@ -6,6 +6,9 @@ import TermsAndConditions from "./TermsAndConditions.vue"
 import PrivacyPolicy from "./PrivacyPolicy.vue"
 import RefundPolicy from "./RefundPolicy.vue"
 
+// Public
+import SessionReview from "./SessionReview.vue"
+
 export {
   LoginPageAuth,
   SignupPageAuth,
@@ -18,4 +21,5 @@ export {
   TermsAndConditions,
   PrivacyPolicy,
   RefundPolicy,
+  SessionReview,
 }

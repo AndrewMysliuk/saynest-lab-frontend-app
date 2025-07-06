@@ -24,6 +24,11 @@ const childrenComponents: RouteRecordRaw[] = [
     component: () => import("@/pages").then((module) => module.RefundPolicy),
   },
   {
+    path: "/session-review/:public_id",
+    name: "session-review-public",
+    component: () => import("@/pages").then((module) => module.SessionReview),
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },

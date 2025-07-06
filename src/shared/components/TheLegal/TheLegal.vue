@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div class="flex items-center justify-center bg-opacity-50">
     <div class="bg-white rounded-2xl shadow-lg p-6 w-[400px] max-w-full">
       <h2 class="text-lg font-semibold text-gray-800 mb-4">Accept Policies</h2>
 

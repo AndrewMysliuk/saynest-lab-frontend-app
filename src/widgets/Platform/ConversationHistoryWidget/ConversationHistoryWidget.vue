@@ -20,6 +20,9 @@
             <span v-else-if="getCurrentReview.user_cefr_level" class="bg-green-100 text-xs text-green-800 font-medium px-2 py-0.5 rounded-full">
               {{ getCurrentReview.user_cefr_level.level }}
             </span>
+
+            <!-- GENERATE PUBLIC LINK -->
+            <button @click="generatePublicLink" class="ml-auto bg-[#5B3DF5] hover:bg-[#452ee0] text-white text-sm px-4 py-1.5 rounded-full transition">Share Review</button>
           </div>
 
           <!-- EVALUATION TEXT -->
@@ -333,6 +336,10 @@
                   {{ review.user_cefr_level.reasons }}
                 </p>
 
+                <p class="text-sm italic text-text-muted mb-3" v-if="review?.conclusion">
+                  {{ review.conclusion }}
+                </p>
+
                 <div class="flex flex-wrap gap-4 text-xs text-gray-500">
                   <p><i class="fas fa-calendar-alt mr-1"></i> {{ formatDate(review.created_at) }}</p>
                   <p><i class="fas fa-clock mr-1"></i> {{ formatDuration(review.history.duration_seconds) }}</p>
@@ -361,6 +368,10 @@
     <v-modal v-model="isDeleteModalOpen">
       <TheConfirmation title="Delete Review" description="Are you sure you want to delete review? This action cannot be undone." @accept="confirmDeleteReview" @cancel="isDeleteModalOpen = false" />
     </v-modal>
+
+    <v-modal v-model="isPublicLinkModalOpen">
+      <PublicLink :public-id="getCurrentReview?.public_id ?? ''" @close="isPublicLinkModalOpen = false" />
+    </v-modal>
   </div>
 </template>
 
@@ -368,15 +379,17 @@
 import { defineComponent, onBeforeMount, computed, ref, onBeforeUnmount, nextTick, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { commonStore, communicationReviewStore, orgStore, promptStore, taskGeneratorStore, userStore } from "@/app"
-import { formatDuration } from "@/shared/lib"
-import { IConversationHistory, ICommunicationReview, IWord, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
+import { formatDuration, formatDate, highlightWords } from "@/shared/lib"
+import { IConversationHistory, ICommunicationReview, TaskModeEnum, TaskTypeEnum } from "@/shared/types"
 import { TheLoader, TheTask, TheConfirmation } from "@/shared/components"
+import { PublicLink } from "./ui"
 
 export default defineComponent({
   components: {
     TheLoader,
     TheTask,
     TheConfirmation,
+    PublicLink,
   },
 
   setup() {
@@ -387,10 +400,11 @@ export default defineComponent({
     const controller = new AbortController()
     const isReady = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
-    const activeTab = ref<"ERRORS" | "VOCAB" | "DIALOGUE" | "TASKS">("ERRORS")
+    const activeTab = ref<"ERRORS" | "DIALOGUE" | "TASKS">("ERRORS")
     const selectedTopic = ref<string>("")
     const isDeleteModalOpen = ref<boolean>(false)
     const selectedReviewId = ref<string>("")
+    const isPublicLinkModalOpen = ref<boolean>(false)
 
     const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
     const isSingle = computed(() => !!route.params.id)
@@ -433,10 +447,6 @@ export default defineComponent({
       }
     })
 
-    const formatDate = (date: Date | string) => {
-      return new Date(date).toLocaleString()
-    }
-
     const deleteReview = (id: string) => {
       selectedReviewId.value = id
       isDeleteModalOpen.value = true
@@ -450,19 +460,6 @@ export default defineComponent({
       } finally {
         isDeleteModalOpen.value = false
       }
-    }
-
-    const highlightWords = (text: string, words: IWord[], type: "error" | "correct") => {
-      if (!words?.length) return text
-
-      const uniqueWords = [...new Set(words.map((w) => w.value))]
-      const escapedWords = uniqueWords.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-      const regex = new RegExp(`\\b(${escapedWords.join("|")})\\b`, "gi")
-
-      return text.replace(regex, (match) => {
-        const cls = type === "error" ? "text-red-600 font-semibold" : "text-green-700 font-semibold"
-        return `<span class="${cls}">${match}</span>`
-      })
     }
 
     const openDetails = async (review: ICommunicationReview) => {
@@ -543,6 +540,23 @@ export default defineComponent({
       }
     }
 
+    const generatePublicLink = async () => {
+      if (!getCurrentReview.value) return
+
+      if (getCurrentReview.value?.public_id) {
+        isPublicLinkModalOpen.value = true
+        return
+      }
+
+      try {
+        await communicationReviewStore.generateReviewPublicId(getCurrentReview.value._id)
+
+        isPublicLinkModalOpen.value = true
+      } catch (error: unknown) {
+        console.log(error)
+      }
+    }
+
     onBeforeUnmount(() => {
       controller.abort()
       observer.value?.disconnect()
@@ -556,6 +570,7 @@ export default defineComponent({
       loadMoreTrigger,
       isLoading,
       selectedTopic,
+      isPublicLinkModalOpen,
       getReviewsList,
       getCurrentReview,
       issueTopics,
@@ -568,6 +583,7 @@ export default defineComponent({
       highlightWords,
       generateTask,
       handleAudioError,
+      generatePublicLink,
       TaskTypeEnum,
     }
   },

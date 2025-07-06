@@ -1,11 +1,12 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { ICommunicationReview, ICommunicationReviewFilters, ICommunicationReviewGenerateRequest, ICommunicationReviewParams, ICommunicationReviewUpdateAudioUrl } from "../types"
-import { deleteReviewHandler, generateConversationReviewHandler, getReviewHandler, reviewsListHandler, updateAudioUrlHandler } from "../api"
+import { deleteReviewHandler, generateConversationReviewHandler, generateReviewPublicIdHandler, getReviewByPublicIdHandler, getReviewHandler, reviewsListHandler, updateAudioUrlHandler } from "../api"
 
 export const useCommunicationReviewStore = defineStore("communicationReviewStore", () => {
   const reviewsList = ref<ICommunicationReview[]>([])
   const currentReview = ref<ICommunicationReview | null>(null)
+  const publicReview = ref<ICommunicationReview | null>(null)
   const reviewsParams = ref<ICommunicationReviewParams>({
     offset: 0,
     limit: 20,
@@ -15,6 +16,7 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
 
   const getReviewsList = computed(() => reviewsList.value)
   const getCurrentReview = computed(() => currentReview.value)
+  const getPublicReview = computed(() => publicReview.value)
   const getReviewsParams = computed(() => reviewsParams.value)
 
   const setReviewList = (review: ICommunicationReview[]) => {
@@ -95,6 +97,32 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
       })
   }
 
+  const fetchReviewByPublicId = async (public_id: string) => {
+    await getReviewByPublicIdHandler(public_id)
+      .then((response: ICommunicationReview) => {
+        publicReview.value = response
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
+  const generateReviewPublicId = async (review_id: string) => {
+    await generateReviewPublicIdHandler(review_id)
+      .then((response: string) => {
+        if (currentReview.value) {
+          currentReview.value.public_id = response
+        }
+
+        if (reviewsList.value?.length) {
+          reviewsList.value = reviewsList.value.map((item) => (item._id === review_id ? { ...item, public_id: response } : item))
+        }
+      })
+      .catch((error: unknown) => {
+        throw error
+      })
+  }
+
   const fetchDeleteReviewById = async (review_id: string) => {
     return deleteReviewHandler(review_id)
       .then((response: boolean) => {
@@ -122,13 +150,16 @@ export const useCommunicationReviewStore = defineStore("communicationReviewStore
   return {
     getReviewsList,
     getCurrentReview,
+    getPublicReview,
     getReviewsParams,
     setCurrentReview,
     setReviewList,
     resetReviewsParams,
     generateConversationReview,
+    generateReviewPublicId,
     fetchReviewsList,
     fetchReviewById,
+    fetchReviewByPublicId,
     fetchDeleteReviewById,
     fetchUpdateAudioUrl,
   }
