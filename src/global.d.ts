@@ -16,6 +16,7 @@ declare global {
     google: typeof google
     hj: typeof hj
     Paddle: typeof Paddle
+    Tawk_API: typeof Tawk_API
   }
 }
 

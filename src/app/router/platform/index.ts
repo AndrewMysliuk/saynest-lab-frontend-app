@@ -2,6 +2,7 @@ import { RouteRecordRaw } from "vue-router"
 import { authStore, commonStore, communicationReviewStore, orgStore, plansStore, promptStore, userStore, vocabularyStore } from "@/app"
 import PlatformLayout from "@/layouts/PlatformLayout.vue"
 import { subscriptionCheckMiddleware } from "@/shared/middleware"
+import { useTawk } from "@/shared/config"
 
 const platform: RouteRecordRaw[] = [
   {
@@ -10,7 +11,7 @@ const platform: RouteRecordRaw[] = [
     component: PlatformLayout,
     beforeEnter: async (_to, _from, next) => {
       const isLogged = authStore.getIsLogged
-      const currentUser = userStore.getCurrentUser
+      let currentUser = userStore.getCurrentUser
 
       if (!isLogged) {
         next({ name: "auth.login" })
@@ -21,7 +22,13 @@ const platform: RouteRecordRaw[] = [
 
       if (!currentUser) {
         await userStore.fetchGetUser()
+        currentUser = userStore.getCurrentUser
       }
+
+      // Tawk
+      const { show, setVisitor } = useTawk()
+      if (currentUser) setVisitor(`${currentUser?.first_name} ${currentUser?.last_name}`, currentUser?.email)
+      show()
 
       await subscriptionCheckMiddleware()
 

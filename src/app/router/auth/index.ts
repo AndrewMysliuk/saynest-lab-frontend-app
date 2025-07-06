@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from "vue-router"
 import { authStore } from "@/app"
 import AuthLayout from "@/layouts/AuthLayout.vue"
+import { useTawk } from "@/shared/config"
 
 const auth: RouteRecordRaw[] = [
   {
@@ -9,6 +10,10 @@ const auth: RouteRecordRaw[] = [
     component: AuthLayout,
     beforeEnter: (_to, _from, next) => {
       const isLogged = authStore.getIsLogged
+
+      // Tawk
+      const { hide } = useTawk()
+      hide()
 
       if (isLogged) {
         next({ name: "platform.conversation-dashboard" })
