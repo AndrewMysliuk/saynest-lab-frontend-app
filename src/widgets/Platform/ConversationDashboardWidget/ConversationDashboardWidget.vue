@@ -92,16 +92,23 @@
 
             <p class="text-sm text-text-muted mb-5">{{ scenario.description }}</p>
 
-            <button @click.prevent.stop="toggleExpand(index)" class="text-sm text-primary font-medium hover:underline">
+            <button
+              @click.prevent.stop="toggleExpand(index)"
+              class="text-sm text-primary font-medium hover:underline"
+              v-if="scenario.user_content.goals?.length || scenario.user_content.dictionary?.length || scenario.user_content.phrases?.length"
+            >
               {{ expandedScenario === index ? "Hide Details" : "Show Details" }}
             </button>
 
             <transition name="fade">
-              <div v-if="expandedScenario === index" class="mt-6 border-t border-gray-100 pt-5 space-y-6">
+              <div
+                v-if="expandedScenario === index && (scenario.user_content.goals?.length || scenario.user_content.dictionary?.length || scenario.user_content.phrases?.length)"
+                class="mt-6 border-t border-gray-100 pt-5 space-y-6"
+              >
                 <!-- Goals -->
                 <div>
                   <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
-                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1" v-if="scenario.user_content.goals">
+                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
                     <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                       {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
                     </li>
@@ -183,16 +190,23 @@
 
                 <p class="text-sm text-text-muted mb-4">{{ scenario.description }}</p>
 
-                <button @click.prevent.stop="toggleExpand(scenario._id)" class="text-sm text-primary font-medium hover:underline">
+                <button
+                  @click.prevent.stop="toggleExpand(scenario._id)"
+                  class="text-sm text-primary font-medium hover:underline"
+                  v-if="scenario.user_content.goals?.length || scenario.user_content.dictionary?.length || scenario.user_content.phrases?.length"
+                >
                   {{ expandedScenario === scenario._id ? "Hide Details" : "Show Details" }}
                 </button>
 
                 <transition name="fade">
-                  <div v-if="expandedScenario === scenario._id" class="mt-6 border-t border-gray-100 pt-5 space-y-6">
+                  <div
+                    v-if="expandedScenario === scenario._id && (scenario.user_content.goals?.length || scenario.user_content.dictionary?.length || scenario.user_content.phrases?.length)"
+                    class="mt-6 border-t border-gray-100 pt-5 space-y-6"
+                  >
                     <!-- Goals -->
                     <div>
                       <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
-                      <ul class="list-disc list-inside text-sm text-text-muted space-y-1" v-if="scenario.user_content.goals">
+                      <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
                         <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                           {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
                         </li>
@@ -247,16 +261,23 @@
 
             <p class="text-sm text-text-muted mb-5">{{ scenario.description }}</p>
 
-            <button @click.prevent.stop="toggleExpand(index)" class="text-sm text-primary font-medium hover:underline">
+            <button
+              @click.prevent.stop="toggleExpand(index)"
+              class="text-sm text-primary font-medium hover:underline"
+              v-if="scenario.user_content.goals?.length || scenario.user_content.dictionary?.length || scenario.user_content.phrases?.length"
+            >
               {{ expandedScenario === index ? "Hide Details" : "Show Details" }}
             </button>
 
             <transition name="fade">
-              <div v-if="expandedScenario === index" class="mt-6 border-t border-gray-100 pt-5 space-y-6">
+              <div
+                v-if="expandedScenario === index && (scenario.user_content.goals?.length || scenario.user_content.dictionary?.length || scenario.user_content.phrases?.length)"
+                class="mt-6 border-t border-gray-100 pt-5 space-y-6"
+              >
                 <!-- Goals -->
                 <div>
                   <h4 class="text-md font-semibold text-text-base mb-2">Goals</h4>
-                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1" scenario.user_content.goals>
+                  <ul class="list-disc list-inside text-sm text-text-muted space-y-1">
                     <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                       {{ goal.phrase }} — <i>{{ goal.translation[getUserTranslateLanguage] }}</i>
                     </li>

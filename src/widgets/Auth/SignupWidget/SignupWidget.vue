@@ -1,129 +1,200 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-background px-4">
-    <form class="w-full max-w-md bg-surface p-8 rounded-xl shadow-soft space-y-6" @submit.prevent="onSubmit">
-      <h2 class="text-2xl font-semibold text-text-base text-center">Sign Up</h2>
+  <div class="min-h-screen flex items-center justify-center bg-background px-4 relative">
+    <!-- ========== MAIN CONTENT ========== -->
+    <main id="content" class="pb-24 sm:pb-16 w-full max-w-[540px] mx-auto">
+      <div class="py-10 lg:py-20 w-full max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
+        <div class="w-full max-w-sm mx-auto">
+          <!-- Log In Details -->
+          <div class="space-y-8">
+            <div class="text-center">
+              <h2 class="font-medium text-xl text-gray-800">Sign Up</h2>
+            </div>
 
-      <div ref="googleDiv" class="flex justify-center" />
+            <div class="space-y-3">
+              <div ref="googleDiv" class="w-full">
+                <div class="mx-auto w-full max-w-[300px]" />
+              </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label for="first_name" class="block text-sm font-medium text-text-muted">First Name</label>
-          <input
-            id="first_name"
-            v-model="sigupPayload.first_name"
-            type="text"
-            placeholder="Enter your first name"
-            required
-            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-          <p v-if="errorMessages.first_name" class="mt-1 text-sm text-red-600">{{ errorMessages.first_name }}</p>
-        </div>
+              <!-- Divider -->
+              <div class="flex items-center my-4">
+                <hr class="flex-grow border-gray-200" />
+                <span class="mx-3 text-sm text-gray-400">or</span>
+                <hr class="flex-grow border-gray-200" />
+              </div>
+              <!-- End Divider -->
 
-        <div>
-          <label for="last_name" class="block text-sm font-medium text-text-muted">Last Name</label>
-          <input
-            id="last_name"
-            v-model="sigupPayload.last_name"
-            type="text"
-            placeholder="Enter your last name"
-            required
-            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-          <p v-if="errorMessages.last_name" class="mt-1 text-sm text-red-600">{{ errorMessages.last_name }}</p>
-        </div>
-      </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="first_name" class="sr-only">First name</label>
+                  <input
+                    id="first_name"
+                    v-model="signupPayload.first_name"
+                    type="text"
+                    required
+                    placeholder="First name"
+                    class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+                  />
+                  <p v-if="errorMessages.first_name" class="mt-1 text-sm text-red-600">{{ errorMessages.first_name }}</p>
+                </div>
 
-      <div>
-        <label for="country" class="block text-sm font-medium text-text-muted">Country</label>
-        <div class="relative">
-          <select
-            id="country"
-            v-model="sigupPayload.country"
-            required
-            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base appearance-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
-          >
-            <option value="" disabled>Select your country</option>
-            <option v-for="country in countryOptions" :key="country.alpha_2" :value="country.alpha_2">
-              {{ country.name }}
-            </option>
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
-            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
+                <div>
+                  <label for="last_name" class="sr-only">Last name</label>
+                  <input
+                    id="last_name"
+                    v-model="signupPayload.last_name"
+                    type="text"
+                    required
+                    placeholder="Last name"
+                    class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+                  />
+                  <p v-if="errorMessages.last_name" class="mt-1 text-sm text-red-600">{{ errorMessages.last_name }}</p>
+                </div>
+              </div>
+
+              <div>
+                <label for="country" class="sr-only">Country</label>
+                <div class="relative">
+                  <select
+                    id="country"
+                    v-model="signupPayload.country"
+                    required
+                    class="py-3 px-4 w-full appearance-none rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5] pr-10"
+                  >
+                    <option value="" disabled>Select your country</option>
+                    <option v-for="country in countryOptions" :key="country.alpha_2" :value="country.alpha_2">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                    <i class="fas fa-chevron-down text-xs"></i>
+                  </div>
+                </div>
+                <p v-if="errorMessages.country" class="mt-1 text-sm text-red-600">{{ errorMessages.country }}</p>
+              </div>
+
+              <div>
+                <label for="email" class="sr-only">Email</label>
+                <input
+                  id="email"
+                  v-model="signupPayload.email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                  placeholder="Email"
+                  class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+                />
+                <p v-if="errorMessages.email" class="mt-1 text-sm text-red-600">{{ errorMessages.email }}</p>
+              </div>
+
+              <div>
+                <label for="password" class="sr-only">Password</label>
+                <div class="relative">
+                  <input
+                    :type="isPasswordVisible ? 'text' : 'password'"
+                    id="password"
+                    v-model="signupPayload.password"
+                    required
+                    placeholder="Password"
+                    autocomplete="new-password"
+                    class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+                  />
+                  <button type="button" @click="togglePasswordVisibility" class="absolute inset-y-0 end-0 flex items-center px-3 text-gray-400 hover:text-[#4F46E5] focus:outline-none">
+                    <i :class="isPasswordVisible ? 'fas fa-eye' : 'fas fa-eye-slash'" />
+                  </button>
+                </div>
+                <p v-if="errorMessages.password" class="mt-1 text-sm text-red-600">{{ errorMessages.password }}</p>
+              </div>
+
+              <div>
+                <label for="repeat_password" class="sr-only">Repeat Password</label>
+                <input
+                  :type="isPasswordVisible ? 'text' : 'password'"
+                  id="repeat_password"
+                  v-model="repeatPassword"
+                  required
+                  placeholder="Repeat password"
+                  autocomplete="new-password"
+                  class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+                />
+                <p v-if="errorMessages.repeat_password" class="mt-1 text-sm text-red-600">{{ errorMessages.repeat_password }}</p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <!-- CAPTCHA -->
+              <div v-if="isProduction">
+                <VueHcaptcha :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
+              </div>
+
+              <!-- Error Message -->
+              <div v-if="errorMessages._global" class="text-sm text-red-600 bg-[#FFFAFA] border border-red-200 rounded-md p-3 shadow-sm">
+                {{ errorMessages._global }}
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Sign Up -->
+              <button
+                type="button"
+                @click="onSubmit"
+                :disabled="isGoogleProcessing"
+                class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-2 sm:text-sm font-medium rounded-lg border border-transparent bg-[#4F46E5] text-white hover:bg-[#4338CA] disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
+              >
+                Sign Up
+              </button>
+
+              <p class="text-center text-sm text-gray-500">
+                Already have an account?
+                <router-link :to="{ name: 'auth.login' }" class="text-[13px] text-gray-500 underline underline-offset-4 hover:text-[#4F46E5] focus:outline-hidden focus:text-[#4F46E5]">
+                  Log in
+                </router-link>
+              </p>
+            </div>
           </div>
-        </div>
-        <p v-if="errorMessages.country" class="mt-1 text-sm text-red-600">{{ errorMessages.country }}</p>
-      </div>
-
-      <div>
-        <label for="email" class="block text-sm font-medium text-text-muted">Email</label>
-        <input
-          id="email"
-          v-model="sigupPayload.email"
-          type="email"
-          placeholder="Enter your email"
-          required
-          class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
-        <p v-if="errorMessages.email" class="mt-1 text-sm text-red-600">{{ errorMessages.email }}</p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label for="password" class="block text-sm font-medium text-text-muted">Password</label>
-          <input
-            id="password"
-            v-model="sigupPayload.password"
-            type="password"
-            placeholder="Enter your password"
-            required
-            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-          <p v-if="errorMessages.password" class="mt-1 text-sm text-red-600">{{ errorMessages.password }}</p>
-        </div>
-
-        <div>
-          <label for="repeat_password" class="block text-sm font-medium text-text-muted">Repeat Password</label>
-          <input
-            id="repeat_password"
-            v-model="repeatPassword"
-            type="password"
-            placeholder="Repeat your password"
-            required
-            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-          <p v-if="errorMessages.repeat_password" class="mt-1 text-sm text-red-600">{{ errorMessages.repeat_password }}</p>
+          <!-- End Log In Details -->
         </div>
       </div>
-
-      <div v-if="isProduction">
-        <VueHcaptcha :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
+    </main>
+    <!-- ========== END MAIN CONTENT ========== -->
+    <!-- ========== FOOTER ========== -->
+    <footer class="mt-auto absolute bottom-0 inset-x-0 bg-white border-t border-gray-200">
+      <div class="w-full max-w-5xl py-6 mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- List -->
+        <ul class="flex flex-wrap justify-center items-center whitespace-nowrap gap-3">
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            © 2025 Saynest Lab
+          </li>
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            <router-link
+              :to="{ name: 'terms-and-conditions' }"
+              class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800"
+            >
+              Terms and Conditions
+            </router-link>
+          </li>
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            <router-link :to="{ name: 'privacy-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800">
+              Privacy Policy
+            </router-link>
+          </li>
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            <router-link :to="{ name: 'refund-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800">
+              Refund Policy
+            </router-link>
+          </li>
+        </ul>
+        <!-- End List -->
       </div>
-
-      <div v-if="errorMessages?._global" class="text-sm text-red-600 bg-red-100 border border-red-200 rounded-md p-3">
-        {{ errorMessages._global }}
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <button
-          type="button"
-          @click="$router.push({ name: 'auth.login' })"
-          :disabled="isGoogleProcessing"
-          class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Log In
-        </button>
-
-        <button
-          type="submit"
-          :disabled="isGoogleProcessing"
-          class="w-1/2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryDark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Sign Up
-        </button>
-      </div>
-    </form>
+    </footer>
+    <!-- ========== END FOOTER ========== -->
   </div>
 </template>
 
@@ -145,7 +216,7 @@ export default defineComponent({
   setup() {
     const googleDiv = ref<HTMLDivElement | null>(null)
     const loginCaptchaRef = ref<any>()
-    const sigupPayload = ref<IRegisterRequest>({
+    const signupPayload = ref<IRegisterRequest>({
       email: "",
       password: "",
       first_name: "",
@@ -160,6 +231,7 @@ export default defineComponent({
     }))
     const errorMessages = ref<Record<string, string>>({})
     const isGoogleProcessing = ref<boolean>(false)
+    const isPasswordVisible = ref<boolean>(false)
 
     onMounted(() => {
       const interval = setInterval(() => {
@@ -218,7 +290,11 @@ export default defineComponent({
     }
 
     const loginCodeCaptcha = (token: string) => {
-      sigupPayload.value.hcaptcha_token = token
+      signupPayload.value.hcaptcha_token = token
+    }
+
+    const togglePasswordVisibility = () => {
+      isPasswordVisible.value = !isPasswordVisible.value
     }
 
     const onSubmit = async () => {
@@ -227,13 +303,13 @@ export default defineComponent({
       try {
         errorMessages.value = {}
 
-        if (sigupPayload.value.password !== repeatPassword.value) {
+        if (signupPayload.value.password !== repeatPassword.value) {
           errorMessages.value.password = "Passwords must match"
           errorMessages.value.repeat_password = "Passwords must match"
           return
         }
 
-        await authStore.fetchRegister(sigupPayload.value)
+        await authStore.fetchRegister(signupPayload.value)
 
         window.dataLayer = window.dataLayer || []
         window.dataLayer.push({
@@ -261,13 +337,15 @@ export default defineComponent({
 
     return {
       googleDiv,
+      isPasswordVisible,
       loginCaptchaRef,
       isGoogleProcessing,
-      sigupPayload,
+      signupPayload,
       repeatPassword,
       countryOptions,
       errorMessages,
       onSubmit,
+      togglePasswordVisibility,
       loginCodeCaptcha,
       CAPTCHA_SITE_KEY,
       isProduction,

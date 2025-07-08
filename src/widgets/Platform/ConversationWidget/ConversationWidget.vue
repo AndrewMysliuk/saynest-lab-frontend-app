@@ -59,7 +59,7 @@
           <i class="fa-solid fa-repeat" />
         </div>
 
-        <div class="conversation__info" @click="openModalInfo">
+        <div class="conversation__info --left-second" @click="openModalInfo">
           <i class="fa-regular fa-circle-question" />
         </div>
 

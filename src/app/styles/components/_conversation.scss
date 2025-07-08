@@ -32,15 +32,17 @@
 
   &__info {
     position: absolute;
-    right: 0;
     z-index: 11;
     font-size: rem(36px);
     cursor: pointer;
     bottom: 0;
 
     &.--left {
-      right: auto;
       left: 0;
+    }
+
+    &.--left-second {
+      left: rem(60px);
     }
   }
 

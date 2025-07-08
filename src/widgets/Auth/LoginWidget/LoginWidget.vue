@@ -1,61 +1,153 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-background px-4">
-    <form class="w-full max-w-md bg-surface p-8 rounded-xl shadow-soft space-y-6" @submit.prevent="onSubmit">
-      <h2 class="text-2xl font-semibold text-text-base text-center">Login</h2>
+  <div class="min-h-screen flex items-center justify-center bg-background px-4 relative">
+    <!-- ========== MAIN CONTENT ========== -->
+    <main id="content" class="pb-24 sm:pb-16 w-full max-w-[540px] mx-auto">
+      <div class="py-10 lg:py-20 w-full max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
+        <div class="w-full max-w-sm mx-auto">
+          <!-- Log In Details -->
+          <div class="space-y-8">
+            <div class="text-center">
+              <h2 class="font-medium text-xl text-gray-800">Log In</h2>
+            </div>
 
-      <div ref="googleDiv" class="flex justify-center" />
+            <div class="space-y-3">
+              <div ref="googleDiv" class="w-full">
+                <div class="mx-auto w-full max-w-[300px]" />
+              </div>
 
-      <div>
-        <label for="email" class="block text-sm font-medium text-text-muted">Email</label>
-        <input
-          id="email"
-          v-model="loginPayload.email"
-          type="email"
-          placeholder="Enter your email"
-          required
-          class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
+              <!-- Divider -->
+              <div class="flex items-center my-4">
+                <hr class="flex-grow border-gray-200" />
+                <span class="mx-3 text-sm text-gray-400">or</span>
+                <hr class="flex-grow border-gray-200" />
+              </div>
+              <!-- End Divider -->
+
+              <!-- Input -->
+              <div>
+                <label for="email" class="sr-only">Email</label>
+                <input
+                  id="email"
+                  v-model="loginPayload.email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                  placeholder="Email"
+                  class="py-3 px-4 relative w-full inline-flex justify-center items-center gap-x-1.5 sm:text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:border-[#4F46E5]"
+                />
+              </div>
+              <!-- End Input -->
+
+              <!-- Input -->
+              <div>
+                <label for="password" class="sr-only">Password</label>
+
+                <div class="relative">
+                  <input
+                    :type="isPasswordVisible ? 'text' : 'password'"
+                    id="password"
+                    v-model="loginPayload.password"
+                    required
+                    placeholder="Password"
+                    autocomplete="current-password"
+                    class="py-3 px-4 relative w-full inline-flex justify-center items-center gap-x-1.5 sm:text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:border-[#4F46E5]"
+                  />
+
+                  <button
+                    type="button"
+                    @click="togglePasswordVisibility"
+                    class="absolute inset-y-0 end-0 flex items-center z-20 px-3 cursor-pointer text-gray-400 hover:text-[#4F46E5] focus:outline-none"
+                  >
+                    <i :class="isPasswordVisible ? 'fas fa-eye' : 'fas fa-eye-slash'" />
+                  </button>
+                </div>
+              </div>
+              <!-- End Input -->
+
+              <!-- <div class="flex flex-wrap justify-between items-center gap-3">
+                <a class="text-[13px] text-gray-500 underline underline-offset-4 hover:text-[#4F46E5] focus:outline-none focus:text-[#4F46E5]" href="/forgot-password"> Forgot your password? </a>
+              </div> -->
+            </div>
+
+            <div class="space-y-4">
+              <!-- CAPTCHA -->
+              <div v-if="isProduction">
+                <VueHcaptcha :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
+              </div>
+
+              <!-- Error Message -->
+              <div v-if="errorMessage" class="text-sm text-red-600 bg-[#FFFAFA] border border-red-200 rounded-md p-3 shadow-sm">
+                {{ errorMessage }}
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Log In -->
+              <button
+                type="button"
+                @click="onSubmit"
+                :disabled="isGoogleProcessing"
+                class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-2 sm:text-sm font-medium rounded-lg border border-transparent bg-[#4F46E5] text-white hover:bg-[#4338CA] disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
+              >
+                Log in
+              </button>
+
+              <!-- Create Account -->
+              <button
+                type="button"
+                @click="$router.push({ name: 'auth.signup' })"
+                :disabled="isGoogleProcessing"
+                class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-1.5 sm:text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
+              >
+                Create account
+              </button>
+            </div>
+          </div>
+          <!-- End Log In Details -->
+        </div>
       </div>
+    </main>
+    <!-- ========== END MAIN CONTENT ========== -->
 
-      <div>
-        <label for="password" class="block text-sm font-medium text-text-muted">Password</label>
-        <input
-          id="password"
-          v-model="loginPayload.password"
-          type="password"
-          placeholder="Enter your password"
-          required
-          class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
+    <!-- ========== FOOTER ========== -->
+    <footer class="mt-auto absolute bottom-0 inset-x-0 bg-white border-t border-gray-200">
+      <div class="w-full max-w-5xl py-6 mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- List -->
+        <ul class="flex flex-wrap justify-center items-center whitespace-nowrap gap-3">
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            © 2025 Saynest Lab
+          </li>
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            <router-link
+              :to="{ name: 'terms-and-conditions' }"
+              class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800"
+            >
+              Terms and Conditions
+            </router-link>
+          </li>
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            <router-link :to="{ name: 'privacy-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800">
+              Privacy Policy
+            </router-link>
+          </li>
+          <li
+            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
+          >
+            <router-link :to="{ name: 'refund-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800">
+              Refund Policy
+            </router-link>
+          </li>
+        </ul>
+        <!-- End List -->
       </div>
-
-      <div v-if="isProduction">
-        <VueHcaptcha :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
-      </div>
-
-      <div v-if="errorMessage" class="text-sm text-red-600 bg-red-100 border border-red-200 rounded-md p-3">
-        {{ errorMessage }}
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <button
-          type="button"
-          @click="$router.push({ name: 'auth.signup' })"
-          :disabled="isGoogleProcessing"
-          class="w-1/2 px-4 py-2 rounded-md border border-gray-300 text-text-muted bg-white hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Sign Up
-        </button>
-
-        <button
-          type="submit"
-          :disabled="isGoogleProcessing"
-          class="w-1/2 px-4 py-2 rounded-md bg-primary text-white hover:bg-primaryDark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Log In
-        </button>
-      </div>
-    </form>
+    </footer>
+    <!-- ========== END FOOTER ========== -->
   </div>
 </template>
 
@@ -84,6 +176,7 @@ export default defineComponent({
     })
     const errorMessage = ref<string | null>(null)
     const isGoogleProcessing = ref<boolean>(false)
+    const isPasswordVisible = ref<boolean>(false)
 
     onMounted(() => {
       const interval = setInterval(() => {
@@ -145,6 +238,10 @@ export default defineComponent({
       loginPayload.value.hcaptcha_token = token
     }
 
+    const togglePasswordVisibility = () => {
+      isPasswordVisible.value = !isPasswordVisible.value
+    }
+
     const onSubmit = async () => {
       if (isGoogleProcessing.value) return
 
@@ -173,12 +270,14 @@ export default defineComponent({
 
     return {
       googleDiv,
+      isPasswordVisible,
       isGoogleProcessing,
       loginCaptchaRef,
       loginPayload,
       errorMessage,
       onSubmit,
       loginCodeCaptcha,
+      togglePasswordVisibility,
       CAPTCHA_SITE_KEY,
       isProduction,
     }

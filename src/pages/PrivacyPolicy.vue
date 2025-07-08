@@ -1,7 +1,7 @@
 <template>
   <section class="min-h-screen bg-white text-gray-800 flex items-start justify-center px-4 pt-16">
     <div class="max-w-3xl w-full">
-      <h1 class="text-4xl font-bold mb-2">Privacy Policy for Saynest Lab</h1>
+      <h1 class="text-4xl font-bold mb-2">Privacy Policy</h1>
       <p class="text-sm text-gray-500 mb-8">Last updated: June 10, 2025</p>
 
       <h2 class="text-xl font-semibold mt-6 mb-2">1. Introduction</h2>
