@@ -11,9 +11,7 @@
             </div>
 
             <div class="space-y-3">
-              <div ref="googleDiv" class="w-full">
-                <div class="mx-auto w-full max-w-[300px]" />
-              </div>
+              <div ref="googleDiv" class="flex justify-center" />
 
               <!-- Divider -->
               <div class="flex items-center my-4">
