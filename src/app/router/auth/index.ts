@@ -16,7 +16,7 @@ const auth: RouteRecordRaw[] = [
       hide()
 
       if (isLogged) {
-        next({ name: "platform.conversation-dashboard" })
+        next({ name: "platform.dashboard" })
         return
       }
 

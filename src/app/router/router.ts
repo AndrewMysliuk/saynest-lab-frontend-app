@@ -41,7 +41,7 @@ export const routes: RouteRecordRaw[] = [
     component: MainLayout,
 
     redirect: {
-      name: "platform.conversation-dashboard",
+      name: "platform.dashboard",
     },
 
     beforeEnter: (_to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {

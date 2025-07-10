@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-grow min-h-0">
     <TheLoader v-if="getIsPageLoading" />
 
     <div class="pt-16" v-else>

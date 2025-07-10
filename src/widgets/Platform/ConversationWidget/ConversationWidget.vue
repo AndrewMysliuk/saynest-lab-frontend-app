@@ -55,12 +55,12 @@
 
         <TheLoader v-else-if="isLoading" message="Processing your recording..." />
 
-        <div class="conversation__info --left" v-if="!getIsLoading" @click="repeatLastAudio">
-          <i class="fa-solid fa-repeat" />
+        <div class="conversation__info --left" @click="openModalInfo">
+          <i class="fa-regular fa-circle-question" />
         </div>
 
-        <div class="conversation__info --left-second" @click="openModalInfo">
-          <i class="fa-regular fa-circle-question" />
+        <div class="conversation__info --left-second" v-if="!getIsLoading" @click="repeatLastAudio">
+          <i class="fa-solid fa-repeat" />
         </div>
 
         <div class="conversation__visualization --client" v-if="isHold">
@@ -196,7 +196,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       if (!Object.keys(getSelectedPrompt.value)?.length) {
         setTimeout(() => {
-          router.push({ name: "platform.conversation-dashboard" })
+          router.push({ name: "platform.dashboard" })
         }, 100)
       } else {
         conversationStore.resetAll()
@@ -237,7 +237,7 @@ export default defineComponent({
           errorAnalysisStore.resetAll()
 
           router.push({
-            name: "platform.conversation-history",
+            name: "platform.history",
             params: { id: getCurrentReview.value?._id },
           })
         } catch (error) {
@@ -529,7 +529,7 @@ export default defineComponent({
       errorAnalysisStore.resetAll()
       urlAudioPlayer.stop()
 
-      router.push({ name: "platform.conversation-dashboard" })
+      router.push({ name: "platform.dashboard" })
     }
 
     const handleWordClick = async (word: string) => {

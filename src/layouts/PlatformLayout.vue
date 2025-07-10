@@ -11,9 +11,13 @@
       @link-click="() => $router.push({ name: 'platform.tariff-plans' })"
     />
 
-    <div :class="[getIsExpiredVisible || getIsTrialVisible ? 'pt-[64px]' : '']">
+    <TheHeader v-if="!$route.path.includes('/platform/conversation')" />
+
+    <div class="platform-layout__body" :class="[getIsExpiredVisible || getIsTrialVisible ? 'pt-[64px]' : '']">
       <router-view />
     </div>
+
+    <TheFooter is-static v-if="!$route.path.includes('/platform/conversation')" />
 
     <v-modal :model-value="!getUserLegalTC || !getUserLegalPP || !getUserLegalRP">
       <TheLegal />
@@ -28,7 +32,7 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, onMounted } from "vue"
 import { orgStore, plansStore, subscriptionStore, userStore, vocabularyStore } from "@/app"
-import { TheNotification, TheLegal, TheWordInfo } from "@/shared/components"
+import { TheNotification, TheLegal, TheWordInfo, TheHeader, TheFooter } from "@/shared/components"
 import { useRouter } from "vue-router"
 import { subscriptionCheckMiddleware } from "@/shared/middleware"
 import { formatDateTime } from "@/shared/lib"
@@ -41,6 +45,8 @@ export default defineComponent({
     TheNotification,
     TheLegal,
     TheWordInfo,
+    TheHeader,
+    TheFooter,
   },
 
   setup() {
@@ -130,5 +136,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .platform-layout {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__body {
+    flex-grow: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

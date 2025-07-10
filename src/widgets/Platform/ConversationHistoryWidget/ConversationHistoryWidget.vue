@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex-grow min-h-0">
     <TheLoader v-if="!isReady || getIsPageLoading" />
 
     <div class="pt-16" v-else>
@@ -428,7 +428,7 @@ export default defineComponent({
     onBeforeMount(() => {
       if (!getCurrentReview.value) {
         router.push({
-          name: "platform.conversation-history",
+          name: "platform.history",
         })
       }
 
@@ -471,7 +471,7 @@ export default defineComponent({
       activeTab.value = getCurrentReview.value?.error_analysis?.length ? "ERRORS" : "DIALOGUE"
 
       router.push({
-        name: "platform.conversation-history",
+        name: "platform.history",
         params: { id: review._id },
       })
     }

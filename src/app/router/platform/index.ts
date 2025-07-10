@@ -26,7 +26,10 @@ const platform: RouteRecordRaw[] = [
       }
 
       // Tawk
-      const { show, setVisitor } = useTawk()
+      const { init, show, setVisitor } = useTawk()
+
+      init()
+
       if (currentUser) setVisitor(`${currentUser?.first_name} ${currentUser?.last_name}`, currentUser?.email)
       show()
 
@@ -52,7 +55,7 @@ const platform: RouteRecordRaw[] = [
     },
 
     redirect: {
-      name: "platform.conversation-dashboard",
+      name: "platform.dashboard",
     },
 
     children: [
@@ -62,13 +65,13 @@ const platform: RouteRecordRaw[] = [
         component: async () => await import("@/pages").then((module) => module.ConversationPagePlatform),
       },
       {
-        path: "/platform/conversation-dashboard",
-        name: "platform.conversation-dashboard",
+        path: "/platform/dashboard",
+        name: "platform.dashboard",
         component: async () => await import("@/pages").then((module) => module.ConversationDashboardPagePlatform),
       },
       {
-        path: "/platform/conversation-history/:id?",
-        name: "platform.conversation-history",
+        path: "/platform/history/:id?",
+        name: "platform.history",
         component: async () => await import("@/pages").then((module) => module.ConversationHistoryPagePlatform),
       },
       {

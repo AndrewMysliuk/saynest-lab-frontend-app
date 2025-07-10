@@ -154,45 +154,8 @@
       </div>
     </main>
     <!-- ========== END MAIN CONTENT ========== -->
-    <!-- ========== FOOTER ========== -->
-    <footer class="mt-auto absolute bottom-0 inset-x-0 bg-white border-t border-gray-200">
-      <div class="w-full max-w-5xl py-6 mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- List -->
-        <ul class="flex flex-wrap justify-center items-center whitespace-nowrap gap-3">
-          <li
-            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
-          >
-            © 2025 Saynest Lab
-          </li>
-          <li
-            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
-          >
-            <router-link
-              :to="{ name: 'terms-and-conditions' }"
-              class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800"
-            >
-              Terms and Conditions
-            </router-link>
-          </li>
-          <li
-            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
-          >
-            <router-link :to="{ name: 'privacy-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800">
-              Privacy Policy
-            </router-link>
-          </li>
-          <li
-            class="inline-flex items-center relative text-xs text-gray-500 pe-3.5 last:pe-0 last:after:hidden after:absolute after:top-1/2 after:end-0 after:inline-block after:size-[3px] after:bg-gray-400 after:rounded-full after:-translate-y-1/2"
-          >
-            <router-link :to="{ name: 'refund-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800 focus:outline-hidden focus:underline focus:text-gray-800">
-              Refund Policy
-            </router-link>
-          </li>
-        </ul>
-        <!-- End List -->
-      </div>
-    </footer>
-    <!-- ========== END FOOTER ========== -->
+
+    <TheFooter />
   </div>
 </template>
 
@@ -202,6 +165,7 @@ import { authStore } from "@/app"
 import { defineComponent, onMounted, ref } from "vue"
 import { isProduction } from "@/shared/utils"
 import { IRegisterRequest } from "@/shared/types"
+import { TheFooter } from "@/shared/components"
 import CountryList from "@/shared/json_data/countries.json"
 
 const CAPTCHA_SITE_KEY = import.meta.env.VITE_CAPTCHA_SITE_KEY as string
@@ -209,6 +173,7 @@ const CAPTCHA_SITE_KEY = import.meta.env.VITE_CAPTCHA_SITE_KEY as string
 export default defineComponent({
   components: {
     VueHcaptcha,
+    TheFooter,
   },
 
   setup() {

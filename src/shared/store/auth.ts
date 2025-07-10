@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("authStore", () => {
 
       isLogged.value = true
 
-      router.push({ name: "platform.conversation-dashboard" })
+      router.push({ name: "platform.dashboard" })
     } catch (error: unknown) {
       throw error
     }
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore("authStore", () => {
 
       isLogged.value = true
 
-      router.push({ name: "platform.conversation-dashboard" })
+      router.push({ name: "platform.dashboard" })
     } catch (error: unknown) {
       throw error
     }
@@ -66,7 +66,7 @@ export const useAuthStore = defineStore("authStore", () => {
 
       isLogged.value = true
 
-      router.push({ name: "platform.conversation-dashboard" })
+      router.push({ name: "platform.dashboard" })
     } catch (error: unknown) {
       throw error
     }

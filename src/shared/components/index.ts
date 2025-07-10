@@ -6,5 +6,6 @@ import TheConfirmation from "./TheConfirmation"
 import TheNotification from "./TheNotification"
 import TheInteractiveText from "./TheInteractiveText"
 import TheWordInfo from "./TheWordInfo"
+import TheFooter from "./TheFooter"
 
-export { TheHeader, TheLoader, TheTask, TheLegal, TheConfirmation, TheNotification, TheInteractiveText, TheWordInfo }
+export { TheHeader, TheLoader, TheTask, TheLegal, TheConfirmation, TheNotification, TheInteractiveText, TheWordInfo, TheFooter }

@@ -17,6 +17,7 @@ declare global {
     hj: typeof hj
     Paddle: typeof Paddle
     Tawk_API: typeof Tawk_API
+    Tawk_LoadStart: typeof Tawk_LoadStart
   }
 }
 
