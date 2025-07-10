@@ -79,7 +79,7 @@
                       v-else-if="isPastDue"
                       type="button"
                       @click="updatePaymentDetailsLink"
-                      class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-orange-500 text-white hover:bg-orange-600 hover:shadow-none focus:outline-none focus:bg-orange-600 focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
+                      class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                     >
                       Update Payment Method
                     </button>

@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" @enter="startEnterAnimation" @afterEnter="endEnterAnimation" @leave="startLeaveAnimation" @afterLeave="endLeaveAnimation">
-    <div v-if="modelValue" class="v-modal" :class="{ '--is-curtain': isCurtain, '--is-info': isInfo, '--is-standart': !isCurtain && !isInfo }">
+    <div v-if="modelValue" class="v-modal" :class="{ '--is-open': modelValue, '--is-curtain': isCurtain, '--is-info': isInfo, '--is-standart': !isCurtain && !isInfo }">
       <div class="v-modal__content">
         <slot />
       </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, nextTick } from "vue"
 
 export default defineComponent({
   name: "VModal",
@@ -31,6 +31,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+
+    isSlideOutBottom: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup(props, { emit }) {
@@ -38,42 +43,51 @@ export default defineComponent({
       emit("update:modelValue", false)
     }
 
-    const startEnterAnimation = (el: Element, done: () => void) => {
-      document.body.style.overflow = "hidden"
+    const toggleAnimationClass = (el: Element, action: "add" | "remove", animationType: string) => {
+      el.classList[action](animationType)
+    }
 
-      if (props.isCurtain || props.isInfo) {
-        el.classList.add("--slide-from-right")
-        setTimeout(done, 300)
-
-        return
+    const getAnimationClass = (action: "enter" | "leave"): string => {
+      if (props.isSlideOutBottom) {
+        return action === "enter" ? "--slide-from-bottom" : "--slide-out-bottom"
       }
 
-      done()
+      return props.isCurtain || props.isInfo ? (action === "enter" ? "--slide-from-right" : "--slide-out-right") : action === "enter" ? "--fade-in-enter" : "--fade-out"
+    }
+
+    const updateBodyOverflow = async () => {
+      await nextTick()
+      const openModals = document.querySelectorAll(".v-modal.--is-open").length
+
+      if (openModals > 0) {
+        document.body.style.overflow = "hidden"
+      } else {
+        document.body.style.overflow = ""
+      }
+    }
+
+    const startEnterAnimation = (el: Element, done: () => void) => {
+      updateBodyOverflow()
+      toggleAnimationClass(el, "add", getAnimationClass("enter"))
+
+      setTimeout(done, 300)
+      return
     }
 
     const endEnterAnimation = (el: Element) => {
-      if (props.isCurtain || props.isInfo) {
-        el.classList.remove("--slide-from-right")
-      }
+      toggleAnimationClass(el, "remove", getAnimationClass("enter"))
     }
 
     const startLeaveAnimation = (el: Element, done: () => void) => {
-      if (props.isCurtain || props.isInfo) {
-        el.classList.add("--slide-out-right")
-        setTimeout(done, 300)
+      toggleAnimationClass(el, "add", getAnimationClass("leave"))
 
-        return
-      }
-
-      done()
+      setTimeout(done, 300)
+      return
     }
 
     const endLeaveAnimation = (el: Element) => {
-      if (props.isCurtain || props.isInfo) {
-        el.classList.remove("--slide-out-right")
-      }
-
-      document.body.style.overflow = ""
+      toggleAnimationClass(el, "remove", getAnimationClass("leave"))
+      updateBodyOverflow()
     }
 
     return {

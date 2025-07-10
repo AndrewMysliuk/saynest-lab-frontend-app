@@ -1,39 +1,52 @@
 <template>
-  <div class="w-full h-full overflow-y-auto p-6 bg-white rounded-lg shadow-md text-gray-800">
-    <form class="max-w-md space-y-4" @submit.prevent="onSubmit">
+  <div class="w-full h-full overflow-y-auto p-6 bg-gray-50 rounded-lg shadow-md">
+    <form class="w-full max-w-none lg:max-w-md space-y-4" @submit.prevent="onSubmit">
       <div>
-        <label class="block text-sm font-medium text-text-muted">Email (readonly)</label>
-        <input type="email" :value="getCurrentUser?.email" disabled class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-text-base" />
+        <label class="block mb-2 text-sm font-medium text-gray-800">Email (readonly)</label>
+        <input
+          :value="getCurrentUser?.email"
+          type="email"
+          disabled
+          class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+        />
         <p v-if="errorMessages.email" class="mt-1 text-sm text-red-600">{{ errorMessages.email }}</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-text-muted">First Name</label>
-        <input v-model="form.first_name" type="text" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg text-text-base" />
+        <label class="block mb-2 text-sm font-medium text-gray-800">First Name</label>
+        <input
+          v-model="form.first_name"
+          type="text"
+          class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+        />
         <p v-if="errorMessages.first_name" class="mt-1 text-sm text-red-600">{{ errorMessages.first_name }}</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-text-muted">Last Name</label>
-        <input v-model="form.last_name" type="text" class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg text-text-base" />
+        <label class="block mb-2 text-sm font-medium text-gray-800">Last Name</label>
+        <input
+          v-model="form.last_name"
+          type="text"
+          class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
+        />
         <p v-if="errorMessages.last_name" class="mt-1 text-sm text-red-600">{{ errorMessages.last_name }}</p>
       </div>
 
       <div>
-        <label for="country" class="block text-sm font-medium text-text-muted">Country</label>
+        <label for="country" class="block mb-2 text-sm font-medium text-gray-800">Country</label>
         <div class="relative">
           <select
             id="country"
             v-model="form.country"
             required
-            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base appearance-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
+            class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5] appearance-none pr-10"
           >
             <option value="" disabled>Select your country</option>
             <option v-for="country in countryOptions" :key="country.alpha_2" :value="country.alpha_2">
               {{ country.name }}
             </option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
             <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -43,20 +56,20 @@
       </div>
 
       <div>
-        <label for="explanation_language" class="block text-sm font-medium text-text-muted">Explanation Language</label>
+        <label for="explanation_language" class="block mb-2 text-sm font-medium text-gray-800">Explanation Language</label>
         <div class="relative">
           <select
             id="explanation_language"
             v-model="form.explanation_language"
             required
-            class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-text-base appearance-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent pr-10"
+            class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm appearance-none focus:outline-none focus:border-[#4F46E5] pr-10"
           >
             <option value="" disabled>Select a language</option>
             <option v-for="lang in languageOptions" :key="lang.language_iso" :value="lang.language_iso">
               {{ lang.language }}
             </option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
             <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -69,19 +82,33 @@
         {{ errorMessages._global }}
       </div>
 
-      <div class="flex items-center gap-4 mt-6">
-        <button type="button" @click="$emit('close')" class="px-4 py-2 bg-gray-100 text-text-base rounded-md hover:bg-gray-200 transition">← Back</button>
+      <div class="flex gap-2 mt-6 lg:gap-4">
+        <!-- Back Button -->
+        <button
+          type="button"
+          @click="$emit('close')"
+          class="basis-[calc(50%-4px)] lg:basis-auto py-2 px-10 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
+        >
+          ← Back
+        </button>
 
-        <button type="submit" :disabled="!isChanged" class="px-4 py-2 bg-primary text-white rounded-md transition hover:bg-primaryDark disabled:opacity-50 disabled:cursor-not-allowed">Save</button>
+        <!-- Save Button -->
+        <button
+          type="submit"
+          :disabled="!isChanged"
+          class="basis-[calc(50%-4px)] lg:basis-auto py-2 px-10 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-[#4F46E5] text-white hover:bg-[#4338CA] disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Save
+        </button>
       </div>
     </form>
 
-    <div v-if="getCurrentSubscription && getCurrentPlan" class="mt-8 p-6 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
-      <h2 class="text-xl font-bold mb-4 text-gray-800">Your Subscription</h2>
+    <div v-if="getCurrentSubscription && getCurrentPlan" class="mt-8 relative p-4 md:p-6 flex flex-col w-full bg-white border border-gray-200 rounded-xl shadow-xs">
+      <h4 class="font-semibold text-lg text-gray-800 mb-4">Your Subscription</h4>
 
       <div class="mb-2 text-gray-700">
         <span class="font-medium">Plan:</span>
-        {{ getCurrentPlan.name }} — {{ getCurrentPlan.amount }} {{ getCurrentPlan.currency }} / {{ getCurrentPlan.billing_period.toLowerCase() }}
+        {{ getCurrentPlan.name }} — €{{ getCurrentPlan.amount }} {{ getCurrentPlan.currency }} / {{ getCurrentPlan.billing_period.toLowerCase() }} for one person
       </div>
 
       <div class="mb-2 text-gray-700">
@@ -101,31 +128,51 @@
 
       <div v-if="!isPendingCancel && !isCancelled" class="mb-2 text-gray-700"><span class="font-medium">Next Payment:</span> {{ formatDate(getCurrentSubscription.next_payment_date ?? "") }}</div>
 
-      <div v-if="isPendingCancel" class="p-4 border border-yellow-300 bg-yellow-100 rounded-lg text-yellow-800 mt-4">
-        <p class="mb-2">
+      <div v-if="isPendingCancel" class="p-4 border border-yellow-200 bg-yellow-50 rounded-lg mt-4">
+        <p class="mb-4 font-medium text-yellow-800">
           Subscription will be cancelled on
-          <strong>{{ formatDate(getCurrentSubscription.scheduled_cancel_at ?? "") }}</strong
-          >.
+          <strong>{{ formatDate(getCurrentSubscription.scheduled_cancel_at ?? "") }} </strong>.
         </p>
-        <button @click="recancelSubscription" type="button" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Resume Subscription</button>
+        <button
+          @click="recancelSubscription"
+          type="button"
+          class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Resume Subscription
+        </button>
       </div>
 
-      <div v-if="isPastDue" class="p-4 border border-red-300 bg-red-100 rounded-lg text-red-800 mt-4">
-        <p class="mb-2 font-medium">Payment Failed</p>
-        <p>Please update your payment method to keep your subscription active.</p>
-        <button @click="updatePaymentDetailsLink" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Update Payment Method</button>
+      <div v-if="isPastDue" class="p-4 border border-yellow-200 bg-yellow-50 rounded-lg mt-4">
+        <p class="mb-2 font-medium text-yellow-800">Payment Failed</p>
+        <p class="mb-4 text-yellow-800">Please update your payment method to keep your subscription active</p>
+        <button
+          @click="updatePaymentDetailsLink"
+          class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
+        >
+          Update Payment Method
+        </button>
       </div>
 
-      <div v-if="isCancelled" class="p-4 border border-gray-300 bg-gray-100 rounded-lg text-gray-700 mt-4">
-        <p class="mb-2 font-medium">Your subscription has been cancelled.</p>
-        <p>You can always pick a new plan to continue using premium features.</p>
-        <router-link :to="{ name: 'platform.tariff-plans' }">
-          <button class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">Choose a New Plan</button>
+      <div v-if="isCancelled" class="p-4 border border-yellow-200 bg-yellow-50 rounded-lg mt-4">
+        <p class="mb-2 font-medium text-yellow-800">Payment Failed</p>
+        <p class="mb-4 text-yellow-800">You can always pick a new plan to continue using premium features</p>
+
+        <router-link :to="{ name: 'platform.tariff-plans' }" @click="$emit('close')">
+          <button
+            class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
+          >
+            Choose a New Plan
+          </button>
         </router-link>
       </div>
 
       <div class="flex flex-col gap-4 mt-4">
-        <button v-if="isTrialing && !isPendingCancel" type="button" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition" @click="isActiveFromTrialOpen = true">
+        <button
+          v-if="isTrialing && !isPendingCancel"
+          type="button"
+          class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
+          @click="isActiveFromTrialOpen = true"
+        >
           Unlock Full Access
         </button>
 
@@ -133,15 +180,21 @@
           v-if="(isTrialing || isActive) && !isPendingCancel"
           @click="isUnsubscribedConfirmOpened = true"
           type="button"
-          class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+          class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
         >
           Cancel Subscription
         </button>
       </div>
     </div>
 
-    <div class="flex flex-col gap-2 mt-8 border-t pt-4">
-      <button type="button" @click="isDeleteHistoryModalOpen = true" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">Delete All Conversation History</button>
+    <div class="flex flex-col gap-2 mt-12">
+      <button
+        type="button"
+        @click="isDeleteHistoryModalOpen = true"
+        class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
+      >
+        Delete All Conversation History
+      </button>
     </div>
 
     <v-modal v-model="isDeleteHistoryModalOpen">

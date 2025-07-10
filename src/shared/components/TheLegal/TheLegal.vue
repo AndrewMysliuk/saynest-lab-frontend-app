@@ -1,33 +1,6 @@
 <template>
   <div class="mt-0 sm:w-full sm:mx-auto h-[calc(100%-56px)] min-h-[calc(100%-56px)] flex items-center justify-center">
-    <div class="relative w-[480px] max-h-full overflow-hidden flex flex-col bg-white rounded-xl pointer-events-auto shadow-xl">
-      <!-- Close Button -->
-      <!-- <div class="absolute top-3 end-3 z-10">
-        <button
-          type="button"
-          class="size-8 shrink-0 flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
-          aria-label="Close"
-        >
-          <span class="sr-only">Close</span>
-          <svg
-            class="shrink-0 size-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
-          </svg>
-        </button>
-      </div> -->
-      <!-- End Close Button -->
-
+    <div class="relative sm:w-[480px] max-h-full overflow-hidden flex flex-col bg-white rounded-xl pointer-events-auto shadow-xl">
       <!-- Body -->
       <div class="p-4">
         <h3 class="text-lg font-medium text-gray-800">Accept Policies</h3>
@@ -73,18 +46,6 @@
 
         <!-- Button Group -->
         <div class="mt-5 flex flex-wrap justify-end gap-2">
-          <!-- <button
-            type="button"
-            class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
-          >
-            Yes, I’m sure
-          </button> -->
           <button
             type="button"
             @click="onDone"
