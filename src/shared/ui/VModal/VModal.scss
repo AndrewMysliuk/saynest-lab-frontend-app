@@ -78,6 +78,11 @@
     bottom: 0;
     width: rem(480px);
 
+    @include for-lg {
+      width: auto;
+      left: 0;
+    }
+
     .v-modal__background {
       top: 0;
       left: auto;
@@ -85,6 +90,11 @@
       bottom: 0;
       width: rem(480px);
       background: none;
+
+      @include for-lg {
+        width: auto;
+        left: 0;
+      }
     }
 
     .v-modal__content {
@@ -92,6 +102,11 @@
       right: 0;
       bottom: 0;
       width: rem(480px);
+
+      @include for-lg {
+        width: auto;
+        left: 0;
+      }
     }
   }
 

@@ -23,19 +23,19 @@
       <TheLegal />
     </v-modal>
 
-    <v-modal :model-value="getIsWordModalOpen" @update:model-value="closeWordInfoModal" is-info>
+    <v-modal :model-value="getIsWordModalOpen" @update:model-value="closeWordInfoModal" is-info :is-slide-out-bottom="!isDesktop">
       <TheWordInfo />
     </v-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted } from "vue"
+import { computed, ref, defineComponent, onBeforeMount, onMounted } from "vue"
 import { orgStore, plansStore, subscriptionStore, userStore, vocabularyStore } from "@/app"
 import { TheNotification, TheLegal, TheWordInfo, TheHeader, TheFooter } from "@/shared/components"
 import { useRouter } from "vue-router"
 import { subscriptionCheckMiddleware } from "@/shared/middleware"
-import { formatDateTime } from "@/shared/lib"
+import { formatDateTime, isLg } from "@/shared/lib"
 
 const VITE_PADDLE_TOKEN: string = import.meta.env.VITE_PADDLE_TOKEN
 const VITE_DEV: boolean = import.meta.env.DEV
@@ -51,6 +51,7 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
+    const isDesktop = ref<boolean>(isLg())
 
     const getUserLegalTC = computed(() => userStore.getUserLegal?.is_accept_terms_and_conditions)
     const getUserLegalPP = computed(() => userStore.getUserLegal?.is_accept_privacy_policy)
@@ -120,6 +121,7 @@ export default defineComponent({
     }
 
     return {
+      isDesktop,
       getUserLegalTC,
       getUserLegalPP,
       getUserLegalRP,

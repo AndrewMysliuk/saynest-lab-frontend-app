@@ -2,7 +2,7 @@
   <section class="min-h-screen bg-white text-gray-800 flex items-start justify-center px-4 pt-16">
     <div class="max-w-3xl w-full">
       <h1 class="text-4xl font-bold mb-2">Terms & Conditions</h1>
-      <p class="text-sm text-gray-500 mb-8">Last updated: June 16, 2025</p>
+      <p class="text-sm text-gray-500 mb-8">Last updated: July 12, 2025</p>
 
       <h2 class="text-xl font-semibold mt-6 mb-2">1. Introduction</h2>
       <p class="mb-4">
@@ -24,7 +24,7 @@
       <h2 class="text-xl font-semibold mt-6 mb-2">4. Payments and Free Trial</h2>
       <p class="mb-4">
         Our Service is provided on a subscription basis:<br />
-        • €14.99/month subscription fee (MVP phase)<br />
+        • €19.99/month subscription fee<br />
         • 3-day free trial, which includes: 20 sessions, 20 reviews, and 20 tasks<br />
         After the trial, the subscription automatically starts unless canceled before the trial ends.<br />
         We reserve the right to update pricing in the future as the product evolves.

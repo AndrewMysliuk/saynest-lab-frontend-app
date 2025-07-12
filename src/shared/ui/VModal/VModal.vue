@@ -11,7 +11,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick } from "vue"
+import { defineComponent, nextTick, watch } from "vue"
+import { useTawk } from "@/shared/config"
 
 export default defineComponent({
   name: "VModal",
@@ -39,6 +40,8 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
+    const { show, hide } = useTawk()
+
     const closeModal = () => {
       emit("update:modelValue", false)
     }
@@ -89,6 +92,19 @@ export default defineComponent({
       toggleAnimationClass(el, "remove", getAnimationClass("leave"))
       updateBodyOverflow()
     }
+
+    watch(
+      () => props.modelValue,
+      (newValue) => {
+        if (newValue && (props.isCurtain || props.isInfo)) {
+          hide()
+        }
+
+        if (!newValue && (props.isCurtain || props.isInfo)) {
+          show()
+        }
+      }
+    )
 
     return {
       closeModal,

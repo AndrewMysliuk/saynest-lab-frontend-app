@@ -78,6 +78,8 @@ export interface IUserWordUpdateUserWordTierRequest {
 export interface IUserWordFilters {
   target_language?: string
   native_language?: string
+  word?: string
+  tier?: IUserWordTierEnum[]
   limit?: number
   offset?: number
 }
