@@ -83,6 +83,7 @@ axiosInstance.interceptors.response.use(
 
         try {
           await authStore.fetchRefreshAccessToken()
+          refreshRetryCount = 0
 
           const token = authStore.getAccessToken
           axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`

@@ -1,12 +1,12 @@
 <template>
   <div class="p-5 flex flex-col bg-white border border-stone-200 shadow-sm rounded-xl">
-    <h2 class="font-medium text-stone-800 text-base md:text-lg">CEFR Level Over Time</h2>
+    <h2 class="font-medium text-stone-800 text-base md:text-lg">IELTS Mark Over Time</h2>
 
     <div class="min-h-[215px] md:min-h-[300px] mt-5 relative" v-if="chartData">
       <Line :data="chartData" :options="chartOptions" />
     </div>
 
-    <div v-else class="text-gray-400 text-sm mt-4">No CEFR progress data available yet.</div>
+    <div v-else class="text-gray-400 text-sm mt-4">No IELTS progress data available yet.</div>
   </div>
 </template>
 
@@ -19,15 +19,6 @@ import { userProgressStore } from "@/app"
 
 ChartJS.register(Title, Tooltip, Legend, Filler, LineElement, PointElement, CategoryScale, LinearScale)
 
-const LEVEL_MAP: Record<string, number> = {
-  A1: 1,
-  A2: 2,
-  B1: 3,
-  B2: 4,
-  C1: 5,
-  C2: 6,
-}
-
 export default defineComponent({
   components: {
     Line,
@@ -37,11 +28,11 @@ export default defineComponent({
     const userProgress = computed(() => userProgressStore.getCurrentUserProgress)
 
     const chartData = computed(() => {
-      const history = userProgress.value?.cefr_history
+      const history = userProgress.value?.ielts_marks_history
       if (!history || history.length === 0) return null
 
       const labels = history.map((h) => new Date(h.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }))
-      const data = history.map((h) => LEVEL_MAP[h.level.toUpperCase().trim()] ?? 0)
+      const data = history.map((h) => h.mark)
 
       return {
         labels,
@@ -49,16 +40,16 @@ export default defineComponent({
           {
             label: "CEFR Level",
             data,
-            borderColor: "#4F46E5",
+            borderColor: "#f472b6",
             backgroundColor: (ctx: ScriptableContext<"line">) => {
               const chart = ctx.chart
               const { ctx: canvasCtx, chartArea } = chart
               if (!chartArea) return
 
               const gradient = canvasCtx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
-              gradient.addColorStop(0, "rgba(79, 70, 229, 0.4)")
-              gradient.addColorStop(0.5, "rgba(79, 70, 229, 0.2)")
-              gradient.addColorStop(1, "rgba(79, 70, 229, 0)")
+              gradient.addColorStop(0, "rgba(244, 114, 182, 0.35)")
+              gradient.addColorStop(0.5, "rgba(244, 114, 182, 0.15)")
+              gradient.addColorStop(1, "rgba(244, 114, 182, 0)")
               return gradient
             },
             fill: true,
@@ -86,26 +77,20 @@ export default defineComponent({
           bodyFont: { weight: 500 },
           callbacks: {
             label: (context: any) => {
-              const level = context.parsed.y
-              const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"]
-              return `Level: ${LEVELS[level - 1]}`
+              const mark = context.parsed.y
+              return `Mark: ${mark}`
             },
           },
         },
       },
       scales: {
         y: {
-          min: 1,
-          max: 6,
+          min: 0,
+          max: 9,
           ticks: {
+            stepSize: 0.5,
             padding: 8,
-            stepSize: 1,
-            callback: (tickValue: number | string) => {
-              const LEVELS = ["", "A1", "A2", "B1", "B2", "C1", "C2"]
-              const val = Number(tickValue)
-
-              return LEVELS[val] || ""
-            },
+            callback: (tickValue: number | string) => `${tickValue}`,
             color: "#6b7280",
             font: {
               size: 12,

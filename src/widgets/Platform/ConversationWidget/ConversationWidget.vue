@@ -310,6 +310,7 @@ export default defineComponent({
 
     const handleKeyDown = async (e: KeyboardEvent) => {
       if (e.code === "Space" && !isHold.value && !isLoading.value) {
+        recordingDuration.value = 0
         e.preventDefault()
         isHold.value = true
         isCancelled.value = false
@@ -336,6 +337,7 @@ export default defineComponent({
 
     const startRecordingFromButton = async () => {
       if (!isHold.value && !isLoading.value) {
+        recordingDuration.value = 0
         isHold.value = true
         isCancelled.value = false
         // audioPlayer.interruptAndClear()
@@ -457,8 +459,6 @@ export default defineComponent({
 
           if (cleanupCanvas) await cleanupCanvas()
         }
-
-        recordingDuration.value = 0
 
         recordingTimer = window.setInterval(async () => {
           recordingDuration.value = Math.floor((Date.now() - recordingStartTime) / 1000)
