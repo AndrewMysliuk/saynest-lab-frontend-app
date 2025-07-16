@@ -9,7 +9,7 @@
       <div class="max-w-6xl px-4 sm:px-6 lg:px-8 mx-auto">
         <!-- Heading -->
         <div class="mb-8 max-w-2xl mx-auto text-center">
-          <h1 class="font-bold text-gray-800 text-4xl md:text-5xl">Overview of available plans</h1>
+          <h1 class="font-bold text-gray-800 text-4xl md:text-5xl">Overview our plans</h1>
 
           <p class="mt-5 text-sm md:text-lg text-gray-800">Here you can view all available subscription plans and their features</p>
         </div>

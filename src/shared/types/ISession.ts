@@ -11,11 +11,18 @@ export enum SessionStatusEnum {
   DELETED = "DELETED",
 }
 
+export enum SessionIeltsPartEnum {
+  PART_1 = 1,
+  PART_2 = 2,
+  PART_3 = 3,
+}
+
 export interface ISessionEntity {
   _id: string
   prompt_id: string
   user_id: string | null
   organization_id: string | null
+  active_ielts_part?: SessionIeltsPartEnum
   type: SessionTypeEnum
   status: SessionStatusEnum
   system_prompt: string

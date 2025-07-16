@@ -1,12 +1,13 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { IModuleFilters, IModuleParams, IModuleScenarioEntity, IPromptFilters, IPromptParams, IPromptScenarioEntity } from "@/shared/types"
+import { IIeltsPromptFilters, IModuleFilters, IModuleParams, IModuleScenarioEntity, IPromptFilters, IPromptParams, IPromptScenarioEntity } from "@/shared/types"
 import { getScenarioByIdHandler, listScenariosHandler, getModuleScenariosHandler, listModulesHandler } from "../api"
 
 export const usePromptStore = defineStore("promptStore", () => {
   const moduleList = ref<IModuleScenarioEntity[]>([])
   const promptList = ref<IPromptScenarioEntity[]>([])
   const modulePromptList = ref<IPromptScenarioEntity[]>([])
+  const ieltsScenarioList = ref<IPromptScenarioEntity[]>([])
   const currentModule = ref<IModuleScenarioEntity>({} as IModuleScenarioEntity)
   const currentPrompt = ref<IPromptScenarioEntity>({} as IPromptScenarioEntity)
   const moduleParams = ref<IModuleParams>({
@@ -21,14 +22,22 @@ export const usePromptStore = defineStore("promptStore", () => {
     hasMore: true,
     isLoading: false,
   })
+  const ieltsScenarioParams = ref<IPromptParams>({
+    offset: 0,
+    limit: 20,
+    hasMore: true,
+    isLoading: false,
+  })
 
   const getModuleList = computed(() => moduleList.value)
   const getPromptList = computed(() => promptList.value)
   const getModulePromptList = computed(() => modulePromptList.value)
+  const getIeltsScenarioList = computed(() => ieltsScenarioList.value)
   const getCurrentPrompt = computed(() => currentPrompt.value)
   const getCurrentModule = computed(() => currentModule.value)
   const getModuleParams = computed(() => moduleParams.value)
   const getPromptParams = computed(() => promptParams.value)
+  const getIeltsScenarioParams = computed(() => ieltsScenarioParams.value)
 
   const setPrompt = (prompt: IPromptScenarioEntity) => {
     currentPrompt.value = prompt
@@ -49,6 +58,50 @@ export const usePromptStore = defineStore("promptStore", () => {
       limit: 20,
       hasMore: true,
       isLoading: false,
+    }
+  }
+
+  const resetIeltsScenarioParams = () => {
+    ieltsScenarioParams.value = {
+      offset: 0,
+      limit: 20,
+      hasMore: true,
+      isLoading: false,
+    }
+  }
+
+  const fetchIeltsScenariosList = async (isLoadMore = false, query?: IIeltsPromptFilters) => {
+    try {
+      if (ieltsScenarioParams.value.isLoading) return
+
+      ieltsScenarioParams.value.isLoading = true
+
+      if (!isLoadMore) {
+        ieltsScenarioList.value = []
+        resetPromptParams()
+      }
+
+      const limit = query?.limit ?? ieltsScenarioParams.value.limit
+      const offset = query?.offset ?? ieltsScenarioParams.value.offset
+
+      const response = await listScenariosHandler({
+        ...query,
+        limit,
+        offset,
+      })
+
+      if (isLoadMore) {
+        ieltsScenarioList.value = [...ieltsScenarioList.value, ...response]
+      } else {
+        ieltsScenarioList.value = response
+      }
+
+      ieltsScenarioParams.value.offset = offset + limit
+      ieltsScenarioParams.value.hasMore = response.length === limit
+    } catch (error) {
+      console.error("fetchIeltsScenariosList error:", error)
+    } finally {
+      ieltsScenarioParams.value.isLoading = false
     }
   }
 
@@ -150,13 +203,17 @@ export const usePromptStore = defineStore("promptStore", () => {
     getModuleList,
     getCurrentModule,
     getModulePromptList,
+    getIeltsScenarioList,
     getModuleParams,
     getPromptParams,
+    getIeltsScenarioParams,
     setPrompt,
     resetModuleParams,
     resetPromptParams,
+    resetIeltsScenarioParams,
     fetchScenariosList,
     fetchModuleScenarios,
+    fetchIeltsScenariosList,
     fetchPromptById,
     fetchModuleList,
   }

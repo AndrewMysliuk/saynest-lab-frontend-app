@@ -1,4 +1,4 @@
-import { IErrorAnalysisEntity, IWord } from "../types"
+import { IErrorAnalysisEntity, IWord, SessionIeltsPartEnum } from "../types"
 
 export function formatCorrections(data: IErrorAnalysisEntity): string {
   if (!data.has_errors || !data.issues.length) return ""
@@ -99,4 +99,11 @@ export const highlightWords = (text: string, words: IWord[], type: "error" | "co
     const cls = type === "error" ? "text-red-600 font-semibold" : "text-green-700 font-semibold"
     return `<span class="${cls}">${match}</span>`
   })
+}
+
+export function getPartProgress(progress: Record<string, number>, promptName: string, part: SessionIeltsPartEnum | "FULL_SCENARIO"): number {
+  if (part === "FULL_SCENARIO") return progress[promptName] || 0
+
+  const key = `${promptName}#${part}`
+  return progress[key] || 0
 }

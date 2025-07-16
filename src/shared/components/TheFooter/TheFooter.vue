@@ -6,13 +6,13 @@
         <!-- Centered Links -->
         <ul class="flex flex-wrap justify-center items-center whitespace-nowrap gap-3">
           <li class="text-xs text-gray-500">© 2025 Saynest Lab</li>
-          <li>
+          <li class="text-xs">
             <router-link :to="{ name: 'terms-and-conditions' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800"> Terms and Conditions </router-link>
           </li>
-          <li>
+          <li class="text-xs">
             <router-link :to="{ name: 'privacy-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800"> Privacy Policy </router-link>
           </li>
-          <li>
+          <li class="text-xs">
             <router-link :to="{ name: 'refund-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800"> Refund Policy </router-link>
           </li>
         </ul>

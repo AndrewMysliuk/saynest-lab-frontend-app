@@ -1,3 +1,4 @@
+import { SessionIeltsPartEnum } from "./ISession"
 import { VocabularyFrequencyLevelEnum } from "./IVocabulary"
 
 export interface IPromptScenarioEntity {
@@ -94,6 +95,13 @@ export interface IPromptFilters {
   user_id?: string
   organization_id?: string
   target_language?: string
+  limit?: number
+  offset?: number
+}
+
+export interface IIeltsPromptFilters {
+  search?: string
+  ielts_part?: SessionIeltsPartEnum
   limit?: number
   offset?: number
 }

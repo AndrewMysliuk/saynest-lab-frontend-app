@@ -112,3 +112,10 @@ export interface ICommunicationReviewParams {
   hasMore: boolean
   isLoading: boolean
 }
+
+export enum CommunicationReviewHistoryEnum {
+  GENERAL = "GENERAL",
+  ERRORS = "ERRORS",
+  DIALOGUE = "DIALOGUE",
+  TASKS = "TASKS",
+}

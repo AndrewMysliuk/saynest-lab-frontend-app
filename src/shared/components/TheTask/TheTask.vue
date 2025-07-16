@@ -1,9 +1,9 @@
 <template>
-  <div class="w-full md:w-[720px] h-[80vh] overflow-y-auto p-4 bg-gray-50 rounded-xl pointer-events-auto shadow-xl">
+  <div :class="['w-full overflow-y-auto  rounded-xl pointer-events-auto ', isModal ? 'md:w-[720px] h-[80vh] p-4 bg-gray-50 shadow-xl' : 'max-w-full']">
     <div class="flex flex-col gap-4 relative">
-      <h2 class="text-xl font-semibold text-gray-800">Task Review</h2>
+      <h2 class="text-xl font-semibold text-gray-800" v-if="isModal">Task Review</h2>
       <!-- Close Button -->
-      <div class="absolute top-0 end-0 z-10">
+      <div class="absolute top-0 end-0 z-10" v-if="isModal">
         <button
           @click="$emit('close')"
           type="button"
@@ -29,7 +29,7 @@
       </div>
       <!-- End Close Button -->
 
-      <div v-for="task in getTasksList" :key="task._id" class="space-y-6 bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
+      <div v-for="task in getTasksList" :key="task._id" :class="['space-y-6 border border-gray-200 p-6 rounded-xl shadow-sm', isModal ? 'bg-white' : 'bg-gray-50']">
         <h3 class="text-lg font-semibold text-gray-800">{{ task.topic_title }}</h3>
 
         <!-- Multiple Choice Block -->
@@ -41,13 +41,16 @@
               <label
                 v-for="option in sentence.options"
                 :key="option"
-                class="flex items-center space-x-2 p-2 rounded-md border transition-all duration-150"
-                :class="{
-                  'cursor-pointer': !isTaskChecked(task._id),
-                  'bg-green-50 border-green-300': isTaskChecked(task._id) && option === sentence.answer,
-                  'bg-red-50 border-red-300': isTaskChecked(task._id) && getSelectedAnswersMap[task._id]?.[sentence.id] === option && option !== sentence.answer,
-                  'border-gray-300 hover:bg-gray-50': !isTaskChecked(task._id),
-                }"
+                :class="[
+                  'flex items-center space-x-2 p-2 rounded-md border transition-all duration-150',
+                  {
+                    'cursor-pointer': !isTaskChecked(task._id),
+                    'bg-green-50 border-green-300': isTaskChecked(task._id) && option === sentence.answer,
+                    'bg-red-50 border-red-300': isTaskChecked(task._id) && getSelectedAnswersMap[task._id]?.[sentence.id] === option && option !== sentence.answer,
+                    'bg-white border-gray-300 hover:bg-gray-50': !isTaskChecked(task._id),
+                    'bg-white border-gray-200': isTaskChecked(task._id) && option !== sentence.answer && getSelectedAnswersMap[task._id]?.[sentence.id] !== option,
+                  },
+                ]"
               >
                 <input
                   type="radio"
@@ -69,7 +72,12 @@
         </div>
 
         <div class="flex items-center justify-between">
-          <button v-if="!isTaskChecked(task._id)" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primaryDark transition" @click="checkTask(task._id)" :disabled="isTaskChecked(task._id)">
+          <button
+            v-if="!isTaskChecked(task._id)"
+            @click="checkTask(task._id)"
+            :disabled="isTaskChecked(task._id)"
+            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:pointer-events-none rounded-md transition"
+          >
             Check
           </button>
 
@@ -86,6 +94,13 @@ import { taskGeneratorStore } from "@/app"
 import { IGenericTaskEntity, IMultipleChoiceTask, TaskTypeEnum } from "@/shared/types"
 
 export default defineComponent({
+  props: {
+    isModal: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   setup() {
     const checkedTasks = ref<Set<string>>(new Set())
 

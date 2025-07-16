@@ -36,7 +36,7 @@
     </div>
 
     <v-modal v-model="isTaskModalOpen">
-      <TheTask @close="isTaskModalOpen = false" />
+      <TheTask is-modal @close="isTaskModalOpen = false" />
     </v-modal>
   </div>
 </template>

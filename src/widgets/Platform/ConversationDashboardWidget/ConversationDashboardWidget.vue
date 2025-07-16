@@ -43,7 +43,7 @@
               <h3 class="text-xl font-semibold text-gray-800 truncate">
                 {{ module.title }}
               </h3>
-              <span class="text-sm font-medium text-gray-400"> ({{ module.level.join(", ") }}) </span>
+              <span class="text-sm font-medium text-gray-400"> ({{ module.level.join("-") }}) </span>
             </div>
 
             <p class="text-sm text-gray-600 leading-relaxed mb-3 h-[64px] overflow-hidden">
@@ -84,7 +84,7 @@
                 <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
                 <span v-if="getCurrentUserProgress[scenario.name]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
-                  Completed {{ getCurrentUserProgress[scenario.name] }}x
+                  Completed {{ getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }}x
                 </span>
                 <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
               </div>
@@ -182,7 +182,7 @@
                     <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
                     <span v-if="getCurrentUserProgress[scenario.name]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
-                      Completed {{ getCurrentUserProgress[scenario.name] }}x
+                      Completed {{ getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }}x
                     </span>
                     <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
                   </div>
@@ -253,7 +253,7 @@
                 <span class="bg-blue-100 text-blue-700 font-semibold px-2 py-1 rounded-full"> Level: {{ scenario.level }} </span>
 
                 <span v-if="getCurrentUserProgress[scenario.name]" class="bg-green-100 text-green-700 font-semibold px-2 py-1 rounded-full">
-                  Completed {{ getCurrentUserProgress[scenario.name] }}x
+                  Completed {{ getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }}x
                 </span>
                 <span v-else class="bg-gray-100 text-gray-500 font-semibold px-2 py-1 rounded-full"> Not completed </span>
               </div>
@@ -318,7 +318,7 @@ import { useRouter } from "vue-router"
 import { commonStore, promptStore, userProgressStore, userStore } from "@/app"
 import { TheLoader } from "@/shared/components"
 import { IPromptScenarioEntity, ModuleTypeEnum } from "@/shared/types"
-import { formatTagLabel } from "@/shared/lib"
+import { formatTagLabel, getPartProgress } from "@/shared/lib"
 import { PromptLibraryTabsEnum } from "./types"
 
 export default defineComponent({
@@ -348,6 +348,7 @@ export default defineComponent({
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
+
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
     const isStructuredModule = computed(() => getCurrentModule.value?.type === ModuleTypeEnum.STRUCTURED)
 
@@ -497,6 +498,7 @@ export default defineComponent({
       selectPrompt,
       getScenariosForSubmodule,
       formatTagLabel,
+      getPartProgress,
       ModuleTypeEnum,
       PromptLibraryTabsEnum,
     }

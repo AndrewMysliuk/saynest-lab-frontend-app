@@ -2,8 +2,8 @@
   <div class="flex-grow min-h-0 bg-gray-50">
     <TheLoader v-if="getIsPageLoading" />
 
-    <div class="pt-16" v-else>
-      <div class="px-6 py-10">
+    <div class="pt-16 max-w-[1720px] w-full mx-auto" v-else>
+      <div class="py-10 px-6">
         <h1 class="text-3xl font-bold text-text-base mb-6">Vocabulary</h1>
 
         <div v-if="!getWordsList.length && !isRecordLoading && !inputSearch.length" class="text-center text-text-muted text-sm italic">No words yet</div>
@@ -11,7 +11,7 @@
         <!-- Discounts Table Card -->
         <div v-else class="p-5 space-y-4 flex flex-col bg-white border border-stone-200 shadow-2xs rounded-xl">
           <!-- Nav Tab -->
-          <nav class="flex gap-1 relative after:absolute after:bottom-0 after:inset-x-0 after:border-b after:border-stone-200">
+          <nav class="flex gap-2 relative after:absolute after:bottom-0 after:inset-x-0 after:border-b after:border-stone-200">
             <button
               @click="toggleTier(null)"
               type="button"
