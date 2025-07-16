@@ -5,12 +5,12 @@
     </h1>
 
     <div class="mt-8 bg-white border border-gray-200 rounded-xl p-6 shadow-sm space-y-6">
-      <nav class="flex gap-2 relative after:absolute after:bottom-0 after:inset-x-0 after:border-b after:border-stone-200">
+      <nav class="flex gap-2 relative overflow-x-auto no-scrollbar after:absolute after:bottom-0 after:inset-x-0 after:border-b after:border-stone-200 sm:flex-nowrap">
         <button
           @click="activeTab = CommunicationReviewHistoryEnum.GENERAL"
           type="button"
           :class="[
-            'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-base rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
+            'flex-shrink-0 px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base mb-2 relative inline-flex justify-center items-center gap-x-1 sm:gap-x-2 rounded-lg focus:outline-none after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
             activeTab === CommunicationReviewHistoryEnum.GENERAL ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
           ]"
         >
@@ -22,7 +22,7 @@
           @click="activeTab = CommunicationReviewHistoryEnum.ERRORS"
           type="button"
           :class="[
-            'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-base rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
+            'flex-shrink-0 px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base mb-2 relative inline-flex justify-center items-center gap-x-1 sm:gap-x-2 rounded-lg focus:outline-none after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
             activeTab === CommunicationReviewHistoryEnum.ERRORS ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
           ]"
         >
@@ -33,7 +33,7 @@
           @click="activeTab = CommunicationReviewHistoryEnum.DIALOGUE"
           type="button"
           :class="[
-            'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-base rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
+            'flex-shrink-0 px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base mb-2 relative inline-flex justify-center items-center gap-x-1 sm:gap-x-2 rounded-lg focus:outline-none after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
             activeTab === CommunicationReviewHistoryEnum.DIALOGUE ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
           ]"
         >
@@ -45,7 +45,7 @@
           @click="activeTab = CommunicationReviewHistoryEnum.TASKS"
           type="button"
           :class="[
-            'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-base rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
+            'flex-shrink-0 px-3 py-1 sm:px-4 sm:py-2 text-sm sm:text-base mb-2 relative inline-flex justify-center items-center gap-x-1 sm:gap-x-2 rounded-lg focus:outline-none after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
             activeTab === CommunicationReviewHistoryEnum.TASKS ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
           ]"
         >
