@@ -11,7 +11,7 @@
         >
           <span class="sr-only">Close</span>
           <svg
-            class="shrink-0 size-4"
+            class="shrink-0 size-6"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"

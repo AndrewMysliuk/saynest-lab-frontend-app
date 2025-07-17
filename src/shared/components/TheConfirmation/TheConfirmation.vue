@@ -10,7 +10,7 @@
         >
           <span class="sr-only">Close</span>
           <svg
-            class="shrink-0 size-4"
+            class="shrink-0 size-6"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -45,7 +45,10 @@
           <button
             @click="$emit('accept')"
             type="button"
-            class="py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
+            :class="[
+              'py-2 px-3 inline-flex items-center gap-x-2 text-xs font-medium rounded-lg border border-transparent text-white disabled:opacity-50 disabled:pointer-events-none',
+              isInfo ? 'bg-primary hover:bg-primary/90' : 'bg-red-500 hover:bg-red-600',
+            ]"
           >
             Yes, I’m sure
           </button>
@@ -70,6 +73,11 @@ export default defineComponent({
     description: {
       type: String,
       required: true,
+    },
+
+    isInfo: {
+      type: Boolean,
+      default: false,
     },
   },
 })

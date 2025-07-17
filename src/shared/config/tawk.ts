@@ -2,14 +2,32 @@ let tawkScriptLoading: Promise<void> | null = null
 
 const loadTawk = (): Promise<void> => {
   if (typeof window === "undefined") return Promise.resolve()
-
   if (window.Tawk_API) return Promise.resolve()
-
   if (tawkScriptLoading) return tawkScriptLoading
 
   tawkScriptLoading = new Promise((resolve, reject) => {
     window.Tawk_API = window.Tawk_API || {}
     window.Tawk_LoadStart = new Date()
+
+    window.Tawk_API.customStyle = {
+      visibility: {
+        desktop: {
+          position: "br",
+          xOffset: "24px",
+          yOffset: 20,
+        },
+        mobile: {
+          position: "br",
+          xOffset: "10px",
+          yOffset: "16px",
+        },
+        bubble: {
+          rotate: "0deg",
+          xOffset: -20,
+          yOffset: 0,
+        },
+      },
+    }
 
     const script = document.createElement("script")
     script.src = "https://embed.tawk.to/686a41b7a86aec190ca6a887/1ivfh1dcp"

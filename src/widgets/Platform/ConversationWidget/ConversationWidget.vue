@@ -1,5 +1,8 @@
 <template>
-  <div class="room" :class="{ '--sidebar-opened': isSidebarOpen, '--goals-opened': isGoalsOpen, '--is-word-info': getIsWordModalOpen, '--is-notification': getIsExpiredVisible || getIsTrialVisible }">
+  <div
+    class="room"
+    :class="{ '--sidebar-opened': isSidebarOpen, '--goals-opened': isGoalsOpen, '--is-word-info': getIsWordModalOpen && isDesktop, '--is-notification': getIsExpiredVisible || getIsTrialVisible }"
+  >
     <transition name="slide-left">
       <ConversationSidebar v-if="isSidebarOpen" />
     </transition>
@@ -25,19 +28,25 @@
           </button>
         </div>
 
-        <div class="absolute top-4 right-4 z-10 flex gap-2">
-          <button @click="handleReviewModalToggle" class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-medium">Finish and Analyse Conversation</button>
+        <div class="absolute top-4 right-0 md:right-4 z-10 flex gap-2">
+          <button @click="handleReviewModalToggle" class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-semibold">Review Conversation</button>
 
           <button
             v-if="getConversationResponse?.conversation_history?.length"
             @click="toggleSidebar"
             id="CONVERSATION_HISTORY_CLICKED"
-            class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition text-sm font-medium"
+            class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium"
           >
             Toggle History
           </button>
 
-          <button id="CONVERSATION_GOALS_CLICKED" @click="toggleGoals" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition text-sm font-medium">Toggle Goals</button>
+          <button
+            id="CONVERSATION_GOALS_CLICKED"
+            @click="toggleGoals"
+            class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium"
+          >
+            Toggle Goals
+          </button>
         </div>
 
         <div class="conversation__description" v-if="getLastModelFullAnswer">
@@ -46,11 +55,6 @@
           </p>
 
           <!-- <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" /> -->
-        </div>
-
-        <div class="conversation__description" v-else-if="!isLoading && !isHold">
-          <i class="fa-solid fa-keyboard" />
-          <p>Press and hold Spacebar to start recording</p>
         </div>
 
         <TheLoader v-else-if="isLoading" message="Processing your recording..." />
@@ -97,12 +101,13 @@
       <TheLoader v-else message="Review Generation In Progress..." />
     </div>
 
-    <v-modal v-model="isModalInfoOpen" is-curtain>
-      <InfoModal />
+    <v-modal v-model="isModalInfoOpen" is-curtain :is-slide-out-bottom="!isDesktop">
+      <InfoModal @close="isModalInfoOpen = false" />
     </v-modal>
 
     <v-modal v-model="isReviewModalOpen">
       <TheConfirmation
+        is-info
         title="Submit Review Early"
         description="The conversation is still in progress. Are you sure you want to end it and submit your review now? You won't be able to return and continue later."
         @accept="analyseUserConversation"
@@ -118,7 +123,7 @@ import { conversationStore, audioPlayer, urlAudioPlayer, promptStore, errorAnaly
 import { useRouter } from "vue-router"
 import { TheConfirmation, TheLoader, TheInteractiveText } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
-import { useMicrophone, initializeCanvasForConversation } from "@/shared/lib"
+import { useMicrophone, initializeCanvasForConversation, isLg } from "@/shared/lib"
 import { ConversationSidebar, InfoModal } from "./ui"
 import { SessionTypeEnum } from "@/shared/types"
 import { createSessionHandler } from "@/shared/api"
@@ -176,6 +181,7 @@ export default defineComponent({
     let cleanupCanvas: (() => void) | null = null
     const recordingDuration = ref<number>(0)
     let recordingTimer: number | null = null
+    const isDesktop = ref<boolean>(isLg())
 
     const getIsLogged = computed(() => authStore.getIsLogged)
     const getIsLoading = computed(() => conversationStore.getIsLoading)
@@ -588,6 +594,7 @@ export default defineComponent({
 
     return {
       recordingDuration,
+      isDesktop,
       clientCanvasRef,
       audioElementRef,
       getIsWordModalOpen,

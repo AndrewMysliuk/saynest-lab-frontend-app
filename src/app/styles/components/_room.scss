@@ -1,4 +1,5 @@
 @use "../common/mixins" as *;
+@use "../common/media" as *;
 
 .room {
   width: 100%;
@@ -37,7 +38,7 @@
 
   &__body {
     padding: rem(24px 40px);
-    background: #f9f9f9;
+    background: #f9fafb;
     color: #333333;
     transition: all 0.3s ease;
     box-sizing: border-box;
@@ -46,6 +47,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    @include for-md {
+      padding: rem(16px);
+    }
   }
 }
 

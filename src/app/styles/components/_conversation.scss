@@ -1,4 +1,5 @@
 @use "../common/mixins" as *;
+@use "../common/media" as *;
 
 .conversation {
   width: 100%;
@@ -8,6 +9,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  @include for-md {
+    min-height: calc(100vh - rem(32px));
+  }
 
   &__description {
     display: inline-flex;
@@ -23,10 +28,18 @@
     .fa-solid,
     .fa-regular {
       font-size: rem(42px);
+
+      @include for-md {
+        font-size: rem(36px);
+      }
     }
 
     p {
       font-size: rem(32px);
+
+      @include for-md {
+        font-size: rem(21px);
+      }
     }
   }
 
@@ -43,6 +56,10 @@
 
     &.--left-second {
       left: rem(60px);
+
+      @include for-md {
+        display: none;
+      }
     }
   }
 
@@ -74,6 +91,12 @@
       left: rem(-40px);
       right: rem(-40px);
       width: auto;
+
+      @include for-md {
+        bottom: rem(-16px);
+        left: rem(-16px);
+        right: rem(-16px);
+      }
     }
   }
 
@@ -124,6 +147,13 @@
         font-size: 14px;
         color: #4b5563;
       }
+    }
+  }
+
+  #CONVERSATION_HISTORY_CLICKED,
+  #CONVERSATION_GOALS_CLICKED {
+    @include for-md {
+      display: none;
     }
   }
 }

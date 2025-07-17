@@ -1,5 +1,36 @@
 <template>
   <div class="w-full h-full overflow-y-auto p-6 bg-gray-50 rounded-lg shadow-md">
+    <div class="flex justify-between items-center relative mb-6 md:block">
+      <h2 class="text-xl font-semibold text-gray-800">User Profile</h2>
+
+      <!-- Close Button -->
+      <div class="md:absolute md:top-0 md:end-0 md:z-10">
+        <button
+          @click="$emit('close')"
+          type="button"
+          class="size-8 shrink-0 flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
+        >
+          <span class="sr-only">Close</span>
+          <svg
+            class="shrink-0 size-6"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </div>
+      <!-- End Close Button -->
+    </div>
+
     <form class="w-full max-w-none lg:max-w-md space-y-4" @submit.prevent="onSubmit">
       <div>
         <label class="block mb-2 text-sm font-medium text-gray-800">Email (readonly)</label>
@@ -89,7 +120,7 @@
           @click="$emit('close')"
           class="basis-[calc(50%-4px)] lg:basis-auto py-2 px-10 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
         >
-          ← Back
+          ← Close
         </button>
 
         <!-- Save Button -->
