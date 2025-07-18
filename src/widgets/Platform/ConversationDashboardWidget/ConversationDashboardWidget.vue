@@ -11,9 +11,10 @@
           <h1 :class="['text-3xl font-bold cursor-pointer', activeTab === PromptLibraryTabsEnum.SCENARIOS ? 'text-primary' : 'text-gray-400']" @click="toggleTabs(PromptLibraryTabsEnum.SCENARIOS)">
             All Scenarios
           </h1>
+          <h1 :class="['text-3xl font-bold cursor-pointer', activeTab === PromptLibraryTabsEnum.IELTS ? 'text-primary' : 'text-gray-400']" @click="toggleTabs(PromptLibraryTabsEnum.IELTS)">IELTS</h1>
         </div>
 
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6" v-if="activeTab !== PromptLibraryTabsEnum.IELTS">
           <input
             :value="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules : searchQueryScenarios"
             @input="onSearchInput"
@@ -32,9 +33,69 @@
           </button>
         </div>
 
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6" v-else>
+          <!-- List -->
+          <div class="relative flex flex-1 items-center justify-center">
+            <div class="flex items-center justify-center gap-2 py-2">
+              <button
+                @click="toggleIeltsPart(null)"
+                type="button"
+                :class="[
+                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
+                  currentIeltsPart === null ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                ]"
+              >
+                Full Exam
+              </button>
+
+              <button
+                @click="toggleIeltsPart(SessionIeltsPartEnum.PART_1)"
+                type="button"
+                :class="[
+                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
+                  currentIeltsPart === SessionIeltsPartEnum.PART_1 ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                ]"
+              >
+                Part 1
+              </button>
+
+              <button
+                @click="toggleIeltsPart(SessionIeltsPartEnum.PART_2)"
+                type="button"
+                :class="[
+                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
+                  currentIeltsPart === SessionIeltsPartEnum.PART_2 ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                ]"
+              >
+                Part 2
+              </button>
+
+              <button
+                @click="toggleIeltsPart(SessionIeltsPartEnum.PART_3)"
+                type="button"
+                :class="[
+                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
+                  currentIeltsPart === SessionIeltsPartEnum.PART_3 ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                ]"
+              >
+                Part 3
+              </button>
+            </div>
+          </div>
+          <!-- End List -->
+        </div>
+
         <ModuleList v-if="activeTab === PromptLibraryTabsEnum.MODULES" @openScenarios="openScenarios" />
 
         <ScenarioList v-if="activeTab === PromptLibraryTabsEnum.SCENARIOS" :expanded-scenario="expandedScenario" @toggleExpand="toggleExpand" @selectPrompt="selectPrompt" />
+
+        <IeltsScenarioList
+          v-if="activeTab === PromptLibraryTabsEnum.IELTS"
+          :current-ielts-part="currentIeltsPart"
+          :expanded-scenario="expandedScenario"
+          @toggleExpand="toggleExpand"
+          @selectPrompt="selectPrompt"
+        />
 
         <div ref="loadMoreTrigger" class="h-1" />
       </div>
@@ -49,9 +110,9 @@ import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { commonStore, promptStore, userProgressStore, userStore } from "@/app"
 import { TheLoader } from "@/shared/components"
-import { IPromptScenarioEntity } from "@/shared/types"
+import { IPromptScenarioEntity, SessionIeltsPartEnum } from "@/shared/types"
 import { PromptLibraryTabsEnum } from "./types"
-import { ModuleList, ScenarioList, ModuleScenarioList } from "./ui"
+import { ModuleList, ScenarioList, ModuleScenarioList, IeltsScenarioList } from "./ui"
 
 export default defineComponent({
   components: {
@@ -59,6 +120,7 @@ export default defineComponent({
     ModuleList,
     ScenarioList,
     ModuleScenarioList,
+    IeltsScenarioList,
   },
 
   setup() {
@@ -71,6 +133,7 @@ export default defineComponent({
     const expandedScenario = ref<string | number | null>(null)
     const loadMoreTrigger = ref<HTMLElement | null>(null)
     const observer = ref<IntersectionObserver | null>(null)
+    const currentIeltsPart = ref<SessionIeltsPartEnum | null>(null)
     let debounceTimeout: ReturnType<typeof setTimeout> | null = null
 
     const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
@@ -78,6 +141,7 @@ export default defineComponent({
     const getCurrentPrompt = computed(() => promptStore.getCurrentPrompt)
     const getModuleParams = computed(() => promptStore.getModuleParams)
     const getPromptParams = computed(() => promptStore.getPromptParams)
+    const getIeltsScenarioParams = computed(() => promptStore.getIeltsScenarioParams)
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
 
@@ -95,6 +159,10 @@ export default defineComponent({
           if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS && getPromptParams.value.hasMore) {
             promptStore.fetchScenariosList(true, { is_module_only: false })
           }
+
+          if (activeTab.value === PromptLibraryTabsEnum.IELTS && getIeltsScenarioParams.value.hasMore) {
+            promptStore.fetchIeltsScenariosList(true, { ielts_part: currentIeltsPart.value ? currentIeltsPart.value : undefined })
+          }
         }
       })
 
@@ -105,6 +173,21 @@ export default defineComponent({
 
     const toggleExpand = (index: number | string) => {
       expandedScenario.value = expandedScenario.value === index ? null : index
+    }
+
+    const toggleIeltsPart = async (value: SessionIeltsPartEnum | null) => {
+      try {
+        isLoading.value = true
+
+        currentIeltsPart.value = value
+
+        promptStore.resetIeltsScenarioParams()
+        await promptStore.fetchIeltsScenariosList(false, { ielts_part: value ? value : undefined })
+      } catch (error: unknown) {
+        console.log(error)
+      } finally {
+        isLoading.value = false
+      }
     }
 
     const openScenarios = async (module_id: string) => {
@@ -200,12 +283,14 @@ export default defineComponent({
       isOverview,
       isLoading,
       activeTab,
+      currentIeltsPart,
       searchQueryModules,
       searchQueryScenarios,
       loadMoreTrigger,
       getIsPageLoading,
       expandedScenario,
       getCurrentModule,
+      toggleIeltsPart,
       clearSearch,
       onSearchInput,
       toggleExpand,
@@ -213,6 +298,7 @@ export default defineComponent({
       openScenarios,
       selectPrompt,
       PromptLibraryTabsEnum,
+      SessionIeltsPartEnum,
     }
   },
 })

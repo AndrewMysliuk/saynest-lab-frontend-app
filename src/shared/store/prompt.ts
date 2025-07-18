@@ -1,7 +1,7 @@
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
 import { IIeltsPromptFilters, IModuleFilters, IModuleParams, IModuleScenarioEntity, IPromptFilters, IPromptParams, IPromptScenarioEntity } from "@/shared/types"
-import { getScenarioByIdHandler, listScenariosHandler, getModuleScenariosHandler, listModulesHandler } from "../api"
+import { getScenarioByIdHandler, listScenariosHandler, getModuleScenariosHandler, listModulesHandler, listIeltsScenariosHandler } from "../api"
 
 export const usePromptStore = defineStore("promptStore", () => {
   const moduleList = ref<IModuleScenarioEntity[]>([])
@@ -84,7 +84,7 @@ export const usePromptStore = defineStore("promptStore", () => {
       const limit = query?.limit ?? ieltsScenarioParams.value.limit
       const offset = query?.offset ?? ieltsScenarioParams.value.offset
 
-      const response = await listScenariosHandler({
+      const response = await listIeltsScenariosHandler({
         ...query,
         limit,
         offset,
