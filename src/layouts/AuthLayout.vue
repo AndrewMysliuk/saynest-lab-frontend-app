@@ -16,6 +16,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .auth-layout {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 </style>
