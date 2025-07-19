@@ -379,7 +379,8 @@ export default defineComponent({
 
         if (!mediaStream) return
 
-        mediaRecorder = new MediaRecorder(mediaStream, { mimeType: "audio/webm;codecs=opus" })
+        mediaRecorder = new MediaRecorder(mediaStream)
+        // { mimeType: "audio/webm;codecs=opus" }
 
         if (clientCanvasRef.value) {
           cleanupCanvas = initializeCanvasForConversation(clientCanvasRef.value, mediaStream)
