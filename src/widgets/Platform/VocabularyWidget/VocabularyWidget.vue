@@ -153,7 +153,7 @@
 
                     <td class="px-4 py-2 text-center align-middle">
                       <div class="inline-flex items-center gap-2">
-                        <i v-if="word.global_word_entity.audio_url" class="fas fa-volume-up text-gray-500 hover:text-black cursor-pointer" @click.stop="playAudio(word)" />
+                        <i class="fas fa-volume-up text-gray-500 hover:text-black cursor-pointer" @click.stop="playAudio(word)" />
                       </div>
                     </td>
                   </tr>
@@ -236,9 +236,12 @@ export default defineComponent({
     })
 
     const playAudio = async (word: IUserWordPublic) => {
-      if (!word?.global_word_entity?.audio_url) return
-
       try {
+        if (!word?.global_word_entity?.audio_url) {
+          await handleAudioError(word)
+          return
+        }
+
         const audio = new Audio(word.global_word_entity.audio_url)
         await audio.play()
       } catch {
@@ -252,7 +255,11 @@ export default defineComponent({
 
       try {
         await vocabularyStore.generateWordAudioUrlMethod(wordId)
-        const refreshed = vocabularyStore.getSelectedWord?.global_word_entity?.audio_url
+        let refreshed = vocabularyStore.getSelectedWord?.global_word_entity?.audio_url
+        if (!refreshed) {
+          refreshed = getWordsList.value.find((item) => item.global_word_entity._id === wordId)?.global_word_entity?.audio_url
+        }
+
         if (!refreshed) return
 
         const audio = new Audio(refreshed)

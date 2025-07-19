@@ -1,48 +1,74 @@
 <template>
-  <div class="flex-grow min-h-0">
-    <TheLoader v-if="getIsPageLoading || isLoading" />
+  <div class="flex-grow min-h-0 bg-gray-50">
+    <TheLoader v-if="getIsPageLoading || isLoading || !isReady" />
 
-    <div class="pt-16" v-else>
+    <div class="pt-16 max-w-[1720px] w-full mx-auto" v-else>
       <div v-if="isOverview" class="px-6 py-10">
-        <div class="flex items-center gap-6 mb-6">
-          <h1 :class="['text-3xl font-bold cursor-pointer', activeTab === PromptLibraryTabsEnum.MODULES ? 'text-primary' : 'text-gray-400']" @click="toggleTabs(PromptLibraryTabsEnum.MODULES)">
-            Modules
-          </h1>
-          <h1 :class="['text-3xl font-bold cursor-pointer', activeTab === PromptLibraryTabsEnum.SCENARIOS ? 'text-primary' : 'text-gray-400']" @click="toggleTabs(PromptLibraryTabsEnum.SCENARIOS)">
-            All Scenarios
-          </h1>
-          <h1 :class="['text-3xl font-bold cursor-pointer', activeTab === PromptLibraryTabsEnum.IELTS ? 'text-primary' : 'text-gray-400']" @click="toggleTabs(PromptLibraryTabsEnum.IELTS)">IELTS</h1>
+        <nav class="mb-6">
+          <div class="flex items-center gap-4 sm:gap-6">
+            <button
+              type="button"
+              @click="toggleTabs(PromptLibraryTabsEnum.MODULES)"
+              :aria-selected="activeTab === PromptLibraryTabsEnum.MODULES"
+              :class="['text-lg sm:text-[26px] font-semibold transition-all', activeTab === PromptLibraryTabsEnum.MODULES ? 'text-[#4F46E5]' : 'text-gray-500 hover:text-gray-700']"
+            >
+              Topics
+            </button>
+
+            <button
+              type="button"
+              @click="toggleTabs(PromptLibraryTabsEnum.SCENARIOS)"
+              :aria-selected="activeTab === PromptLibraryTabsEnum.SCENARIOS"
+              :class="['text-lg sm:text-[26px] font-semibold transition-all', activeTab === PromptLibraryTabsEnum.SCENARIOS ? 'text-[#4F46E5]' : 'text-gray-500 hover:text-gray-700']"
+            >
+              Scenarios
+            </button>
+
+            <button
+              v-if="targetLanguage === 'English'"
+              type="button"
+              @click="toggleTabs(PromptLibraryTabsEnum.IELTS)"
+              :aria-selected="activeTab === PromptLibraryTabsEnum.IELTS"
+              :class="['text-lg sm:text-[26px] font-semibold transition-all', activeTab === PromptLibraryTabsEnum.IELTS ? 'text-[#4F46E5]' : 'text-gray-500 hover:text-gray-700']"
+            >
+              IELTS
+            </button>
+          </div>
+        </nav>
+
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 w-full" v-if="activeTab !== PromptLibraryTabsEnum.IELTS">
+          <TheCountryLanguage :model-value="targetLanguage" @update:modelValue="updateTargetLanguage" />
+
+          <div class="flex-1 relative">
+            <input
+              :value="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules : searchQueryScenarios"
+              @input="onSearchInput"
+              type="text"
+              placeholder="Search..."
+              class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-0 focus:border-[#4F46E5] transition"
+            />
+
+            <button
+              v-if="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules.length : searchQueryScenarios.length"
+              @click="clearSearch"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-gray-600 transition font-medium"
+              title="Clear search"
+              type="button"
+            >
+              Clear
+            </button>
+          </div>
         </div>
 
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6" v-if="activeTab !== PromptLibraryTabsEnum.IELTS">
-          <input
-            :value="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules : searchQueryScenarios"
-            @input="onSearchInput"
-            type="text"
-            placeholder="Search..."
-            class="flex-1 border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30 transition"
-          />
-          <button
-            v-if="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules.length : searchQueryScenarios.length"
-            @click="clearSearch"
-            class="text-gray-400 hover:text-gray-600 transition text-lg font-bold"
-            title="Clear search"
-            type="button"
-          >
-            Clear
-          </button>
-        </div>
-
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6" v-else>
-          <!-- List -->
-          <div class="relative flex flex-1 items-center justify-center">
-            <div class="flex items-center justify-center gap-2 py-2">
+        <div class="w-full mb-6" v-else>
+          <div class="flex justify-center w-full overflow-x-auto">
+            <div class="flex gap-2 w-max sm:w-auto">
               <button
                 @click="toggleIeltsPart(null)"
                 type="button"
                 :class="[
-                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
-                  currentIeltsPart === null ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                  'py-2 px-4 text-sm sm:text-base rounded-full border transition whitespace-nowrap',
+                  currentIeltsPart === null ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
                 Full Exam
@@ -52,8 +78,10 @@
                 @click="toggleIeltsPart(SessionIeltsPartEnum.PART_1)"
                 type="button"
                 :class="[
-                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
-                  currentIeltsPart === SessionIeltsPartEnum.PART_1 ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                  'py-2 px-4 text-sm sm:text-base rounded-full border transition whitespace-nowrap',
+                  currentIeltsPart === SessionIeltsPartEnum.PART_1
+                    ? 'bg-[#4F46E5] text-white border-[#4F46E5]'
+                    : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
                 Part 1
@@ -63,8 +91,10 @@
                 @click="toggleIeltsPart(SessionIeltsPartEnum.PART_2)"
                 type="button"
                 :class="[
-                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
-                  currentIeltsPart === SessionIeltsPartEnum.PART_2 ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                  'py-2 px-4 text-sm sm:text-base rounded-full border transition whitespace-nowrap',
+                  currentIeltsPart === SessionIeltsPartEnum.PART_2
+                    ? 'bg-[#4F46E5] text-white border-[#4F46E5]'
+                    : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
                 Part 2
@@ -74,15 +104,16 @@
                 @click="toggleIeltsPart(SessionIeltsPartEnum.PART_3)"
                 type="button"
                 :class="[
-                  'py-1.5 px-3 sm:py-2 sm:px-4 lg:py-2.5 lg:px-5 flex items-center gap-x-1.5 whitespace-nowrap rounded-full border text-[13px] sm:text-sm lg:text-base font-medium focus:outline-none',
-                  currentIeltsPart === SessionIeltsPartEnum.PART_3 ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300 focus:border-gray-300',
+                  'py-2 px-4 text-sm sm:text-base rounded-full border transition whitespace-nowrap',
+                  currentIeltsPart === SessionIeltsPartEnum.PART_3
+                    ? 'bg-[#4F46E5] text-white border-[#4F46E5]'
+                    : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
                 Part 3
               </button>
             </div>
           </div>
-          <!-- End List -->
         </div>
 
         <ModuleList v-if="activeTab === PromptLibraryTabsEnum.MODULES" @openScenarios="openScenarios" />
@@ -98,6 +129,8 @@
         />
 
         <div ref="loadMoreTrigger" class="h-1" />
+
+        <div v-if="isListLoading" class="text-center text-text-muted text-sm italic py-4">Loading more...</div>
       </div>
 
       <ModuleScenarioList :expanded-scenario="expandedScenario" @toggleExpand="toggleExpand" @selectPrompt="selectPrompt" @overview="isOverview = true" v-else />
@@ -106,10 +139,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref } from "vue"
+import { computed, defineComponent, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { commonStore, promptStore, userProgressStore, userStore } from "@/app"
-import { TheLoader } from "@/shared/components"
+import { TheLoader, TheCountryLanguage } from "@/shared/components"
 import { IPromptScenarioEntity, SessionIeltsPartEnum } from "@/shared/types"
 import { PromptLibraryTabsEnum } from "./types"
 import { ModuleList, ScenarioList, ModuleScenarioList, IeltsScenarioList } from "./ui"
@@ -117,6 +150,7 @@ import { ModuleList, ScenarioList, ModuleScenarioList, IeltsScenarioList } from 
 export default defineComponent({
   components: {
     TheLoader,
+    TheCountryLanguage,
     ModuleList,
     ScenarioList,
     ModuleScenarioList,
@@ -125,9 +159,12 @@ export default defineComponent({
 
   setup() {
     const router = useRouter()
+    const isReady = ref<boolean>(false)
+    const isListLoading = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     const searchQueryModules = ref<string>("")
     const searchQueryScenarios = ref<string>("")
+    const targetLanguage = ref<string>("English")
     const isOverview = ref<boolean>(true)
     const activeTab = ref<PromptLibraryTabsEnum>(PromptLibraryTabsEnum.MODULES)
     const expandedScenario = ref<string | number | null>(null)
@@ -145,6 +182,20 @@ export default defineComponent({
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
 
+    onBeforeMount(async () => {
+      await fetchUserProgress()
+
+      isReady.value = true
+    })
+
+    const fetchUserProgress = async () => {
+      try {
+        await userProgressStore.fetchCurrentUserProgress()
+      } catch (error: unknown) {
+        console.error("Error fetching user progress:", error)
+      }
+    }
+
     onMounted(() => {
       observer.value = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
@@ -153,15 +204,27 @@ export default defineComponent({
           if (hasSearch) return
 
           if (activeTab.value === PromptLibraryTabsEnum.MODULES && getModuleParams.value.hasMore) {
-            promptStore.fetchModuleList(true)
+            isListLoading.value = true
+
+            promptStore.fetchModuleList(true, { target_language: targetLanguage.value }).finally(() => {
+              isListLoading.value = false
+            })
           }
 
           if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS && getPromptParams.value.hasMore) {
-            promptStore.fetchScenariosList(true, { is_module_only: false })
+            isListLoading.value = true
+
+            promptStore.fetchScenariosList(true, { is_module_only: false, target_language: targetLanguage.value }).finally(() => {
+              isListLoading.value = false
+            })
           }
 
           if (activeTab.value === PromptLibraryTabsEnum.IELTS && getIeltsScenarioParams.value.hasMore) {
-            promptStore.fetchIeltsScenariosList(true, { ielts_part: currentIeltsPart.value ? currentIeltsPart.value : undefined })
+            isListLoading.value = true
+
+            promptStore.fetchIeltsScenariosList(true, { ielts_part: currentIeltsPart.value ? currentIeltsPart.value : undefined }).finally(() => {
+              isListLoading.value = false
+            })
           }
         }
       })
@@ -176,6 +239,8 @@ export default defineComponent({
     }
 
     const toggleIeltsPart = async (value: SessionIeltsPartEnum | null) => {
+      if (currentIeltsPart.value === value) return
+
       try {
         isLoading.value = true
 
@@ -202,7 +267,7 @@ export default defineComponent({
           user_id: getCurrentUser.value?._id,
         })
 
-        await Promise.all([promptStore.fetchModuleScenarios(module_id), userProgressStore.fetchCurrentUserProgress()])
+        await promptStore.fetchModuleScenarios(module_id)
 
         isOverview.value = false
       } catch (error: unknown) {
@@ -249,29 +314,62 @@ export default defineComponent({
     }
 
     const handleSearchInput = async (query: string) => {
+      observer.value?.disconnect()
+
       if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
         promptStore.resetModuleParams()
         await promptStore.fetchModuleList(false, {
           search: query,
+          target_language: targetLanguage.value,
         })
       } else if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS) {
+        expandedScenario.value = null
         promptStore.resetPromptParams()
         await promptStore.fetchScenariosList(false, {
           search: query,
           is_module_only: false,
+          target_language: targetLanguage.value,
         })
       }
+
+      nextTick(() => {
+        if (loadMoreTrigger.value) {
+          observer.value?.observe(loadMoreTrigger.value)
+        }
+      })
     }
 
     const clearSearch = () => {
       if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
         searchQueryModules.value = ""
         promptStore.resetModuleParams()
-        promptStore.fetchModuleList(false)
+        promptStore.fetchModuleList(false, { target_language: targetLanguage.value })
       } else {
+        expandedScenario.value = ""
         searchQueryScenarios.value = ""
         promptStore.resetPromptParams()
-        promptStore.fetchScenariosList(false, { is_module_only: false })
+        promptStore.fetchScenariosList(false, { is_module_only: false, target_language: targetLanguage.value })
+      }
+    }
+
+    const updateTargetLanguage = async (value: string) => {
+      try {
+        isLoading.value = true
+
+        targetLanguage.value = value
+        expandedScenario.value = null
+
+        searchQueryModules.value = ""
+        searchQueryScenarios.value = ""
+
+        promptStore.resetModuleParams()
+        promptStore.resetPromptParams()
+
+        await Promise.all([promptStore.fetchModuleList(false, { target_language: value }), promptStore.fetchScenariosList(false, { is_module_only: false, target_language: value })])
+      } catch (error: unknown) {
+        console.log(error)
+      } finally {
+        isLoading.value = false
       }
     }
 
@@ -280,9 +378,12 @@ export default defineComponent({
     })
 
     return {
+      isReady,
       isOverview,
       isLoading,
+      isListLoading,
       activeTab,
+      targetLanguage,
       currentIeltsPart,
       searchQueryModules,
       searchQueryScenarios,
@@ -297,6 +398,7 @@ export default defineComponent({
       toggleTabs,
       openScenarios,
       selectPrompt,
+      updateTargetLanguage,
       PromptLibraryTabsEnum,
       SessionIeltsPartEnum,
     }

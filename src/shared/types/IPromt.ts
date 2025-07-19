@@ -86,6 +86,7 @@ export interface IPromptMeta {
     max: number
   } | null
   is_it_ielts: boolean
+  active_ielts_part?: SessionIeltsPartEnum
 }
 
 export interface IPromptFilters {

@@ -44,8 +44,8 @@ const platform: RouteRecordRaw[] = [
         orgStore.fetchOrgById(),
         communicationReviewStore.fetchReviewsList(false),
         vocabularyStore.listUserWordsMethod(false),
-        promptStore.fetchModuleList(false),
-        promptStore.fetchScenariosList(false, { is_module_only: false }),
+        promptStore.fetchModuleList(false, { target_language: "English" }),
+        promptStore.fetchScenariosList(false, { is_module_only: false, target_language: "English" }),
         promptStore.fetchIeltsScenariosList(false),
         plansStore.fetchPlansList(),
       ]).catch((error: unknown) => console.error("Error in setupOnloadMethods:", error))

@@ -66,6 +66,8 @@
       </div>
 
       <div ref="loadMoreTrigger" class="h-1" />
+
+      <div v-if="isListLoading" class="text-center text-text-muted text-sm italic py-4">Loading more...</div>
     </div>
 
     <p v-else class="text-center text-text-muted text-sm italic">You don't have any conversation reviews yet.</p>
@@ -80,6 +82,7 @@ import { ICommunicationReview } from "@/shared/types"
 
 export default defineComponent({
   setup(_, { emit }) {
+    const isListLoading = ref<boolean>(false)
     const loadMoreTrigger = ref<HTMLElement | null>(null)
     const observer = ref<IntersectionObserver | null>(null)
 
@@ -89,7 +92,11 @@ export default defineComponent({
     onMounted(() => {
       observer.value = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && getReviewsParams.value.hasMore) {
-          communicationReviewStore.fetchReviewsList(true)
+          isListLoading.value = true
+
+          communicationReviewStore.fetchReviewsList(true).finally(() => {
+            isListLoading.value = false
+          })
         }
       })
 
@@ -111,6 +118,7 @@ export default defineComponent({
     })
 
     return {
+      isListLoading,
       loadMoreTrigger,
       observer,
       getReviewsList,

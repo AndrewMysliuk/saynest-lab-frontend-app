@@ -4,16 +4,25 @@
       v-for="(module, index) in getModuleList"
       :key="index"
       @click="openScenarios(module._id)"
-      class="cursor-pointer bg-white rounded-2xl p-6 border border-gray-200 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200 flex flex-col h-full"
+      @keyup.enter="openScenarios(module._id)"
+      role="button"
+      tabindex="0"
+      :class="[
+        'cursor-pointer bg-white rounded-2xl p-6 border shadow transition-all duration-200 flex flex-col h-full',
+        'hover:-translate-y-[2px] focus-visible:outline focus-visible:outline-2',
+        module.type === ModuleTypeEnum.STRUCTURED
+          ? 'border-gray-200 hover:border-purple-500 hover:ring-2 hover:ring-purple-300 focus-visible:outline-purple-500'
+          : 'border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-300 focus-visible:outline-blue-500',
+      ]"
     >
       <div class="flex items-center justify-between mb-3 h-[32px]">
-        <h3 class="text-xl font-semibold text-gray-800 truncate">
+        <h3 class="text-xl font-semibold text-gray-800 truncate" :title="module.title">
           {{ module.title }}
         </h3>
         <span class="text-sm font-medium text-gray-400"> ({{ module.level.join("-") }}) </span>
       </div>
 
-      <p class="text-sm text-gray-600 leading-relaxed mb-3 h-[64px] overflow-hidden">
+      <p class="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-3">
         {{ module.description }}
       </p>
 
@@ -21,14 +30,15 @@
         <span
           v-if="module.type === ModuleTypeEnum.STRUCTURED"
           class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full border border-purple-300"
+          title="Structured Module"
         >
           Structured Module
         </span>
-        <span v-else class="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full border border-gray-300"> Open Practice </span>
+        <span v-else class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full border border-blue-200" title="Open Practice"> Open Practice </span>
       </div>
 
       <div class="flex flex-wrap gap-2 overflow-hidden">
-        <span v-for="tag in module.tags" :key="tag" class="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1 rounded-full border border-blue-200">
+        <span v-for="tag in module.tags" :key="tag" class="inline-block bg-amber-50 text-amber-800 text-xs font-medium px-3 py-1 rounded-full border border-amber-200">
           {{ formatTagLabel(tag) }}
         </span>
       </div>

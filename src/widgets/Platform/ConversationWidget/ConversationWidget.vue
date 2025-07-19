@@ -140,7 +140,7 @@ const FILE_LANGUAGE = [
   },
   {
     file: helloRecordBg,
-    language: "Bulgarisch",
+    language: "Bolgarian",
   },
   {
     file: helloRecordDe,
@@ -281,6 +281,7 @@ export default defineComponent({
         const { _id } = await createSessionHandler({
           type: SessionTypeEnum.SPEACKING,
           prompt_id: getSelectedPrompt.value?._id,
+          active_ielts_part: getSelectedPrompt.value?.meta?.active_ielts_part,
         })
 
         orgStore.updateTrialUsage("session")

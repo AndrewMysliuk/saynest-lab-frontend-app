@@ -1,0 +1,1016 @@
+@use "./mixins" as *;
+
+.country-flag {
+  width: rem(20px);
+  height: rem(20px);
+
+  &.sz {
+    background: url(@/shared/assets/country-flags/eswatini.svg) center / contain no-repeat;
+  }
+
+  &.xk {
+    background: url(@/shared/assets/country-flags/kosovo.svg) center / contain no-repeat;
+  }
+
+  &.aq {
+    background: url(@/shared/assets/country-flags/antarctica.svg) center / contain no-repeat;
+  }
+
+  &.bl {
+    background: url(@/shared/assets/country-flags/st-barts.svg) center / contain no-repeat;
+  }
+
+  &.sh {
+    background: url(@/shared/assets/country-flags/united-kingdom.svg) center / contain no-repeat;
+  }
+
+  &.gs {
+    background: url(@/shared/assets/country-flags/south-georgia-and-the-south-sandwich-islands.svg) center / contain no-repeat;
+  }
+
+  &.sj {
+    background: url(@/shared/assets/country-flags/norway.svg) center / contain no-repeat;
+  }
+
+  &.um {
+    background: url(@/shared/assets/country-flags/united-states-of-america.svg) center / contain no-repeat;
+  }
+
+  &.wf {
+    background: url(@/shared/assets/country-flags/wallis-and-futuna.svg) center / contain no-repeat;
+  }
+
+  &.bv {
+    background: url(@/shared/assets/country-flags/norway.svg) center / contain no-repeat;
+  }
+
+  &.tf {
+    background: url(@/shared/assets/country-flags/french-southern-territories.svg) center / contain no-repeat;
+  }
+
+  &.hm {
+    background: url(@/shared/assets/country-flags/australia.svg) center / contain no-repeat;
+  }
+
+  &.yt {
+    background: url(@/shared/assets/country-flags/mayotte.svg) center / contain no-repeat;
+  }
+
+  &.je {
+    background: url(@/shared/assets/country-flags/jersey.svg) center / contain no-repeat;
+  }
+
+  &.cd {
+    background: url(@/shared/assets/country-flags/democratic-republic-of-congo.svg) center / contain no-repeat;
+  }
+
+  &.kp {
+    background: url(@/shared/assets/country-flags/north-korea.svg) center / contain no-repeat;
+  }
+
+  &.pm {
+    background: url(@/shared/assets/country-flags/france.svg) center / contain no-repeat;
+  }
+
+  &.tv {
+    background: url(@/shared/assets/country-flags/tuvalu.svg) center / contain no-repeat;
+  }
+
+  // Europe Union
+  &.eu {
+    background: url(@/shared/assets/country-flags/eu.svg) center / contain no-repeat;
+  }
+
+  &.ax {
+    background: url(@/shared/assets/country-flags/aland-islands.svg) center / contain no-repeat;
+  }
+
+  &.as {
+    background: url(@/shared/assets/country-flags/american-samoa.svg) center / contain no-repeat;
+  }
+
+  &.ai {
+    background: url(@/shared/assets/country-flags/anguilla.svg) center / contain no-repeat;
+  }
+
+  &.va {
+    background: url(@/shared/assets/country-flags/vatican-city.svg) center / contain no-repeat;
+  }
+
+  &.bq {
+    background: url(@/shared/assets/country-flags/bonaire.svg) center / contain no-repeat;
+  }
+
+  &.io {
+    background: url(@/shared/assets/country-flags/british-indian-ocean-territory.svg) center / contain no-repeat;
+  }
+
+  &.bi {
+    background: url(@/shared/assets/country-flags/burundi.svg) center / contain no-repeat;
+  }
+
+  &.cn {
+    background: url(@/shared/assets/country-flags/china.svg) center / contain no-repeat;
+  }
+
+  &.cx {
+    background: url(@/shared/assets/country-flags/christmas-island.svg) center / contain no-repeat;
+  }
+
+  &.cc {
+    background: url(@/shared/assets/country-flags/cocos-island.svg) center / contain no-repeat;
+  }
+
+  &.cw {
+    background: url(@/shared/assets/country-flags/curacao.svg) center / contain no-repeat;
+  }
+
+  &.dj {
+    background: url(@/shared/assets/country-flags/djibouti.svg) center / contain no-repeat;
+  }
+
+  &.fk {
+    background: url(@/shared/assets/country-flags/falkland-islands.svg) center / contain no-repeat;
+  }
+
+  &.gg {
+    background: url(@/shared/assets/country-flags/guernsey.svg) center / contain no-repeat;
+  }
+
+  &.gy {
+    background: url(@/shared/assets/country-flags/guyana.svg) center / contain no-repeat;
+  }
+
+  &.ht {
+    background: url(@/shared/assets/country-flags/haiti.svg) center / contain no-repeat;
+  }
+
+  &.im {
+    background: url(@/shared/assets/country-flags/isle-of-man.svg) center / contain no-repeat;
+  }
+
+  &.ki {
+    background: url(@/shared/assets/country-flags/kiribati.svg) center / contain no-repeat;
+  }
+
+  &.la {
+    background: url(@/shared/assets/country-flags/laos.svg) center / contain no-repeat;
+  }
+
+  &.mh {
+    background: url(@/shared/assets/country-flags/marshall-island.svg) center / contain no-repeat;
+  }
+
+  &.fm {
+    background: url(@/shared/assets/country-flags/micronesia.svg) center / contain no-repeat;
+  }
+
+  &.ms {
+    background: url(@/shared/assets/country-flags/montserrat.svg) center / contain no-repeat;
+  }
+
+  &.nu {
+    background: url(@/shared/assets/country-flags/niue.svg) center / contain no-repeat;
+  }
+
+  &.nf {
+    background: url(@/shared/assets/country-flags/norfolk-island.svg) center / contain no-repeat;
+  }
+
+  &.mk {
+    background: url(@/shared/assets/country-flags/republic-of-macedonia.svg) center / contain no-repeat;
+  }
+
+  &.pw {
+    background: url(@/shared/assets/country-flags/palau.svg) center / contain no-repeat;
+  }
+
+  &.pn {
+    background: url(@/shared/assets/country-flags/pitcairn-islands.svg) center / contain no-repeat;
+  }
+
+  &.mf {
+    background: url(@/shared/assets/country-flags/martinique.svg) center / contain no-repeat;
+  }
+
+  &.st {
+    background: url(@/shared/assets/country-flags/sao-tome-and-principe.svg) center / contain no-repeat;
+  }
+
+  &.sx {
+    background: url(@/shared/assets/country-flags/sint-maarten.svg) center / contain no-repeat;
+  }
+
+  &.tk {
+    background: url(@/shared/assets/country-flags/tokelau.svg) center / contain no-repeat;
+  }
+
+  &.tc {
+    background: url(@/shared/assets/country-flags/turks-and-caicos.svg) center / contain no-repeat;
+  }
+
+  &.ve {
+    background: url(@/shared/assets/country-flags/venezuela.svg) center / contain no-repeat;
+  }
+
+  &.vg {
+    background: url(@/shared/assets/country-flags/british-virgin-islands.svg) center / contain no-repeat;
+  }
+
+  &.vi {
+    background: url(@/shared/assets/country-flags/virgin-islands.svg) center / contain no-repeat;
+  }
+
+  &.eh {
+    background: url(@/shared/assets/country-flags/western-sahara.svg) center / contain no-repeat;
+  }
+
+  &.ps {
+    height: rem(20px) !important;
+    background: url(@/shared/assets/country-flags/palestine.svg) center / contain no-repeat !important;
+  }
+
+  &.af {
+    background: url(@/shared/assets/country-flags/afghanistan.svg) center / contain no-repeat;
+  }
+
+  &.cf {
+    background: url(@/shared/assets/country-flags/central-african-republic.svg) center / contain no-repeat;
+  }
+
+  &.cg {
+    background: url(@/shared/assets/country-flags/republic-of-the-congo.svg) center / contain no-repeat;
+  }
+
+  &.cu {
+    background: url(@/shared/assets/country-flags/cuba.svg) center / contain no-repeat;
+  }
+
+  &.er {
+    background: url(@/shared/assets/country-flags/eritrea.svg) center / contain no-repeat;
+  }
+
+  &.ir {
+    background: url(@/shared/assets/country-flags/iran.svg) center / contain no-repeat;
+  }
+
+  &.iq {
+    background: url(@/shared/assets/country-flags/iraq.svg) center / contain no-repeat;
+  }
+
+  &.lb {
+    background: url(@/shared/assets/country-flags/lebanon.svg) center / contain no-repeat;
+  }
+
+  &.ly {
+    background: url(@/shared/assets/country-flags/libya.svg) center / contain no-repeat;
+  }
+
+  &.ml {
+    background: url(@/shared/assets/country-flags/mali.svg) center / contain no-repeat;
+  }
+
+  &.mm {
+    background: url(@/shared/assets/country-flags/myanmar.svg) center / contain no-repeat;
+  }
+
+  &.so {
+    background: url(@/shared/assets/country-flags/somalia.svg) center / contain no-repeat;
+  }
+
+  &.ss {
+    background: url(@/shared/assets/country-flags/south-sudan.svg) center / contain no-repeat;
+  }
+
+  &.sd {
+    background: url(@/shared/assets/country-flags/sudan.svg) center / contain no-repeat;
+  }
+
+  &.sy {
+    background: url(@/shared/assets/country-flags/syria.svg) center / contain no-repeat;
+  }
+
+  &.ye {
+    background: url(@/shared/assets/country-flags/yemen.svg) center / contain no-repeat;
+  }
+
+  &.zw {
+    background: url(@/shared/assets/country-flags/zimbabwe.svg) center / contain no-repeat;
+  }
+
+  &.by {
+    background: url(@/shared/assets/country-flags/belarus.svg) center / contain no-repeat;
+  }
+
+  &.gb {
+    background: url(@/shared/assets/country-flags/united-kingdom.svg) center / contain no-repeat;
+  }
+
+  &.ie {
+    background: url(@/shared/assets/country-flags/ireland.svg) center / contain no-repeat;
+  }
+
+  &.es {
+    background: url(@/shared/assets/country-flags/spain.svg) center / contain no-repeat;
+  }
+
+  &.fr {
+    background: url(@/shared/assets/country-flags/france.svg) center / contain no-repeat;
+  }
+
+  &.al {
+    background: url(@/shared/assets/country-flags/albania.svg) center / contain no-repeat;
+  }
+
+  &.dz {
+    background: url(@/shared/assets/country-flags/algeria.svg) center / contain no-repeat;
+  }
+
+  &.ad {
+    background: url(@/shared/assets/country-flags/andorra.svg) center / contain no-repeat;
+  }
+
+  &.ao {
+    background: url(@/shared/assets/country-flags/angola.svg) center / contain no-repeat;
+  }
+
+  &.ag {
+    background: url(@/shared/assets/country-flags/antigua-and-barbuda.svg) center / contain no-repeat;
+  }
+
+  &.ar {
+    background: url(@/shared/assets/country-flags/argentina.svg) center / contain no-repeat;
+  }
+
+  &.am {
+    background: url(@/shared/assets/country-flags/armenia.svg) center / contain no-repeat;
+  }
+
+  &.aw {
+    background: url(@/shared/assets/country-flags/aruba.svg) center / contain no-repeat;
+  }
+
+  &.au {
+    background: url(@/shared/assets/country-flags/australia.svg) center / contain no-repeat;
+  }
+
+  &.at {
+    background: url(@/shared/assets/country-flags/austria.svg) center / contain no-repeat;
+  }
+
+  &.az {
+    background: url(@/shared/assets/country-flags/azerbaijan.svg) center / contain no-repeat;
+  }
+
+  &.bs {
+    background: url(@/shared/assets/country-flags/bahamas.svg) center / contain no-repeat;
+  }
+
+  &.bh {
+    background: url(@/shared/assets/country-flags/bahrain.svg) center / contain no-repeat;
+  }
+
+  &.bd {
+    background: url(@/shared/assets/country-flags/bangladesh.svg) center / contain no-repeat;
+  }
+
+  &.bb {
+    background: url(@/shared/assets/country-flags/barbados.svg) center / contain no-repeat;
+  }
+
+  &.be {
+    background: url(@/shared/assets/country-flags/belgium.svg) center / contain no-repeat;
+  }
+
+  &.bz {
+    background: url(@/shared/assets/country-flags/belize.svg) center / contain no-repeat;
+  }
+
+  &.bj {
+    background: url(@/shared/assets/country-flags/benin.svg) center / contain no-repeat;
+  }
+
+  &.bm {
+    background: url(@/shared/assets/country-flags/bermuda.svg) center / contain no-repeat;
+  }
+
+  &.bt {
+    background: url(@/shared/assets/country-flags/bhutan.svg) center / contain no-repeat;
+  }
+
+  &.bo {
+    background: url(@/shared/assets/country-flags/bolivia.svg) center / contain no-repeat;
+  }
+
+  &.ba {
+    background: url(@/shared/assets/country-flags/bosnia-and-herzegovina.svg) center / contain no-repeat;
+  }
+
+  &.bw {
+    background: url(@/shared/assets/country-flags/botswana.svg) center / contain no-repeat;
+  }
+
+  &.br {
+    background: url(@/shared/assets/country-flags/brazil.svg) center / contain no-repeat;
+  }
+
+  &.bn {
+    background: url(@/shared/assets/country-flags/brunei.svg) center / contain no-repeat;
+  }
+
+  &.bg {
+    background: url(@/shared/assets/country-flags/bulgaria.svg) center / contain no-repeat;
+  }
+
+  &.bf {
+    background: url(@/shared/assets/country-flags/burkina-faso.svg) center / contain no-repeat;
+  }
+
+  &.kh {
+    background: url(@/shared/assets/country-flags/cambodia.svg) center / contain no-repeat;
+  }
+
+  &.cm {
+    background: url(@/shared/assets/country-flags/cameroon.svg) center / contain no-repeat;
+  }
+
+  &.ca {
+    background: url(@/shared/assets/country-flags/canada.svg) center / contain no-repeat;
+  }
+
+  &.cv {
+    background: url(@/shared/assets/country-flags/cape-verde.svg) center / contain no-repeat;
+  }
+
+  &.ky {
+    background: url(@/shared/assets/country-flags/cayman-islands.svg) center / contain no-repeat;
+  }
+
+  &.td {
+    background: url(@/shared/assets/country-flags/chad.svg) center / contain no-repeat;
+  }
+
+  &.cl {
+    background: url(@/shared/assets/country-flags/chile.svg) center / contain no-repeat;
+  }
+
+  &.co {
+    background: url(@/shared/assets/country-flags/colombia.svg) center / contain no-repeat;
+  }
+
+  &.km {
+    background: url(@/shared/assets/country-flags/comoros.svg) center / contain no-repeat;
+  }
+
+  &.ck {
+    background: url(@/shared/assets/country-flags/cook-islands.svg) center / contain no-repeat;
+  }
+
+  &.cr {
+    background: url(@/shared/assets/country-flags/costa-rica.svg) center / contain no-repeat;
+  }
+
+  &.hr {
+    background: url(@/shared/assets/country-flags/croatia.svg) center / contain no-repeat;
+  }
+
+  &.cy {
+    background: url(@/shared/assets/country-flags/cyprus.svg) center / contain no-repeat;
+  }
+
+  &.cz {
+    background: url(@/shared/assets/country-flags/czech-republic.svg) center / contain no-repeat;
+  }
+
+  &.dk {
+    background: url(@/shared/assets/country-flags/denmark.svg) center / contain no-repeat;
+  }
+
+  &.dm {
+    background: url(@/shared/assets/country-flags/dominica.svg) center / contain no-repeat;
+  }
+
+  &.do {
+    background: url(@/shared/assets/country-flags/dominican-republic.svg) center / contain no-repeat;
+  }
+
+  &.ec {
+    background: url(@/shared/assets/country-flags/ecuador.svg) center / contain no-repeat;
+  }
+
+  &.eg {
+    background: url(@/shared/assets/country-flags/egypt.svg) center / contain no-repeat;
+  }
+
+  &.sv {
+    background: url(@/shared/assets/country-flags/salvador.svg) center / contain no-repeat;
+  }
+
+  &.gq {
+    background: url(@/shared/assets/country-flags/equatorial-guinea.svg) center / contain no-repeat;
+  }
+
+  &.ee {
+    background: url(@/shared/assets/country-flags/estonia.svg) center / contain no-repeat;
+  }
+
+  &.et {
+    background: url(@/shared/assets/country-flags/ethiopia.svg) center / contain no-repeat;
+  }
+
+  &.fo {
+    background: url(@/shared/assets/country-flags/faroe-islands.svg) center / contain no-repeat;
+  }
+
+  &.fj {
+    background: url(@/shared/assets/country-flags/fiji.svg) center / contain no-repeat;
+  }
+
+  &.fi {
+    background: url(@/shared/assets/country-flags/finland.svg) center / contain no-repeat;
+  }
+
+  &.gf {
+    background: url(@/shared/assets/country-flags/france.svg) center / contain no-repeat;
+  }
+
+  &.pf {
+    background: url(@/shared/assets/country-flags/french-polynesia.svg) center / contain no-repeat;
+  }
+
+  &.ga {
+    background: url(@/shared/assets/country-flags/gabon.svg) center / contain no-repeat;
+  }
+
+  &.gm {
+    background: url(@/shared/assets/country-flags/gambia.svg) center / contain no-repeat;
+  }
+
+  &.ge {
+    background: url(@/shared/assets/country-flags/georgia.svg) center / contain no-repeat;
+  }
+
+  &.de {
+    background: url(@/shared/assets/country-flags/germany.svg) center / contain no-repeat;
+  }
+
+  &.gh {
+    background: url(@/shared/assets/country-flags/ghana.svg) center / contain no-repeat;
+  }
+
+  &.gi {
+    background: url(@/shared/assets/country-flags/gibraltar.svg) center / contain no-repeat;
+  }
+
+  &.gr {
+    background: url(@/shared/assets/country-flags/greece.svg) center / contain no-repeat;
+  }
+
+  &.gl {
+    background: url(@/shared/assets/country-flags/greenland.svg) center / contain no-repeat;
+  }
+
+  &.gd {
+    background: url(@/shared/assets/country-flags/grenada.svg) center / contain no-repeat;
+  }
+
+  &.gp {
+    background: url(@/shared/assets/country-flags/france.svg) center / contain no-repeat;
+  }
+
+  &.gu {
+    background: url(@/shared/assets/country-flags/guam.svg) center / contain no-repeat;
+  }
+
+  &.gt {
+    background: url(@/shared/assets/country-flags/guatemala.svg) center / contain no-repeat;
+  }
+
+  &.gn {
+    background: url(@/shared/assets/country-flags/guinea.svg) center / contain no-repeat;
+  }
+
+  &.gw {
+    background: url(@/shared/assets/country-flags/guinea-bissau.svg) center / contain no-repeat;
+  }
+
+  &.hn {
+    background: url(@/shared/assets/country-flags/honduras.svg) center / contain no-repeat;
+  }
+
+  &.hk {
+    background: url(@/shared/assets/country-flags/hong-kong.svg) center / contain no-repeat;
+  }
+
+  &.hu {
+    background: url(@/shared/assets/country-flags/hungary.svg) center / contain no-repeat;
+  }
+
+  &.is {
+    background: url(@/shared/assets/country-flags/iceland.svg) center / contain no-repeat;
+  }
+
+  &.in {
+    background: url(@/shared/assets/country-flags/india.svg) center / contain no-repeat;
+  }
+
+  &.id {
+    background: url(@/shared/assets/country-flags/indonesia.svg) center / contain no-repeat;
+  }
+
+  &.il {
+    background: url(@/shared/assets/country-flags/israel.svg) center / contain no-repeat;
+  }
+
+  &.it {
+    background: url(@/shared/assets/country-flags/italy.svg) center / contain no-repeat;
+  }
+
+  &.ci {
+    background: url(@/shared/assets/country-flags/ivory-coast.svg) center / contain no-repeat;
+  }
+
+  &.jm {
+    background: url(@/shared/assets/country-flags/jamaica.svg) center / contain no-repeat;
+  }
+
+  &.jp {
+    background: url(@/shared/assets/country-flags/japan.svg) center / contain no-repeat;
+  }
+
+  &.jo {
+    background: url(@/shared/assets/country-flags/jordan.svg) center / contain no-repeat;
+  }
+
+  &.kz {
+    background: url(@/shared/assets/country-flags/kazakhstan.svg) center / contain no-repeat;
+  }
+
+  &.ke {
+    background: url(@/shared/assets/country-flags/kenya.svg) center / contain no-repeat;
+  }
+
+  &.kr {
+    background: url(@/shared/assets/country-flags/south-korea.svg) center / contain no-repeat;
+  }
+
+  &.kw {
+    background: url(@/shared/assets/country-flags/kuwait.svg) center / contain no-repeat;
+  }
+
+  &.kg {
+    background: url(@/shared/assets/country-flags/kyrgyzstan.svg) center / contain no-repeat;
+  }
+
+  &.lv {
+    background: url(@/shared/assets/country-flags/latvia.svg) center / contain no-repeat;
+  }
+
+  &.ls {
+    background: url(@/shared/assets/country-flags/lesotho.svg) center / contain no-repeat;
+  }
+
+  &.lr {
+    background: url(@/shared/assets/country-flags/liberia.svg) center / contain no-repeat;
+  }
+
+  &.li {
+    background: url(@/shared/assets/country-flags/liechtenstein.svg) center / contain no-repeat;
+  }
+
+  &.lt {
+    background: url(@/shared/assets/country-flags/lithuania.svg) center / contain no-repeat;
+  }
+
+  &.lu {
+    background: url(@/shared/assets/country-flags/luxembourg.svg) center / contain no-repeat;
+  }
+
+  &.mo {
+    background: url(@/shared/assets/country-flags/macao.svg) center / contain no-repeat;
+  }
+
+  &.mg {
+    background: url(@/shared/assets/country-flags/madagascar.svg) center / contain no-repeat;
+  }
+
+  &.mw {
+    background: url(@/shared/assets/country-flags/malawi.svg) center / contain no-repeat;
+  }
+
+  &.my {
+    background: url(@/shared/assets/country-flags/malaysia.svg) center / contain no-repeat;
+  }
+
+  &.mv {
+    background: url(@/shared/assets/country-flags/maldives.svg) center / contain no-repeat;
+  }
+
+  &.ml {
+    background: url(@/shared/assets/country-flags/mali.svg) center / contain no-repeat;
+  }
+
+  &.mt {
+    background: url(@/shared/assets/country-flags/malta.svg) center / contain no-repeat;
+  }
+
+  &.mq {
+    background: url(@/shared/assets/country-flags/martinique.svg) center / contain no-repeat;
+  }
+
+  &.mr {
+    background: url(@/shared/assets/country-flags/mauritania.svg) center / contain no-repeat;
+  }
+
+  &.mu {
+    background: url(@/shared/assets/country-flags/mauritius.svg) center / contain no-repeat;
+  }
+
+  &.mx {
+    background: url(@/shared/assets/country-flags/mexico.svg) center / contain no-repeat;
+  }
+
+  &.md {
+    background: url(@/shared/assets/country-flags/moldova.svg) center / contain no-repeat;
+  }
+
+  &.mc {
+    background: url(@/shared/assets/country-flags/monaco.svg) center / contain no-repeat;
+  }
+
+  &.mn {
+    background: url(@/shared/assets/country-flags/mongolia.svg) center / contain no-repeat;
+  }
+
+  &.me {
+    background: url(@/shared/assets/country-flags/montenegro.svg) center / contain no-repeat;
+  }
+
+  &.ma {
+    background: url(@/shared/assets/country-flags/morocco.svg) center / contain no-repeat;
+  }
+
+  &.mz {
+    background: url(@/shared/assets/country-flags/mozambique.svg) center / contain no-repeat;
+  }
+
+  &.na {
+    background: url(@/shared/assets/country-flags/namibia.svg) center / contain no-repeat;
+  }
+
+  &.nr {
+    background: url(@/shared/assets/country-flags/nauru.svg) center / contain no-repeat;
+  }
+
+  &.np {
+    background: url(@/shared/assets/country-flags/nepal.svg) center / contain no-repeat;
+  }
+
+  &.nl {
+    background: url(@/shared/assets/country-flags/netherlands.svg) center / contain no-repeat;
+  }
+
+  &.nc {
+    background: url(@/shared/assets/country-flags/france.svg) center / contain no-repeat;
+  }
+
+  &.nz {
+    background: url(@/shared/assets/country-flags/new-zealand.svg) center / contain no-repeat;
+  }
+
+  &.ni {
+    background: url(@/shared/assets/country-flags/nicaragua.svg) center / contain no-repeat;
+  }
+
+  &.ne {
+    background: url(@/shared/assets/country-flags/niger.svg) center / contain no-repeat;
+  }
+
+  &.ng {
+    background: url(@/shared/assets/country-flags/nigeria.svg) center / contain no-repeat;
+  }
+
+  &.mp {
+    background: url(@/shared/assets/country-flags/northern-marianas-islands.svg) center / contain no-repeat;
+  }
+
+  &.no {
+    background: url(@/shared/assets/country-flags/norway.svg) center / contain no-repeat;
+  }
+
+  &.om {
+    background: url(@/shared/assets/country-flags/oman.svg) center / contain no-repeat;
+  }
+
+  &.pk {
+    background: url(@/shared/assets/country-flags/pakistan.svg) center / contain no-repeat;
+  }
+
+  &.pa {
+    background: url(@/shared/assets/country-flags/panama.svg) center / contain no-repeat;
+  }
+
+  &.pg {
+    background: url(@/shared/assets/country-flags/papua-new-guinea.svg) center / contain no-repeat;
+  }
+
+  &.py {
+    background: url(@/shared/assets/country-flags/paraguay.svg) center / contain no-repeat;
+  }
+
+  &.pe {
+    background: url(@/shared/assets/country-flags/peru.svg) center / contain no-repeat;
+  }
+
+  &.ph {
+    background: url(@/shared/assets/country-flags/philippines.svg) center / contain no-repeat;
+  }
+
+  &.pl {
+    background: url(@/shared/assets/country-flags/republic-of-poland.svg) center / contain no-repeat;
+  }
+
+  &.pt {
+    background: url(@/shared/assets/country-flags/portugal.svg) center / contain no-repeat;
+  }
+
+  &.pr {
+    background: url(@/shared/assets/country-flags/puerto-rico.svg) center / contain no-repeat;
+  }
+
+  &.qa {
+    background: url(@/shared/assets/country-flags/qatar.svg) center / contain no-repeat;
+  }
+
+  &.re {
+    background: url(@/shared/assets/country-flags/france.svg) center / contain no-repeat;
+  }
+
+  &.ro {
+    background: url(@/shared/assets/country-flags/romania.svg) center / contain no-repeat;
+  }
+
+  &.ru {
+    background: url(@/shared/assets/country-flags/russia.svg) center / contain no-repeat;
+  }
+
+  &.rw {
+    background: url(@/shared/assets/country-flags/rwanda.svg) center / contain no-repeat;
+  }
+
+  &.kn {
+    background: url(@/shared/assets/country-flags/saint-kitts-and-nevis.svg) center / contain no-repeat;
+  }
+
+  &.lc {
+    background: url(@/shared/assets/country-flags/st-lucia.svg) center / contain no-repeat;
+  }
+
+  &.vc {
+    background: url(@/shared/assets/country-flags/st-vincent-and-the-grenadines.svg) center / contain no-repeat;
+  }
+
+  &.ws {
+    background: url(@/shared/assets/country-flags/samoa.svg) center / contain no-repeat;
+  }
+
+  &.sm {
+    background: url(@/shared/assets/country-flags/san-marino.svg) center / contain no-repeat;
+  }
+
+  &.sa {
+    background: url(@/shared/assets/country-flags/saudi-arabia.svg) center / contain no-repeat;
+  }
+
+  &.sn {
+    background: url(@/shared/assets/country-flags/senegal.svg) center / contain no-repeat;
+  }
+
+  &.rs {
+    background: url(@/shared/assets/country-flags/serbia.svg) center / contain no-repeat;
+  }
+
+  &.sc {
+    background: url(@/shared/assets/country-flags/seychelles.svg) center / contain no-repeat;
+  }
+
+  &.sl {
+    background: url(@/shared/assets/country-flags/sierra-leone.svg) center / contain no-repeat;
+  }
+
+  &.sg {
+    background: url(@/shared/assets/country-flags/singapore.svg) center / contain no-repeat;
+  }
+
+  &.sk {
+    background: url(@/shared/assets/country-flags/slovakia.svg) center / contain no-repeat;
+  }
+
+  &.si {
+    background: url(@/shared/assets/country-flags/slovenia.svg) center / contain no-repeat;
+  }
+
+  &.sb {
+    background: url(@/shared/assets/country-flags/solomon-islands.svg) center / contain no-repeat;
+  }
+
+  &.za {
+    background: url(@/shared/assets/country-flags/south-africa.svg) center / contain no-repeat;
+  }
+
+  &.lk {
+    background: url(@/shared/assets/country-flags/sri-lanka.svg) center / contain no-repeat;
+  }
+
+  &.sr {
+    background: url(@/shared/assets/country-flags/suriname.svg) center / contain no-repeat;
+  }
+
+  &.se {
+    background: url(@/shared/assets/country-flags/sweden.svg) center / contain no-repeat;
+  }
+
+  &.ch {
+    background: url(@/shared/assets/country-flags/switzerland.svg) center / contain no-repeat;
+  }
+
+  &.tw {
+    background: url(@/shared/assets/country-flags/taiwan.svg) center / contain no-repeat;
+  }
+
+  &.tj {
+    background: url(@/shared/assets/country-flags/tajikistan.svg) center / contain no-repeat;
+  }
+
+  &.tz {
+    background: url(@/shared/assets/country-flags/tanzania.svg) center / contain no-repeat;
+  }
+
+  &.th {
+    background: url(@/shared/assets/country-flags/thailand.svg) center / contain no-repeat;
+  }
+
+  &.tl {
+    background: url(@/shared/assets/country-flags/east-timor.svg) center / contain no-repeat;
+  }
+
+  &.tg {
+    background: url(@/shared/assets/country-flags/togo.svg) center / contain no-repeat;
+  }
+
+  &.to {
+    background: url(@/shared/assets/country-flags/tonga.svg) center / contain no-repeat;
+  }
+
+  &.tt {
+    background: url(@/shared/assets/country-flags/trinidad-and-tobago.svg) center / contain no-repeat;
+  }
+
+  &.tn {
+    background: url(@/shared/assets/country-flags/tunisia.svg) center / contain no-repeat;
+  }
+
+  &.tr {
+    background: url(@/shared/assets/country-flags/turkey.svg) center / contain no-repeat;
+  }
+
+  &.tm {
+    background: url(@/shared/assets/country-flags/turkmenistan.svg) center / contain no-repeat;
+  }
+
+  &.ug {
+    background: url(@/shared/assets/country-flags/uganda.svg) center / contain no-repeat;
+  }
+
+  &.ua {
+    background: url(@/shared/assets/country-flags/ukraine.svg) center / contain no-repeat;
+  }
+
+  &.ae {
+    background: url(@/shared/assets/country-flags/united-arab-emirates.svg) center / contain no-repeat;
+  }
+
+  &.us {
+    background: url(@/shared/assets/country-flags/united-states-of-america.svg) center / contain no-repeat;
+  }
+
+  &.uy {
+    background: url(@/shared/assets/country-flags/uruguay.svg) center / contain no-repeat;
+  }
+
+  &.uz {
+    background: url(@/shared/assets/country-flags/uzbekistn.svg) center / contain no-repeat;
+  }
+
+  &.vu {
+    background: url(@/shared/assets/country-flags/vanuatu.svg) center / contain no-repeat;
+  }
+
+  &.vn {
+    background: url(@/shared/assets/country-flags/vietnam.svg) center / contain no-repeat;
+  }
+
+  &.zm {
+    background: url(@/shared/assets/country-flags/zambia.svg) center / contain no-repeat;
+  }
+}

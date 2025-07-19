@@ -27,9 +27,9 @@ export const generateWordAudioUrlHandler = async (global_word_id: string): Promi
       method: "GET",
     })
 
-    const { data }: { data: string } = response
+    const { data }: { data: { audio_url: string } } = response
 
-    return data
+    return data.audio_url
   } catch (error: unknown) {
     throw error
   }

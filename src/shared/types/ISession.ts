@@ -35,4 +35,5 @@ export interface ISessionEntity {
 export interface ISessionCreateRequest {
   type: SessionTypeEnum
   prompt_id: string
+  active_ielts_part?: SessionIeltsPartEnum
 }
