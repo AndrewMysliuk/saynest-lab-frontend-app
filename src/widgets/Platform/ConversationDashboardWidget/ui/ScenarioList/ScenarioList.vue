@@ -116,6 +116,7 @@ import { computed, defineComponent } from "vue"
 import { promptStore, userProgressStore, userStore } from "@/app"
 import { IPromptScenarioEntity } from "@/shared/types"
 import { getPartProgress } from "@/shared/lib"
+import { urlAudioPlayer } from "@/app"
 
 export default defineComponent({
   props: {
@@ -131,6 +132,7 @@ export default defineComponent({
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
 
     const selectPrompt = (prompt: IPromptScenarioEntity) => {
+      urlAudioPlayer.unlockAudio()
       emit("selectPrompt", prompt)
     }
 

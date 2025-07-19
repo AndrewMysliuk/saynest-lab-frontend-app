@@ -164,6 +164,22 @@ export const createAudioPlayer = () => {
 export const createUrlAudioPlayer = () => {
   const audioElement = ref<HTMLAudioElement | null>(new Audio())
 
+  let unlocked = false
+
+  const unlockAudio = () => {
+    if (!audioElement.value || unlocked) return
+    audioElement.value.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA="
+    audioElement.value
+      .play()
+      .then(() => {
+        unlocked = true
+        console.log("Audio unlocked!")
+      })
+      .catch((e) => {
+        console.warn("Unlock failed", e)
+      })
+  }
+
   const playUrl = (url: string) => {
     if (!audioElement.value) return
 
@@ -172,9 +188,11 @@ export const createUrlAudioPlayer = () => {
     audioElement.value.src = url
     audioElement.value.load()
 
-    audioElement.value.play().catch((error) => {
-      console.error("Audio playback error:", error)
-    })
+    setTimeout(() => {
+      audioElement.value?.play().catch((error) => {
+        console.error("Audio playback error:", error)
+      })
+    }, 100)
   }
 
   const stop = () => {
@@ -186,6 +204,7 @@ export const createUrlAudioPlayer = () => {
   return {
     playUrl,
     stop,
+    unlockAudio,
     audioElement,
   }
 }
