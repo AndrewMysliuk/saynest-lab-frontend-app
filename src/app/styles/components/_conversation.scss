@@ -3,7 +3,7 @@
 
 .conversation {
   width: 100%;
-  min-height: calc(100vh - rem(48px));
+  min-height: calc(100dvh - rem(48px));
   position: relative;
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
   justify-content: center;
 
   @include for-md {
-    min-height: calc(100vh - rem(32px));
+    min-height: calc(100dvh - rem(32px));
   }
 
   &__description {
