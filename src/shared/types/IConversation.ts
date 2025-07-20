@@ -120,3 +120,5 @@ export interface IConversationResponse {
   conversation_history: IConversationHistory[]
   last_model_response: string
 }
+
+export type TokenType = { type: "word"; value: string } | { type: "newline" }

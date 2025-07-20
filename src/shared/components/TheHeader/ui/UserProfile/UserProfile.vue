@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full overflow-y-auto p-6 bg-gray-50 rounded-lg shadow-md">
+  <div class="w-full h-full overflow-y-auto p-6 bg-gray-50 rounded-none sm:rounded-lg shadow-md">
     <div class="flex justify-between items-center relative mb-6 md:block">
       <h2 class="text-xl font-semibold text-gray-800">User Profile</h2>
 

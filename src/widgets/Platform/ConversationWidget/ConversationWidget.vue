@@ -127,27 +127,31 @@ import { useMicrophone, initializeCanvasForConversation, isLg } from "@/shared/l
 import { ConversationSidebar, InfoModal } from "./ui"
 import { SessionTypeEnum } from "@/shared/types"
 import { createSessionHandler } from "@/shared/api"
-import helloRecordEn from "@/shared/assets/records/hello_record_en.wav"
-import helloRecordBg from "@/shared/assets/records/hello_record_bg.wav"
-import helloRecordDe from "@/shared/assets/records/hello_record_de.wav"
-import helloRecordEs from "@/shared/assets/records/hello_record_es.wav"
+// import helloRecordEn from "@/shared/assets/records/hello_record_en.wav"
+// import helloRecordBg from "@/shared/assets/records/hello_record_bg.wav"
+// import helloRecordDe from "@/shared/assets/records/hello_record_de.wav"
+// import helloRecordEs from "@/shared/assets/records/hello_record_es.wav"
+import startRecordEn from "@/shared/assets/records/start_record_en.wav"
+import startRecordBg from "@/shared/assets/records/start_record_bg.wav"
+import startRecordDe from "@/shared/assets/records/start_record_de.wav"
+import startRecordEs from "@/shared/assets/records/start_record_es.wav"
 import LanguagesList from "@/shared/json_data/languages.json"
 
 const FILE_LANGUAGE = [
   {
-    file: helloRecordEn,
+    file: startRecordEn,
     language: "English",
   },
   {
-    file: helloRecordBg,
+    file: startRecordBg,
     language: "Bolgarian",
   },
   {
-    file: helloRecordDe,
+    file: startRecordDe,
     language: "German",
   },
   {
-    file: helloRecordEs,
+    file: startRecordEs,
     language: "Spanish",
   },
 ]

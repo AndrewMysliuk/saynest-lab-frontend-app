@@ -1,12 +1,14 @@
 <template>
   <div ref="textContainerRef" class="interactive-text" @mouseup="handleTextSelection">
-    <template v-for="(word, _index) in tokenizedWords" :key="_index">
+    <template v-for="(token, i) in tokenizedWords" :key="i">
+      <br v-if="token.type === 'newline'" />
       <span
+        v-else
         class="word select-text cursor-pointer px-0.5 rounded selection:bg-yellow-300 selection:text-black"
-        :class="['hover:bg-yellow-100', highlightColor(word)]"
-        @click="() => handleWordClick(word)"
+        :class="['hover:bg-yellow-100', highlightColor(token.value)]"
+        @click="() => handleWordClick(token.value)"
       >
-        {{ word }}
+        {{ token.value }}
       </span>
     </template>
   </div>
@@ -16,6 +18,7 @@
 import { defineComponent, computed, ref } from "vue"
 import { normalizeTrim } from "@/shared/utils"
 import { vocabularyStore } from "@/app"
+import { tokenizeTextToParagraphs } from "@/shared/lib"
 
 export default defineComponent({
   props: {
@@ -29,7 +32,7 @@ export default defineComponent({
     const textContainerRef = ref<HTMLDivElement | null>(null)
     const isSkipClick = ref<boolean>(false)
 
-    const tokenizedWords = computed(() => props.text.split(/\s+/))
+    const tokenizedWords = computed(() => tokenizeTextToParagraphs(props.text).flat())
     const getSelectedWord = computed(() => vocabularyStore.getSelectedWord)
     const normalizedCurrentWord = computed(() => normalizeTrim(getSelectedWord.value?.global_word_entity?.word || "").toLowerCase())
 

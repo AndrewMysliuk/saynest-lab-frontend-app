@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full overflow-y-auto p-6 bg-white rounded-lg shadow-md text-gray-800">
+  <div class="w-full h-full overflow-y-auto p-6 bg-white rounded-none sm:rounded-lg shadow-md text-gray-800">
     <div class="flex justify-between items-center relative mb-6 md:block">
       <h3 class="text-xl font-semibold text-gray-800">{{ getSelectedPrompt?.title }}</h3>
 

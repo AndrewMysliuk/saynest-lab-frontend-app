@@ -1,4 +1,4 @@
-import { IErrorAnalysisEntity, IWord, SessionIeltsPartEnum } from "../types"
+import { IErrorAnalysisEntity, IWord, SessionIeltsPartEnum, TokenType } from "../types"
 
 export function formatCorrections(data: IErrorAnalysisEntity): string {
   if (!data.has_errors || !data.issues.length) return ""
@@ -106,4 +106,25 @@ export function getPartProgress(progress: Record<string, number>, promptName: st
 
   const key = `${promptName}#${part}`
   return progress[key] || 0
+}
+
+export function tokenizeTextToParagraphs(text: string): TokenType[][] {
+  const paragraphs = text.split(/\n\s*\n/)
+
+  return paragraphs.map((para) => {
+    const tokens: TokenType[] = []
+    const withLineBreaks = para.replace(/\n/g, " __NEWLINE__ ")
+
+    withLineBreaks.split(/\s+/).forEach((chunk) => {
+      if (chunk === "" || chunk === " ") return
+
+      if (chunk === "__NEWLINE__") {
+        tokens.push({ type: "newline" })
+      } else {
+        tokens.push({ type: "word", value: chunk })
+      }
+    })
+
+    return tokens
+  })
 }
