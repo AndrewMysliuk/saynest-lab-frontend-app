@@ -29,7 +29,7 @@ app.use(
   createGtm({
     id: gtmConfig.id,
     enabled: gtmConfig.enabled,
-    debug: gtmConfig.debug,
+    debug: false,
     vueRouter: router,
   })
 )
