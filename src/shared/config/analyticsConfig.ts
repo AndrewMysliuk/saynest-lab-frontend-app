@@ -1,6 +1,8 @@
+import { isProduction } from "../utils"
+
 export const gtmConfig = {
   id: import.meta.env.VITE_GTM_ID,
-  enabled: import.meta.env.MODE !== "development",
-  debug: import.meta.env.MODE === "development",
+  enabled: isProduction,
+  debug: !isProduction,
   // enabled: true,
 }
