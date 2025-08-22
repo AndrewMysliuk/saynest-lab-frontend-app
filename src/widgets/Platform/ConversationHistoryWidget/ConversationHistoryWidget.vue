@@ -15,20 +15,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, computed, ref } from "vue"
+import { defineComponent, onBeforeMount, computed, ref, defineAsyncComponent } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { commonStore, communicationReviewStore, taskGeneratorStore } from "@/app"
 import { ICommunicationReview, TaskTypeEnum } from "@/shared/types"
 import { TheLoader, TheConfirmation } from "@/shared/components"
-import { PublicLink, HistoryList, SingleHistory } from "./ui"
 
 export default defineComponent({
   components: {
     TheLoader,
     TheConfirmation,
-    PublicLink,
-    SingleHistory,
-    HistoryList,
+    PublicLink: defineAsyncComponent(() => import("./ui/PublicLink")),
+    SingleHistory: defineAsyncComponent(() => import("./ui/SingleHistory")),
+    HistoryList: defineAsyncComponent(() => import("./ui/HistoryList")),
   },
 
   setup() {

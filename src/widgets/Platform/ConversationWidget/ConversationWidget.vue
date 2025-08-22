@@ -118,13 +118,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch } from "vue"
+import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch, defineAsyncComponent } from "vue"
 import { conversationStore, audioPlayer, urlAudioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore, vocabularyStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheConfirmation, TheLoader, TheInteractiveText } from "@/shared/components"
 import { retryWithAdaptiveParams } from "@/shared/utils"
 import { useMicrophone, initializeCanvasForConversation, isLg } from "@/shared/lib"
-import { ConversationSidebar, InfoModal } from "./ui"
 import { SessionTypeEnum } from "@/shared/types"
 import { createSessionHandler } from "@/shared/api"
 // import helloRecordEn from "@/shared/assets/records/hello_record_en.wav"
@@ -158,8 +157,8 @@ const FILE_LANGUAGE = [
 
 export default defineComponent({
   components: {
-    ConversationSidebar,
-    InfoModal,
+    ConversationSidebar: defineAsyncComponent(() => import("./ui/ConversationSidebar")),
+    InfoModal: defineAsyncComponent(() => import("./ui/InfoModal")),
     TheLoader,
     TheInteractiveText,
     TheConfirmation,

@@ -139,22 +139,21 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue"
+import { computed, defineAsyncComponent, defineComponent, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue"
 import { useRouter } from "vue-router"
 import { commonStore, promptStore, userProgressStore, userStore } from "@/app"
 import { TheLoader, TheCountryLanguage } from "@/shared/components"
 import { IPromptScenarioEntity, SessionIeltsPartEnum } from "@/shared/types"
 import { PromptLibraryTabsEnum } from "./types"
-import { ModuleList, ScenarioList, ModuleScenarioList, IeltsScenarioList } from "./ui"
 
 export default defineComponent({
   components: {
     TheLoader,
     TheCountryLanguage,
-    ModuleList,
-    ScenarioList,
-    ModuleScenarioList,
-    IeltsScenarioList,
+    ModuleList: defineAsyncComponent(() => import("./ui/ModuleList")),
+    ScenarioList: defineAsyncComponent(() => import("./ui/ScenarioList")),
+    ModuleScenarioList: defineAsyncComponent(() => import("./ui/ModuleScenarioList")),
+    IeltsScenarioList: defineAsyncComponent(() => import("./ui/IeltsScenarioList")),
   },
 
   setup() {

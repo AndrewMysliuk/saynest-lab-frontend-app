@@ -37,21 +37,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onBeforeMount } from "vue"
+import { defineComponent, computed, ref, onBeforeMount, defineAsyncComponent } from "vue"
 import { userProgressStore } from "@/app"
 import { TheLoader } from "@/shared/components"
-import { ProgressOverview, IeltsProgressChart, CefrProgressChart, ErrorStatsList, CompletedPromptsList, TasksTimeline, DayStreakProgress } from "./ui"
 
 export default defineComponent({
   components: {
     TheLoader,
-    ProgressOverview,
-    CefrProgressChart,
-    IeltsProgressChart,
-    ErrorStatsList,
-    CompletedPromptsList,
-    TasksTimeline,
-    DayStreakProgress,
+    ProgressOverview: defineAsyncComponent(() => import("./ui/ProgressOverview")),
+    IeltsProgressChart: defineAsyncComponent(() => import("./ui/IeltsProgressChart")),
+    CefrProgressChart: defineAsyncComponent(() => import("./ui/CefrProgressChart")),
+    ErrorStatsList: defineAsyncComponent(() => import("./ui/ErrorStatsList")),
+    CompletedPromptsList: defineAsyncComponent(() => import("./ui/CompletedPromptsList")),
+    TasksTimeline: defineAsyncComponent(() => import("./ui/TasksTimeline")),
+    DayStreakProgress: defineAsyncComponent(() => import("./ui/DayStreakProgress")),
   },
 
   setup() {
