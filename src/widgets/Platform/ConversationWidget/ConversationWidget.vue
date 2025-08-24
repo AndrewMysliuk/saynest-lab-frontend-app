@@ -224,6 +224,7 @@ export default defineComponent({
     const analyseUserConversation = async () => {
       if (getConversationResponse.value) {
         try {
+          isReviewModalOpen.value = false
           isReviewGenerating.value = true
 
           window.dataLayer = window.dataLayer || []
@@ -253,7 +254,6 @@ export default defineComponent({
           console.error("Error analysing user conversation:", error)
         } finally {
           isReviewGenerating.value = false
-          isReviewModalOpen.value = false
           orgStore.updateTrialUsage("review")
         }
       }
