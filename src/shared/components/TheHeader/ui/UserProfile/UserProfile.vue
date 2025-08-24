@@ -200,6 +200,7 @@
       <div class="flex flex-col gap-4 mt-4">
         <button
           v-if="isTrialing && !isPendingCancel"
+          id="UNLOCK_FULL_ACCESS_CLICKED"
           type="button"
           class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
           @click="isActiveFromTrialOpen = true"
@@ -209,6 +210,7 @@
 
         <button
           v-if="(isTrialing || isActive) && !isPendingCancel"
+          id="CANCEL_SUBSCRIPTION_CLICKED"
           @click="isUnsubscribedConfirmOpened = true"
           type="button"
           class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
