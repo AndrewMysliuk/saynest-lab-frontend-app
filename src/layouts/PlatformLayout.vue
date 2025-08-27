@@ -30,10 +30,9 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, defineComponent, onBeforeMount, onMounted } from "vue"
+import { computed, ref, defineComponent, onMounted } from "vue"
 import { orgStore, plansStore, subscriptionStore, userStore, vocabularyStore } from "@/app"
 import { TheNotification, TheLegal, TheWordInfo, TheHeader, TheFooter } from "@/shared/components"
-import { useRouter } from "vue-router"
 import { subscriptionCheckMiddleware } from "@/shared/middleware"
 import { formatDateTime, isLg } from "@/shared/lib"
 
@@ -50,7 +49,6 @@ export default defineComponent({
   },
 
   setup() {
-    const router = useRouter()
     const isDesktop = ref<boolean>(isLg())
 
     const getUserLegalTC = computed(() => userStore.getUserLegal?.is_accept_terms_and_conditions)
@@ -79,11 +77,11 @@ export default defineComponent({
     const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
     const getIsWordModalOpen = computed(() => vocabularyStore.getIsWordModalOpen)
 
-    onBeforeMount(() => {
-      if (!getCurrentSubscription.value) {
-        router.push({ name: "platform.tariff-plans" })
-      }
-    })
+    // onBeforeMount(() => {
+    //   if (!getCurrentSubscription.value) {
+    //     router.push({ name: "platform.tariff-plans" })
+    //   }
+    // })
 
     onMounted(() => {
       hotjarUserData()

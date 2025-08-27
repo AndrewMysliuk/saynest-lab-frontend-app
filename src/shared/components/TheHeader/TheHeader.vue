@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 inset-x-0 z-50 bg-white border-b border-gray-200">
+  <header class="fixed top-0 left-0 right-0 inset-x-0 z-50 bg-white border-b border-gray-200" :class="[getIsExpiredVisible || getIsTrialVisible ? 'top-[64px]' : '']">
     <nav class="basis-full w-full py-4 px-4 sm:px-6 lg:px-8 lg:mx-auto">
       <div class="flex flex-wrap lg:flex-nowrap basis-full justify-between gap-x-2 w-full">
         <!-- Button Group -->

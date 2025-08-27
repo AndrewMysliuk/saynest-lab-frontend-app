@@ -7,10 +7,16 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
   const currentSubscription = ref<ISubscriptionEntity | null>(null)
   const isExpiredVisible = ref<boolean>(false)
   const isTrialVisible = ref<boolean>(false)
+  const isHasSubscription = ref<boolean>(false)
 
   const getCurrentSubscription = computed(() => currentSubscription.value)
   const getIsExpiredVisible = computed(() => isExpiredVisible.value)
   const getIsTrialVisible = computed(() => isTrialVisible.value)
+  const getIsHasSubscription = computed(() => isHasSubscription.value)
+
+  const setIsHasSubscription = (value: boolean) => {
+    isHasSubscription.value = value
+  }
 
   const setIsExpiredVisible = (value: boolean) => {
     isExpiredVisible.value = value
@@ -92,6 +98,8 @@ export const useSubscriptionStore = defineStore("subscriptionStore", () => {
     getCurrentSubscription,
     getIsExpiredVisible,
     getIsTrialVisible,
+    getIsHasSubscription,
+    setIsHasSubscription,
     setIsTrialVisible,
     setIsExpiredVisible,
     fetchCurrentSubscription,

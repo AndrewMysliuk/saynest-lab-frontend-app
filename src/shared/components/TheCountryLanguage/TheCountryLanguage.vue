@@ -13,7 +13,7 @@
       </svg>
     </button>
 
-    <div v-if="isOpen" class="absolute mt-2 z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+    <div v-if="isOpen" class="absolute mt-2 z-20 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
       <ul>
         <li v-for="country in countries" :key="country.code" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center gap-2" @click="selectCountry(country)">
           <span :class="['country-flag', `${country.code}`]" />

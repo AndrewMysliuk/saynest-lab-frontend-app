@@ -2,8 +2,7 @@
   <div class="space-y-6">
     <div
       v-for="(scenario, index) in getPromptList"
-      :key="scenario._id"
-      @click="selectPrompt(scenario)"
+      :key="index"
       class="relative bg-white border-l-4 rounded-2xl p-6 border border-gray-200 shadow-sm transition-all duration-200 cursor-pointer hover:shadow-md hover:-translate-y-[1px]"
       :class="[
         scenario.level === 'A1'
@@ -20,7 +19,12 @@
                     ? 'border-l-rose-200'
                     : 'border-l-gray-200',
       ]"
+      @click="!isLocked || AVAILABLE_SCENARIOS.includes(scenario._id) ? selectPrompt(scenario) : $router.push('/platform/tariff-plans')"
     >
+      <div v-if="isLocked && !AVAILABLE_SCENARIOS.includes(scenario._id)" class="absolute inset-0 z-10 bg-gray-400/50 flex items-center justify-center cursor-pointer rounded-2xl">
+        <i class="fas fa-lock text-gray-600 text-3xl" title="Scenario is locked" />
+      </div>
+
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
         <h3 class="text-xl font-semibold text-gray-900 truncate">
@@ -113,10 +117,10 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
-import { promptStore, userProgressStore, userStore } from "@/app"
+import { promptStore, subscriptionStore, userProgressStore, userStore, urlAudioPlayer } from "@/app"
 import { IPromptScenarioEntity } from "@/shared/types"
 import { getPartProgress } from "@/shared/lib"
-import { urlAudioPlayer } from "@/app"
+import { AVAILABLE_SCENARIOS } from "@/shared/utils"
 
 export default defineComponent({
   props: {
@@ -130,6 +134,7 @@ export default defineComponent({
     const getPromptList = computed(() => promptStore.getPromptList)
     const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
+    const isLocked = computed(() => subscriptionStore.getIsExpiredVisible || !subscriptionStore.getIsHasSubscription)
 
     const selectPrompt = (prompt: IPromptScenarioEntity) => {
       urlAudioPlayer.unlockAudio()
@@ -141,12 +146,14 @@ export default defineComponent({
     }
 
     return {
+      isLocked,
       getPromptList,
       getUserTranslateLanguage,
       getCurrentUserProgress,
       getPartProgress,
       selectPrompt,
       toggleExpand,
+      AVAILABLE_SCENARIOS,
     }
   },
 })
