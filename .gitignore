@@ -30,5 +30,4 @@ ssl
 *.njsproj
 *.sln
 *.sw?
-
 certs
