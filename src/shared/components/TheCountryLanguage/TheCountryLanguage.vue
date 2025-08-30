@@ -46,9 +46,14 @@ export default defineComponent({
     const isOpen = ref<boolean>(false)
     const countries = ref<ICountryLanguage[]>([
       { code: "gb", name: "English" },
-      { code: "de", name: "German" },
       { code: "es", name: "Spanish" },
-      { code: "bg", name: "Bolgarian" },
+      { code: "fr", name: "French" },
+      { code: "pt", name: "Portuguese" },
+      { code: "de", name: "German" },
+      { code: "it", name: "Italian" },
+      { code: "pl", name: "Polish" },
+      { code: "uk", name: "Ukrainian" },
+      { code: "bg", name: "Bulgarian" },
     ])
     const selectedCountry = ref<ICountryLanguage | null>(countries.value.find((item) => item.name === props.modelValue) || null)
 
