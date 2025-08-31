@@ -1,0 +1,411 @@
+{
+  "header": {
+    "logout": "Cerrar sesión",
+    "menu": "Menú",
+    "conversation": "Conversación",
+    "history": "Historial",
+    "progress": "Progreso",
+    "vocabulary": "Vocabulario",
+    "pricing": "Precios"
+  },
+  "footer": {
+    "copyright": "Saynest Lab",
+    "terms": "Términos y condiciones",
+    "privacy": "Política de privacidad",
+    "refund": "Política de reembolso"
+  },
+  "confirmation": { "close": "Cerrar", "cancel": "Cancelar", "accept": "Sí, estoy seguro" },
+  "moduleLang": {
+    "select": "Seleccionar idioma",
+    "countries": {
+      "en": "Inglés",
+      "es": "Español",
+      "fr": "Francés",
+      "pt": "Portugués",
+      "de": "Alemán",
+      "it": "Italiano",
+      "pl": "Polaco",
+      "uk": "Ucraniano",
+      "bg": "Búlgaro"
+    }
+  },
+  "loader": {
+    "default": "Por favor, espere..."
+  },
+  "legal": {
+    "title": "Aceptar políticas",
+    "accept_prefix": "Acepto",
+    "done": "Listo"
+  },
+  "task": { "review_title": "Revisión de tareas", "close": "Cerrar", "check": "Comprobar", "correct": "Correctas: {x} / {y}" },
+  "layout": {
+    "click_here": "Haz clic aquí",
+    "expired_message": "Tu suscripción ha caducado. Renuévala para continuar.",
+    "trial_message": "Tu prueba está activa hasta {date}. Has usado {sessionsUsed}/{sessionsLimit} sesiones, {reviewsUsed}/{reviewsLimit} reseñas y {tasksUsed}/{tasksLimit} tareas. Puedes mejorar al plan completo en cualquier momento."
+  },
+  "wordInfo": {
+    "open_gt": "Abrir en Google Translate",
+    "open_dl": "Abrir en DeepL",
+    "translation": "Traducción",
+    "definition": "Definición",
+    "synonyms": "Sinónimos",
+    "no_data": "No hay datos disponibles. Prueba Google Translate o DeepL.",
+    "tier": {
+      "1": "Acabas de encontrarte con esta palabra.",
+      "2": "Te suena, pero no estás seguro.",
+      "3": "La entiendes en contexto pero no la usas.",
+      "4": "La entiendes totalmente y la usas con confianza.",
+      "none": "Aún no tienes esta palabra en tu vocabulario."
+    },
+    "remove": "Eliminar"
+  },
+  "vocab": {
+    "title": "Vocabulario",
+    "empty": "Aún no hay palabras",
+    "tabs": { "all": "Todas" },
+    "tier_label": { "1": "Nuevo", "2": "Familiar", "3": "Comprendido", "4": "Fluido" },
+    "search_placeholder": "Buscar palabra",
+    "th": { "word": "Palabra", "definition": "Definición", "tier": "Nivel", "audio": "Audio" },
+    "no_definition": "Sin definición",
+    "loading": "Cargando...",
+    "empty_filtered": "No se encontraron palabras",
+    "tier_none": "Nivel: –"
+  },
+  "profile": {
+    "title": "Perfil de usuario",
+    "close": "Cerrar",
+    "fields": {
+      "email_ro": "Correo (solo lectura)",
+      "first_name": "Nombre",
+      "last_name": "Apellido",
+      "country": "País",
+      "expl_lang": "Idioma de explicación"
+    },
+    "select_country": "Selecciona tu país",
+    "select_language": "Selecciona un idioma",
+    "btn": { "close": "Cerrar", "save": "Guardar" },
+    "error_global": "Algo salió mal. Inténtalo de nuevo más tarde.",
+    "sub": {
+      "title": "Tu suscripción",
+      "plan": "Plan:",
+      "per_person": "para una persona",
+      "status": "Estado: ",
+      "status_value": {
+        "active": "Activa",
+        "trialing": "En prueba",
+        "past_due": "Vencida",
+        "cancelled": "Cancelada"
+      },
+      "started_at": "Inicio:",
+      "next_payment": "Próximo pago:",
+      "pending_cancel": "La suscripción se cancelará el {date}.",
+      "resume": "Reanudar suscripción",
+      "past_due_title": "Pago fallido",
+      "past_due_desc": "Actualiza tu método de pago para mantener activa la suscripción",
+      "update_payment": "Actualizar método de pago",
+      "payment_failed": "Pago fallido",
+      "pick_new_plan_desc": "Puedes elegir un nuevo plan para seguir usando funciones premium",
+      "choose_new_plan": "Elegir nuevo plan"
+    },
+    "actions": {
+      "unlock_full": "Desbloquear acceso completo",
+      "cancel_sub": "Cancelar suscripción",
+      "delete_all_history": "Eliminar todo el historial de conversaciones"
+    },
+    "confirm": {
+      "delete_history": {
+        "title": "Eliminar todo el historial de conversaciones",
+        "desc": "¿Seguro que deseas eliminar todo el historial? Esta acción no se puede deshacer."
+      },
+      "cancel_sub": {
+        "title": "Cancelar suscripción",
+        "desc": "¿Seguro que deseas cancelar tu suscripción? Perderás el acceso premium al final del período."
+      },
+      "end_trial": {
+        "title": "Finalizar prueba",
+        "desc": "¿Finalizar la prueba y comenzar la suscripción ahora? Se te cobrará de inmediato y no podrás volver a la prueba."
+      }
+    }
+  },
+  "auth": {
+    "common": {
+      "or": "o",
+      "email": "Correo",
+      "email_placeholder": "Correo",
+      "password": "Contraseña",
+      "password_placeholder": "Contraseña",
+      "show_password": "Mostrar contraseña",
+      "hide_password": "Ocultar contraseña",
+      "continue_google": "Continuar con Google",
+      "errors": {
+        "generic": "Algo salió mal. Inténtalo de nuevo.",
+        "generic_later": "Algo salió mal. Inténtalo más tarde."
+      }
+    },
+    "login": {
+      "title": "Iniciar sesión",
+      "or": "@:auth.common.or",
+      "email": "@:auth.common.email",
+      "email_placeholder": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_placeholder": "@:auth.common.password_placeholder",
+      "show_password": "@:auth.common.show_password",
+      "hide_password": "@:auth.common.hide_password",
+      "submit": "Iniciar sesión",
+      "create": "Crear cuenta",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "errors": {
+        "invalid_credentials": "Correo o contraseña inválidos",
+        "generic": "@:auth.common.errors.generic"
+      }
+    },
+    "signup": {
+      "title": "Crear cuenta",
+      "first_name": "Nombre",
+      "first_name_ph": "Nombre",
+      "last_name": "Apellido",
+      "last_name_ph": "Apellido",
+      "country": "País",
+      "country_ph": "Selecciona tu país",
+      "email": "@:auth.common.email",
+      "email_ph": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_ph": "@:auth.common.password_placeholder",
+      "repeat_password": "Repite la contraseña",
+      "repeat_password_ph": "Repite la contraseña",
+      "submit": "Crear cuenta",
+      "have_account": "¿Ya tienes cuenta?",
+      "login_link": "Inicia sesión",
+      "errors": {
+        "passwords_mismatch": "Las contraseñas deben coincidir",
+        "email_exists": "El correo ya existe",
+        "generic": "@:auth.common.errors.generic",
+        "generic_later": "@:auth.common.errors.generic_later"
+      }
+    }
+  },
+  "subscription": {
+    "overview": {
+      "title": "Resumen de nuestros planes",
+      "subtitle": "Aquí puedes ver todos los planes de suscripción disponibles y sus características"
+    },
+    "badges": {
+      "current": "Plan actual",
+      "cancelled": "Plan cancelado"
+    },
+    "price": {
+      "perPerson": "{period} por una persona"
+    },
+    "period": {
+      "monthly": "mensual",
+      "annually": "anual",
+      "weekly": "semanal",
+      "daily": "diario"
+    },
+    "states": {
+      "active": "Activo",
+      "trialing": "En prueba",
+      "cancelled": "Cancelado",
+      "pastDue": "Vencido",
+      "pendingCancel": "Cancelación pendiente"
+    },
+    "actions": {
+      "updatePaymentMethod": "Actualizar método de pago",
+      "cancel": "Cancelar suscripción",
+      "resume": "Reanudar suscripción",
+      "start": "Iniciar suscripción",
+      "getTrial": "Obtener prueba gratuita",
+      "changePlan": "Cambiar plan",
+      "unlockFullAccess": "Desbloquear acceso completo"
+    },
+    "modals": {
+      "cancel": {
+        "title": "Cancelar suscripción",
+        "desc": "¿Seguro que quieres cancelar tu suscripción actual? Perderás acceso a todas las funciones premium al final del período de facturación."
+      },
+      "endTrial": {
+        "title": "Finalizar prueba antes",
+        "desc": "¿Quieres finalizar tu prueba y comenzar tu suscripción completa ahora? Esta acción no se puede deshacer: se te cobrará inmediatamente y no podrás volver a la prueba."
+      },
+      "changePlan": {
+        "title": "Cambiar plan",
+        "titleTrial": "Finalizar prueba y cambiar plan",
+        "desc": "Tu suscripción se actualizará de inmediato. ¿Seguro que deseas cambiar a otro plan?",
+        "descTrial": "Actualmente estás en un período de prueba. Cambiar ahora finalizará la prueba y se te cobrará el plan seleccionado. ¿Estás seguro?"
+      }
+    },
+    "errors": {
+      "paddleMissing": "El servicio de pago no está disponible."
+    }
+  },
+  "progress": {
+    "title": "Progreso",
+    "cefr": {
+      "title": "Nivel CEFR a lo largo del tiempo",
+      "empty": "Todavía no hay datos de progreso CEFR disponibles."
+    },
+    "completedPrompts": {
+      "title": "Indicaciones más completadas",
+      "empty": "Aún no hay indicaciones completadas. ¡Elige algo!"
+    },
+    "streak": {
+      "title": "Tu racha de días",
+      "current": "Actual",
+      "longest": "Más larga",
+      "weekdays": ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"]
+    },
+    "errors": { "title": "Errores más frecuentes", "empty": "No se encontraron errores. ¿Eres... perfecto?" },
+    "ielts": {
+      "title": "Nota IELTS a lo largo del tiempo",
+      "empty": "Todavía no hay datos de progreso en IELTS disponibles."
+    },
+    "overview": { "finishedSessions": { "title": "Sesiones finalizadas" }, "totalSessionDuration": { "title": "Duración total de las sesiones" } },
+    "timeline": {
+      "title": "Últimas tareas",
+      "labels": { "started": "Iniciada:", "completed": "Completada:" },
+      "status": { "completed": "Completada", "inProgress": "En progreso" },
+      "empty": "Aún no hay tareas. Ponte a aprender."
+    }
+  },
+  "dashboard": {
+    "tabs": { "topics": "Temas", "scenarios": "Escenarios", "ielts": "IELTS" },
+    "search": { "placeholder": "Buscar...", "clear": "Borrar", "clearTitle": "Borrar búsqueda" },
+    "ielts": { "fullExam": "Examen completo", "part1": "Parte 1", "part2": "Parte 2", "part3": "Parte 3" },
+    "loading": { "more": "Cargando más..." },
+    "ieltsScenarioCard": {
+      "lockedTitle": "El escenario está bloqueado",
+      "status": { "completed": "Completado {count} veces", "notCompleted": "No completado" },
+      "details": { "show": "Mostrar detalles", "hide": "Ocultar detalles" },
+      "sections": { "goals": "Objetivos", "dictionary": "Diccionario", "phrases": "Frases" }
+    },
+    "moduleList": {
+      "lockedTitle": "El módulo está bloqueado",
+      "types": { "structured": "Módulo estructurado", "open": "Práctica libre" },
+      "empty": "No se encontraron módulos."
+    },
+    "scenarioList": {
+      "lockedTitle": "El escenario está bloqueado",
+      "status": { "completed": "Completado {count} veces", "notCompleted": "No completado" },
+      "details": { "show": "Mostrar detalles", "hide": "Ocultar detalles" },
+      "sections": { "goals": "Objetivos", "dictionary": "Diccionario", "phrases": "Frases" },
+      "empty": "No se encontraron escenarios."
+    },
+    "moduleScenarioList": {
+      "title": "Escenarios",
+      "back": "Volver a los módulos"
+    }
+  },
+  "conversation": {
+    "goals": { "title": "Objetivos de la conversación" },
+    "actions": {
+      "backToDashboard": "← Volver al panel",
+      "review": "Revisar conversación",
+      "toggleHistory": "Mostrar/ocultar historial",
+      "toggleGoals": "Mostrar/ocultar objetivos"
+    },
+    "loader": {
+      "processingRecording": "Procesando tu grabación...",
+      "reviewInProgress": "Generando la reseña..."
+    },
+    "recorder": {
+      "startTitle": "Iniciar grabación",
+      "stopTitle": "Detener grabación",
+      "cancelTitle": "Cancelar (Escape)"
+    },
+    "reviewModal": {
+      "title": "Enviar reseña antes de tiempo",
+      "desc": "La conversación sigue en curso. ¿Seguro que quieres finalizarla y enviar tu reseña ahora? No podrás volver y continuar después."
+    },
+    "history": {
+      "title": "Historial de conversación",
+      "roles": { "assistant": "asistente", "user": "usuario", "system": "sistema", "other": "otro" }
+    },
+    "infoModal": {
+      "close": "Cerrar",
+      "dictionary": {
+        "title": "Diccionario",
+        "word": "Palabra:",
+        "translation": "Traducción:",
+        "meaning": "Significado:"
+      },
+      "phrases": {
+        "title": "Frases útiles",
+        "phrase": "Frase:",
+        "translation": "Traducción:",
+        "meaning": "Significado:"
+      },
+      "suggestions": { "title": "Sugerencias" }
+    }
+  },
+  "history": {
+    "delete": {
+      "title": "Eliminar reseña",
+      "desc": "¿Seguro que quieres eliminar la reseña? Esta acción no se puede deshacer."
+    },
+    "list": {
+      "title": "Historial de conversaciones",
+      "actions": { "view": "Ver", "delete": "Eliminar" },
+      "meta": { "messages": "Mensajes" },
+      "badges": { "ielts": "IELTS" },
+      "loadingMore": "Cargando más...",
+      "empty": "Aún no tienes reseñas de conversaciones."
+    },
+    "publicLink": {
+      "title": "Enlace público generado",
+      "desc": "Puedes compartir este enlace con otros — no necesitan una cuenta.",
+      "close": "Cerrar",
+      "copied": "¡Copiado!",
+      "copyTitle": "Copiar al portapapeles"
+    },
+    "details": {
+      "tabs": { "summary": "Resumen", "mistakes": "Errores", "transcript": "Transcripción", "tasks": "Tareas" },
+      "summary": {
+        "title": "Resumen general",
+        "share": "Compartir",
+        "badges": { "ielts": "IELTS" },
+        "meta": { "messages": "Mensajes", "you": "Tú", "ai": "IA" },
+        "suggestion": "Sugerencia:",
+        "conclusion": "Conclusión:",
+        "consistency": {
+          "title": "Revisión de coherencia:",
+          "inconsistencies": "Incoherencias:",
+          "q": "P:",
+          "a": "R:",
+          "comment": "Comentario:"
+        },
+        "band": {
+          "title": "Desglose de bandas IELTS:",
+          "fluency": "Fluidez y coherencia",
+          "lexical": "Recursos léxicos",
+          "grammar": "Rango y precisión gramatical"
+        },
+        "parts": {
+          "p1": { "title": "Comentarios IELTS Parte 1:", "highlights": "Aspectos destacados:" },
+          "p2": { "title": "Comentarios IELTS Parte 2:", "highlights": "Aspectos destacados:" },
+          "p3": { "title": "Comentarios IELTS Parte 3:", "highlights": "Aspectos destacados:" }
+        },
+        "goals": { "title": "Objetivos del usuario" },
+        "vocab": { "title": "Vocabulario usado", "used": "Usado", "notUsed": "No usado" },
+        "phrases": { "title": "Frases usadas", "used": "Usada", "notUsed": "No usada" }
+      },
+      "mistakes": {
+        "title": "Resumen de errores",
+        "userMsg": "Mensaje del usuario",
+        "issue": {
+          "original": "Original:",
+          "suggestion": "Sugerencia:",
+          "explanation": "Explicación:",
+          "topic": "Tema:"
+        },
+        "improve": {
+          "title": "¿Cómo mejorar?",
+          "answer": "Respuesta mejorada:",
+          "cefr": "Nivel CEFR:",
+          "explanation": "Explicación:"
+        }
+      },
+      "transcript": { "title": "Transcripción de la conversación", "you": "Tú", "ai": "IA" },
+      "tasks": { "title": "Tarea", "selectLabel": "Selecciona tema:", "generate": "Generar tarea", "loading": "Cargando..." }
+    }
+  }
+}

@@ -1,0 +1,420 @@
+{
+  "header": {
+    "logout": "Log out",
+    "menu": "Menu",
+    "conversation": "Conversation",
+    "history": "History",
+    "progress": "Progress",
+    "vocabulary": "Vocabulary",
+    "pricing": "Pricing"
+  },
+  "footer": {
+    "copyright": "Saynest Lab",
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy",
+    "refund": "Refund Policy"
+  },
+  "confirmation": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "accept": "Yes, I’m sure"
+  },
+  "moduleLang": {
+    "select": "Select language",
+    "countries": {
+      "en": "English",
+      "es": "Spanish",
+      "fr": "French",
+      "pt": "Portuguese",
+      "de": "German",
+      "it": "Italian",
+      "pl": "Polish",
+      "uk": "Ukrainian",
+      "bg": "Bulgarian"
+    }
+  },
+  "loader": {
+    "default": "Please stand by..."
+  },
+  "legal": {
+    "title": "Accept Policies",
+    "accept_prefix": "I accept the",
+    "done": "Done"
+  },
+  "task": {
+    "review_title": "Task Review",
+    "close": "Close",
+    "check": "Check",
+    "correct": "Correct: {x} / {y}"
+  },
+  "layout": {
+    "click_here": "Click here",
+    "expired_message": "Your subscription has expired. Renew to continue.",
+    "trial_message": "Your trial is active until {date}. You’ve used {sessionsUsed}/{sessionsLimit} sessions, {reviewsUsed}/{reviewsLimit} reviews, and {tasksUsed}/{tasksLimit} tasks. You can upgrade to a full plan at any time."
+  },
+  "wordInfo": {
+    "open_gt": "Open in Google Translate",
+    "open_dl": "Open in DeepL",
+    "translation": "Translation",
+    "definition": "Definition",
+    "synonyms": "Synonyms",
+    "no_data": "No data available. Try using Google Translate or DeepL.",
+    "tier": {
+      "1": "You've just encountered this word.",
+      "2": "It sounds familiar, but you're unsure.",
+      "3": "You understand it in context but don't use it.",
+      "4": "You fully understand and confidently use this word.",
+      "none": "This word is not yet in your vocabulary."
+    },
+    "remove": "Remove"
+  },
+  "vocab": {
+    "title": "Vocabulary",
+    "empty": "No words yet",
+    "tabs": { "all": "All" },
+    "tier_label": { "1": "New", "2": "Familiar", "3": "Understood", "4": "Fluent" },
+    "search_placeholder": "Search word",
+    "th": { "word": "Word", "definition": "Definition", "tier": "Tier", "audio": "Audio" },
+    "no_definition": "No definition",
+    "loading": "Loading...",
+    "empty_filtered": "No words found",
+    "tier_none": "Tier: –"
+  },
+  "profile": {
+    "title": "User Profile",
+    "close": "Close",
+    "fields": {
+      "email_ro": "Email (readonly)",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "country": "Country",
+      "expl_lang": "Explanation Language"
+    },
+    "select_country": "Select your country",
+    "select_language": "Select a language",
+    "btn": { "close": "Close", "save": "Save" },
+    "error_global": "Something went wrong. Please try again later.",
+    "sub": {
+      "title": "Your Subscription",
+      "plan": "Plan:",
+      "per_person": "for one person",
+      "status": "Status: ",
+      "status_value": {
+        "active": "Active",
+        "trialing": "Trialing",
+        "past_due": "Past due",
+        "cancelled": "Cancelled"
+      },
+      "started_at": "Started at:",
+      "next_payment": "Next Payment:",
+      "pending_cancel": "Subscription will be cancelled on {date}.",
+      "resume": "Resume Subscription",
+      "past_due_title": "Payment Failed",
+      "past_due_desc": "Please update your payment method to keep your subscription active",
+      "update_payment": "Update Payment Method",
+      "payment_failed": "Payment Failed",
+      "pick_new_plan_desc": "You can always pick a new plan to continue using premium features",
+      "choose_new_plan": "Choose a New Plan"
+    },
+    "actions": {
+      "unlock_full": "Unlock Full Access",
+      "cancel_sub": "Cancel Subscription",
+      "delete_all_history": "Delete All Conversation History"
+    },
+    "confirm": {
+      "delete_history": {
+        "title": "Delete All Conversation History",
+        "desc": "Are you sure you want to delete your all conversation history? This action cannot be undone."
+      },
+      "cancel_sub": {
+        "title": "Cancel Subscription",
+        "desc": "Are you sure you want to cancel your current subscription? You will lose access to all premium features after the end of the billing period."
+      },
+      "end_trial": {
+        "title": "End Trial Early",
+        "desc": "Do you want to end your trial and start your full subscription now? This cannot be undone — you’ll be charged immediately and won’t be able to return to the trial."
+      }
+    }
+  },
+  "auth": {
+    "common": {
+      "or": "or",
+      "email": "Email",
+      "email_placeholder": "Email",
+      "password": "Password",
+      "password_placeholder": "Password",
+      "show_password": "Show password",
+      "hide_password": "Hide password",
+      "continue_google": "Continue with Google",
+      "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "generic_later": "Something went wrong. Please try again later."
+      }
+    },
+    "login": {
+      "title": "Log In",
+      "or": "@:auth.common.or",
+      "email": "@:auth.common.email",
+      "email_placeholder": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_placeholder": "@:auth.common.password_placeholder",
+      "show_password": "@:auth.common.show_password",
+      "hide_password": "@:auth.common.hide_password",
+      "submit": "Log in",
+      "create": "Create account",
+      "forgot": "Forgot your password?",
+      "errors": {
+        "invalid_credentials": "Invalid email or password",
+        "generic": "@:auth.common.errors.generic"
+      }
+    },
+    "signup": {
+      "title": "Sign Up",
+      "first_name": "First name",
+      "first_name_ph": "First name",
+      "last_name": "Last name",
+      "last_name_ph": "Last name",
+      "country": "Country",
+      "country_ph": "Select your country",
+      "email": "@:auth.common.email",
+      "email_ph": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_ph": "@:auth.common.password_placeholder",
+      "repeat_password": "Repeat password",
+      "repeat_password_ph": "Repeat password",
+      "submit": "Sign Up",
+      "have_account": "Already have an account?",
+      "login_link": "Log in",
+      "errors": {
+        "passwords_mismatch": "Passwords must match",
+        "email_exists": "Email already exists",
+        "generic": "@:auth.common.errors.generic",
+        "generic_later": "@:auth.common.errors.generic_later"
+      }
+    }
+  },
+  "subscription": {
+    "overview": {
+      "title": "Overview our plans",
+      "subtitle": "Here you can view all available subscription plans and their features"
+    },
+    "badges": {
+      "current": "Current Plan",
+      "cancelled": "Cancelled Plan"
+    },
+    "price": {
+      "perPerson": "{period} for one person"
+    },
+    "period": {
+      "monthly": "monthly",
+      "annually": "annually",
+      "weekly": "weekly",
+      "daily": "daily"
+    },
+    "states": {
+      "active": "Active",
+      "trialing": "Trialing",
+      "cancelled": "Cancelled",
+      "pastDue": "Past due",
+      "pendingCancel": "Pending cancellation"
+    },
+    "actions": {
+      "updatePaymentMethod": "Update Payment Method",
+      "cancel": "Cancel Subscription",
+      "resume": "Resume Subscription",
+      "start": "Start Subscription",
+      "getTrial": "Get Free Trial",
+      "changePlan": "Change Plan",
+      "unlockFullAccess": "Unlock Full Access"
+    },
+    "modals": {
+      "cancel": {
+        "title": "Cancel Subscription",
+        "desc": "Are you sure you want to cancel your current subscription? You will lose access to all premium features after the end of the billing period."
+      },
+      "endTrial": {
+        "title": "End Trial Early",
+        "desc": "Do you want to end your trial and start your full subscription now? This action cannot be undone — you’ll be charged immediately and won’t be able to return to the trial."
+      },
+      "changePlan": {
+        "title": "Change Plan",
+        "titleTrial": "End Trial and Change Plan",
+        "desc": "Your subscription will be updated immediately. Are you sure you want to switch to a different plan?",
+        "descTrial": "You are currently in a trial period. Changing your plan now will end the trial immediately and you’ll be charged for the selected plan. Are you sure?"
+      }
+    },
+    "errors": {
+      "paddleMissing": "Payment service is not available."
+    }
+  },
+  "progress": {
+    "title": "Progress",
+    "cefr": {
+      "title": "CEFR Level Over Time",
+      "empty": "No CEFR progress data available yet."
+    },
+    "completedPrompts": {
+      "title": "Most Completed Prompts",
+      "empty": "No completed prompts yet. Pick something!"
+    },
+    "streak": {
+      "title": "Your Day Streak",
+      "current": "Current",
+      "longest": "Longest",
+      "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    },
+    "errors": { "title": "Most Frequent Errors", "empty": "No errors found. Are you... perfect?" },
+    "ielts": {
+      "title": "IELTS Mark Over Time",
+      "empty": "No IELTS progress data available yet."
+    },
+    "overview": { "finishedSessions": { "title": "Finished Sessions" }, "totalSessionDuration": { "title": "Total Session Duration" } },
+    "timeline": {
+      "title": "Latest Tasks",
+      "labels": { "started": "Started:", "completed": "Completed:" },
+      "status": { "completed": "Completed", "inProgress": "In Progress" },
+      "empty": "No tasks yet. Go get some learning done."
+    }
+  },
+  "dashboard": {
+    "tabs": { "topics": "Topics", "scenarios": "Scenarios", "ielts": "IELTS" },
+    "search": { "placeholder": "Search...", "clear": "Clear", "clearTitle": "Clear search" },
+    "ielts": { "fullExam": "Full Exam", "part1": "Part 1", "part2": "Part 2", "part3": "Part 3" },
+    "loading": { "more": "Loading more..." },
+    "ieltsScenarioCard": {
+      "lockedTitle": "Scenario is locked",
+      "status": { "completed": "Completed {count}x", "notCompleted": "Not completed" },
+      "details": { "show": "Show Details", "hide": "Hide Details" },
+      "sections": { "goals": "Goals", "dictionary": "Dictionary", "phrases": "Phrases" }
+    },
+    "moduleList": {
+      "lockedTitle": "Module is locked",
+      "types": { "structured": "Structured Module", "open": "Open Practice" },
+      "empty": "No modules found."
+    },
+    "scenarioList": {
+      "lockedTitle": "Scenario is locked",
+      "status": { "completed": "Completed {count}x", "notCompleted": "Not completed" },
+      "details": { "show": "Show Details", "hide": "Hide Details" },
+      "sections": { "goals": "Goals", "dictionary": "Dictionary", "phrases": "Phrases" },
+      "empty": "No scenarios found."
+    },
+    "moduleScenarioList": {
+      "title": "Scenarios",
+      "back": "Back to Modules"
+    }
+  },
+  "conversation": {
+    "goals": { "title": "Conversation Goals" },
+    "actions": {
+      "backToDashboard": "← Back to Dashboard",
+      "review": "Review Conversation",
+      "toggleHistory": "Toggle History",
+      "toggleGoals": "Toggle Goals"
+    },
+    "loader": {
+      "processingRecording": "Processing your recording...",
+      "reviewInProgress": "Review Generation In Progress..."
+    },
+    "recorder": {
+      "startTitle": "Start recording",
+      "stopTitle": "Stop recording",
+      "cancelTitle": "Cancel (Escape)"
+    },
+    "reviewModal": {
+      "title": "Submit Review Early",
+      "desc": "The conversation is still in progress. Are you sure you want to end it and submit your review now? You won't be able to return and continue later."
+    },
+    "history": {
+      "title": "Conversation History",
+      "roles": { "assistant": "assistant", "user": "user", "system": "system", "other": "other" }
+    },
+    "infoModal": {
+      "close": "Close",
+      "dictionary": {
+        "title": "Dictionary",
+        "word": "Word:",
+        "translation": "Translation:",
+        "meaning": "Meaning:"
+      },
+      "phrases": {
+        "title": "Useful Phrases",
+        "phrase": "Phrase:",
+        "translation": "Translation:",
+        "meaning": "Meaning:"
+      },
+      "suggestions": { "title": "Suggestions" }
+    }
+  },
+  "history": {
+    "delete": {
+      "title": "Delete Review",
+      "desc": "Are you sure you want to delete the review? This action cannot be undone."
+    },
+    "list": {
+      "title": "Conversation History",
+      "actions": { "view": "View", "delete": "Delete" },
+      "meta": { "messages": "Messages" },
+      "badges": { "ielts": "IELTS" },
+      "loadingMore": "Loading more...",
+      "empty": "You don't have any conversation reviews yet."
+    },
+    "publicLink": {
+      "title": "Public Link Generated",
+      "desc": "You can share this link with others — they don’t need an account.",
+      "close": "Close",
+      "copied": "Copied!",
+      "copyTitle": "Copy to clipboard"
+    },
+    "details": {
+      "tabs": { "summary": "Summary", "mistakes": "Mistakes", "transcript": "Transcript", "tasks": "Tasks" },
+      "summary": {
+        "title": "General Summary",
+        "share": "Share",
+        "badges": { "ielts": "IELTS" },
+        "meta": { "messages": "Messages", "you": "You", "ai": "AI" },
+        "suggestion": "Suggestion:",
+        "conclusion": "Conclusion:",
+        "consistency": {
+          "title": "Consistency Review:",
+          "inconsistencies": "Inconsistencies:",
+          "q": "Q:",
+          "a": "A:",
+          "comment": "Comment:"
+        },
+        "band": {
+          "title": "IELTS Band Breakdown:",
+          "fluency": "Fluency & Coherence",
+          "lexical": "Lexical Resource",
+          "grammar": "Grammatical Range & Accuracy"
+        },
+        "parts": {
+          "p1": { "title": "IELTS Part 1 Feedback:", "highlights": "Highlights:" },
+          "p2": { "title": "IELTS Part 2 Feedback:", "highlights": "Highlights:" },
+          "p3": { "title": "IELTS Part 3 Feedback:", "highlights": "Highlights:" }
+        },
+        "goals": { "title": "User Goals" },
+        "vocab": { "title": "Vocabulary Used", "used": "Used", "notUsed": "Not used" },
+        "phrases": { "title": "Phrases Used", "used": "Used", "notUsed": "Not used" }
+      },
+      "mistakes": {
+        "title": "Mistakes Summary",
+        "userMsg": "User Message",
+        "issue": {
+          "original": "Original:",
+          "suggestion": "Suggestion:",
+          "explanation": "Explanation:",
+          "topic": "Topic:"
+        },
+        "improve": {
+          "title": "How to improve?",
+          "answer": "Improved Answer:",
+          "cefr": "CEFR Level:",
+          "explanation": "Explanation:"
+        }
+      },
+      "transcript": { "title": "Conversation Transcript", "you": "You", "ai": "AI" },
+      "tasks": { "title": "Task", "selectLabel": "Select topic:", "generate": "Generate Task", "loading": "Loading..." }
+    }
+  }
+}

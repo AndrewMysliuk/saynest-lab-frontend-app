@@ -4,7 +4,7 @@
     <div class="p-5 flex flex-col bg-white border border-stone-200 shadow-sm rounded-xl">
       <div class="flex gap-x-3">
         <div class="grow">
-          <h2 class="text-sm md:text-base text-gray-600 font-medium">Finished Sessions</h2>
+          <h2 class="text-sm md:text-base text-gray-600 font-medium">{{ t("progress.overview.finishedSessions.title") }}</h2>
           <p class="mt-2 text-2xl md:text-3xl font-semibold text-gray-800">{{ totalSessions }}</p>
         </div>
         <svg
@@ -31,7 +31,7 @@
     <div class="p-5 flex flex-col bg-white border border-stone-200 shadow-sm rounded-xl">
       <div class="flex gap-x-3">
         <div class="grow">
-          <h2 class="text-sm md:text-base text-gray-600 font-medium">Total Session Duration</h2>
+          <h2 class="text-sm md:text-base text-gray-600 font-medium">{{ t("progress.overview.totalSessionDuration.title") }}</h2>
           <p class="mt-2 text-2xl md:text-3xl font-semibold text-gray-800">{{ totalDuration }}</p>
         </div>
         <svg
@@ -59,11 +59,14 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { userProgressStore } from "@/app"
 import { formatDuration } from "@/shared/lib"
 
 export default defineComponent({
   setup() {
+    const { t } = useI18n()
+
     const userProgress = computed(() => userProgressStore.getCurrentUserProgress)
     const totalSessions = computed(() => userProgress.value?.total_sessions ?? 0)
     const totalDuration = computed(() => formatDuration(userProgress.value?.total_session_duration ?? 0))
@@ -71,6 +74,7 @@ export default defineComponent({
     return {
       totalSessions,
       totalDuration,
+      t,
     }
   },
 })

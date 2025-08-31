@@ -1,0 +1,392 @@
+{
+  "header": {
+    "logout": "Изход",
+    "menu": "Меню",
+    "conversation": "Разговор",
+    "history": "История",
+    "progress": "Напредък",
+    "vocabulary": "Речник",
+    "pricing": "Цени"
+  },
+  "footer": {
+    "copyright": "Saynest Lab",
+    "terms": "Общи условия",
+    "privacy": "Политика за поверителност",
+    "refund": "Политика за възстановяване"
+  },
+  "confirmation": { "close": "Затвори", "cancel": "Отказ", "accept": "Да, сигурен съм" },
+  "moduleLang": {
+    "select": "Изберете език",
+    "countries": {
+      "en": "Английски",
+      "es": "Испански",
+      "fr": "Френски",
+      "pt": "Португалски",
+      "de": "Немски",
+      "it": "Италиански",
+      "pl": "Полски",
+      "uk": "Украински",
+      "bg": "Български"
+    }
+  },
+  "loader": {
+    "default": "Моля, изчакайте..."
+  },
+  "legal": {
+    "title": "Приемане на политики",
+    "accept_prefix": "Приемам",
+    "done": "Готово"
+  },
+  "task": { "review_title": "Преглед на задачите", "close": "Затвори", "check": "Провери", "correct": "Вярно: {x} / {y}" },
+  "layout": {
+    "click_here": "Кликнете тук",
+    "expired_message": "Абонаментът ви е изтекъл. Подновете, за да продължите.",
+    "trial_message": "Пробният ви период е активен до {date}. Използвали сте {sessionsUsed}/{sessionsLimit} сесии, {reviewsUsed}/{reviewsLimit} прегледа и {tasksUsed}/{tasksLimit} задачи. Можете по всяко време да преминете към пълен план."
+  },
+  "wordInfo": {
+    "open_gt": "Отвори в Google Translate",
+    "open_dl": "Отвори в DeepL",
+    "translation": "Превод",
+    "definition": "Дефиниция",
+    "synonyms": "Синоними",
+    "no_data": "Няма налични данни. Опитайте Google Translate или DeepL.",
+    "tier": {
+      "1": "Току-що срещнахте тази дума.",
+      "2": "Звучи познато, но не сте сигурни.",
+      "3": "Разбирате я в контекст, но не я използвате.",
+      "4": "Напълно я разбирате и я използвате уверено.",
+      "none": "Тази дума все още не е в речника ви."
+    },
+    "remove": "Премахни"
+  },
+  "vocab": {
+    "title": "Речник",
+    "empty": "Все още няма думи",
+    "tabs": { "all": "Всички" },
+    "tier_label": { "1": "Нова", "2": "Позната", "3": "Разбрана", "4": "Свободно" },
+    "search_placeholder": "Търсене на дума",
+    "th": { "word": "Дума", "definition": "Дефиниция", "tier": "Ниво", "audio": "Аудио" },
+    "no_definition": "Няма дефиниция",
+    "loading": "Зареждане...",
+    "empty_filtered": "Няма намерени думи",
+    "tier_none": "Ниво: –"
+  },
+  "profile": {
+    "title": "Профил на потребителя",
+    "close": "Затвори",
+    "fields": {
+      "email_ro": "Имейл (само за четене)",
+      "first_name": "Собствено име",
+      "last_name": "Фамилия",
+      "country": "Държава",
+      "expl_lang": "Език за обяснения"
+    },
+    "select_country": "Изберете държава",
+    "select_language": "Изберете език",
+    "btn": { "close": "Затвори", "save": "Запази" },
+    "error_global": "Нещо се обърка. Опитайте по-късно.",
+    "sub": {
+      "title": "Вашият абонамент",
+      "plan": "План:",
+      "per_person": "за един човек",
+      "status": "Статус: ",
+      "status_value": {
+        "active": "Активен",
+        "trialing": "Пробен период",
+        "past_due": "Просрочен",
+        "cancelled": "Отменен"
+      },
+      "started_at": "Начало:",
+      "next_payment": "Следващо плащане:",
+      "pending_cancel": "Абонаментът ще бъде отменен на {date}.",
+      "resume": "Възобнови абонамента",
+      "past_due_title": "Неуспешно плащане",
+      "past_due_desc": "Моля, обновете начина на плащане, за да остане активен абонаментът",
+      "update_payment": "Обнови начин на плащане",
+      "payment_failed": "Неуспешно плащане",
+      "pick_new_plan_desc": "Можете да изберете нов план, за да продължите с премиум функциите",
+      "choose_new_plan": "Избери нов план"
+    },
+    "actions": {
+      "unlock_full": "Отключи пълен достъп",
+      "cancel_sub": "Отмени абонамента",
+      "delete_all_history": "Изтрий цялата история на разговорите"
+    },
+    "confirm": {
+      "delete_history": { "title": "Изтриване на цялата история", "desc": "Сигурни ли сте? Действието е необратимо." },
+      "cancel_sub": { "title": "Отмяна на абонамент", "desc": "Сигурни ли сте, че искате да отмените? Достъпът премиум ще бъде загубен след периода." },
+      "end_trial": { "title": "Край на пробния период", "desc": "Край на пробния и старт на абонамента сега? Таксуване веднага, без връщане към пробен." }
+    }
+  },
+  "auth": {
+    "common": {
+      "or": "или",
+      "email": "Имейл",
+      "email_placeholder": "Имейл",
+      "password": "Парола",
+      "password_placeholder": "Парола",
+      "show_password": "Покажи паролата",
+      "hide_password": "Скрий паролата",
+      "continue_google": "Продължи с Google",
+      "errors": {
+        "generic": "Нещо се обърка. Опитайте отново.",
+        "generic_later": "Нещо се обърка. Опитайте по-късно."
+      }
+    },
+    "login": {
+      "title": "Вход",
+      "or": "@:auth.common.or",
+      "email": "@:auth.common.email",
+      "email_placeholder": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_placeholder": "@:auth.common.password_placeholder",
+      "show_password": "@:auth.common.show_password",
+      "hide_password": "@:auth.common.hide_password",
+      "submit": "Вход",
+      "create": "Създай акаунт",
+      "forgot": "Забравена парола?",
+      "errors": {
+        "invalid_credentials": "Невалиден имейл или парола",
+        "generic": "@:auth.common.errors.generic"
+      }
+    },
+    "signup": {
+      "title": "Създай акаунт",
+      "first_name": "Собствено име",
+      "first_name_ph": "Собствено име",
+      "last_name": "Фамилия",
+      "last_name_ph": "Фамилия",
+      "country": "Държава",
+      "country_ph": "Изберете държава",
+      "email": "@:auth.common.email",
+      "email_ph": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_ph": "@:auth.common.password_placeholder",
+      "repeat_password": "Повтори паролата",
+      "repeat_password_ph": "Повтори паролата",
+      "submit": "Регистрация",
+      "have_account": "Вече имате акаунт?",
+      "login_link": "Вход",
+      "errors": {
+        "passwords_mismatch": "Паролите трябва да съвпадат",
+        "email_exists": "Имейлът вече съществува",
+        "generic": "@:auth.common.errors.generic",
+        "generic_later": "@:auth.common.errors.generic_later"
+      }
+    }
+  },
+  "subscription": {
+    "overview": {
+      "title": "Преглед на нашите планове",
+      "subtitle": "Тук можете да видите всички налични абонаментни планове и техните функции"
+    },
+    "badges": {
+      "current": "Текущ план",
+      "cancelled": "Отменен план"
+    },
+    "price": {
+      "perPerson": "{period} за един човек"
+    },
+    "period": {
+      "monthly": "месечно",
+      "annually": "годишно",
+      "weekly": "седмично",
+      "daily": "ежедневно"
+    },
+    "states": {
+      "active": "Активен",
+      "trialing": "Пробен период",
+      "cancelled": "Отменен",
+      "pastDue": "Просрочен",
+      "pendingCancel": "Изчакващо анулиране"
+    },
+    "actions": {
+      "updatePaymentMethod": "Актуализирай метод на плащане",
+      "cancel": "Откажи абонамента",
+      "resume": "Възобнови абонамента",
+      "start": "Започни абонамент",
+      "getTrial": "Вземи безплатен пробен период",
+      "changePlan": "Смени план",
+      "unlockFullAccess": "Отключи пълен достъп"
+    },
+    "modals": {
+      "cancel": {
+        "title": "Откажи абонамента",
+        "desc": "Сигурни ли сте, че искате да отмените текущия си абонамент? Ще загубите достъп до всички премиум функции след края на текущия отчетен период."
+      },
+      "endTrial": {
+        "title": "Прекратяване на пробния период по-рано",
+        "desc": "Искате ли да приключите пробния период и да започнете пълния абонамент сега? Това действие е необратимо — ще бъдете таксувани веднага и няма да можете да се върнете към пробния период."
+      },
+      "changePlan": {
+        "title": "Смени план",
+        "titleTrial": "Прекрати пробния период и смени план",
+        "desc": "Абонаментът ви ще бъде актуализиран веднага. Сигурни ли сте, че искате да преминете към друг план?",
+        "descTrial": "В момента сте в пробен период. Смяната ще го прекрати веднага и ще бъдете таксувани за избрания план. Сигурни ли сте?"
+      }
+    },
+    "errors": {
+      "paddleMissing": "Услугата за плащане не е налична."
+    }
+  },
+  "progress": {
+    "title": "Прогрес",
+    "cefr": {
+      "title": "Ниво CEFR във времето",
+      "empty": "Все още няма налични данни за напредъка по CEFR."
+    },
+    "completedPrompts": {
+      "title": "Най-често изпълнени подсказки",
+      "empty": "Все още няма изпълнени подсказки. Изберете нещо!"
+    },
+    "streak": {
+      "title": "Вашата серия дни",
+      "current": "Текуща",
+      "longest": "Най-дълга",
+      "weekdays": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"]
+    },
+    "errors": { "title": "Най-чести грешки", "empty": "Няма открити грешки. Ти... перфектен ли си?" },
+    "ielts": {
+      "title": "Резултат IELTS във времето",
+      "empty": "Все още няма налични данни за напредъка в IELTS."
+    },
+    "overview": { "finishedSessions": { "title": "Завършени сесии" }, "totalSessionDuration": { "title": "Обща продължителност на сесиите" } },
+    "timeline": {
+      "title": "Последни задачи",
+      "labels": { "started": "Стартирано:", "completed": "Завършено:" },
+      "status": { "completed": "Завършено", "inProgress": "В процес" },
+      "empty": "Все още няма задачи. Време е за учене."
+    }
+  },
+  "dashboard": {
+    "tabs": { "topics": "Теми", "scenarios": "Сценарии", "ielts": "IELTS" },
+    "search": { "placeholder": "Търсене...", "clear": "Изчисти", "clearTitle": "Изчисти търсенето" },
+    "ielts": { "fullExam": "Пълен изпит", "part1": "Част 1", "part2": "Част 2", "part3": "Част 3" },
+    "loading": { "more": "Зареждат се още..." },
+    "ieltsScenarioCard": {
+      "lockedTitle": "Сценарият е заключен",
+      "status": { "completed": "Завършено {count}×", "notCompleted": "Незавършено" },
+      "details": { "show": "Покажи детайли", "hide": "Скрий детайли" },
+      "sections": { "goals": "Цели", "dictionary": "Речник", "phrases": "Фрази" }
+    },
+    "moduleList": {
+      "lockedTitle": "Модулът е заключен",
+      "types": { "structured": "Структуриран модул", "open": "Свободна практика" },
+      "empty": "Няма намерени модули."
+    },
+    "scenarioList": {
+      "lockedTitle": "Сценарият е заключен",
+      "status": { "completed": "Завършено {count}×", "notCompleted": "Незавършено" },
+      "details": { "show": "Покажи детайли", "hide": "Скрий детайли" },
+      "sections": { "goals": "Цели", "dictionary": "Речник", "phrases": "Фрази" },
+      "empty": "Няма намерени сценарии."
+    },
+    "moduleScenarioList": {
+      "title": "Сценарии",
+      "back": "Назад към модулите"
+    }
+  },
+  "conversation": {
+    "goals": { "title": "Цели на разговора" },
+    "actions": {
+      "backToDashboard": "← Назад към таблото",
+      "review": "Преглед на разговора",
+      "toggleHistory": "Покажи/скрий история",
+      "toggleGoals": "Покажи/скрий цели"
+    },
+    "loader": {
+      "processingRecording": "Обработва се записът…",
+      "reviewInProgress": "Създаване на преглед…"
+    },
+    "recorder": {
+      "startTitle": "Започни запис",
+      "stopTitle": "Спри запис",
+      "cancelTitle": "Отказ (Escape)"
+    },
+    "reviewModal": {
+      "title": "Изпрати преглед по-рано",
+      "desc": "Разговорът все още тече. Сигурни ли сте, че искате да го прекратите и да изпратите прегледа сега? Няма да можете да се върнете и да продължите по-късно."
+    },
+    "history": {
+      "title": "История на разговора",
+      "roles": { "assistant": "асистент", "user": "потребител", "system": "система", "other": "друго" }
+    },
+    "infoModal": {
+      "close": "Затвори",
+      "dictionary": {
+        "title": "Речник",
+        "word": "Дума:",
+        "translation": "Превод:",
+        "meaning": "Значение:"
+      },
+      "phrases": {
+        "title": "Полезни фрази",
+        "phrase": "Фраза:",
+        "translation": "Превод:",
+        "meaning": "Значение:"
+      },
+      "suggestions": { "title": "Препоръки" }
+    }
+  },
+  "history": {
+    "delete": {
+      "title": "Изтриване на отзива",
+      "desc": "Сигурни ли сте, че искате да изтриете отзива? Това действие е необратимо."
+    },
+    "list": {
+      "title": "История на разговорите",
+      "actions": { "view": "Преглед", "delete": "Изтрий" },
+      "meta": { "messages": "Съобщения" },
+      "badges": { "ielts": "IELTS" },
+      "loadingMore": "Зареждат се още...",
+      "empty": "Все още нямате прегледи на разговори."
+    },
+    "publicLink": {
+      "title": "Създаден е публичен линк",
+      "desc": "Можете да споделите този линк — не е нужен акаунт.",
+      "close": "Затвори",
+      "copied": "Копирано!",
+      "copyTitle": "Копирай в клипборда"
+    },
+    "details": {
+      "tabs": { "summary": "Обобщение", "mistakes": "Грешки", "transcript": "Транскрипт", "tasks": "Задачи" },
+      "summary": {
+        "title": "Общо обобщение",
+        "share": "Сподели",
+        "badges": { "ielts": "IELTS" },
+        "meta": { "messages": "Съобщения", "you": "Вие", "ai": "ИИ" },
+        "suggestion": "Препоръка:",
+        "conclusion": "Заключение:",
+        "consistency": {
+          "title": "Проверка на последователност:",
+          "inconsistencies": "Несъответствия:",
+          "q": "В:",
+          "a": "O:",
+          "comment": "Коментар:"
+        },
+        "band": {
+          "title": "Разбивка по критерии (IELTS):",
+          "fluency": "Плавност и свързаност",
+          "lexical": "Лексикален ресурс",
+          "grammar": "Граматика и точност"
+        },
+        "parts": {
+          "p1": { "title": "Обратна връзка IELTS — Част 1:", "highlights": "Акценти:" },
+          "p2": { "title": "Обратна връзка IELTS — Част 2:", "highlights": "Акценти:" },
+          "p3": { "title": "Обратна връзка IELTS — Част 3:", "highlights": "Акценти:" }
+        },
+        "goals": { "title": "Цели на потребителя" },
+        "vocab": { "title": "Използван речник", "used": "Използвано", "notUsed": "Неизползвано" },
+        "phrases": { "title": "Използвани фрази", "used": "Използвана", "notUsed": "Неизползвана" }
+      },
+      "mistakes": {
+        "title": "Обобщение на грешките",
+        "userMsg": "Съобщение на потребителя",
+        "issue": { "original": "Оригинал:", "suggestion": "Предложение:", "explanation": "Обяснение:", "topic": "Тема:" },
+        "improve": { "title": "Как да подобрим?", "answer": "Подобрeн отговор:", "cefr": "Ниво CEFR:", "explanation": "Обяснение:" }
+      },
+      "transcript": { "title": "Транскрипт на разговора", "you": "Вие", "ai": "ИИ" },
+      "tasks": { "title": "Задача", "selectLabel": "Изберете тема:", "generate": "Генерирай задача", "loading": "Зареждане..." }
+    }
+  }
+}

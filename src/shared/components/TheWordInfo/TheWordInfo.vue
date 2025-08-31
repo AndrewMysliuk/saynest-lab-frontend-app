@@ -7,19 +7,21 @@
         <i class="fas fa-times text-2xl text-gray-500 hover:text-gray-800 cursor-pointer" @click="closeModal"></i>
       </div>
 
+      <!-- Phrase -->
       <div v-if="getSelectedPhrase">
         <h2 class="text-xl font-bold text-text-base">{{ getSelectedPhrase }}</h2>
 
         <div class="flex items-center gap-4 flex-wrap mt-4">
           <a :href="googleTranslatePhraseUrl" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded border border-blue-500 text-blue-600 text-sm hover:bg-blue-50 transition">
-            Open in Google Translate
+            {{ t("wordInfo.open_gt") }}
           </a>
           <a :href="deepLPhraseUrl" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded border border-purple-500 text-purple-600 text-sm hover:bg-purple-50 transition">
-            Open in DeepL
+            {{ t("wordInfo.open_dl") }}
           </a>
         </div>
       </div>
 
+      <!-- Word -->
       <template v-if="getSelectedWord">
         <div class="flex items-center space-x-2">
           <h2 class="text-xl font-bold text-text-base">
@@ -37,46 +39,42 @@
 
         <div class="flex items-center gap-4 flex-wrap mt-2">
           <a :href="googleTranslateUrl" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded border border-blue-500 text-blue-600 text-sm hover:bg-blue-50 transition">
-            Open in Google Translate
+            {{ t("wordInfo.open_gt") }}
           </a>
 
-          <a :href="deepLUrl" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded border border-purple-500 text-purple-600 text-sm hover:bg-purple-50 transition"> Open in DeepL </a>
+          <a :href="deepLUrl" target="_blank" rel="noopener noreferrer" class="px-3 py-1 rounded border border-purple-500 text-purple-600 text-sm hover:bg-purple-50 transition">
+            {{ t("wordInfo.open_dl") }}
+          </a>
         </div>
 
         <div v-if="getSelectedWord.global_word_entity.senses?.length" class="space-y-4">
           <div v-for="(sense, idx) in getSelectedWord.global_word_entity.senses" :key="idx" class="bg-gray-50 p-4 rounded border space-y-3">
             <div v-if="sense.translations?.length">
-              <div class="text-sm font-semibold text-gray-800">Translation</div>
+              <div class="text-sm font-semibold text-gray-800">{{ t("wordInfo.translation") }}</div>
               <div class="text-sm text-gray-700 ml-2">{{ sense.translations.join(", ") }}</div>
             </div>
 
             <div v-if="sense.definitions?.length">
-              <div class="text-sm font-semibold text-gray-800">Definition</div>
+              <div class="text-sm font-semibold text-gray-800">{{ t("wordInfo.definition") }}</div>
               <div class="text-sm text-gray-700 ml-2">{{ sense.definitions.join("; ") }}</div>
             </div>
 
             <div v-if="sense.synonyms?.length">
-              <div class="text-sm font-semibold text-gray-800">Synonyms</div>
+              <div class="text-sm font-semibold text-gray-800">{{ t("wordInfo.synonyms") }}</div>
               <div class="text-sm text-gray-700 ml-2">{{ sense.synonyms.join(", ") }}</div>
             </div>
           </div>
         </div>
 
-        <div v-else class="text-sm text-gray-600 italic">No data available. Try using Google Translate or DeepL below.</div>
+        <div v-else class="text-sm text-gray-600 italic">
+          {{ t("wordInfo.no_data") }}
+        </div>
 
-        <div v-else class="text-sm text-gray-600 italic">No data available. Try using Google Translate or DeepL above.</div>
-
+        <!-- Bottom actions -->
         <div class="absolute bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 shadow-[0_-2px_6px_rgba(0,0,0,0.05)]">
-          <strong>{{
-            getSelectedWord.tier !== null
-              ? {
-                  1: "You've just encountered this word.",
-                  2: "It sounds familiar, but you're unsure.",
-                  3: "You understand it in context but don't use it.",
-                  4: "You fully understand and confidently use this word.",
-                }[getSelectedWord.tier]
-              : "This word is not yet in your vocabulary."
-          }}</strong>
+          <strong>
+            {{ getSelectedWord.tier !== null ? tierText[getSelectedWord.tier] || t("wordInfo.tier.none") : t("wordInfo.tier.none") }}
+          </strong>
           <div class="mt-2 flex flex-wrap gap-2">
             <button
               v-for="(label, key) in tierButtons"
@@ -88,7 +86,9 @@
               {{ label }}
             </button>
 
-            <button v-if="getSelectedWord?.user_id" @click="deleteWord" class="flex-1 px-3 py-2 rounded border border-red-500 text-red-500 text-sm text-center hover:bg-red-50">Remove</button>
+            <button v-if="getSelectedWord?.user_id" @click="deleteWord" class="flex-1 px-3 py-2 rounded border border-red-500 text-red-500 text-sm text-center hover:bg-red-50">
+              {{ t("wordInfo.remove") }}
+            </button>
           </div>
         </div>
       </template>
@@ -98,17 +98,17 @@
 
 <script lang="ts">
 import { computed, defineComponent, nextTick, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { promptStore, userStore, vocabularyStore } from "@/app"
 import { IUserWordTierEnum } from "@/shared/types"
 import LanguagesList from "@/shared/json_data/languages.json"
 import TheLoader from "../TheLoader"
 
 export default defineComponent({
-  components: {
-    TheLoader,
-  },
+  components: { TheLoader },
 
   setup() {
+    const { t, locale } = useI18n()
     const audioRef = ref<HTMLAudioElement | null>(null)
     const isLoading = ref<boolean>(false)
 
@@ -119,35 +119,41 @@ export default defineComponent({
       [IUserWordTierEnum.MASTERED]: "4",
     }
 
+    const tierText = {
+      [IUserWordTierEnum.UNKNOWN]: t("wordInfo.tier.1"),
+      [IUserWordTierEnum.RECOGNIZABLE]: t("wordInfo.tier.2"),
+      [IUserWordTierEnum.CONTEXTUAL]: t("wordInfo.tier.3"),
+      [IUserWordTierEnum.MASTERED]: t("wordInfo.tier.4"),
+    } as Record<number, string>
+
     const getSelectedWord = computed(() => vocabularyStore.getSelectedWord)
     const getSelectedPhrase = computed(() => vocabularyStore.getSelectedPhrase)
     const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getUserTranslateLanguage = computed(() => (locale.value ? locale.value : userStore.getCurrentUser?.explanation_language || "en"))
     const encode = (txt: string) => encodeURIComponent(txt)
+
     const googleTranslateUrl = computed(() => {
       const word = getSelectedWord.value?.global_word_entity.word ?? ""
       const sl = getSelectedWord.value?.global_word_entity.target_language ?? "en"
       const tl = getSelectedWord.value?.global_word_entity.native_language ?? "en"
-
       return `https://translate.google.com/?sl=${sl}&tl=${tl}&text=${encode(word)}&op=translate`
     })
     const deepLUrl = computed(() => {
       const word = getSelectedWord.value?.global_word_entity.word ?? ""
       const sl = getSelectedWord.value?.global_word_entity.target_language ?? "en"
       const tl = getSelectedWord.value?.global_word_entity.native_language ?? "en"
-
       return `https://www.deepl.com/translator#${sl}/${tl}/${encode(word)}`
     })
+
     const googleTranslatePhraseUrl = computed(() => {
       const text = getSelectedPhrase.value || ""
-      const sl = LanguagesList.find((item) => item.language.toLowerCase() === getSelectedPrompt.value.meta.target_language.toLowerCase())?.language_iso
+      const sl = LanguagesList.find((i) => i.language.toLowerCase() === getSelectedPrompt.value.meta.target_language.toLowerCase())?.language_iso
       const tl = getUserTranslateLanguage.value
       return `https://translate.google.com/?sl=${sl}&tl=${tl}&text=${encode(text)}&op=translate`
     })
-
     const deepLPhraseUrl = computed(() => {
       const text = getSelectedPhrase.value || ""
-      const sl = LanguagesList.find((item) => item.language.toLowerCase() === getSelectedPrompt.value.meta.target_language.toLowerCase())?.language_iso
+      const sl = LanguagesList.find((i) => i.language.toLowerCase() === getSelectedPrompt.value.meta.target_language.toLowerCase())?.language_iso
       const tl = getUserTranslateLanguage.value
       return `https://www.deepl.com/translator#${sl}/${tl}/${encode(text)}`
     })
@@ -155,25 +161,19 @@ export default defineComponent({
     const playAudio = () => {
       if (audioRef.value) {
         audioRef.value.currentTime = 0
-        audioRef.value.play().catch((err) => {
-          console.warn("Failed to play audio", err)
-        })
+        audioRef.value.play().catch((err) => console.warn("Failed to play audio", err))
       }
     }
 
     const handleAudioError = async (e: Event) => {
       const target = e.target as HTMLAudioElement
       const is403 = target?.error?.code === target?.error?.MEDIA_ERR_SRC_NOT_SUPPORTED
-
       if (is403 && getSelectedWord.value && getSelectedWord.value.global_word_entity?._id) {
         try {
           await vocabularyStore.generateWordAudioUrlMethod(getSelectedWord.value.global_word_entity._id)
-
           nextTick(() => {
             target.load()
-            target.play().catch((err) => {
-              console.warn("Auto-play blocked or failed:", err)
-            })
+            target.play().catch((err) => console.warn("Auto-play blocked or failed:", err))
           })
         } catch (err) {
           console.error("Failed to refresh audio URL", err)
@@ -189,12 +189,9 @@ export default defineComponent({
 
     const handleTierChange = async (value: number) => {
       if (isLoading.value) return
-
       const isUserHasWord = getSelectedWord.value?.user_id
-
       try {
         isLoading.value = true
-
         if (isUserHasWord) {
           await vocabularyStore.updateUserWordTierMethod({
             user_word_id: getSelectedWord.value?._id || "",
@@ -202,12 +199,11 @@ export default defineComponent({
           })
           return
         }
-
         await vocabularyStore.addWordToUserMethod({
           global_word_id: getSelectedWord.value?.global_word_entity?._id || "",
           tier: value,
         })
-      } catch (error: unknown) {
+      } catch (error) {
         console.log(error)
       } finally {
         isLoading.value = false
@@ -217,12 +213,10 @@ export default defineComponent({
 
     const deleteWord = async () => {
       if (isLoading.value || !getSelectedWord.value?.user_id) return
-
       try {
         isLoading.value = true
-
         await vocabularyStore.deleteUserWordMethod(getSelectedWord.value?.global_word_entity?._id || "")
-      } catch (error: unknown) {
+      } catch (error) {
         console.log(error)
       } finally {
         isLoading.value = false
@@ -231,8 +225,10 @@ export default defineComponent({
     }
 
     return {
+      t,
       audioRef,
       tierButtons,
+      tierText,
       getSelectedWord,
       getSelectedPhrase,
       googleTranslateUrl,

@@ -22,7 +22,7 @@
       @click="!isLocked || AVAILABLE_SCENARIOS.includes(scenario._id) ? selectPrompt(scenario) : $router.push('/platform/tariff-plans')"
     >
       <div v-if="isLocked && !AVAILABLE_SCENARIOS.includes(scenario._id)" class="absolute inset-0 z-10 bg-gray-400/50 flex items-center justify-center cursor-pointer rounded-2xl">
-        <i class="fas fa-lock text-gray-600 text-3xl" title="Scenario is locked" />
+        <i class="fas fa-lock text-gray-600 text-3xl" :title="t('dashboard.ieltsScenarioCard.lockedTitle')" />
       </div>
 
       <!-- Header -->
@@ -51,9 +51,9 @@
           >
             {{ scenario.level }} ·
             <span v-if="getPartProgress(getCurrentUserProgress, scenario.name, currentIeltsPart || 'FULL_SCENARIO')">
-              Completed {{ getPartProgress(getCurrentUserProgress, scenario.name, currentIeltsPart || "FULL_SCENARIO") }}x
+              {{ t("dashboard.ieltsScenarioCard.status.completed", { count: getPartProgress(getCurrentUserProgress, scenario.name, currentIeltsPart || "FULL_SCENARIO") }) }}
             </span>
-            <span v-else> Not completed </span>
+            <span v-else> {{ t("dashboard.ieltsScenarioCard.status.notCompleted") }} </span>
           </span>
         </div>
       </div>
@@ -72,7 +72,7 @@
         >
           <i :class="expandedScenario === index ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-base" />
           <span class="sm:group-hover:underline">
-            {{ expandedScenario === index ? "Hide Details" : "Show Details" }}
+            {{ expandedScenario === index ? t("dashboard.ieltsScenarioCard.details.hide") : t("dashboard.ieltsScenarioCard.details.show") }}
           </span>
         </button>
       </div>
@@ -84,7 +84,7 @@
           <div v-if="scenario.user_content.goals?.length">
             <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
               <i class="fas fa-bullseye text-gray-500" />
-              Goals
+              {{ t("dashboard.ieltsScenarioCard.sections.goals") }}
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
@@ -97,7 +97,7 @@
           <div v-if="scenario.user_content.dictionary?.length">
             <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
               <i class="fas fa-book text-gray-500" />
-              Dictionary
+              {{ t("dashboard.ieltsScenarioCard.sections.dictionary") }}
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="word in scenario.user_content.dictionary" :key="word.word">
@@ -110,7 +110,7 @@
           <div v-if="scenario.user_content.phrases?.length">
             <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
               <i class="fas fa-comment-dots text-gray-500" />
-              Phrases
+              {{ t("dashboard.ieltsScenarioCard.sections.phrases") }}
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
@@ -126,6 +126,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue"
+import { useI18n } from "vue-i18n"
 import { promptStore, subscriptionStore, userProgressStore, userStore, urlAudioPlayer } from "@/app"
 import { IPromptScenarioEntity, SessionIeltsPartEnum } from "@/shared/types"
 import { getPartProgress } from "@/shared/lib"
@@ -145,8 +146,9 @@ export default defineComponent({
   },
 
   setup(props, { emit }) {
+    const { t, locale } = useI18n()
     const getIeltsScenarioList = computed(() => promptStore.getIeltsScenarioList)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getUserTranslateLanguage = computed(() => (locale.value ? locale.value : userStore.getCurrentUser?.explanation_language || "en"))
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
     const isLocked = computed(() => subscriptionStore.getIsExpiredVisible || !subscriptionStore.getIsHasSubscription)
 
@@ -167,6 +169,7 @@ export default defineComponent({
       selectPrompt,
       toggleExpand,
       getPartProgress,
+      t,
       SessionIeltsPartEnum,
       AVAILABLE_SCENARIOS,
     }

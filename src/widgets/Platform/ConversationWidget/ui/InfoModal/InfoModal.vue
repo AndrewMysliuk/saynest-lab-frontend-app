@@ -10,7 +10,7 @@
           type="button"
           class="size-8 shrink-0 flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
         >
-          <span class="sr-only">Close</span>
+          <span class="sr-only">{{ t("conversation.infoModal.close") }}</span>
           <svg
             class="shrink-0 size-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -37,22 +37,22 @@
 
     <!-- Dictionary Section -->
     <div v-if="getSelectedPrompt?.user_content.dictionary?.length" class="mb-10">
-      <h4 class="text-xl font-semibold text-gray-800 mb-4">Dictionary</h4>
+      <h4 class="text-xl font-semibold text-gray-800 mb-4">{{ t("conversation.infoModal.dictionary.title") }}</h4>
       <div
         v-for="(entry, index) in getSelectedPrompt.user_content.dictionary"
         :key="'dict-' + index"
         class="mb-4 p-4 border border-gray-200 rounded-md bg-gradient-to-br from-blue-50 via-white to-blue-50/40"
       >
         <p>
-          <span class="font-semibold text-gray-700">Word: </span>
+          <span class="font-semibold text-gray-700">{{ t("conversation.infoModal.dictionary.word") }} </span>
           <span class="text-blue-700 font-medium">{{ entry.word }}</span>
         </p>
         <p>
-          <span class="font-semibold text-gray-700">Translation: </span>
+          <span class="font-semibold text-gray-700">{{ t("conversation.infoModal.dictionary.translation") }} </span>
           {{ entry.translation[getUserTranslateLanguage] }}
         </p>
         <p>
-          <span class="font-semibold text-gray-700">Meaning: </span>
+          <span class="font-semibold text-gray-700">{{ t("conversation.infoModal.dictionary.meaning") }} </span>
           {{ entry.meaning }}
         </p>
       </div>
@@ -60,22 +60,22 @@
 
     <!-- Phrases Section -->
     <div v-if="getSelectedPrompt?.user_content.phrases?.length" class="mb-10">
-      <h4 class="text-xl font-semibold text-gray-800 mb-4">Useful Phrases</h4>
+      <h4 class="text-xl font-semibold text-gray-800 mb-4">{{ t("conversation.infoModal.phrases.title") }}</h4>
       <div
         v-for="(entry, index) in getSelectedPrompt.user_content.phrases"
         :key="'phrase-' + index"
         class="mb-4 p-4 border border-gray-200 rounded-md bg-gradient-to-br from-yellow-50 via-white to-yellow-50/40"
       >
         <p>
-          <span class="font-semibold text-gray-700">Phrase: </span>
+          <span class="font-semibold text-gray-700">{{ t("conversation.infoModal.phrases.phrase") }} </span>
           <span class="text-yellow-700 font-medium">{{ entry.phrase }}</span>
         </p>
         <p>
-          <span class="font-semibold text-gray-700">Translation: </span>
+          <span class="font-semibold text-gray-700">{{ t("conversation.infoModal.phrases.translation") }} </span>
           {{ entry.translation[getUserTranslateLanguage] }}
         </p>
         <p>
-          <span class="font-semibold text-gray-700">Meaning: </span>
+          <span class="font-semibold text-gray-700">{{ t("conversation.infoModal.phrases.meaning") }} </span>
           {{ entry.meaning }}
         </p>
       </div>
@@ -83,7 +83,7 @@
 
     <!-- Suggestions -->
     <div v-if="getModelTips.length">
-      <h4 class="text-xl font-semibold text-gray-800 mb-4">Suggestions</h4>
+      <h4 class="text-xl font-semibold text-gray-800 mb-4">{{ t("conversation.infoModal.suggestions.title") }}</h4>
       <div
         v-for="(item, index) in getModelTips"
         :key="index"
@@ -96,18 +96,21 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
+import { useI18n } from "vue-i18n"
 import { promptStore, errorAnalysisStore, userStore } from "@/app"
 
 export default defineComponent({
   setup() {
+    const { t, locale } = useI18n()
     const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getModelTips = computed(() => errorAnalysisStore.getModelTips)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getUserTranslateLanguage = computed(() => (locale.value ? locale.value : userStore.getCurrentUser?.explanation_language || "en"))
 
     return {
       getSelectedPrompt,
       getModelTips,
       getUserTranslateLanguage,
+      t,
     }
   },
 })

@@ -1,22 +1,24 @@
 <template>
   <div class="p-5 bg-white border border-stone-200 shadow-sm rounded-xl">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4">Your Day Streak</h2>
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">
+      {{ t("progress.streak.title") }}
+    </h2>
 
     <!-- Header streak stats -->
     <div class="flex items-center justify-between text-sm text-gray-500 font-medium mb-4">
       <span>
-        Current: <span class="text-gray-800 font-semibold">{{ currentStreak }}d</span>
+        {{ t("progress.streak.current") }}:
+        <span class="text-gray-800 font-semibold">{{ currentStreak }}d</span>
       </span>
       <span>
-        Longest: <span class="text-gray-800 font-semibold">{{ longestStreak }}d</span>
+        {{ t("progress.streak.longest") }}:
+        <span class="text-gray-800 font-semibold">{{ longestStreak }}d</span>
       </span>
     </div>
 
     <!-- Progress bar -->
     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
-      <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
-        <div class="bg-[#4F46E5] h-2.5 rounded-full transition-all duration-500" :style="{ width: percentage + '%' }" />
-      </div>
+      <div class="bg-[#4F46E5] h-2.5 rounded-full transition-all duration-500" :style="{ width: percentage + '%' }" />
     </div>
 
     <!-- Calendar -->
@@ -27,7 +29,7 @@
 
       <!-- Weekday headers -->
       <div class="grid grid-cols-7 text-[11px] text-gray-400 text-center mb-1 tracking-wide">
-        <span v-for="day in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']" :key="day">
+        <span v-for="day in t('progress.streak.weekdays', { returnObjects: true })" :key="day">
           {{ day }}
         </span>
       </div>
@@ -45,11 +47,13 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { userProgressStore } from "@/app"
 import type { IUserProgressEntity } from "@/shared/types"
 
 export default defineComponent({
   setup() {
+    const { t } = useI18n()
     const today = new Date()
 
     const progress = computed(() => userProgressStore.getCurrentUserProgress as IUserProgressEntity)
@@ -87,6 +91,7 @@ export default defineComponent({
       longestStreak,
       percentage,
       daysOfMonth,
+      t,
     }
   },
 })

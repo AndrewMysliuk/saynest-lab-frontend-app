@@ -1,11 +1,13 @@
 <template>
   <div class="px-6 py-10">
     <div class="flex items-center justify-between gap-3 sm:gap-6 mb-8 flex-nowrap overflow-x-auto min-w-0">
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 truncate">Scenarios</h1>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 truncate">
+        {{ t("dashboard.moduleScenarioList.title") }}
+      </h1>
 
       <button type="button" class="inline-flex shrink-0 items-center gap-2 bg-primary text-white font-medium px-4 py-2 rounded-md hover:bg-primaryDark transition-colors" @click="$emit('overview')">
         <i class="fas fa-arrow-left text-sm" />
-        <span>Back to Modules</span>
+        <span>{{ t("dashboard.moduleScenarioList.back") }}</span>
       </button>
     </div>
 
@@ -30,7 +32,7 @@
           </ul>
         </div>
 
-        <!-- Сценарии внутри подмодуля -->
+        <!-- Scenarios inside submodule -->
         <div class="space-y-6">
           <div
             v-for="scenario in getScenariosForSubmodule(submodule.id)"
@@ -55,7 +57,7 @@
             @click="!isLocked || AVAILABLE_SCENARIOS.includes(scenario._id) ? selectPrompt(scenario) : $router.push('/platform/tariff-plans')"
           >
             <div v-if="isLocked && !AVAILABLE_SCENARIOS.includes(scenario._id)" class="absolute inset-0 z-10 bg-gray-400/50 flex items-center justify-center cursor-pointer rounded-2xl">
-              <i class="fas fa-lock text-gray-600 text-3xl" title="Scenario is locked" />
+              <i class="fas fa-lock text-gray-600 text-3xl" :title="t('dashboard.scenarioList.lockedTitle')" />
             </div>
 
             <!-- Header -->
@@ -69,8 +71,12 @@
                   ]"
                 >
                   {{ scenario.level }} ·
-                  <span v-if="getPartProgress(getCurrentUserProgress, scenario.name, 'FULL_SCENARIO')"> Completed {{ getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }}x </span>
-                  <span v-else>Not completed</span>
+                  <span v-if="getPartProgress(getCurrentUserProgress, scenario.name, 'FULL_SCENARIO')">
+                    {{ t("dashboard.scenarioList.status.completed", { count: getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }) }}
+                  </span>
+                  <span v-else>
+                    {{ t("dashboard.scenarioList.status.notCompleted") }}
+                  </span>
                 </span>
               </div>
             </div>
@@ -89,7 +95,7 @@
               >
                 <i :class="expandedScenario === scenario._id ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-base" />
                 <span class="sm:group-hover:underline">
-                  {{ expandedScenario === scenario._id ? "Hide Details" : "Show Details" }}
+                  {{ expandedScenario === scenario._id ? t("dashboard.scenarioList.details.hide") : t("dashboard.scenarioList.details.show") }}
                 </span>
               </button>
             </div>
@@ -99,7 +105,10 @@
               <div v-if="expandedScenario === scenario._id" class="mt-4 border-t pt-4 space-y-4">
                 <!-- Goals -->
                 <div v-if="scenario.user_content.goals?.length">
-                  <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2"><i class="fas fa-bullseye text-gray-500" /> Goals</h4>
+                  <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
+                    <i class="fas fa-bullseye text-gray-500" />
+                    {{ t("dashboard.scenarioList.sections.goals") }}
+                  </h4>
                   <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
                     <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
                       <b>{{ goal.phrase }}</b> — <i class="text-gray-600">{{ goal.translation[getUserTranslateLanguage] }}</i>
@@ -109,7 +118,10 @@
 
                 <!-- Dictionary -->
                 <div v-if="scenario.user_content.dictionary?.length">
-                  <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2"><i class="fas fa-book text-gray-500" /> Dictionary</h4>
+                  <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
+                    <i class="fas fa-book text-gray-500" />
+                    {{ t("dashboard.scenarioList.sections.dictionary") }}
+                  </h4>
                   <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
                     <li v-for="word in scenario.user_content.dictionary" :key="word.word">
                       <b>{{ word.word }}</b>
@@ -121,7 +133,10 @@
 
                 <!-- Phrases -->
                 <div v-if="scenario.user_content.phrases?.length">
-                  <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2"><i class="fas fa-comment-dots text-gray-500" /> Phrases</h4>
+                  <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
+                    <i class="fas fa-comment-dots text-gray-500" />
+                    {{ t("dashboard.scenarioList.sections.phrases") }}
+                  </h4>
                   <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
                     <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
                       <b>"{{ phrase.phrase }}"</b> — <i class="text-gray-600">{{ phrase.translation[getUserTranslateLanguage] }}</i>
@@ -135,6 +150,7 @@
       </div>
     </div>
 
+    <!-- Open module -->
     <div v-else class="space-y-6">
       <div
         v-for="(scenario, index) in getModulePromptList"
@@ -158,7 +174,7 @@
         @click="!isLocked || AVAILABLE_SCENARIOS.includes(scenario._id) ? selectPrompt(scenario) : $router.push('/platform/tariff-plans')"
       >
         <div v-if="isLocked && !AVAILABLE_SCENARIOS.includes(scenario._id)" class="absolute inset-0 z-10 bg-gray-400/50 flex items-center justify-center cursor-pointer rounded-2xl">
-          <i class="fas fa-lock text-gray-600 text-3xl" title="Scenario is locked" />
+          <i class="fas fa-lock text-gray-600 text-3xl" :title="t('dashboard.scenarioList.lockedTitle')" />
         </div>
 
         <!-- Header -->
@@ -172,8 +188,12 @@
               ]"
             >
               {{ scenario.level }} ·
-              <span v-if="getPartProgress(getCurrentUserProgress, scenario.name, 'FULL_SCENARIO')"> Completed {{ getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }}x </span>
-              <span v-else>Not completed</span>
+              <span v-if="getPartProgress(getCurrentUserProgress, scenario.name, 'FULL_SCENARIO')">
+                {{ t("dashboard.scenarioList.status.completed", { count: getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }) }}
+              </span>
+              <span v-else>
+                {{ t("dashboard.scenarioList.status.notCompleted") }}
+              </span>
             </span>
           </div>
         </div>
@@ -192,7 +212,7 @@
           >
             <i :class="expandedScenario === index ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-base" />
             <span class="sm:group-hover:underline">
-              {{ expandedScenario === index ? "Hide Details" : "Show Details" }}
+              {{ expandedScenario === index ? t("dashboard.scenarioList.details.hide") : t("dashboard.scenarioList.details.show") }}
             </span>
           </button>
         </div>
@@ -204,7 +224,7 @@
             <div v-if="scenario.user_content.goals?.length">
               <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
                 <i class="fas fa-bullseye text-gray-500" />
-                Goals
+                {{ t("dashboard.scenarioList.sections.goals") }}
               </h4>
               <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
                 <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
@@ -217,7 +237,7 @@
             <div v-if="scenario.user_content.dictionary?.length">
               <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
                 <i class="fas fa-book text-gray-500" />
-                Dictionary
+                {{ t("dashboard.scenarioList.sections.dictionary") }}
               </h4>
               <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
                 <li v-for="word in scenario.user_content.dictionary" :key="word.word">
@@ -232,7 +252,7 @@
             <div v-if="scenario.user_content.phrases?.length">
               <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
                 <i class="fas fa-comment-dots text-gray-500" />
-                Phrases
+                {{ t("dashboard.scenarioList.sections.phrases") }}
               </h4>
               <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
                 <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
@@ -249,6 +269,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
+import { useI18n } from "vue-i18n"
 import { promptStore, subscriptionStore, userProgressStore, userStore, urlAudioPlayer } from "@/app"
 import { IPromptScenarioEntity, ModuleTypeEnum } from "@/shared/types"
 import { getPartProgress } from "@/shared/lib"
@@ -263,10 +284,12 @@ export default defineComponent({
   },
 
   setup(_, { emit }) {
+    const { t, locale } = useI18n()
+
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
     const getModulePromptList = computed(() => promptStore.getModulePromptList)
     const isStructuredModule = computed(() => getCurrentModule.value?.type === ModuleTypeEnum.STRUCTURED)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getUserTranslateLanguage = computed(() => (locale.value ? locale.value : userStore.getCurrentUser?.explanation_language || "en"))
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
     const isLocked = computed(() => subscriptionStore.getIsExpiredVisible || !subscriptionStore.getIsHasSubscription)
 
@@ -297,6 +320,7 @@ export default defineComponent({
       toggleExpand,
       getPartProgress,
       getScenariosForSubmodule,
+      t,
       AVAILABLE_SCENARIOS,
     }
   },

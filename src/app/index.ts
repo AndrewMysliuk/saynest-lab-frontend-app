@@ -19,7 +19,7 @@ import {
 import App from "./index.vue"
 import "./index.scss"
 
-import { components, gtmConfig } from "@/shared/config"
+import { components, gtmConfig, i18n } from "@/shared/config"
 import { createAudioPlayer, createUrlAudioPlayer } from "@/shared/lib"
 import { createGtm } from "@gtm-support/vue-gtm"
 
@@ -38,6 +38,7 @@ components.forEach((element) => {
   app.component(element.name as string, element)
 })
 
+app.use(i18n)
 app.use(createPinia())
 app.use(router)
 

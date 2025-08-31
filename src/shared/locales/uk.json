@@ -1,0 +1,392 @@
+{
+  "header": {
+    "logout": "Вийти",
+    "menu": "Меню",
+    "conversation": "Розмова",
+    "history": "Історія",
+    "progress": "Прогрес",
+    "vocabulary": "Словник",
+    "pricing": "Тарифи"
+  },
+  "footer": {
+    "copyright": "Saynest Lab",
+    "terms": "Умови та положення",
+    "privacy": "Політика конфіденційності",
+    "refund": "Політика відшкодування"
+  },
+  "confirmation": { "close": "Закрити", "cancel": "Скасувати", "accept": "Так, я впевнений" },
+  "moduleLang": {
+    "select": "Виберіть мову",
+    "countries": {
+      "en": "Англійська",
+      "es": "Іспанська",
+      "fr": "Французька",
+      "pt": "Португальська",
+      "de": "Німецька",
+      "it": "Італійська",
+      "pl": "Польська",
+      "uk": "Українська",
+      "bg": "Болгарська"
+    }
+  },
+  "loader": {
+    "default": "Будь ласка, зачекайте..."
+  },
+  "legal": {
+    "title": "Підтвердження політик",
+    "accept_prefix": "Я приймаю",
+    "done": "Готово"
+  },
+  "task": { "review_title": "Перевірка завдань", "close": "Закрити", "check": "Перевірити", "correct": "Правильно: {x} / {y}" },
+  "layout": {
+    "click_here": "Натисніть тут",
+    "expired_message": "Термін дії вашої підписки закінчився. Поновіть, щоб продовжити.",
+    "trial_message": "Ваш пробний період активний до {date}. Ви використали {sessionsUsed}/{sessionsLimit} сесій, {reviewsUsed}/{reviewsLimit} переглядів і {tasksUsed}/{tasksLimit} завдань. Ви можете перейти на повний план у будь-який час."
+  },
+  "wordInfo": {
+    "open_gt": "Відкрити в Google Translate",
+    "open_dl": "Відкрити в DeepL",
+    "translation": "Переклад",
+    "definition": "Визначення",
+    "synonyms": "Синоніми",
+    "no_data": "Немає даних. Спробуйте Google Translate або DeepL.",
+    "tier": {
+      "1": "Ви щойно зустріли це слово.",
+      "2": "Звучить знайомо, але ви не впевнені.",
+      "3": "Розумієте в контексті, але не використовуєте.",
+      "4": "Повністю розумієте і впевнено використовуєте це слово.",
+      "none": "Цього слова ще немає у вашому словнику."
+    },
+    "remove": "Видалити"
+  },
+  "vocab": {
+    "title": "Словник",
+    "empty": "Слів поки немає",
+    "tabs": { "all": "Усі" },
+    "tier_label": { "1": "Нове", "2": "Знайоме", "3": "Зрозуміле", "4": "Вільно" },
+    "search_placeholder": "Пошук слова",
+    "th": { "word": "Слово", "definition": "Визначення", "tier": "Рівень", "audio": "Аудіо" },
+    "no_definition": "Немає визначення",
+    "loading": "Завантаження...",
+    "empty_filtered": "Слів не знайдено",
+    "tier_none": "Рівень: –"
+  },
+  "profile": {
+    "title": "Профіль користувача",
+    "close": "Закрити",
+    "fields": {
+      "email_ro": "Ел. пошта (лише читання)",
+      "first_name": "Ім’я",
+      "last_name": "Прізвище",
+      "country": "Країна",
+      "expl_lang": "Мова пояснень"
+    },
+    "select_country": "Оберіть країну",
+    "select_language": "Оберіть мову",
+    "btn": { "close": "Закрити", "save": "Зберегти" },
+    "error_global": "Щось пішло не так. Спробуйте пізніше.",
+    "sub": {
+      "title": "Ваша підписка",
+      "plan": "План:",
+      "per_person": "для однієї особи",
+      "status": "Статус: ",
+      "status_value": {
+        "active": "Активна",
+        "trialing": "Пробний період",
+        "past_due": "Прострочено",
+        "cancelled": "Скасовано"
+      },
+      "started_at": "Початок:",
+      "next_payment": "Наступний платіж:",
+      "pending_cancel": "Підписку буде скасовано {date}.",
+      "resume": "Відновити підписку",
+      "past_due_title": "Платіж не виконано",
+      "past_due_desc": "Оновіть спосіб оплати, щоб зберегти активну підписку",
+      "update_payment": "Оновити спосіб оплати",
+      "payment_failed": "Платіж не виконано",
+      "pick_new_plan_desc": "Ви можете вибрати новий план, щоб продовжити користуватись преміум-функціями",
+      "choose_new_plan": "Обрати новий план"
+    },
+    "actions": {
+      "unlock_full": "Відкрити повний доступ",
+      "cancel_sub": "Скасувати підписку",
+      "delete_all_history": "Видалити всю історію розмов"
+    },
+    "confirm": {
+      "delete_history": { "title": "Видалити всю історію?", "desc": "Ви впевнені? Дію не можна скасувати." },
+      "cancel_sub": { "title": "Скасувати підписку", "desc": "Ви втратите доступ до преміум-функцій після закінчення періоду." },
+      "end_trial": { "title": "Завершити пробний період", "desc": "Завершити зараз і почати підписку? Зняття коштів одразу, повернення до пробного неможливе." }
+    }
+  },
+  "auth": {
+    "common": {
+      "or": "або",
+      "email": "Ел. пошта",
+      "email_placeholder": "Ел. пошта",
+      "password": "Пароль",
+      "password_placeholder": "Пароль",
+      "show_password": "Показати пароль",
+      "hide_password": "Приховати пароль",
+      "continue_google": "Продовжити з Google",
+      "errors": {
+        "generic": "Щось пішло не так. Спробуйте ще раз.",
+        "generic_later": "Щось пішло не так. Спробуйте пізніше."
+      }
+    },
+    "login": {
+      "title": "Вхід",
+      "or": "@:auth.common.or",
+      "email": "@:auth.common.email",
+      "email_placeholder": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_placeholder": "@:auth.common.password_placeholder",
+      "show_password": "@:auth.common.show_password",
+      "hide_password": "@:auth.common.hide_password",
+      "submit": "Увійти",
+      "create": "Створити акаунт",
+      "forgot": "Забули пароль?",
+      "errors": {
+        "invalid_credentials": "Невірна пошта або пароль",
+        "generic": "@:auth.common.errors.generic"
+      }
+    },
+    "signup": {
+      "title": "Реєстрація",
+      "first_name": "Ім’я",
+      "first_name_ph": "Ім’я",
+      "last_name": "Прізвище",
+      "last_name_ph": "Прізвище",
+      "country": "Країна",
+      "country_ph": "Оберіть країну",
+      "email": "@:auth.common.email",
+      "email_ph": "@:auth.common.email_placeholder",
+      "password": "@:auth.common.password",
+      "password_ph": "@:auth.common.password_placeholder",
+      "repeat_password": "Повторіть пароль",
+      "repeat_password_ph": "Повторіть пароль",
+      "submit": "Зареєструватися",
+      "have_account": "Вже маєте акаунт?",
+      "login_link": "Увійти",
+      "errors": {
+        "passwords_mismatch": "Паролі мають збігатися",
+        "email_exists": "Ел. пошта вже існує",
+        "generic": "@:auth.common.errors.generic",
+        "generic_later": "@:auth.common.errors.generic_later"
+      }
+    }
+  },
+  "subscription": {
+    "overview": {
+      "title": "Огляд наших планів",
+      "subtitle": "Тут ви можете переглянути всі доступні плани підписки та їхні можливості"
+    },
+    "badges": {
+      "current": "Поточний план",
+      "cancelled": "Скасований план"
+    },
+    "price": {
+      "perPerson": "{period} для однієї особи"
+    },
+    "period": {
+      "monthly": "щомісяця",
+      "annually": "щороку",
+      "weekly": "щотижня",
+      "daily": "щодня"
+    },
+    "states": {
+      "active": "Активна",
+      "trialing": "Пробний період",
+      "cancelled": "Скасована",
+      "pastDue": "Прострочена",
+      "pendingCancel": "Очікує скасування"
+    },
+    "actions": {
+      "updatePaymentMethod": "Оновити спосіб оплати",
+      "cancel": "Скасувати підписку",
+      "resume": "Відновити підписку",
+      "start": "Почати підписку",
+      "getTrial": "Отримати безкоштовний пробний період",
+      "changePlan": "Змінити план",
+      "unlockFullAccess": "Відкрити повний доступ"
+    },
+    "modals": {
+      "cancel": {
+        "title": "Скасувати підписку",
+        "desc": "Ви впевнені, що хочете скасувати поточну підписку? Ви втратите доступ до всіх преміум-функцій після закінчення розрахункового періоду."
+      },
+      "endTrial": {
+        "title": "Завершити пробний період раніше",
+        "desc": "Хочете завершити пробний період і розпочати повну підписку вже зараз? Цю дію неможливо скасувати — платіж буде знято негайно, і ви не зможете повернутися до пробного періоду."
+      },
+      "changePlan": {
+        "title": "Змінити план",
+        "titleTrial": "Завершити пробний період і змінити план",
+        "desc": "Вашу підписку буде оновлено одразу. Ви впевнені, що хочете перейти на інший план?",
+        "descTrial": "Зараз ви перебуваєте в пробному періоді. Зміна плану завершить його достроково, і з вас буде стягнено оплату за обраний план. Ви впевнені?"
+      }
+    },
+    "errors": {
+      "paddleMissing": "Сервіс оплати недоступний."
+    }
+  },
+  "progress": {
+    "title": "Прогрес",
+    "cefr": {
+      "title": "Рівень CEFR з часом",
+      "empty": "Дані про прогрес CEFR ще недоступні."
+    },
+    "completedPrompts": {
+      "title": "Найчастіше виконані підказки",
+      "empty": "Ще немає виконаних підказок. Оберіть щось!"
+    },
+    "streak": {
+      "title": "Ваша серія днів",
+      "current": "Поточна",
+      "longest": "Найдовша",
+      "weekdays": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"]
+    },
+    "errors": { "title": "Найпоширеніші помилки", "empty": "Помилок не знайдено. Ви... ідеальні?" },
+    "ielts": {
+      "title": "Результат IELTS з часом",
+      "empty": "Дані про прогрес IELTS ще недоступні."
+    },
+    "overview": { "finishedSessions": { "title": "Завершені сесії" }, "totalSessionDuration": { "title": "Загальна тривалість сесій" } },
+    "timeline": {
+      "title": "Останні завдання",
+      "labels": { "started": "Почато:", "completed": "Завершено:" },
+      "status": { "completed": "Завершено", "inProgress": "У процесі" },
+      "empty": "Поки немає завдань. Час навчатися."
+    }
+  },
+  "dashboard": {
+    "tabs": { "topics": "Теми", "scenarios": "Сценарії", "ielts": "IELTS" },
+    "search": { "placeholder": "Пошук...", "clear": "Очистити", "clearTitle": "Очистити пошук" },
+    "ielts": { "fullExam": "Повний іспит", "part1": "Частина 1", "part2": "Частина 2", "part3": "Частина 3" },
+    "loading": { "more": "Завантаження ще..." },
+    "ieltsScenarioCard": {
+      "lockedTitle": "Сценарій заблоковано",
+      "status": { "completed": "Завершено {count}×", "notCompleted": "Не завершено" },
+      "details": { "show": "Показати деталі", "hide": "Сховати деталі" },
+      "sections": { "goals": "Цілі", "dictionary": "Словник", "phrases": "Фрази" }
+    },
+    "moduleList": {
+      "lockedTitle": "Модуль заблоковано",
+      "types": { "structured": "Структурований модуль", "open": "Вільна практика" },
+      "empty": "Модулі не знайдено."
+    },
+    "scenarioList": {
+      "lockedTitle": "Сценарій заблоковано",
+      "status": { "completed": "Завершено {count}×", "notCompleted": "Не завершено" },
+      "details": { "show": "Показати деталі", "hide": "Сховати деталі" },
+      "sections": { "goals": "Цілі", "dictionary": "Словник", "phrases": "Фрази" },
+      "empty": "Сценарії не знайдено."
+    },
+    "moduleScenarioList": {
+      "title": "Сценарії",
+      "back": "Назад до модулів"
+    }
+  },
+  "conversation": {
+    "goals": { "title": "Цілі розмови" },
+    "actions": {
+      "backToDashboard": "← Назад до панелі",
+      "review": "Огляд розмови",
+      "toggleHistory": "Показати/сховати історію",
+      "toggleGoals": "Показати/сховати цілі"
+    },
+    "loader": {
+      "processingRecording": "Обробка вашого запису…",
+      "reviewInProgress": "Триває створення огляду…"
+    },
+    "recorder": {
+      "startTitle": "Почати запис",
+      "stopTitle": "Зупинити запис",
+      "cancelTitle": "Скасувати (Escape)"
+    },
+    "reviewModal": {
+      "title": "Надіслати огляд завчасно",
+      "desc": "Розмова ще триває. Завершити її та надіслати огляд зараз? Повернутись і продовжити потім не вийде."
+    },
+    "history": {
+      "title": "Історія розмови",
+      "roles": { "assistant": "асистент", "user": "користувач", "system": "система", "other": "інше" }
+    },
+    "infoModal": {
+      "close": "Закрити",
+      "dictionary": {
+        "title": "Словник",
+        "word": "Слово:",
+        "translation": "Переклад:",
+        "meaning": "Значення:"
+      },
+      "phrases": {
+        "title": "Корисні фрази",
+        "phrase": "Фраза:",
+        "translation": "Переклад:",
+        "meaning": "Значення:"
+      },
+      "suggestions": { "title": "Поради" }
+    }
+  },
+  "history": {
+    "delete": {
+      "title": "Видалити відгук",
+      "desc": "Ви впевнені, що хочете видалити відгук? Цю дію неможливо скасувати."
+    },
+    "list": {
+      "title": "Історія розмов",
+      "actions": { "view": "Переглянути", "delete": "Видалити" },
+      "meta": { "messages": "Повідомлення" },
+      "badges": { "ielts": "IELTS" },
+      "loadingMore": "Завантаження...",
+      "empty": "У вас ще немає оглядів розмов."
+    },
+    "publicLink": {
+      "title": "Створено публічне посилання",
+      "desc": "Можна поділитися цим посиланням — акаунт не потрібен.",
+      "close": "Закрити",
+      "copied": "Скопійовано!",
+      "copyTitle": "Копіювати в буфер"
+    },
+    "details": {
+      "tabs": { "summary": "Підсумок", "mistakes": "Помилки", "transcript": "Транскрипт", "tasks": "Завдання" },
+      "summary": {
+        "title": "Загальний підсумок",
+        "share": "Поділитися",
+        "badges": { "ielts": "IELTS" },
+        "meta": { "messages": "Повідомлення", "you": "Ви", "ai": "ШІ" },
+        "suggestion": "Порада:",
+        "conclusion": "Висновок:",
+        "consistency": {
+          "title": "Перевірка узгодженості:",
+          "inconsistencies": "Невідповідності:",
+          "q": "Пит.:",
+          "a": "Відп.:",
+          "comment": "Коментар:"
+        },
+        "band": {
+          "title": "Оцінювання IELTS за критеріями:",
+          "fluency": "Біглість і зв’язність",
+          "lexical": "Лексичний ресурс",
+          "grammar": "Граматика та точність"
+        },
+        "parts": {
+          "p1": { "title": "Зворотний зв’язок — Частина 1:", "highlights": "Основне:" },
+          "p2": { "title": "Зворотний зв’язок — Частина 2:", "highlights": "Основне:" },
+          "p3": { "title": "Зворотний зв’язок — Частина 3:", "highlights": "Основне:" }
+        },
+        "goals": { "title": "Цілі користувача" },
+        "vocab": { "title": "Використана лексика", "used": "Використано", "notUsed": "Не використано" },
+        "phrases": { "title": "Використані фрази", "used": "Використано", "notUsed": "Не використано" }
+      },
+      "mistakes": {
+        "title": "Підсумок помилок",
+        "userMsg": "Повідомлення користувача",
+        "issue": { "original": "Оригінал:", "suggestion": "Пропозиція:", "explanation": "Пояснення:", "topic": "Тема:" },
+        "improve": { "title": "Як покращити?", "answer": "Покращена відповідь:", "cefr": "Рівень CEFR:", "explanation": "Пояснення:" }
+      },
+      "transcript": { "title": "Транскрипт розмови", "you": "Ви", "ai": "ШІ" },
+      "tasks": { "title": "Завдання", "selectLabel": "Оберіть тему:", "generate": "Згенерувати завдання", "loading": "Завантаження..." }
+    }
+  }
+}

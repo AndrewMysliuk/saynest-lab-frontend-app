@@ -7,7 +7,7 @@
           <!-- Log In Details -->
           <div class="space-y-8">
             <div class="text-center">
-              <h2 class="font-medium text-xl text-gray-800">Log In</h2>
+              <h2 class="font-medium text-xl text-gray-800">{{ t("auth.login.title") }}</h2>
             </div>
 
             <div class="space-y-3">
@@ -16,29 +16,28 @@
               <!-- Divider -->
               <div class="flex items-center my-4">
                 <hr class="flex-grow border-gray-200" />
-                <span class="mx-3 text-sm text-gray-400">or</span>
+                <span class="mx-3 text-sm text-gray-400">{{ t("auth.login.or") }}</span>
                 <hr class="flex-grow border-gray-200" />
               </div>
               <!-- End Divider -->
 
-              <!-- Input -->
+              <!-- Email -->
               <div>
-                <label for="email" class="sr-only">Email</label>
+                <label for="email" class="sr-only">{{ t("auth.login.email") }}</label>
                 <input
                   id="email"
                   v-model="loginPayload.email"
                   type="email"
                   autocomplete="email"
                   required
-                  placeholder="Email"
+                  :placeholder="t('auth.login.email_placeholder')"
                   class="py-3 px-4 relative w-full inline-flex justify-center items-center gap-x-1.5 sm:text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:border-[#4F46E5]"
                 />
               </div>
-              <!-- End Input -->
 
-              <!-- Input -->
+              <!-- Password -->
               <div>
-                <label for="password" class="sr-only">Password</label>
+                <label for="password" class="sr-only">{{ t("auth.login.password") }}</label>
 
                 <div class="relative">
                   <input
@@ -46,13 +45,14 @@
                     id="password"
                     v-model="loginPayload.password"
                     required
-                    placeholder="Password"
                     autocomplete="current-password"
+                    :placeholder="t('auth.login.password_placeholder')"
                     class="py-3 px-4 relative w-full inline-flex justify-center items-center gap-x-1.5 sm:text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:border-[#4F46E5]"
                   />
 
                   <button
                     type="button"
+                    :aria-label="isPasswordVisible ? t('auth.login.hide_password') : t('auth.login.show_password')"
                     @click="togglePasswordVisibility"
                     class="absolute inset-y-0 end-0 flex items-center z-20 px-3 cursor-pointer text-gray-400 hover:text-[#4F46E5] focus:outline-none"
                   >
@@ -60,11 +60,15 @@
                   </button>
                 </div>
               </div>
-              <!-- End Input -->
 
-              <!-- <div class="flex flex-wrap justify-between items-center gap-3">
-                <a class="text-[13px] text-gray-500 underline underline-offset-4 hover:text-[#4F46E5] focus:outline-none focus:text-[#4F46E5]" href="/forgot-password"> Forgot your password? </a>
-              </div> -->
+              <!-- Forgot (optional) -->
+              <!--
+              <div class="flex flex-wrap justify-between items-center gap-3">
+                <a class="text-[13px] text-gray-500 underline underline-offset-4 hover:text-[#4F46E5] focus:outline-none focus:text-[#4F46E5]" href="/forgot-password">
+                  {{ t('auth.login.forgot') }}
+                </a>
+              </div>
+              -->
             </div>
 
             <div class="space-y-4">
@@ -87,7 +91,7 @@
                 :disabled="isGoogleProcessing"
                 class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-2 sm:text-sm font-medium rounded-lg border border-transparent bg-[#4F46E5] text-white hover:bg-[#4338CA] disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
               >
-                Log in
+                {{ t("auth.login.submit") }}
               </button>
 
               <!-- Create Account -->
@@ -97,7 +101,7 @@
                 :disabled="isGoogleProcessing"
                 class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-1.5 sm:text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
               >
-                Create account
+                {{ t("auth.login.create") }}
               </button>
             </div>
           </div>
@@ -118,6 +122,7 @@ import { defineComponent, onMounted, ref } from "vue"
 import { isProduction } from "@/shared/utils"
 import { ILoginRequest } from "@/shared/types"
 import { TheFooter } from "@/shared/components"
+import { useI18n } from "vue-i18n"
 
 const CAPTCHA_SITE_KEY = import.meta.env.VITE_CAPTCHA_SITE_KEY as string
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string
@@ -129,6 +134,8 @@ export default defineComponent({
   },
 
   setup() {
+    const { t } = useI18n()
+
     const googleDiv = ref<HTMLDivElement | null>(null)
     const loginCaptchaRef = ref<any>()
     const loginPayload = ref<ILoginRequest>({
@@ -142,9 +149,7 @@ export default defineComponent({
 
     onMounted(() => {
       const interval = setInterval(() => {
-        if (tryInitGoogle()) {
-          clearInterval(interval)
-        }
+        if (tryInitGoogle()) clearInterval(interval)
       }, 100)
     })
 
@@ -162,7 +167,6 @@ export default defineComponent({
 
         setTimeout(() => {
           const button = googleDiv.value?.querySelector('div[role="button"]')
-
           if (button) {
             button.addEventListener("click", () => {
               window.dataLayer = window.dataLayer || []
@@ -184,10 +188,9 @@ export default defineComponent({
       try {
         isGoogleProcessing.value = true
         errorMessage.value = null
-
         await authStore.fetchGoogle(response.credential)
       } catch (error: unknown) {
-        errorMessage.value = "Something went wrong. Please try again."
+        errorMessage.value = t("auth.login.errors.generic")
       } finally {
         setTimeout(() => {
           isGoogleProcessing.value = false
@@ -219,9 +222,9 @@ export default defineComponent({
         })
       } catch (error: any) {
         if (error?.response?.status === 401) {
-          errorMessage.value = "Invalid email or password"
+          errorMessage.value = t("auth.login.errors.invalid_credentials")
         } else {
-          errorMessage.value = "Something went wrong. Please try again."
+          errorMessage.value = t("auth.login.errors.generic")
         }
       } finally {
         setTimeout(() => {
@@ -231,6 +234,7 @@ export default defineComponent({
     }
 
     return {
+      t,
       googleDiv,
       isPasswordVisible,
       isGoogleProcessing,

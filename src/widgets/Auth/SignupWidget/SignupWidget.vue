@@ -1,13 +1,11 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-background px-4 relative">
-    <!-- ========== MAIN CONTENT ========== -->
     <main id="content" class="pb-24 sm:pb-16 w-full max-w-[540px] mx-auto">
       <div class="py-10 lg:py-20 w-full max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto">
         <div class="w-full max-w-sm mx-auto">
-          <!-- Log In Details -->
           <div class="space-y-8">
             <div class="text-center">
-              <h2 class="font-medium text-xl text-gray-800">Sign Up</h2>
+              <h2 class="font-medium text-xl text-gray-800">{{ t("auth.signup.title") }}</h2>
             </div>
 
             <div class="space-y-3">
@@ -16,33 +14,32 @@
               <!-- Divider -->
               <div class="flex items-center my-4">
                 <hr class="flex-grow border-gray-200" />
-                <span class="mx-3 text-sm text-gray-400">or</span>
+                <span class="mx-3 text-sm text-gray-400">{{ t("auth.common.or") }}</span>
                 <hr class="flex-grow border-gray-200" />
               </div>
-              <!-- End Divider -->
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label for="first_name" class="sr-only">First name</label>
+                  <label for="first_name" class="sr-only">{{ t("auth.signup.first_name") }}</label>
                   <input
                     id="first_name"
                     v-model="signupPayload.first_name"
                     type="text"
                     required
-                    placeholder="First name"
+                    :placeholder="t('auth.signup.first_name_ph')"
                     class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
                   />
                   <p v-if="errorMessages.first_name" class="mt-1 text-sm text-red-600">{{ errorMessages.first_name }}</p>
                 </div>
 
                 <div>
-                  <label for="last_name" class="sr-only">Last name</label>
+                  <label for="last_name" class="sr-only">{{ t("auth.signup.last_name") }}</label>
                   <input
                     id="last_name"
                     v-model="signupPayload.last_name"
                     type="text"
                     required
-                    placeholder="Last name"
+                    :placeholder="t('auth.signup.last_name_ph')"
                     class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
                   />
                   <p v-if="errorMessages.last_name" class="mt-1 text-sm text-red-600">{{ errorMessages.last_name }}</p>
@@ -50,7 +47,7 @@
               </div>
 
               <div>
-                <label for="country" class="sr-only">Country</label>
+                <label for="country" class="sr-only">{{ t("auth.signup.country") }}</label>
                 <div class="relative">
                   <select
                     id="country"
@@ -58,7 +55,7 @@
                     required
                     class="py-3 px-4 w-full appearance-none rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5] pr-10"
                   >
-                    <option value="" disabled>Select your country</option>
+                    <option value="" disabled>{{ t("auth.signup.country_ph") }}</option>
                     <option v-for="country in countryOptions" :key="country.alpha_2" :value="country.alpha_2">
                       {{ country.name }}
                     </option>
@@ -71,32 +68,37 @@
               </div>
 
               <div>
-                <label for="email" class="sr-only">Email</label>
+                <label for="email" class="sr-only">{{ t("auth.signup.email") }}</label>
                 <input
                   id="email"
                   v-model="signupPayload.email"
                   type="email"
                   autocomplete="email"
                   required
-                  placeholder="Email"
+                  :placeholder="t('auth.signup.email_ph')"
                   class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
                 />
                 <p v-if="errorMessages.email" class="mt-1 text-sm text-red-600">{{ errorMessages.email }}</p>
               </div>
 
               <div>
-                <label for="password" class="sr-only">Password</label>
+                <label for="password" class="sr-only">{{ t("auth.signup.password") }}</label>
                 <div class="relative">
                   <input
                     :type="isPasswordVisible ? 'text' : 'password'"
                     id="password"
                     v-model="signupPayload.password"
                     required
-                    placeholder="Password"
                     autocomplete="new-password"
+                    :placeholder="t('auth.signup.password_ph')"
                     class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
                   />
-                  <button type="button" @click="togglePasswordVisibility" class="absolute inset-y-0 end-0 flex items-center px-3 text-gray-400 hover:text-[#4F46E5] focus:outline-none">
+                  <button
+                    type="button"
+                    :aria-label="isPasswordVisible ? t('auth.common.hide_password') : t('auth.common.show_password')"
+                    @click="togglePasswordVisibility"
+                    class="absolute inset-y-0 end-0 flex items-center px-3 text-gray-400 hover:text-[#4F46E5] focus:outline-none"
+                  >
                     <i :class="isPasswordVisible ? 'fas fa-eye' : 'fas fa-eye-slash'" />
                   </button>
                 </div>
@@ -104,14 +106,14 @@
               </div>
 
               <div>
-                <label for="repeat_password" class="sr-only">Repeat Password</label>
+                <label for="repeat_password" class="sr-only">{{ t("auth.signup.repeat_password") }}</label>
                 <input
                   :type="isPasswordVisible ? 'text' : 'password'"
                   id="repeat_password"
                   v-model="repeatPassword"
                   required
-                  placeholder="Repeat password"
                   autocomplete="new-password"
+                  :placeholder="t('auth.signup.repeat_password_ph')"
                   class="py-3 px-4 w-full rounded-lg border border-gray-300 bg-white text-gray-800 shadow-2xs sm:text-sm placeholder:text-gray-400 focus:outline-none focus:border-[#4F46E5]"
                 />
                 <p v-if="errorMessages.repeat_password" class="mt-1 text-sm text-red-600">{{ errorMessages.repeat_password }}</p>
@@ -119,41 +121,36 @@
             </div>
 
             <div class="space-y-4">
-              <!-- CAPTCHA -->
               <div v-if="isProduction">
                 <VueHcaptcha :sitekey="CAPTCHA_SITE_KEY" @verify="loginCodeCaptcha" />
               </div>
 
-              <!-- Error Message -->
               <div v-if="errorMessages._global" class="text-sm text-red-600 bg-[#FFFAFA] border border-red-200 rounded-md p-3 shadow-sm">
                 {{ errorMessages._global }}
               </div>
             </div>
 
             <div class="space-y-4">
-              <!-- Sign Up -->
               <button
                 type="button"
                 @click="onSubmit"
                 :disabled="isGoogleProcessing"
                 class="py-3 px-4 w-full inline-flex justify-center items-center gap-x-2 sm:text-sm font-medium rounded-lg border border-transparent bg-[#4F46E5] text-white hover:bg-[#4338CA] disabled:opacity-50 disabled:pointer-events-none focus:outline-none"
               >
-                Sign Up
+                {{ t("auth.signup.submit") }}
               </button>
 
               <p class="text-center text-sm text-gray-500">
-                Already have an account?
+                {{ t("auth.signup.have_account") }}
                 <router-link :to="{ name: 'auth.login' }" class="text-[13px] text-gray-500 underline underline-offset-4 hover:text-[#4F46E5] focus:outline-hidden focus:text-[#4F46E5]">
-                  Log in
+                  {{ t("auth.signup.login_link") }}
                 </router-link>
               </p>
             </div>
           </div>
-          <!-- End Log In Details -->
         </div>
       </div>
     </main>
-    <!-- ========== END MAIN CONTENT ========== -->
 
     <TheFooter />
   </div>
@@ -167,16 +164,15 @@ import { isProduction } from "@/shared/utils"
 import { IRegisterRequest } from "@/shared/types"
 import { TheFooter } from "@/shared/components"
 import CountryList from "@/shared/json_data/countries.json"
+import { useI18n } from "vue-i18n"
 
 const CAPTCHA_SITE_KEY = import.meta.env.VITE_CAPTCHA_SITE_KEY as string
 
 export default defineComponent({
-  components: {
-    VueHcaptcha,
-    TheFooter,
-  },
-
+  components: { VueHcaptcha, TheFooter },
   setup() {
+    const { t } = useI18n()
+
     const googleDiv = ref<HTMLDivElement | null>(null)
     const loginCaptchaRef = ref<any>()
     const signupPayload = ref<IRegisterRequest>({
@@ -188,19 +184,14 @@ export default defineComponent({
       hcaptcha_token: "default",
     })
     const repeatPassword = ref<string>("")
-    const countryOptions = CountryList.map(({ name, alpha_2 }) => ({
-      name,
-      alpha_2,
-    }))
+    const countryOptions = CountryList.map(({ name, alpha_2 }) => ({ name, alpha_2 }))
     const errorMessages = ref<Record<string, string>>({})
     const isGoogleProcessing = ref<boolean>(false)
     const isPasswordVisible = ref<boolean>(false)
 
     onMounted(() => {
       const interval = setInterval(() => {
-        if (tryInitGoogle()) {
-          clearInterval(interval)
-        }
+        if (tryInitGoogle()) clearInterval(interval)
       }, 100)
     })
 
@@ -210,27 +201,16 @@ export default defineComponent({
           client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
           callback: handleCredentialResponse,
         })
-
-        window.google.accounts.id.renderButton(googleDiv.value, {
-          theme: "outline",
-          size: "large",
-        })
-
+        window.google.accounts.id.renderButton(googleDiv.value, { theme: "outline", size: "large" })
         setTimeout(() => {
           const button = googleDiv.value?.querySelector('div[role="button"]')
-
           if (button) {
             button.addEventListener("click", () => {
               window.dataLayer = window.dataLayer || []
-              window.dataLayer.push({
-                event: "GOOGLE_SIGNUP_CLICK",
-                method: "google_button",
-                location: "signup_form",
-              })
+              window.dataLayer.push({ event: "GOOGLE_SIGNUP_CLICK", method: "google_button", location: "signup_form" })
             })
           }
         }, 500)
-
         return true
       }
       return false
@@ -240,10 +220,9 @@ export default defineComponent({
       try {
         isGoogleProcessing.value = true
         errorMessages.value = {}
-
         await authStore.fetchGoogle(response.credential)
-      } catch (error: unknown) {
-        errorMessages.value._global = "Something went wrong. Please try again."
+      } catch {
+        errorMessages.value._global = t("auth.common.errors.generic")
       } finally {
         setTimeout(() => {
           isGoogleProcessing.value = false
@@ -262,43 +241,36 @@ export default defineComponent({
 
     const onSubmit = async () => {
       if (isGoogleProcessing.value) return
-
       try {
         errorMessages.value = {}
 
         if (signupPayload.value.password !== repeatPassword.value) {
-          errorMessages.value.password = "Passwords must match"
-          errorMessages.value.repeat_password = "Passwords must match"
+          const msg = t("auth.signup.errors.passwords_mismatch")
+          errorMessages.value.password = msg
+          errorMessages.value.repeat_password = msg
           return
         }
 
         await authStore.fetchRegister(signupPayload.value)
 
         window.dataLayer = window.dataLayer || []
-        window.dataLayer.push({
-          event: "BASIC_SIGNUP_CLICK",
-          method: "signup_button",
-          location: "signup_form",
-        })
+        window.dataLayer.push({ event: "BASIC_SIGNUP_CLICK", method: "signup_button", location: "signup_form" })
       } catch (error: any) {
         if (error.response?.status === 400 && error.response.data?.error?.fieldErrors) {
           const fields = error.response.data.error.fieldErrors
-          for (const key in fields) {
-            errorMessages.value[key] = fields[key][0]
-          }
+          for (const key in fields) errorMessages.value[key] = fields[key][0]
         } else if (error.response?.status === 400) {
-          errorMessages.value._global = "Email already exists"
+          errorMessages.value._global = t("auth.signup.errors.email_exists")
         } else {
-          errorMessages.value._global = "Something went wrong. Please try again later."
+          errorMessages.value._global = t("auth.common.errors.generic_later")
         }
       } finally {
-        setTimeout(() => {
-          errorMessages.value = {}
-        }, 3000)
+        setTimeout(() => (errorMessages.value = {}), 3000)
       }
     }
 
     return {
+      t,
       googleDiv,
       isPasswordVisible,
       loginCaptchaRef,

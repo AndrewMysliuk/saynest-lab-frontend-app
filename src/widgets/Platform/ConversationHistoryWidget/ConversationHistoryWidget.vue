@@ -4,18 +4,18 @@
 
     <div class="pt-16 max-w-[1720px] w-full mx-auto" v-else>
       <SingleHistory v-if="isSingle && getCurrentReview" />
-
-      <HistoryList @openDetails="openDetails" @deleteReview="deleteReview" v-else />
+      <HistoryList v-else @openDetails="openDetails" @deleteReview="deleteReview" />
     </div>
 
     <v-modal v-model="isDeleteModalOpen">
-      <TheConfirmation title="Delete Review" description="Are you sure you want to delete review? This action cannot be undone." @accept="confirmDeleteReview" @cancel="isDeleteModalOpen = false" />
+      <TheConfirmation :title="t('history.delete.title')" :description="t('history.delete.desc')" @accept="confirmDeleteReview" @cancel="isDeleteModalOpen = false" />
     </v-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, computed, ref, defineAsyncComponent } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import { commonStore, communicationReviewStore, taskGeneratorStore } from "@/app"
 import { ICommunicationReview, TaskTypeEnum } from "@/shared/types"
@@ -31,6 +31,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { t } = useI18n()
     const route = useRoute()
     const router = useRouter()
     const isReady = ref<boolean>(false)
@@ -87,6 +88,7 @@ export default defineComponent({
       deleteReview,
       confirmDeleteReview,
       TaskTypeEnum,
+      t,
     }
   },
 })

@@ -5,15 +5,21 @@
       <div class="relative flex flex-col md:flex-row items-center justify-center gap-4">
         <!-- Centered Links -->
         <ul class="flex flex-wrap justify-center items-center whitespace-nowrap gap-3">
-          <li class="text-xs text-gray-500">© 2025 Saynest Lab</li>
+          <li class="text-xs text-gray-500">© {{ currentYear }} {{ t("footer.copyright") }}</li>
           <li class="text-xs">
-            <router-link :to="{ name: 'terms-and-conditions' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800"> Terms and Conditions </router-link>
+            <a href="https://saynestlab.com/terms-and-conditions" target="_blank" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800">
+              {{ t("footer.terms") }}
+            </a>
           </li>
           <li class="text-xs">
-            <router-link :to="{ name: 'privacy-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800"> Privacy Policy </router-link>
+            <a href="https://saynestlab.com/privacy-policy" target="_blank" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800">
+              {{ t("footer.privacy") }}
+            </a>
           </li>
           <li class="text-xs">
-            <router-link :to="{ name: 'refund-policy' }" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800"> Refund Policy </router-link>
+            <a href="https://saynestlab.com/refund-policy" target="_blank" class="text-xs text-gray-500 underline-offset-4 hover:underline hover:text-gray-800">
+              {{ t("footer.refund") }}
+            </a>
           </li>
         </ul>
 
@@ -38,13 +44,17 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
+import { useI18n } from "vue-i18n"
 
 export default defineComponent({
   props: {
-    isStatic: {
-      type: Boolean,
-      default: false,
-    },
+    isStatic: { type: Boolean, default: false },
+  },
+  setup() {
+    const { t } = useI18n()
+    const currentYear = new Date().getFullYear()
+
+    return { t, currentYear }
   },
 })
 </script>

@@ -12,7 +12,7 @@
               :aria-selected="activeTab === PromptLibraryTabsEnum.MODULES"
               :class="['text-lg sm:text-[26px] font-semibold transition-all', activeTab === PromptLibraryTabsEnum.MODULES ? 'text-[#4F46E5]' : 'text-gray-500 hover:text-gray-700']"
             >
-              Topics
+              {{ t("dashboard.tabs.topics") }}
             </button>
 
             <button
@@ -21,17 +21,17 @@
               :aria-selected="activeTab === PromptLibraryTabsEnum.SCENARIOS"
               :class="['text-lg sm:text-[26px] font-semibold transition-all', activeTab === PromptLibraryTabsEnum.SCENARIOS ? 'text-[#4F46E5]' : 'text-gray-500 hover:text-gray-700']"
             >
-              Scenarios
+              {{ t("dashboard.tabs.scenarios") }}
             </button>
 
             <button
-              v-if="targetLanguage === 'English'"
+              v-if="targetLanguage === 'en'"
               type="button"
               @click="toggleTabs(PromptLibraryTabsEnum.IELTS)"
               :aria-selected="activeTab === PromptLibraryTabsEnum.IELTS"
               :class="['text-lg sm:text-[26px] font-semibold transition-all', activeTab === PromptLibraryTabsEnum.IELTS ? 'text-[#4F46E5]' : 'text-gray-500 hover:text-gray-700']"
             >
-              IELTS
+              {{ t("dashboard.tabs.ielts") }}
             </button>
           </div>
         </nav>
@@ -44,7 +44,7 @@
               :value="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules : searchQueryScenarios"
               @input="onSearchInput"
               type="text"
-              placeholder="Search..."
+              :placeholder="t('dashboard.search.placeholder')"
               class="w-full border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-0 focus:border-[#4F46E5] transition"
             />
 
@@ -52,10 +52,10 @@
               v-if="activeTab === PromptLibraryTabsEnum.MODULES ? searchQueryModules.length : searchQueryScenarios.length"
               @click="clearSearch"
               class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400 hover:text-gray-600 transition font-medium"
-              title="Clear search"
+              :title="t('dashboard.search.clearTitle')"
               type="button"
             >
-              Clear
+              {{ t("dashboard.search.clear") }}
             </button>
           </div>
         </div>
@@ -71,7 +71,7 @@
                   currentIeltsPart === null ? 'bg-[#4F46E5] text-white border-[#4F46E5]' : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
-                Full Exam
+                {{ t("dashboard.ielts.fullExam") }}
               </button>
 
               <button
@@ -84,7 +84,7 @@
                     : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
-                Part 1
+                {{ t("dashboard.ielts.part1") }}
               </button>
 
               <button
@@ -97,7 +97,7 @@
                     : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
-                Part 2
+                {{ t("dashboard.ielts.part2") }}
               </button>
 
               <button
@@ -110,16 +110,14 @@
                     : 'bg-white text-gray-800 border-gray-200 hover:border-[#4F46E5] focus:border-[#4F46E5]',
                 ]"
               >
-                Part 3
+                {{ t("dashboard.ielts.part3") }}
               </button>
             </div>
           </div>
         </div>
 
         <ModuleList v-if="activeTab === PromptLibraryTabsEnum.MODULES" @openScenarios="openScenarios" />
-
         <ScenarioList v-if="activeTab === PromptLibraryTabsEnum.SCENARIOS" :expanded-scenario="expandedScenario" @toggleExpand="toggleExpand" @selectPrompt="selectPrompt" />
-
         <IeltsScenarioList
           v-if="activeTab === PromptLibraryTabsEnum.IELTS"
           :current-ielts-part="currentIeltsPart"
@@ -130,7 +128,9 @@
 
         <div ref="loadMoreTrigger" class="h-1" />
 
-        <div v-if="isListLoading" class="text-center text-text-muted text-sm italic py-4">Loading more...</div>
+        <div v-if="isListLoading" class="text-center text-text-muted text-sm italic py-4">
+          {{ t("dashboard.loading.more") }}
+        </div>
       </div>
 
       <ModuleScenarioList :expanded-scenario="expandedScenario" @toggleExpand="toggleExpand" @selectPrompt="selectPrompt" @overview="isOverview = true" v-else />
@@ -140,10 +140,12 @@
 
 <script lang="ts">
 import { computed, defineAsyncComponent, defineComponent, nextTick, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue"
+import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import { commonStore, promptStore, userProgressStore, userStore } from "@/app"
 import { TheLoader, TheCountryLanguage } from "@/shared/components"
 import { IPromptScenarioEntity, SessionIeltsPartEnum } from "@/shared/types"
+import LanguagesList from "@/shared/json_data/languages.json"
 import { PromptLibraryTabsEnum } from "./types"
 
 export default defineComponent({
@@ -157,13 +159,14 @@ export default defineComponent({
   },
 
   setup() {
+    const { t } = useI18n()
     const router = useRouter()
     const isReady = ref<boolean>(false)
     const isListLoading = ref<boolean>(false)
     const isLoading = ref<boolean>(false)
     const searchQueryModules = ref<string>("")
     const searchQueryScenarios = ref<string>("")
-    const targetLanguage = ref<string>("English")
+    const targetLanguage = ref<string>("en")
     const isOverview = ref<boolean>(true)
     const activeTab = ref<PromptLibraryTabsEnum>(PromptLibraryTabsEnum.MODULES)
     const expandedScenario = ref<string | number | null>(null)
@@ -202,10 +205,12 @@ export default defineComponent({
 
           if (hasSearch) return
 
+          const target_language = LanguagesList?.find((item) => item.language_iso === targetLanguage.value)?.language
+
           if (activeTab.value === PromptLibraryTabsEnum.MODULES && getModuleParams.value.hasMore) {
             isListLoading.value = true
 
-            promptStore.fetchModuleList(true, { target_language: targetLanguage.value }).finally(() => {
+            promptStore.fetchModuleList(true, { target_language }).finally(() => {
               isListLoading.value = false
             })
           }
@@ -213,7 +218,7 @@ export default defineComponent({
           if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS && getPromptParams.value.hasMore) {
             isListLoading.value = true
 
-            promptStore.fetchScenariosList(true, { is_module_only: false, target_language: targetLanguage.value }).finally(() => {
+            promptStore.fetchScenariosList(true, { is_module_only: false, target_language }).finally(() => {
               isListLoading.value = false
             })
           }
@@ -315,11 +320,13 @@ export default defineComponent({
     const handleSearchInput = async (query: string) => {
       observer.value?.disconnect()
 
+      const target_language = LanguagesList?.find((item) => item.language_iso === targetLanguage.value)?.language
+
       if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
         promptStore.resetModuleParams()
         await promptStore.fetchModuleList(false, {
           search: query,
-          target_language: targetLanguage.value,
+          target_language,
         })
       } else if (activeTab.value === PromptLibraryTabsEnum.SCENARIOS) {
         expandedScenario.value = null
@@ -327,7 +334,7 @@ export default defineComponent({
         await promptStore.fetchScenariosList(false, {
           search: query,
           is_module_only: false,
-          target_language: targetLanguage.value,
+          target_language,
         })
       }
 
@@ -339,15 +346,17 @@ export default defineComponent({
     }
 
     const clearSearch = () => {
+      const target_language = LanguagesList?.find((item) => item.language_iso === targetLanguage.value)?.language
+
       if (activeTab.value === PromptLibraryTabsEnum.MODULES) {
         searchQueryModules.value = ""
         promptStore.resetModuleParams()
-        promptStore.fetchModuleList(false, { target_language: targetLanguage.value })
+        promptStore.fetchModuleList(false, { target_language })
       } else {
         expandedScenario.value = ""
         searchQueryScenarios.value = ""
         promptStore.resetPromptParams()
-        promptStore.fetchScenariosList(false, { is_module_only: false, target_language: targetLanguage.value })
+        promptStore.fetchScenariosList(false, { is_module_only: false, target_language })
       }
     }
 
@@ -364,7 +373,9 @@ export default defineComponent({
         promptStore.resetModuleParams()
         promptStore.resetPromptParams()
 
-        await Promise.all([promptStore.fetchModuleList(false, { target_language: value }), promptStore.fetchScenariosList(false, { is_module_only: false, target_language: value })])
+        const target_language = LanguagesList?.find((item) => item.language_iso === value)?.language
+
+        await Promise.all([promptStore.fetchModuleList(false, { target_language }), promptStore.fetchScenariosList(false, { is_module_only: false, target_language })])
       } catch (error: unknown) {
         console.log(error)
       } finally {
@@ -398,6 +409,7 @@ export default defineComponent({
       openScenarios,
       selectPrompt,
       updateTargetLanguage,
+      t,
       PromptLibraryTabsEnum,
       SessionIeltsPartEnum,
     }

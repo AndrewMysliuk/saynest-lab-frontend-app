@@ -1,14 +1,16 @@
 <template>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
     <div v-for="(module, index) in getModuleList" :key="index" class="relative">
+      <!-- Lock overlay -->
       <div
         v-if="isLocked && !AVAILABLE_MODULES.includes(module._id)"
         class="absolute inset-0 z-10 bg-gray-700/20 flex items-center justify-center rounded-2xl cursor-pointer"
         @click="$router.push({ name: 'platform.tariff-plans' })"
       >
-        <i class="fas fa-lock text-gray-600 text-3xl" title="Module is locked" />
+        <i class="fas fa-lock text-gray-600 text-3xl" :title="t('dashboard.moduleList.lockedTitle')" />
       </div>
 
+      <!-- Card -->
       <div
         @click="openScenarios(module._id)"
         @keyup.enter="openScenarios(module._id)"
@@ -23,6 +25,7 @@
           isLocked && !AVAILABLE_MODULES.includes(module._id) ? 'pointer-events-none opacity-60' : '',
         ]"
       >
+        <!-- Header -->
         <div class="flex items-center justify-between mb-3 h-[32px]">
           <h3 class="text-xl font-semibold text-gray-800 truncate" :title="module.title">
             {{ module.title }}
@@ -30,21 +33,30 @@
           <span class="text-sm font-medium text-gray-400">({{ module.level.join("-") }})</span>
         </div>
 
+        <!-- Description -->
         <p class="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-3">
           {{ module.description }}
         </p>
 
+        <!-- Type badge -->
         <div class="mb-5 h-[28px] flex items-center">
           <span
             v-if="module.type === ModuleTypeEnum.STRUCTURED"
             class="inline-flex items-center gap-1 bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full border border-purple-300"
-            title="Structured Module"
+            :title="t('dashboard.moduleList.types.structured')"
           >
-            Structured Module
+            {{ t("dashboard.moduleList.types.structured") }}
           </span>
-          <span v-else class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full border border-blue-200" title="Open Practice"> Open Practice </span>
+          <span
+            v-else
+            class="inline-flex items-center gap-1 bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full border border-blue-200"
+            :title="t('dashboard.moduleList.types.open')"
+          >
+            {{ t("dashboard.moduleList.types.open") }}
+          </span>
         </div>
 
+        <!-- Tags -->
         <div class="flex flex-wrap gap-2 overflow-hidden">
           <span v-for="tag in module.tags" :key="tag" class="inline-block bg-amber-50 text-amber-800 text-xs font-medium px-3 py-1 rounded-full border border-amber-200">
             {{ formatTagLabel(tag) }}
@@ -53,12 +65,16 @@
       </div>
     </div>
 
-    <p v-if="!getModuleList.length" class="text-sm text-center text-gray-400 italic w-full col-span-full">No modules found.</p>
+    <!-- Empty state -->
+    <p v-if="!getModuleList.length" class="text-sm text-center text-gray-400 italic w-full col-span-full">
+      {{ t("dashboard.moduleList.empty") }}
+    </p>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
+import { useI18n } from "vue-i18n"
 import { promptStore, subscriptionStore } from "@/app"
 import { ModuleTypeEnum } from "@/shared/types"
 import { formatTagLabel } from "@/shared/lib"
@@ -66,6 +82,8 @@ import { AVAILABLE_MODULES } from "@/shared/utils"
 
 export default defineComponent({
   setup(_, { emit }) {
+    const { t } = useI18n()
+
     const getModuleList = computed(() => promptStore.getModuleList)
     const isLocked = computed(() => subscriptionStore.getIsExpiredVisible || !subscriptionStore.getIsHasSubscription)
 
@@ -80,6 +98,7 @@ export default defineComponent({
       ModuleTypeEnum,
       openScenarios,
       formatTagLabel,
+      t,
     }
   },
 })

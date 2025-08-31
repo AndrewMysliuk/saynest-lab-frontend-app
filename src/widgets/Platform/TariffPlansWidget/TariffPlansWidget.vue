@@ -9,25 +9,15 @@
       <div class="max-w-6xl px-4 sm:px-6 lg:px-8 mx-auto">
         <!-- Heading -->
         <div class="mb-8 max-w-2xl mx-auto text-center">
-          <h1 class="font-bold text-gray-800 text-4xl md:text-5xl">Overview our plans</h1>
+          <h1 class="font-bold text-gray-800 text-4xl md:text-5xl">
+            {{ t("subscription.overview.title") }}
+          </h1>
 
-          <p class="mt-5 text-sm md:text-lg text-gray-800">Here you can view all available subscription plans and their features</p>
+          <p class="mt-5 text-sm md:text-lg text-gray-800">
+            {{ t("subscription.overview.subtitle") }}
+          </p>
         </div>
         <!-- End Heading -->
-
-        <!-- Switch -->
-        <!-- <div id="toggle-count" class="flex justify-center items-center gap-x-3">
-          <label for="pricing-switch" class="text-sm text-gray-800">Monthly</label>
-          <label for="pricing-switch" class="relative inline-block w-11 h-6 cursor-pointer">
-            <input type="checkbox" id="pricing-switch" class="peer sr-only" checked />
-            <span
-              class="absolute inset-0 bg-gray-200 rounded-full transition-colors duration-200 ease-in-out peer-checked:bg-[#4F46E5] peer-disabled:opacity-50 peer-disabled:pointer-events-none"
-            ></span>
-            <span class="absolute top-1/2 start-0.5 -translate-y-1/2 size-5 bg-white rounded-full shadow-sm transition-transform duration-200 ease-in-out peer-checked:translate-x-full"></span>
-          </label>
-          <label for="pricing-switch" class="text-sm text-gray-800">Annually</label>
-        </div> -->
-        <!-- End Switch -->
       </div>
 
       <div class="my-8">
@@ -39,8 +29,12 @@
               v-for="plan in getPlansList"
               class="relative p-4 md:p-6 min-h-[460px] h-full flex flex-col w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] max-w-full bg-white border border-gray-200 rounded-xl shadow-xs"
             >
-              <div v-if="isSubscribed(plan._id) && !isCancelled" class="absolute top-[26px] right-[24px] text-xs bg-green-600 text-white px-2 py-1 rounded">Current Plan</div>
-              <div v-if="isSubscribed(plan._id) && isCancelled" class="absolute top-[26px] right-[24px] text-xs bg-red-500 text-white px-2 py-1 rounded">Cancelled Plan</div>
+              <div v-if="isSubscribed(plan._id) && !isCancelled" class="absolute top-[26px] right-[24px] text-xs bg-green-600 text-white px-2 py-1 rounded">
+                {{ t("subscription.badges.current") }}
+              </div>
+              <div v-if="isSubscribed(plan._id) && isCancelled" class="absolute top-[26px] right-[24px] text-xs bg-red-500 text-white px-2 py-1 rounded">
+                {{ t("subscription.badges.cancelled") }}
+              </div>
 
               <!-- Header -->
               <header class="flex flex-col">
@@ -62,7 +56,9 @@
                 </div>
                 <!-- End Price -->
 
-                <p class="text-xs text-gray-500">{{ plan.billing_period.toLowerCase() }} for one person</p>
+                <p class="text-xs text-gray-500">
+                  {{ t("subscription.price.perPerson", { period: formatPeriod(plan.billing_period) }) }}
+                </p>
 
                 <div class="mt-5 pb-7 border-b border-gray-200">
                   <template v-if="isSubscribed(plan._id)">
@@ -73,7 +69,7 @@
                       @click="isActiveFromTrialOpen = true"
                       class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      Unlock Full Access
+                      {{ t("subscription.actions.unlockFullAccess") }}
                     </button>
 
                     <button
@@ -82,7 +78,7 @@
                       @click="updatePaymentDetailsLink"
                       class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      Update Payment Method
+                      {{ t("subscription.actions.updatePaymentMethod") }}
                     </button>
 
                     <button
@@ -92,7 +88,7 @@
                       @click="isUnsubscribedConfirmOpened = true"
                       class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg border border-transparent bg-red-500 text-white hover:bg-red-600 disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      Cancel Subscription
+                      {{ t("subscription.actions.cancel") }}
                     </button>
 
                     <button
@@ -101,7 +97,7 @@
                       @click="recancelSubscription"
                       class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      Resume Subscription
+                      {{ t("subscription.actions.resume") }}
                     </button>
 
                     <template v-else>
@@ -111,7 +107,7 @@
                         @click="subscribeMethod(plan)"
                         class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                       >
-                        Start Subscription
+                        {{ t("subscription.actions.start") }}
                       </button>
                     </template>
                   </template>
@@ -122,7 +118,7 @@
                       @click="openChangePlanModal(plan._id)"
                       class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      Change Plan
+                      {{ t("subscription.actions.changePlan") }}
                     </button>
                   </template>
 
@@ -133,7 +129,7 @@
                       @click="subscribeMethod(plan)"
                       class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      Get Free Trial
+                      {{ t("subscription.actions.getTrial") }}
                     </button>
                   </template>
 
@@ -144,7 +140,7 @@
                       @click="subscribeMethod(plan)"
                       class="py-2 px-2.5 w-full inline-flex justify-center items-center gap-x-1.5 whitespace-nowrap text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] hover:shadow-none focus:outline-none focus:bg-[#4338CA] focus:shadow-none disabled:opacity-50 disabled:pointer-events-none"
                     >
-                      Start Subscription
+                      {{ t("subscription.actions.start") }}
                     </button>
                   </template>
                 </div>
@@ -181,20 +177,15 @@
 
       <v-modal v-model="isUnsubscribedConfirmOpened">
         <TheConfirmation
-          title="Cancel Subscription"
-          description="Are you sure you want to cancel your current subscription? You will lose access to all premium features after the end of the billing period."
+          :title="t('subscription.modals.cancel.title')"
+          :description="t('subscription.modals.cancel.desc')"
           @accept="cancelSubscription"
           @cancel="isUnsubscribedConfirmOpened = false"
         />
       </v-modal>
 
       <v-modal v-model="isActiveFromTrialOpen">
-        <TheConfirmation
-          title="End Trial Early"
-          description="Do you want to end your trial and start your full subscription now? This action cannot be undone — you’ll be charged immediately and won’t be able to return to the trial."
-          @accept="unlockFullAccess"
-          @cancel="isActiveFromTrialOpen = false"
-        />
+        <TheConfirmation :title="t('subscription.modals.endTrial.title')" :description="t('subscription.modals.endTrial.desc')" @accept="unlockFullAccess" @cancel="isActiveFromTrialOpen = false" />
       </v-modal>
 
       <v-modal v-model="isChangePlanOpen">
@@ -206,6 +197,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { commonStore, plansStore, subscriptionStore, userStore } from "@/app"
 import { TheLoader, TheConfirmation } from "@/shared/components"
 import { IPlanEntity, SubscriptionTypeEnum } from "@/shared/types"
@@ -218,6 +210,8 @@ export default defineComponent({
   },
 
   setup() {
+    const { t } = useI18n()
+
     const isUnsubscribedConfirmOpened = ref<boolean>(false)
     const isActiveFromTrialOpen = ref<boolean>(false)
     const isChangePlanOpen = ref<boolean>(false)
@@ -233,45 +227,38 @@ export default defineComponent({
     const isPastDue = computed(() => getCurrentSubscription.value?.status === SubscriptionTypeEnum.PAST_DUE)
     const isPendingCancel = computed(() => getCurrentSubscription.value?.is_pending_cancel)
     const isActiveOrTrialingOrPastDue = computed(() => isActive.value || isTrialing.value || isPastDue.value)
-    const changePlanTitle = computed(() => {
-      if (isTrialing.value) return "End Trial and Change Plan"
-      return "Change Plan"
-    })
+    const changePlanTitle = computed(() => (isTrialing.value ? t("subscription.modals.changePlan.titleTrial") : t("subscription.modals.changePlan.title")))
+    const changePlanDescription = computed(() => (isTrialing.value ? t("subscription.modals.changePlan.descTrial") : t("subscription.modals.changePlan.desc")))
 
-    const changePlanDescription = computed(() => {
-      if (isTrialing.value) {
-        return "You are currently in a trial period. Changing your plan now will end the trial immediately and you’ll be charged for the selected plan. Are you sure?"
+    const formatPeriod = (period: string | undefined) => {
+      if (!period) return ""
+      const key = String(period).trim().toLowerCase()
+      const known = ["monthly", "annually", "weekly", "daily"] as const
+      if ((known as readonly string[]).includes(key)) {
+        return t(`subscription.period.${key}`)
       }
 
-      return "Your subscription will be updated immediately. Are you sure you want to switch to a different plan?"
-    })
+      return key
+    }
 
     const isSubscribed = (plan_id: string) => {
       if (!getCurrentSubscription.value) return false
-
       return getCurrentSubscription.value.plan_id === plan_id
     }
 
     const subscribeMethod = (plan: IPlanEntity) => {
       if (!window.Paddle) {
-        console.error("Paddle not found")
+        console.error(t("subscription.errors.paddleMissing") as string)
         return
       }
 
       const priceId = getCurrentSubscription.value ? plan.paddle_price_ids.no_trial : plan.paddle_price_ids.trial
 
       window.Paddle.Checkout.open({
-        items: [
-          {
-            priceId,
-            quantity: 1,
-          },
-        ],
+        items: [{ priceId, quantity: 1 }],
         customer: {
           email: getCurrentUser.value?.email,
-          address: {
-            countryCode: getCurrentUser.value?.country,
-          },
+          address: { countryCode: getCurrentUser.value?.country },
         },
         customData: {
           user_id: getCurrentUser.value?._id,
@@ -323,7 +310,6 @@ export default defineComponent({
     const updatePaymentDetailsLink = async () => {
       try {
         const url = await getPaymentDetailsLinkHandler()
-
         window.open(url, "_blank")
       } catch (error: unknown) {
         console.log(error)
@@ -346,6 +332,7 @@ export default defineComponent({
     }
 
     return {
+      t,
       isUnsubscribedConfirmOpened,
       isActiveFromTrialOpen,
       isChangePlanOpen,
@@ -369,6 +356,7 @@ export default defineComponent({
       openChangePlanModal,
       changePlan,
       SubscriptionTypeEnum,
+      formatPeriod,
     }
   },
 })

@@ -9,7 +9,9 @@
 
     <transition name="slide-left">
       <div v-if="isGoalsOpen && getSelectedPrompt?.user_content?.goals" class="absolute top-0 left-0 h-full w-80 bg-white border-r border-gray-200 p-6 shadow-xl overflow-y-auto z-20">
-        <h2 class="text-xl font-bold text-gray-800 mb-6">Conversation Goals</h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-6">
+          {{ t("conversation.goals.title") }}
+        </h2>
 
         <div v-for="(goal, index) in getSelectedPrompt.user_content.goals" :key="index" class="mb-4">
           <details class="group">
@@ -24,12 +26,14 @@
       <div class="conversation" v-if="!isReviewGenerating">
         <div class="absolute top-4 left-0 z-10 flex gap-2">
           <button @click="goToDashboard" class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium">
-            ← Back to Dashboard
+            {{ t("conversation.actions.backToDashboard") }}
           </button>
         </div>
 
         <div class="absolute top-4 right-0 md:right-4 z-10 flex gap-2">
-          <button @click="handleReviewModalToggle" class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-semibold">Review Conversation</button>
+          <button @click="handleReviewModalToggle" class="px-3 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition text-sm font-semibold">
+            {{ t("conversation.actions.review") }}
+          </button>
 
           <button
             v-if="getConversationResponse?.conversation_history?.length"
@@ -37,7 +41,7 @@
             id="CONVERSATION_HISTORY_CLICKED"
             class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium"
           >
-            Toggle History
+            {{ t("conversation.actions.toggleHistory") }}
           </button>
 
           <button
@@ -45,7 +49,7 @@
             @click="toggleGoals"
             class="px-3 py-2 border border-gray-300 text-gray-700 rounded-md bg-white hover:bg-gray-100 hover:border-gray-400 transition-colors text-sm font-medium"
           >
-            Toggle Goals
+            {{ t("conversation.actions.toggleGoals") }}
           </button>
         </div>
 
@@ -53,11 +57,9 @@
           <p class="--cursor">
             <TheInteractiveText :text="getLastModelFullAnswer" @click-word="handleWordClick" @select-text="handleWordSelection" />
           </p>
-
-          <!-- <div class="conversation__warning" v-if="getLastModelTip" v-html="getLastModelTip" /> -->
         </div>
 
-        <TheLoader v-else-if="isLoading" message="Processing your recording..." />
+        <TheLoader v-else-if="isLoading" :message="t('conversation.loader.processingRecording')" />
 
         <div class="conversation__info --left" @click="openModalInfo">
           <i class="fa-regular fa-circle-question" />
@@ -72,7 +74,12 @@
         </div>
 
         <div v-if="!isLoading && getConversationResponse?.conversation_history?.length" class="conversation__visualization --prompt flex justify-center items-center gap-6 mt-4">
-          <button v-if="!isHold" @click="startRecordingFromButton" class="w-16 h-16 rounded-full bg-indigo-600 text-white text-xl flex items-center justify-center shadow-md" title="Start recording">
+          <button
+            v-if="!isHold"
+            @click="startRecordingFromButton"
+            class="w-16 h-16 rounded-full bg-indigo-600 text-white text-xl flex items-center justify-center shadow-md"
+            :title="t('conversation.recorder.startTitle')"
+          >
             <i class="fa-solid fa-microphone" />
           </button>
 
@@ -82,7 +89,7 @@
             v-if="isHold"
             @click="stopRecordingFromButton"
             class="w-16 h-16 rounded-full bg-orange-500 text-white text-xl flex items-center justify-center shadow-md relative"
-            title="Stop recording"
+            :title="t('conversation.recorder.stopTitle')"
           >
             <i class="fa-solid fa-stop" />
           </button>
@@ -91,14 +98,14 @@
             v-if="isHold"
             @click="cancelRecordingFromButton"
             class="w-10 h-10 rounded-md border border-gray-300 text-gray-600 hover:bg-gray-100 transition flex items-center justify-center"
-            title="Cancel (Escape)"
+            :title="t('conversation.recorder.cancelTitle')"
           >
             <i class="fa-solid fa-trash" />
           </button>
         </div>
       </div>
 
-      <TheLoader v-else message="Review Generation In Progress..." />
+      <TheLoader v-else :message="t('conversation.loader.reviewInProgress')" />
     </div>
 
     <v-modal v-model="isModalInfoOpen" is-curtain :is-slide-out-bottom="!isDesktop">
@@ -106,19 +113,14 @@
     </v-modal>
 
     <v-modal v-model="isReviewModalOpen">
-      <TheConfirmation
-        is-info
-        title="Submit Review Early"
-        description="The conversation is still in progress. Are you sure you want to end it and submit your review now? You won't be able to return and continue later."
-        @accept="analyseUserConversation"
-        @cancel="isReviewModalOpen = false"
-      />
+      <TheConfirmation is-info :title="t('conversation.reviewModal.title')" :description="t('conversation.reviewModal.desc')" @accept="analyseUserConversation" @cancel="isReviewModalOpen = false" />
     </v-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, onBeforeUnmount, computed, onBeforeMount, watch, defineAsyncComponent } from "vue"
+import { useI18n } from "vue-i18n"
 import { conversationStore, audioPlayer, urlAudioPlayer, promptStore, errorAnalysisStore, communicationReviewStore, authStore, userStore, orgStore, subscriptionStore, vocabularyStore } from "@/app"
 import { useRouter } from "vue-router"
 import { TheConfirmation, TheLoader, TheInteractiveText } from "@/shared/components"
@@ -126,14 +128,15 @@ import { retryWithAdaptiveParams } from "@/shared/utils"
 import { useMicrophone, initializeCanvasForConversation, isLg } from "@/shared/lib"
 import { SessionTypeEnum } from "@/shared/types"
 import { createSessionHandler } from "@/shared/api"
-// import helloRecordEn from "@/shared/assets/records/hello_record_en.wav"
-// import helloRecordBg from "@/shared/assets/records/hello_record_bg.wav"
-// import helloRecordDe from "@/shared/assets/records/hello_record_de.wav"
-// import helloRecordEs from "@/shared/assets/records/hello_record_es.wav"
 import startRecordEn from "@/shared/assets/records/start_record_en.wav"
 import startRecordBg from "@/shared/assets/records/start_record_bg.wav"
 import startRecordDe from "@/shared/assets/records/start_record_de.wav"
 import startRecordEs from "@/shared/assets/records/start_record_es.wav"
+import startRecordPt from "@/shared/assets/records/start_record_pt.wav"
+import startRecordFr from "@/shared/assets/records/start_record_fr.wav"
+import startRecordPl from "@/shared/assets/records/start_record_pl.wav"
+import startRecordUk from "@/shared/assets/records/start_record_uk.wav"
+import startRecordIt from "@/shared/assets/records/start_record_it.wav"
 import LanguagesList from "@/shared/json_data/languages.json"
 
 const FILE_LANGUAGE = [
@@ -153,6 +156,26 @@ const FILE_LANGUAGE = [
     file: startRecordEs,
     language: "Spanish",
   },
+  {
+    file: startRecordPt,
+    language: "Portuguese",
+  },
+  {
+    file: startRecordFr,
+    language: "French",
+  },
+  {
+    file: startRecordPl,
+    language: "Polish",
+  },
+  {
+    file: startRecordUk,
+    language: "Ukrainian",
+  },
+  {
+    file: startRecordIt,
+    language: "Italian",
+  },
 ]
 
 export default defineComponent({
@@ -165,6 +188,7 @@ export default defineComponent({
   },
 
   setup() {
+    const { t, locale } = useI18n()
     const router = useRouter()
     const controller = new AbortController()
     const clientCanvasRef = ref<HTMLCanvasElement | null>(null)
@@ -196,7 +220,7 @@ export default defineComponent({
     const getSessionIsEnd = computed(() => errorAnalysisStore.getSessionIsEnd)
     const getSelectedPrompt = computed(() => promptStore.getCurrentPrompt)
     const getCurrentReview = computed(() => communicationReviewStore.getCurrentReview)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getUserTranslateLanguage = computed(() => (locale.value ? locale.value : userStore.getCurrentUser?.explanation_language || "en"))
     const getCurrentUser = computed(() => userStore.getCurrentUser)
     const getIsExpiredVisible = computed(() => subscriptionStore.getIsExpiredVisible)
     const getIsTrialVisible = computed(() => subscriptionStore.getIsTrialVisible)
@@ -632,6 +656,7 @@ export default defineComponent({
       repeatLastAudio,
       toggleGoals,
       toggleSidebar,
+      t,
     }
   },
 })

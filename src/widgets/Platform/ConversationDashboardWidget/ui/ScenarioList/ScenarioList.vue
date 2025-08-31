@@ -22,7 +22,7 @@
       @click="!isLocked || AVAILABLE_SCENARIOS.includes(scenario._id) ? selectPrompt(scenario) : $router.push('/platform/tariff-plans')"
     >
       <div v-if="isLocked && !AVAILABLE_SCENARIOS.includes(scenario._id)" class="absolute inset-0 z-10 bg-gray-400/50 flex items-center justify-center cursor-pointer rounded-2xl">
-        <i class="fas fa-lock text-gray-600 text-3xl" title="Scenario is locked" />
+        <i class="fas fa-lock text-gray-600 text-3xl" :title="t('dashboard.scenarioList.lockedTitle')" />
       </div>
 
       <!-- Header -->
@@ -41,8 +41,12 @@
             ]"
           >
             {{ scenario.level }} ·
-            <span v-if="getPartProgress(getCurrentUserProgress, scenario.name, 'FULL_SCENARIO')"> Completed {{ getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }}x </span>
-            <span v-else> Not completed </span>
+            <span v-if="getPartProgress(getCurrentUserProgress, scenario.name, 'FULL_SCENARIO')">
+              {{ t("dashboard.scenarioList.status.completed", { count: getPartProgress(getCurrentUserProgress, scenario.name, "FULL_SCENARIO") }) }}
+            </span>
+            <span v-else>
+              {{ t("dashboard.scenarioList.status.notCompleted") }}
+            </span>
           </span>
         </div>
       </div>
@@ -61,7 +65,7 @@
         >
           <i :class="expandedScenario === index ? 'fas fa-chevron-up' : 'fas fa-chevron-down'" class="text-base" />
           <span class="sm:group-hover:underline">
-            {{ expandedScenario === index ? "Hide Details" : "Show Details" }}
+            {{ expandedScenario === index ? t("dashboard.scenarioList.details.hide") : t("dashboard.scenarioList.details.show") }}
           </span>
         </button>
       </div>
@@ -73,7 +77,7 @@
           <div v-if="scenario.user_content.goals?.length">
             <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
               <i class="fas fa-bullseye text-gray-500" />
-              Goals
+              {{ t("dashboard.scenarioList.sections.goals") }}
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
@@ -86,11 +90,13 @@
           <div v-if="scenario.user_content.dictionary?.length">
             <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
               <i class="fas fa-book text-gray-500" />
-              Dictionary
+              {{ t("dashboard.scenarioList.sections.dictionary") }}
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="word in scenario.user_content.dictionary" :key="word.word">
-                <b>{{ word.word }}</b> <span class="text-gray-500">({{ word.translation[getUserTranslateLanguage] }})</span> — {{ word.meaning }}
+                <b>{{ word.word }}</b>
+                <span class="text-gray-500">({{ word.translation[getUserTranslateLanguage] }})</span>
+                — {{ word.meaning }}
               </li>
             </ul>
           </div>
@@ -99,7 +105,7 @@
           <div v-if="scenario.user_content.phrases?.length">
             <h4 class="text-sm font-semibold text-gray-800 mb-1.5 flex items-center gap-2">
               <i class="fas fa-comment-dots text-gray-500" />
-              Phrases
+              {{ t("dashboard.scenarioList.sections.phrases") }}
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
@@ -111,12 +117,15 @@
       </transition>
     </div>
 
-    <p v-if="!getPromptList.length" class="text-sm text-center text-gray-400 italic">No scenarios found.</p>
+    <p v-if="!getPromptList.length" class="text-sm text-center text-gray-400 italic">
+      {{ t("dashboard.scenarioList.empty") }}
+    </p>
   </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from "vue"
+import { useI18n } from "vue-i18n"
 import { promptStore, subscriptionStore, userProgressStore, userStore, urlAudioPlayer } from "@/app"
 import { IPromptScenarioEntity } from "@/shared/types"
 import { getPartProgress } from "@/shared/lib"
@@ -131,8 +140,10 @@ export default defineComponent({
   },
 
   setup(_, { emit }) {
+    const { t, locale } = useI18n()
+
     const getPromptList = computed(() => promptStore.getPromptList)
-    const getUserTranslateLanguage = computed(() => userStore.getCurrentUser?.explanation_language || "en")
+    const getUserTranslateLanguage = computed(() => (locale.value ? locale.value : userStore.getCurrentUser?.explanation_language || "en"))
     const getCurrentUserProgress = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts ?? {})
     const isLocked = computed(() => subscriptionStore.getIsExpiredVisible || !subscriptionStore.getIsHasSubscription)
 
@@ -153,6 +164,7 @@ export default defineComponent({
       getPartProgress,
       selectPrompt,
       toggleExpand,
+      t,
       AVAILABLE_SCENARIOS,
     }
   },

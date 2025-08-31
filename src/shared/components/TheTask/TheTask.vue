@@ -1,7 +1,8 @@
 <template>
   <div :class="['w-full overflow-y-auto  rounded-xl pointer-events-auto ', isModal ? 'md:w-[720px] h-[80vh] p-4 bg-gray-50 shadow-xl' : 'max-w-full']">
     <div class="flex flex-col gap-4 relative">
-      <h2 class="text-xl font-semibold text-gray-800" v-if="isModal">Task Review</h2>
+      <h2 class="text-xl font-semibold text-gray-800" v-if="isModal">{{ t("task.review_title") }}</h2>
+
       <!-- Close Button -->
       <div class="absolute top-0 end-0 z-10" v-if="isModal">
         <button
@@ -9,7 +10,7 @@
           type="button"
           class="size-8 shrink-0 flex justify-center items-center gap-x-2 rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none focus:outline-hidden focus:bg-gray-100"
         >
-          <span class="sr-only">Close</span>
+          <span class="sr-only">{{ t("task.close") }}</span>
           <svg
             class="shrink-0 size-6"
             xmlns="http://www.w3.org/2000/svg"
@@ -78,10 +79,12 @@
             :disabled="isTaskChecked(task._id)"
             class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:pointer-events-none rounded-md transition"
           >
-            Check
+            {{ t("task.check") }}
           </button>
 
-          <p v-if="isTaskChecked(task._id)" class="text-sm text-gray-800 font-medium">Correct: {{ getCorrectCount(task) }} / {{ task.task.sentences.length }}</p>
+          <p v-if="isTaskChecked(task._id)" class="text-sm text-gray-800 font-medium">
+            {{ t("task.correct", { x: getCorrectCount(task), y: task.task.sentences.length }) }}
+          </p>
         </div>
       </div>
     </div>
@@ -90,50 +93,40 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { taskGeneratorStore } from "@/app"
 import { IGenericTaskEntity, IMultipleChoiceTask, TaskTypeEnum } from "@/shared/types"
 
 export default defineComponent({
-  props: {
-    isModal: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
+  props: { isModal: { type: Boolean, default: false } },
   setup() {
-    const checkedTasks = ref<Set<string>>(new Set())
+    const { t } = useI18n()
 
+    const checkedTasks = ref<Set<string>>(new Set())
     const getTasksList = computed(() => taskGeneratorStore.getTasksList)
     const getSelectedAnswersMap = computed(() => taskGeneratorStore.selectedAnswersMap)
 
-    const isMultipleChoiceTask = (task: IGenericTaskEntity): task is IGenericTaskEntity<IMultipleChoiceTask> => {
-      return task.type === TaskTypeEnum.MULTIPLE_CHOICE
-    }
+    const isMultipleChoiceTask = (task: IGenericTaskEntity): task is IGenericTaskEntity<IMultipleChoiceTask> => task.type === TaskTypeEnum.MULTIPLE_CHOICE
 
     const isTaskChecked = (taskId: string) => {
       const isChecked = checkedTasks.value.has(taskId)
       const isCompleted = getTasksList.value?.find((item) => item._id === taskId)?.is_completed || false
-
       return isChecked || isCompleted
     }
 
     const checkTask = async (taskId: string) => {
-      if (!Object.keys(getSelectedAnswersMap.value[taskId]).length) return
-
+      if (!Object.keys(getSelectedAnswersMap.value[taskId] || {}).length) return
       try {
         await taskGeneratorStore.fetchSetCompleted(taskId, getSelectedAnswersMap.value[taskId])
         checkedTasks.value.add(taskId)
-      } catch (error: unknown) {
+      } catch (error) {
         console.log(error)
       }
     }
 
     const getCorrectCount = (task: IGenericTaskEntity): number => {
       const answers = getSelectedAnswersMap.value[task._id] || {}
-      return task.task.sentences.reduce((acc, sentence) => {
-        return answers[sentence.id] === sentence.answer ? acc + 1 : acc
-      }, 0)
+      return task.task.sentences.reduce((acc, s) => (answers[s.id] === s.answer ? acc + 1 : acc), 0)
     }
 
     function onSelectAnswer(taskId: string, sentenceId: number, option: string) {
@@ -141,6 +134,7 @@ export default defineComponent({
     }
 
     return {
+      t,
       getTasksList,
       getSelectedAnswersMap,
       isMultipleChoiceTask,

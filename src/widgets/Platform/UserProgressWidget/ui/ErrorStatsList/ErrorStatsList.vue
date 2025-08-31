@@ -1,6 +1,8 @@
 <template>
   <div class="p-5 flex-1 bg-white border border-stone-200 shadow rounded-xl">
-    <h2 class="text-base font-semibold text-gray-900 mb-4">Most Frequent Errors</h2>
+    <h2 class="text-base font-semibold text-gray-900 mb-4">
+      {{ t("progress.errors.title") }}
+    </h2>
 
     <ul v-if="sortedErrors.length" class="divide-y divide-gray-100">
       <li v-for="(error, index) in sortedErrors" :key="error.category" class="flex items-center justify-between py-2 px-1">
@@ -23,19 +25,23 @@
       </li>
     </ul>
 
-    <div v-else class="text-gray-400 text-sm">No errors found. Are you... perfect?</div>
+    <div v-else class="text-gray-400 text-sm">
+      {{ t("progress.errors.empty") }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { userProgressStore } from "@/app"
 import type { IUserProgressErrorStats } from "@/shared/types"
 
 export default defineComponent({
   setup() {
-    const errorStats = computed<IUserProgressErrorStats[]>(() => userProgressStore.getCurrentUserProgress?.error_stats || [])
+    const { t } = useI18n()
 
+    const errorStats = computed<IUserProgressErrorStats[]>(() => userProgressStore.getCurrentUserProgress?.error_stats || [])
     const sortedErrors = computed(() => [...errorStats.value].sort((a, b) => b.total_count - a.total_count).slice(0, 5))
 
     const trendEmoji = {
@@ -47,6 +53,7 @@ export default defineComponent({
     return {
       sortedErrors,
       trendEmoji,
+      t,
     }
   },
 })

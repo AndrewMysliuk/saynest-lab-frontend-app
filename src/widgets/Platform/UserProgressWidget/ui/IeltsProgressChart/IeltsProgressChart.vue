@@ -1,17 +1,22 @@
 <template>
   <div class="p-5 flex flex-col bg-white border border-stone-200 shadow-sm rounded-xl">
-    <h2 class="font-medium text-stone-800 text-base md:text-lg">IELTS Mark Over Time</h2>
+    <h2 class="font-medium text-stone-800 text-base md:text-lg">
+      {{ t("progress.ielts.title") }}
+    </h2>
 
     <div class="min-h-[215px] md:min-h-[300px] mt-5 relative" v-if="chartData">
       <Line :data="chartData" :options="chartOptions" />
     </div>
 
-    <div v-else class="text-gray-400 text-sm mt-4">No IELTS progress data available yet.</div>
+    <div v-else class="text-gray-400 text-sm mt-4">
+      {{ t("progress.ielts.empty") }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { Line } from "vue-chartjs"
 import type { ChartOptions, ScriptableContext } from "chart.js"
 import { Chart as ChartJS, Filler, Title, Tooltip, Legend, LineElement, PointElement, CategoryScale, LinearScale } from "chart.js"
@@ -25,6 +30,8 @@ export default defineComponent({
   },
 
   setup() {
+    const { t } = useI18n()
+
     const userProgress = computed(() => userProgressStore.getCurrentUserProgress)
 
     const chartData = computed(() => {
@@ -116,6 +123,7 @@ export default defineComponent({
     return {
       chartData,
       chartOptions,
+      t,
     }
   },
 })

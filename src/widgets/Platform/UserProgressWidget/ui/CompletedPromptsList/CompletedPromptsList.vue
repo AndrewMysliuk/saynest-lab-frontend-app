@@ -1,6 +1,8 @@
 <template>
   <div class="p-5 flex-1 bg-white border border-stone-200 shadow rounded-xl">
-    <h2 class="text-base font-semibold text-gray-900 mb-4">Most Completed Prompts</h2>
+    <h2 class="text-base font-semibold text-gray-900 mb-4">
+      {{ t("progress.completedPrompts.title") }}
+    </h2>
 
     <ul v-if="sortedPrompts.length" class="divide-y divide-gray-100">
       <li v-for="(item, index) in sortedPrompts" :key="item.key" class="flex items-center justify-between py-2 px-1">
@@ -12,16 +14,21 @@
       </li>
     </ul>
 
-    <div v-else class="text-gray-400 text-sm">No completed prompts yet. Pick something!</div>
+    <div v-else class="text-gray-400 text-sm">
+      {{ t("progress.completedPrompts.empty") }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from "vue"
+import { useI18n } from "vue-i18n"
 import { userProgressStore } from "@/app"
 
 export default defineComponent({
   setup() {
+    const { t } = useI18n()
+
     const completedPrompts = computed(() => userProgressStore.getCurrentUserProgress?.completed_prompts || {})
     const sortedPrompts = computed(() => {
       return Object.entries(completedPrompts.value)
@@ -32,6 +39,7 @@ export default defineComponent({
 
     return {
       sortedPrompts,
+      t,
     }
   },
 })
