@@ -271,7 +271,7 @@ export default defineComponent({
           tier: selectedTier.value ? [selectedTier.value] : undefined,
           word: inputSearch.value ? inputSearch.value : undefined,
         })
-        // вернуть наблюдатель на место после перерендера
+
         nextTick(() => {
           if (loadMoreTrigger.value) {
             observer.value?.disconnect()

@@ -29,7 +29,7 @@
 
       <!-- Weekday headers -->
       <div class="grid grid-cols-7 text-[11px] text-gray-400 text-center mb-1 tracking-wide">
-        <span v-for="day in t('progress.streak.weekdays', { returnObjects: true })" :key="day">
+        <span v-for="(day, i) in tm('progress.streak.weekdays')" :key="i">
           {{ day }}
         </span>
       </div>
@@ -53,7 +53,7 @@ import type { IUserProgressEntity } from "@/shared/types"
 
 export default defineComponent({
   setup() {
-    const { t } = useI18n()
+    const { t, tm } = useI18n()
     const today = new Date()
 
     const progress = computed(() => userProgressStore.getCurrentUserProgress as IUserProgressEntity)
@@ -92,6 +92,7 @@ export default defineComponent({
       percentage,
       daysOfMonth,
       t,
+      tm,
     }
   },
 })
