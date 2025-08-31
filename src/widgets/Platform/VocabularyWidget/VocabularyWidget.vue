@@ -9,62 +9,64 @@
         <!-- Всегда показываем карточку (табы/фильтры/таблица), эмпти-стейты — внутри таблицы -->
         <div class="p-5 space-y-4 flex flex-col bg-white border border-stone-200 shadow-2xs rounded-xl">
           <!-- Tabs -->
-          <nav class="flex gap-2 relative after:absolute after:bottom-0 after:inset-x-0 after:border-b after:border-stone-200">
-            <button
-              @click="toggleTier(null)"
-              type="button"
-              :class="[
-                'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
-                selectedTier === null ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
-              ]"
-            >
-              {{ t("vocab.tabs.all") }}
-            </button>
+          <div class="w-full overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 [-webkit-overflow-scrolling:touch]">
+            <nav class="flex flex-nowrap gap-2 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:border-b after:border-stone-200 scroll-smooth snap-x snap-mandatory">
+              <button
+                @click="toggleTier(null)"
+                type="button"
+                :class="[
+                  'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none shrink-0 snap-start',
+                  selectedTier === null ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
+                ]"
+              >
+                {{ t("vocab.tabs.all") }}
+              </button>
 
-            <button
-              @click="toggleTier(IUserWordTierEnum.UNKNOWN)"
-              type="button"
-              :class="[
-                'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
-                selectedTier === IUserWordTierEnum.UNKNOWN ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
-              ]"
-            >
-              {{ t("vocab.tier_label.1") }}
-            </button>
+              <button
+                @click="toggleTier(IUserWordTierEnum.UNKNOWN)"
+                type="button"
+                :class="[
+                  'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none shrink-0 snap-start',
+                  selectedTier === IUserWordTierEnum.UNKNOWN ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
+                ]"
+              >
+                {{ t("vocab.tier_label.1") }}
+              </button>
 
-            <button
-              @click="toggleTier(IUserWordTierEnum.RECOGNIZABLE)"
-              type="button"
-              :class="[
-                'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
-                selectedTier === IUserWordTierEnum.RECOGNIZABLE ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
-              ]"
-            >
-              {{ t("vocab.tier_label.2") }}
-            </button>
+              <button
+                @click="toggleTier(IUserWordTierEnum.RECOGNIZABLE)"
+                type="button"
+                :class="[
+                  'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none shrink-0 snap-start',
+                  selectedTier === IUserWordTierEnum.RECOGNIZABLE ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
+                ]"
+              >
+                {{ t("vocab.tier_label.2") }}
+              </button>
 
-            <button
-              @click="toggleTier(IUserWordTierEnum.CONTEXTUAL)"
-              type="button"
-              :class="[
-                'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
-                selectedTier === IUserWordTierEnum.CONTEXTUAL ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
-              ]"
-            >
-              {{ t("vocab.tier_label.3") }}
-            </button>
+              <button
+                @click="toggleTier(IUserWordTierEnum.CONTEXTUAL)"
+                type="button"
+                :class="[
+                  'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none shrink-0 snap-start',
+                  selectedTier === IUserWordTierEnum.CONTEXTUAL ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
+                ]"
+              >
+                {{ t("vocab.tier_label.3") }}
+              </button>
 
-            <button
-              @click="toggleTier(IUserWordTierEnum.MASTERED)"
-              type="button"
-              :class="[
-                'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none',
-                selectedTier === IUserWordTierEnum.MASTERED ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
-              ]"
-            >
-              {{ t("vocab.tier_label.4") }}
-            </button>
-          </nav>
+              <button
+                @click="toggleTier(IUserWordTierEnum.MASTERED)"
+                type="button"
+                :class="[
+                  'px-2.5 py-1.5 mb-2 relative inline-flex justify-center items-center gap-x-2 text-sm rounded-lg focus:outline-hidden after:absolute after:-bottom-2 after:inset-x-0 after:z-10 after:h-0.5 after:pointer-events-none shrink-0 snap-start',
+                  selectedTier === IUserWordTierEnum.MASTERED ? 'text-stone-800 after:bg-stone-800' : 'text-stone-500 hover:bg-stone-100 hover:text-stone-800',
+                ]"
+              >
+                {{ t("vocab.tier_label.4") }}
+              </button>
+            </nav>
+          </div>
           <!-- End Tabs -->
 
           <!-- Filters -->

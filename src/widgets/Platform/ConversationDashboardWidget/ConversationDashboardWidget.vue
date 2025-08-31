@@ -61,8 +61,8 @@
         </div>
 
         <div class="w-full mb-6" v-else>
-          <div class="flex justify-center w-full overflow-x-auto">
-            <div class="flex gap-2 w-max sm:w-auto">
+          <div class="w-full overflow-x-auto">
+            <div class="flex gap-2 w-max sm:w-auto sm:justify-center mx-auto">
               <button
                 @click="toggleIeltsPart(null)"
                 type="button"
