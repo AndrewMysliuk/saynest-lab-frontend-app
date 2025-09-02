@@ -166,7 +166,7 @@ export default defineComponent({
     const isLoading = ref<boolean>(false)
     const searchQueryModules = ref<string>("")
     const searchQueryScenarios = ref<string>("")
-    const targetLanguage = ref<string>("en")
+    const targetLanguage = ref<string>(sessionStorage.getItem("learning-language") ?? "en")
     const isOverview = ref<boolean>(true)
     const activeTab = ref<PromptLibraryTabsEnum>(PromptLibraryTabsEnum.MODULES)
     const expandedScenario = ref<string | number | null>(null)
@@ -185,16 +185,16 @@ export default defineComponent({
     const getCurrentModule = computed(() => promptStore.getCurrentModule)
 
     onBeforeMount(async () => {
-      await fetchUserProgress()
+      await fetchSetupData()
 
       isReady.value = true
     })
 
-    const fetchUserProgress = async () => {
+    const fetchSetupData = async () => {
       try {
         await userProgressStore.fetchCurrentUserProgress()
       } catch (error: unknown) {
-        console.error("Error fetching user progress:", error)
+        console.error("Error fetchSetupData:", error)
       }
     }
 
@@ -364,6 +364,7 @@ export default defineComponent({
       try {
         isLoading.value = true
 
+        sessionStorage.setItem("learning-language", value)
         targetLanguage.value = value
         expandedScenario.value = null
 
