@@ -17,3 +17,5 @@ export { default as WorkshopDifficultySelector } from "./Workshop/DifficultySele
 export { default as WorkshopTagInput } from "./Workshop/TagInput"
 export { default as WorkshopRadioGroup } from "./Workshop/RadioGroup"
 export { default as WorkshopCollapsibleList } from "./Workshop/CollapsibleList"
+export { default as WorkshopDialogSteps } from "./Workshop/DialogSteps"
+export { default as WorkshopIELTSBehavior } from "./Workshop/IELTSBehavior"

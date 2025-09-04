@@ -1,5 +1,5 @@
 <template>
-  <section class="max-w-4xl rounded-2xl bg-white shadow-soft ring-1 ring-gray-100">
+  <section class="rounded-2xl bg-white shadow-soft ring-1 ring-gray-100">
     <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
       <div>
         <h2 class="text-base font-semibold">Basic Information</h2>

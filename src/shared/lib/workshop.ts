@@ -20,20 +20,33 @@ export const DEFAULT_WORKSHOP_SCENARIO_CONTENT: IWorkshopScenarioContent = {
     setting: "",
     situation: "",
     goal: "",
-    steps: [],
+    steps: [""],
     optional_steps: [],
   },
   ielts_behavior: {
-    setting: "",
-    part1: { topics: [] },
+    setting: "You are taking the IELTS Speaking test. The examiner will ask you questions in three parts.",
+    part1: {
+      topics: [
+        {
+          title: "",
+          questions: [""],
+        },
+      ],
+    },
     part2: {
       title: "",
       question: "",
-      bullet_points: [],
+      bullet_points: [""],
     },
-    part3: { topics: [] },
+    part3: {
+      topics: [
+        {
+          title: "",
+          questions: [""],
+        },
+      ],
+    },
   },
-  prompt: "",
 }
 
 export const DEFAULT_WORKSHOP_SCENARIO_METADATA_ACTIONS: IWorkshopScenarioMetadataActions = {

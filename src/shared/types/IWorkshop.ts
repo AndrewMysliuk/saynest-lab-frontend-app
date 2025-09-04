@@ -47,9 +47,8 @@ export interface IWorkshopScenarioContent {
   user_goals: IPromptGoal[]
   user_dictionary: IDictionaryEntry[]
   user_phrases: IPhraseEntry[]
-  dialog_behavior?: IScenarioDetails
-  ielts_behavior?: IIELTSScenarioDetails
-  prompt: string
+  dialog_behavior: IScenarioDetails
+  ielts_behavior: IIELTSScenarioDetails
 }
 
 export interface IWorkshopScenarioMetadataActions {
