@@ -1,5 +1,7 @@
 <template>
-  <div class="relative w-full sm:max-w-xs">
+  <div class="relative w-full">
+    <label v-if="label" class="mb-2 block text-sm font-medium text-gray-700">{{ label }}</label>
+
     <button
       class="flex items-center bg-white justify-between w-full border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-0 focus:border-[#4F46E5] transition"
       @click="toggleDropdown"
@@ -35,6 +37,11 @@ export default defineComponent({
 
   props: {
     modelValue: { type: String, default: "" },
+
+    label: {
+      type: String,
+      default: "",
+    },
   },
 
   setup(props, { emit }) {

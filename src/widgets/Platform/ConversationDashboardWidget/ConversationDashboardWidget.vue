@@ -37,7 +37,9 @@
         </nav>
 
         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 w-full" v-if="activeTab !== PromptLibraryTabsEnum.IELTS">
-          <TheCountryLanguage :model-value="targetLanguage" @update:modelValue="updateTargetLanguage" />
+          <div class="w-full sm:max-w-xs">
+            <TheCountryLanguage :model-value="targetLanguage" @update:modelValue="updateTargetLanguage" />
+          </div>
 
           <div class="flex-1 relative">
             <input

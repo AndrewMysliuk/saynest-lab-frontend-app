@@ -5,6 +5,7 @@ import {
   UserProgressWidgetPlatform,
   TariffPlansWidgetPlatform,
   VocabularyWidgetPlatform,
+  WorkshopWidgetPlatform,
 } from "./Platform"
 import { LoginWidgetAuth, SignupWidgetAuth } from "./Auth"
 
@@ -17,4 +18,5 @@ export {
   UserProgressWidgetPlatform,
   TariffPlansWidgetPlatform,
   VocabularyWidgetPlatform,
+  WorkshopWidgetPlatform,
 }

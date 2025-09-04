@@ -190,6 +190,7 @@ export default defineComponent({
         getIsLogged.value ? { label: t("header.history"), router: { name: "platform.history" } } : null,
         getIsLogged.value ? { label: t("header.progress"), router: { name: "platform.user-progress" } } : null,
         getIsLogged.value ? { label: t("header.vocabulary"), router: { name: "platform.vocabulary" } } : null,
+        getIsLogged.value ? { label: "Workshop", router: { name: "platform.workshop" } } : null,
         { label: t("header.pricing"), router: { name: "platform.tariff-plans" } },
       ].filter(Boolean)
     )

@@ -15,7 +15,9 @@ import {
   useCommonStore,
   usePlansStore,
   useSubscriptionStore,
+  useWorkshopStore,
 } from "@/shared/store"
+import directives from "@/shared/directives"
 import App from "./index.vue"
 import "./index.scss"
 
@@ -33,6 +35,7 @@ app.use(
     vueRouter: router,
   })
 )
+directives(app)
 
 components.forEach((element) => {
   app.component(element.name as string, element)
@@ -60,3 +63,4 @@ export const commonStore = useCommonStore()
 export const orgStore = useOrgStore()
 export const plansStore = usePlansStore()
 export const subscriptionStore = useSubscriptionStore()
+export const workshopStore = useWorkshopStore()

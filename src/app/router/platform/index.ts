@@ -90,6 +90,11 @@ const platform: RouteRecordRaw[] = [
         name: "platform.vocabulary",
         component: async () => await import("@/pages").then((module) => module.VocabularyPagePlatform),
       },
+      {
+        path: "/platform/workshop",
+        name: "platform.workshop",
+        component: async () => await import("@/pages").then((module) => module.WorkshopPagePlatform),
+      },
     ],
   },
 ]

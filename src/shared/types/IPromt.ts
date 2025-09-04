@@ -25,18 +25,18 @@ export interface IUserContent {
 
 export interface IPromptGoal {
   phrase: string
-  translation: Record<string, string>
+  translation: Record<string, string> | string
 }
 
 export interface IDictionaryEntry {
   word: string
-  translation: Record<string, string>
+  translation: Record<string, string> | string
   meaning: string
 }
 
 export interface IPhraseEntry {
   phrase: string
-  translation: Record<string, string>
+  translation: Record<string, string> | string
   meaning: string
 }
 

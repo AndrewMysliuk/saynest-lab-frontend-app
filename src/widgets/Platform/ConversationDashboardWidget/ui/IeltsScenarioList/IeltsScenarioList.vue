@@ -88,7 +88,10 @@
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="goal in scenario.user_content.goals" :key="goal.phrase">
-                <b>{{ goal.phrase }}</b> — <i class="text-gray-600">{{ goal.translation[getUserTranslateLanguage] }}</i>
+                <b>{{ goal.phrase }}</b> —
+                <i class="text-gray-600">
+                  {{ resolveTranslation(goal.translation) }}
+                </i>
               </li>
             </ul>
           </div>
@@ -101,7 +104,9 @@
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="word in scenario.user_content.dictionary" :key="word.word">
-                <b>{{ word.word }}</b> <span class="text-gray-500">({{ word.translation[getUserTranslateLanguage] }})</span> — {{ word.meaning }}
+                <b>{{ word.word }}</b>
+                <span class="text-gray-500">({{ resolveTranslation(word.translation) }})</span>
+                — {{ word.meaning }}
               </li>
             </ul>
           </div>
@@ -114,7 +119,10 @@
             </h4>
             <ul class="text-sm text-gray-700 leading-relaxed space-y-1.5 pl-4 list-disc">
               <li v-for="phrase in scenario.user_content.phrases" :key="phrase.phrase">
-                <b>"{{ phrase.phrase }}"</b> — <i class="text-gray-600">{{ phrase.translation[getUserTranslateLanguage] }}</i>
+                <b>"{{ phrase.phrase }}"</b> —
+                <i class="text-gray-600">
+                  {{ resolveTranslation(phrase.translation) }}
+                </i>
               </li>
             </ul>
           </div>
@@ -161,14 +169,20 @@ export default defineComponent({
       emit("toggleExpand", index)
     }
 
+    const resolveTranslation = (t: string | Record<string, string> | undefined) => {
+      if (!t) return ""
+      if (typeof t === "string") return t
+      return t[getUserTranslateLanguage.value] || ""
+    }
+
     return {
       isLocked,
       getIeltsScenarioList,
-      getUserTranslateLanguage,
       getCurrentUserProgress,
       selectPrompt,
       toggleExpand,
       getPartProgress,
+      resolveTranslation,
       t,
       SessionIeltsPartEnum,
       AVAILABLE_SCENARIOS,
