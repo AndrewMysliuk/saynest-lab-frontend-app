@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <!-- Goals -->
-    <details class="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm" open>
+    <details class="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm" :class="{ 'border-red-300 ring-1 ring-red-200': !!goalsError }" open>
       <summary class="flex cursor-pointer list-none items-center justify-between">
         <div class="font-medium">Goals</div>
         <i class="fa-solid fa-chevron-down h-4 w-4 text-slate-500 transition-transform group-open:rotate-180"></i>
@@ -42,11 +42,13 @@
           <i class="fa-solid fa-plus"></i>
           Add goal
         </button>
+
+        <p v-if="goalsError" class="text-xs text-red-500 mt-2">{{ goalsError }}</p>
       </div>
     </details>
 
     <!-- Dictionary -->
-    <details class="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm" open>
+    <details class="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm" :class="{ 'border-red-300 ring-1 ring-red-200': !!dictError }" open>
       <summary class="flex cursor-pointer list-none items-center justify-between">
         <div class="font-medium">Dictionary</div>
         <i class="fa-solid fa-chevron-down h-4 w-4 text-slate-500 transition-transform group-open:rotate-180"></i>
@@ -93,11 +95,13 @@
           <i class="fa-solid fa-plus"></i>
           Add word
         </button>
+
+        <p v-if="dictError" class="text-xs text-red-500 mt-2">{{ dictError }}</p>
       </div>
     </details>
 
     <!-- Useful phrases -->
-    <details class="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm" open>
+    <details class="group rounded-xl border border-gray-200 bg-white p-4 shadow-sm" :class="{ 'border-red-300 ring-1 ring-red-200': !!phrasesError }" open>
       <summary class="flex cursor-pointer list-none items-center justify-between">
         <div class="font-medium">Useful phrases</div>
         <i class="fa-solid fa-chevron-down h-4 w-4 text-slate-500 transition-transform group-open:rotate-180"></i>
@@ -144,6 +148,8 @@
           <i class="fa-solid fa-plus"></i>
           Add phrase
         </button>
+
+        <p v-if="phrasesError" class="text-xs text-red-500 mt-2">{{ phrasesError }}</p>
       </div>
     </details>
   </div>
@@ -160,7 +166,13 @@ export default defineComponent({
     userGoals: { type: Array as () => IPromptGoal[], required: true },
     userDictionary: { type: Array as () => IDictionaryEntry[], required: true },
     userPhrases: { type: Array as () => IPhraseEntry[], required: true },
+
+    goalsError: { type: String, default: "" },
+    dictError: { type: String, default: "" },
+    phrasesError: { type: String, default: "" },
   },
+
+  emits: ["update:userGoals", "update:userDictionary", "update:userPhrases"],
 
   setup(props, { emit }) {
     // GOALS
@@ -169,16 +181,13 @@ export default defineComponent({
       copy[i] = { ...copy[i], phrase: val }
       emit("update:userGoals", copy)
     }
-
     const addGoal = () => {
       emit("update:userGoals", [...props.userGoals, { phrase: "", translation: "" }])
     }
-
     const removeGoal = (i: number) => {
       const copy = props.userGoals.filter((_, idx) => idx !== i)
       emit("update:userGoals", copy)
     }
-
     const updateGoalTranslation = (i: number, val: string) => {
       const copy = [...props.userGoals]
       copy[i] = { ...copy[i], translation: val }
@@ -191,23 +200,19 @@ export default defineComponent({
       copy[i] = { ...copy[i], word: val }
       emit("update:userDictionary", copy)
     }
-
     const updateDictMeaning = (i: number, val: string) => {
       const copy = [...props.userDictionary]
       copy[i] = { ...copy[i], meaning: val }
       emit("update:userDictionary", copy)
     }
-
     const updateDictTranslation = (i: number, val: string) => {
       const copy = [...props.userDictionary]
       copy[i] = { ...copy[i], translation: val }
       emit("update:userDictionary", copy)
     }
-
     const addDictItem = () => {
       emit("update:userDictionary", [...props.userDictionary, { word: "", meaning: "", translation: "" }])
     }
-
     const removeDictItem = (i: number) => {
       const copy = props.userDictionary.filter((_, idx) => idx !== i)
       emit("update:userDictionary", copy)
@@ -219,17 +224,14 @@ export default defineComponent({
       copy[i] = { ...copy[i], [field]: val }
       emit("update:userPhrases", copy)
     }
-
     const updatePhraseTranslation = (i: number, val: string) => {
       const copy = [...props.userPhrases]
       copy[i] = { ...copy[i], translation: val }
       emit("update:userPhrases", copy)
     }
-
     const addUsefulPhrase = () => {
       emit("update:userPhrases", [...props.userPhrases, { phrase: "", meaning: "", translation: "" }])
     }
-
     const removeUsefulPhrase = (i: number) => {
       const copy = props.userPhrases.filter((_, idx) => idx !== i)
       emit("update:userPhrases", copy)

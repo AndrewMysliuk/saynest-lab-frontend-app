@@ -1,162 +1,84 @@
 <template>
   <section class="rounded-2xl bg-white shadow-soft ring-1 ring-gray-100">
-    <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+    <!-- Header -->
+    <div class="flex items-start justify-between border-b border-gray-100 px-6 py-5">
       <div>
         <h2 class="text-base font-semibold">Metadata & Actions</h2>
         <p class="text-sm text-slate-500 mt-2">Runtime limits and behavior</p>
       </div>
     </div>
+
+    <!-- Body -->
     <div class="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
-      <div class="space-y-2">
-        <WorkshopTextField
-          :mask-options="{
-            mask: '99',
-            placeholder: '',
-            showMaskOnHover: false,
-            showMaskOnFocus: false,
-            jitMasking: true,
-          }"
-          :model-value="getMetadataActions.estimated_duration_minutes"
-          @update:model-value="updateEstimateMinutes"
-          label="Estimated duration (minutes)"
-          placeholder="e.g. 10"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <WorkshopTextField
-          :mask-options="{
-            mask: '99',
-            placeholder: '',
-            showMaskOnHover: false,
-            showMaskOnFocus: false,
-            jitMasking: true,
-          }"
-          :model-value="getMetadataActions.max_turns"
-          @update:model-value="updateMaxTurns"
-          label="Max turns"
-          placeholder="e.g. 8"
-        />
-      </div>
-
       <div class="md:col-span-2 space-y-2">
         <WorkshopTextField
-          :model-value="getMetadataActions.model_end_behavior"
-          @update:model-value="updateModelBehavior"
+          :model-value="localMetadata.model_end_behavior"
+          @update:model-value="(val: string) => (localMetadata.model_end_behavior = val)"
           label="Model end behavior / closing phrase"
           placeholder="e.g. Great job! Let's wrap up."
+          :error="errorMessage"
+          is-required
         />
       </div>
+    </div>
 
-      <div class="space-y-2">
-        <WorkshopTextField
-          :mask-options="{
-            mask: '99',
-            placeholder: '',
-            showMaskOnHover: false,
-            showMaskOnFocus: false,
-            jitMasking: true,
-          }"
-          :model-value="getMetadataActions.question_count_range.min"
-          @update:model-value="updateRangeMin"
-          label="Question count (min)"
-          placeholder="min"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <WorkshopTextField
-          :mask-options="{
-            mask: '99',
-            placeholder: '',
-            showMaskOnHover: false,
-            showMaskOnFocus: false,
-            jitMasking: true,
-          }"
-          :model-value="getMetadataActions.question_count_range.max"
-          @update:model-value="updateRangeMax"
-          label="Question count (max)"
-          placeholder="max"
-        />
-      </div>
-
-      <div class="space-y-2">
-        <label class="text-sm font-medium text-gray-700">IELTS scenario</label>
-
-        <div class="flex flex-col gap-3 mt-2">
-          <label class="flex w-full items-center gap-3 cursor-pointer">
-            <input type="checkbox" class="size-5 accent-[#4F46E5] rounded border-gray-300 transition" :checked="getMetadataActions.is_ielts" @change="updateIeltsType" />
-            <span class="text-sm text-gray-800">Mark as IELTS</span>
-          </label>
-        </div>
-      </div>
+    <!-- Footer -->
+    <div class="flex items-center justify-end border-t border-gray-100 px-6 py-4">
+      <button
+        type="button"
+        class="inline-flex items-center rounded-md px-4 py-2 text-sm text-white bg-[#4F46E5] hover:bg-[#4338CA] disabled:opacity-50 transition"
+        :disabled="isSubmitting"
+        @click="onNext"
+      >
+        Next
+      </button>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue"
+import { defineComponent, ref } from "vue"
 import { workshopStore } from "@/app"
 import { WorkshopTextField } from "@/shared/components"
+import { DEFAULT_WORKSHOP_SCENARIO_METADATA_ACTIONS } from "@/shared/lib"
+import { WorkshopScenarioMetadataActionsSchema } from "@/shared/validation"
+import type { IWorkshopScenarioMetadataActions } from "@/shared/types"
 
 export default defineComponent({
-  components: {
-    WorkshopTextField,
-  },
+  name: "MetadataActionsSection",
+
+  components: { WorkshopTextField },
 
   setup() {
-    const getMetadataActions = computed(() => workshopStore.getMetadataActions)
+    const current = workshopStore.getMetadataActions ?? DEFAULT_WORKSHOP_SCENARIO_METADATA_ACTIONS
+    const localMetadata = ref<IWorkshopScenarioMetadataActions>({
+      ...DEFAULT_WORKSHOP_SCENARIO_METADATA_ACTIONS,
+      ...current,
+    })
 
-    const updateEstimateMinutes = (value: string) => {
-      workshopStore.setMetadataActions({
-        estimated_duration_minutes: value,
-      })
-    }
+    const errorMessage = ref<string>("")
+    const isSubmitting = ref(false)
 
-    const updateMaxTurns = (value: string) => {
-      workshopStore.setMetadataActions({
-        max_turns: value,
-      })
-    }
+    const onNext = () => {
+      const result = WorkshopScenarioMetadataActionsSchema.safeParse(localMetadata.value)
+      if (!result.success) {
+        errorMessage.value = result.error.issues[0]?.message ?? "Invalid value"
+        return
+      }
 
-    const updateModelBehavior = (value: string) => {
-      workshopStore.setMetadataActions({
-        model_end_behavior: value,
-      })
-    }
+      errorMessage.value = ""
+      isSubmitting.value = true
+      workshopStore.setMetadataActions(result.data)
+      isSubmitting.value = false
 
-    const updateRangeMin = (value: string) => {
-      workshopStore.setMetadataActions({
-        question_count_range: {
-          min: value,
-          max: getMetadataActions.value.question_count_range.max,
-        },
-      })
-    }
-
-    const updateRangeMax = (value: string) => {
-      workshopStore.setMetadataActions({
-        question_count_range: {
-          min: getMetadataActions.value.question_count_range.min,
-          max: value,
-        },
-      })
-    }
-
-    const updateIeltsType = (event: Event) => {
-      workshopStore.setMetadataActions({
-        is_ielts: (event.target as HTMLInputElement).checked,
-      })
+      alert("Validation Success")
     }
 
     return {
-      getMetadataActions,
-      updateEstimateMinutes,
-      updateMaxTurns,
-      updateModelBehavior,
-      updateRangeMin,
-      updateRangeMax,
-      updateIeltsType,
+      localMetadata,
+      errorMessage,
+      isSubmitting,
+      onNext,
     }
   },
 })

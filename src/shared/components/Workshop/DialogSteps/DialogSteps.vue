@@ -10,6 +10,7 @@
         :class="{
           'ring-[#4F46E5]': dragOverIndex === index,
           'opacity-80': dragFromIndex === index,
+          'ring-red-300': !!errors[index],
         }"
         :draggable="dragEnabledIndex === index"
         @dragstart="onDragStart(index, $event)"
@@ -31,13 +32,22 @@
             <i class="fa-solid fa-grip-vertical"></i>
           </button>
 
-          <TextField class="flex-1" :model-value="value" @update:model-value="(v: string) => updateStep(index, v)" :label="fieldLabel" :placeholder="placeholder" />
+          <TextField
+            class="flex-1"
+            :model-value="value"
+            @update:model-value="(v: string) => updateStep(index, v)"
+            :label="fieldLabel"
+            :placeholder="placeholder"
+            :aria-invalid="!!errors[index]"
+            :error="errors[index] || ''"
+          />
 
           <button
+            v-if="index > 0"
             type="button"
             @click="removeStep(index)"
-            :disabled="isDisabled || steps.length <= minItems"
-            class="py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-[13px] md:text-sm rounded-lg bg-red-500 text-white hover:bg-red-600"
+            :disabled="isDisabled"
+            class="py-2 px-2.5 inline-flex justify-center items-center gap-x-1.5 text-[13px] md:text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 disabled:opacity-50"
           >
             <i class="fa-solid fa-xmark"></i>
             Remove
@@ -49,11 +59,13 @@
         type="button"
         @click="addStep"
         :disabled="isDisabled || (maxItems !== null && steps.length >= maxItems)"
-        class="py-2 px-2.5 w-full md:w-auto inline-flex justify-center items-center gap-x-1.5 text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA]"
+        class="py-2 px-2.5 w-full md:w-auto inline-flex justify-center items-center gap-x-1.5 text-[13px] md:text-sm rounded-lg shadow-md bg-[#4F46E5] text-white hover:bg-[#4338CA] disabled:opacity-50"
       >
         <i class="fa-solid fa-plus"></i>
         Add step
       </button>
+
+      <p v-if="error" class="text-sm text-red-600">{{ error }}</p>
     </div>
   </div>
 </template>
@@ -75,6 +87,8 @@ export default defineComponent({
     minItems: { type: Number, default: 0 },
     maxItems: { type: Number as () => number | null, default: null },
     isDisabled: { type: Boolean, default: false },
+    error: { type: String, default: "" },
+    errors: { type: Array as () => string[], default: () => [] },
   },
 
   setup(props, { emit }) {

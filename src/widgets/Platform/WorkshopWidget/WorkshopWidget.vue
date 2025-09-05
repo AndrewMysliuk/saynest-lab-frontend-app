@@ -14,9 +14,9 @@
           </div>
 
           <div class="w-full bg-white border border-gray-200 rounded-xl p-4">
-            <pre class="text-sm text-gray-800 font-mono whitespace-pre-wrap">
-              {{ JSON.stringify(scenarioReview, null, 2) }}
-            </pre>
+            <p class="text-sm text-gray-800 font-mono whitespace-pre-wrap">
+              {{ JSON.stringify(getScenarioReview, null, 2) }}
+            </p>
           </div>
         </div>
       </div>
@@ -25,11 +25,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue"
-import { commonStore } from "@/app"
+import { defineComponent, computed } from "vue"
+import { commonStore, workshopStore } from "@/app"
 import { TheLoader } from "@/shared/components"
 import { ScenarioBasicInformation, ScenarioContent, ScenarioMetadataActions } from "./ui"
-import { IPromptScenarioEntity, VocabularyFrequencyLevelEnum } from "@/shared/types"
+import { WorkshopScenarioTypeEnum } from "@/shared/types"
 
 export default defineComponent({
   components: {
@@ -40,86 +40,34 @@ export default defineComponent({
   },
 
   setup() {
-    const scenarioReview = ref<Partial<IPromptScenarioEntity>>({
-      name: "",
-      title: "",
-      description: "",
-      level: VocabularyFrequencyLevelEnum.A1,
+    const getBasicInformation = computed(() => workshopStore.getBasicInformation)
+    const getScenarioContent = computed(() => workshopStore.getScenarioContent)
+    const getMetadataActions = computed(() => workshopStore.getMetadataActions)
+    const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
+    const getScenarioReview = computed(() => ({
+      name: getBasicInformation.value.title.toLowerCase().replace(" ", "_"),
+      title: getBasicInformation.value.title,
+      description: getBasicInformation.value.description,
+      level: getBasicInformation.value.difficulty_level,
       user_content: {
-        goals: [
-          {
-            phrase: "",
-            translation: {},
-          },
-        ],
-        dictionary: [
-          {
-            word: "",
-            translation: {},
-            meaning: "",
-          },
-        ],
-        phrases: [
-          {
-            phrase: "",
-            translation: {},
-            meaning: "",
-          },
-        ],
+        goals: getScenarioContent.value.user_goals,
+        dictionary: getScenarioContent.value.user_dictionary,
+        phrases: getScenarioContent.value.user_phrases,
       },
       model_behavior: {
-        prompt: "",
-        scenario: {
-          setting: "",
-          situation: "",
-          goal: "",
-          steps: [],
-          optional_steps: [],
-        },
-        ielts_scenario: {
-          setting: "",
-          part1: {
-            topics: [
-              {
-                title: "",
-                questions: [],
-              },
-            ],
-          },
-          part2: {
-            title: "",
-            question: "",
-            bullet_points: [],
-          },
-          part3: {
-            topics: [
-              {
-                title: "",
-                questions: [],
-              },
-            ],
-          },
-        },
+        scenario: getScenarioContent.value.dialog_behavior,
+        ielts_scenario: getScenarioContent.value.ielts_behavior,
       },
       meta: {
-        estimated_duration_minutes: 0,
-        max_turns: 0,
-        model_end_behavior: "",
-        target_language: "",
-        question_count_range: {
-          min: 0,
-          max: 0,
-        },
-        is_it_ielts: false,
-        active_ielts_part: undefined,
+        model_end_behavior: getMetadataActions.value.model_end_behavior,
+        target_language: getBasicInformation.value.target_language,
+        is_it_ielts: getBasicInformation.value.scenario_type === WorkshopScenarioTypeEnum.IELTS,
       },
-      is_module_only: false,
-    })
-
-    const getIsPageLoading = computed(() => commonStore.getIsPageLoading)
+      is_module_only: getBasicInformation.value.is_module_only,
+    }))
 
     return {
-      scenarioReview,
+      getScenarioReview,
       getIsPageLoading,
     }
   },

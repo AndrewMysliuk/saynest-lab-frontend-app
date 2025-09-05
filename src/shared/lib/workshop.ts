@@ -5,8 +5,7 @@ export const DEFAULT_WORKSHOP_SCENARIO_BASIC_INFORMATION: IWorkshopScenarioBasic
   description: "",
   target_language: sessionStorage.getItem("learning-language") ?? "en",
   scenario_type: WorkshopScenarioTypeEnum.DIALOG,
-  difficulty_levels: VocabularyFrequencyLevelEnum.B1,
-  tags: [],
+  difficulty_level: VocabularyFrequencyLevelEnum.B1,
   visibility: WorkshopVisabilityEnum.PRIVATE,
   allow_copying: true,
   is_module_only: false,
@@ -50,12 +49,5 @@ export const DEFAULT_WORKSHOP_SCENARIO_CONTENT: IWorkshopScenarioContent = {
 }
 
 export const DEFAULT_WORKSHOP_SCENARIO_METADATA_ACTIONS: IWorkshopScenarioMetadataActions = {
-  estimated_duration_minutes: "",
-  max_turns: "",
   model_end_behavior: "Great job! You've completed this scenario.",
-  question_count_range: {
-    min: "",
-    max: "",
-  },
-  is_ielts: false,
 }

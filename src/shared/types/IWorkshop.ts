@@ -36,8 +36,7 @@ export interface IWorkshopScenarioBasicInformation {
   description: string
   target_language: string
   scenario_type: WorkshopScenarioTypeEnum
-  difficulty_levels: VocabularyFrequencyLevelEnum
-  tags: string[]
+  difficulty_level: VocabularyFrequencyLevelEnum
   visibility: WorkshopVisabilityEnum
   allow_copying: boolean
   is_module_only: boolean
@@ -52,14 +51,7 @@ export interface IWorkshopScenarioContent {
 }
 
 export interface IWorkshopScenarioMetadataActions {
-  estimated_duration_minutes: string
-  max_turns: string
   model_end_behavior: string
-  question_count_range: {
-    min: string
-    max: string
-  }
-  is_ielts: boolean
 }
 
 export interface IWorkshopScenario {

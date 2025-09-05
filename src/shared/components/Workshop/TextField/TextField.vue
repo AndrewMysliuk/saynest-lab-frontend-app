@@ -1,7 +1,8 @@
 <template>
   <div class="space-y-2">
-    <label v-if="label" class="text-sm font-medium text-gray-700 cursor-pointer" @click="focusInput">
+    <label v-if="label" class="text-sm font-medium text-gray-700 cursor-pointer flex items-center gap-1" @click="focusInput">
       {{ label }}
+      <span v-if="isRequired" class="text-red-500">*</span>
     </label>
 
     <component
@@ -13,8 +14,13 @@
       :type="isMultiline ? undefined : 'text'"
       :rows="isMultiline ? rows : undefined"
       :placeholder="placeholder"
-      class="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-0 focus:border-[#4F46E5] transition"
+      class="w-full bg-white border rounded-md px-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-0 focus:border-[#4F46E5] transition"
+      :class="{ 'border-red-500': !!error }"
     />
+
+    <p v-if="error" class="text-xs text-red-500 mt-1">
+      {{ error }}
+    </p>
   </div>
 </template>
 
@@ -32,7 +38,7 @@ export default defineComponent({
 
     maskOptions: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
 
     label: {
@@ -53,6 +59,16 @@ export default defineComponent({
     rows: {
       type: Number,
       default: 3,
+    },
+
+    error: {
+      type: String,
+      default: "",
+    },
+
+    isRequired: {
+      type: Boolean,
+      default: false,
     },
   },
 
