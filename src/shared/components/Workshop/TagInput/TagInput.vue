@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-3">
     <label class="text-sm font-medium text-gray-700">{{ label }}</label>
 
     <div class="flex flex-wrap items-center gap-4">

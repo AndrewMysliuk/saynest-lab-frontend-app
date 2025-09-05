@@ -1,5 +1,10 @@
-import { IDictionaryEntry, IIELTSScenarioDetails, IPhraseEntry, IPromptGoal, IScenarioDetails } from "./IPromt"
+import { IDictionaryEntry, IIELTSScenarioDetails, IPhraseEntry, IPromptGoal, IScenarioDetails, ModuleTypeEnum } from "./IPromt"
 import { VocabularyFrequencyLevelEnum } from "./IVocabulary"
+
+export enum WorkshopMenuTabEnum {
+  SCENARIO = "SCENARIO",
+  MODULE = "MODULE",
+}
 
 export interface IWorkshopSelectFieldOptions {
   label: string
@@ -54,8 +59,26 @@ export interface IWorkshopScenarioMetadataActions {
   model_end_behavior: string
 }
 
-export interface IWorkshopScenario {
-  basic_information: IWorkshopScenarioBasicInformation
-  scenario_content: IWorkshopScenarioContent
-  metadata_actions: IWorkshopScenarioMetadataActions
+export interface IModuleInfo {
+  title: string
+  description: string
+  type: ModuleTypeEnum
+  tags: string[]
+}
+
+export interface IModuleScenariosFlat {
+  scenarios: string[]
+}
+
+export interface ISubmodule {
+  title: string
+  description: string
+  tips: string[]
+  tags: string[]
+  difficulty?: string
+  scenarios: string[]
+}
+
+export interface IModuleStructureComplex {
+  submodules: ISubmodule[]
 }

@@ -1,4 +1,15 @@
-import { IWorkshopScenarioBasicInformation, IWorkshopScenarioContent, IWorkshopScenarioMetadataActions, VocabularyFrequencyLevelEnum, WorkshopScenarioTypeEnum, WorkshopVisabilityEnum } from "../types"
+import {
+  IModuleInfo,
+  IModuleScenariosFlat,
+  IModuleStructureComplex,
+  IWorkshopScenarioBasicInformation,
+  IWorkshopScenarioContent,
+  IWorkshopScenarioMetadataActions,
+  ModuleTypeEnum,
+  VocabularyFrequencyLevelEnum,
+  WorkshopScenarioTypeEnum,
+  WorkshopVisabilityEnum,
+} from "../types"
 
 export const DEFAULT_WORKSHOP_SCENARIO_BASIC_INFORMATION: IWorkshopScenarioBasicInformation = {
   title: "",
@@ -50,4 +61,28 @@ export const DEFAULT_WORKSHOP_SCENARIO_CONTENT: IWorkshopScenarioContent = {
 
 export const DEFAULT_WORKSHOP_SCENARIO_METADATA_ACTIONS: IWorkshopScenarioMetadataActions = {
   model_end_behavior: "Great job! You've completed this scenario.",
+}
+
+export const DEFAULT_MODULE_INFO: IModuleInfo = {
+  title: "",
+  description: "",
+  type: ModuleTypeEnum.FLAT,
+  tags: [],
+}
+
+export const DEFAULT_MODULE_SCENARIOS_FLAT: IModuleScenariosFlat = {
+  scenarios: [],
+}
+
+export const DEFAULT_MODULE_COMPLEX_STRUCTURE: IModuleStructureComplex = {
+  submodules: [
+    {
+      title: "",
+      description: "",
+      tips: [],
+      tags: [],
+      difficulty: "",
+      scenarios: [],
+    },
+  ],
 }

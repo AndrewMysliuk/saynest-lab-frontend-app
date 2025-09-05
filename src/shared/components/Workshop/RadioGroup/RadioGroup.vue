@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
-import { WorkshopVisabilityEnum } from "@/shared/types"
+import { defineComponent, PropType } from "vue"
+import { ModuleTypeEnum, WorkshopVisabilityEnum } from "@/shared/types"
 
 export default defineComponent({
   name: "WorkshopRadioGroup",
@@ -25,7 +25,7 @@ export default defineComponent({
     },
 
     options: {
-      type: Array as () => WorkshopVisabilityEnum[],
+      type: Array as PropType<string[]>,
       required: true,
     },
 
@@ -41,10 +41,12 @@ export default defineComponent({
   },
 
   setup(_, { emit }) {
-    const visibilityLabels: Record<WorkshopVisabilityEnum, string> = {
+    const visibilityLabels: Record<string, string> = {
       [WorkshopVisabilityEnum.PUBLIC]: "Public",
       [WorkshopVisabilityEnum.PRIVATE]: "Private",
       [WorkshopVisabilityEnum.TEAM_ONLY]: "Team only",
+      [ModuleTypeEnum.FLAT]: "Basic",
+      [ModuleTypeEnum.STRUCTURED]: "Complex",
     }
 
     const update = (val: string) => emit("update:modelValue", val)
