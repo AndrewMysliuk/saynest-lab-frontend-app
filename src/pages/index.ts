@@ -1,4 +1,12 @@
-import { ConversationPagePlatform, ConversationDashboardPagePlatform, ConversationHistoryPagePlatform, UserProgressPagePlatform, TariffPlansPagePlatform, VocabularyPagePlatform } from "./Platform"
+import {
+  ConversationPagePlatform,
+  ConversationDashboardPagePlatform,
+  ConversationHistoryPagePlatform,
+  UserProgressPagePlatform,
+  TariffPlansPagePlatform,
+  VocabularyPagePlatform,
+  WorkshopPagePlatform,
+} from "./Platform"
 import { LoginPageAuth, SignupPageAuth } from "./Auth"
 
 // Public
@@ -13,5 +21,6 @@ export {
   UserProgressPagePlatform,
   TariffPlansPagePlatform,
   VocabularyPagePlatform,
+  WorkshopPagePlatform,
   SessionReview,
 }

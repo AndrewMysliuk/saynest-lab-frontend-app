@@ -11,6 +11,7 @@ import { useUserProgressStore } from "./user_progress"
 import { useCommonStore } from "./common"
 import { usePlansStore } from "./plans"
 import { useSubscriptionStore } from "./subscription"
+import { useWorkshopStore } from "./workshop"
 
 export {
   useConversationStore,
@@ -26,4 +27,5 @@ export {
   useCommonStore,
   usePlansStore,
   useSubscriptionStore,
+  useWorkshopStore,
 }

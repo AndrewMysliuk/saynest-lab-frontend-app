@@ -40,15 +40,9 @@ const platform: RouteRecordRaw[] = [
       promptStore.resetModuleParams()
       promptStore.resetPromptParams()
 
-      await Promise.all([
-        orgStore.fetchOrgById(),
-        communicationReviewStore.fetchReviewsList(false),
-        vocabularyStore.listUserWordsMethod(false),
-        promptStore.fetchModuleList(false, { target_language: "English" }),
-        promptStore.fetchScenariosList(false, { is_module_only: false, target_language: "English" }),
-        promptStore.fetchIeltsScenariosList(false),
-        plansStore.fetchPlansList(),
-      ]).catch((error: unknown) => console.error("Error in setupOnloadMethods:", error))
+      await Promise.all([orgStore.fetchOrgById(), communicationReviewStore.fetchReviewsList(false), vocabularyStore.listUserWordsMethod(false), plansStore.fetchPlansList()]).catch((error: unknown) =>
+        console.error("Error in setupOnloadMethods:", error)
+      )
 
       commonStore.setIsPageLoading(false)
 
@@ -89,6 +83,11 @@ const platform: RouteRecordRaw[] = [
         path: "/platform/vocabulary",
         name: "platform.vocabulary",
         component: async () => await import("@/pages").then((module) => module.VocabularyPagePlatform),
+      },
+      {
+        path: "/platform/workshop",
+        name: "platform.workshop",
+        component: async () => await import("@/pages").then((module) => module.WorkshopPagePlatform),
       },
     ],
   },

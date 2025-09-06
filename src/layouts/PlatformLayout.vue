@@ -49,6 +49,7 @@ const VITE_DEV: boolean = import.meta.env.DEV
 
 export default defineComponent({
   components: { TheNotification, TheLegal, TheWordInfo, TheHeader, TheFooter },
+
   setup() {
     const { t } = useI18n()
     const isDesktop = ref<boolean>(isLg())

@@ -37,7 +37,9 @@
         </nav>
 
         <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 w-full" v-if="activeTab !== PromptLibraryTabsEnum.IELTS">
-          <TheCountryLanguage :model-value="targetLanguage" @update:modelValue="updateTargetLanguage" />
+          <div class="w-full sm:max-w-xs">
+            <TheCountryLanguage :model-value="targetLanguage" @update:modelValue="updateTargetLanguage" />
+          </div>
 
           <div class="flex-1 relative">
             <input
@@ -192,7 +194,12 @@ export default defineComponent({
 
     const fetchSetupData = async () => {
       try {
-        await userProgressStore.fetchCurrentUserProgress()
+        await Promise.all([
+          userProgressStore.fetchCurrentUserProgress(),
+          promptStore.fetchModuleList(false, { target_language: "English" }),
+          promptStore.fetchScenariosList(false, { is_module_only: false, target_language: "English" }),
+          promptStore.fetchIeltsScenariosList(false),
+        ])
       } catch (error: unknown) {
         console.error("Error fetchSetupData:", error)
       }

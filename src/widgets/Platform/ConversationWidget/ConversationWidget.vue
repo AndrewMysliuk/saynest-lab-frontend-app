@@ -16,7 +16,7 @@
         <div v-for="(goal, index) in getSelectedPrompt.user_content.goals" :key="index" class="mb-4">
           <details class="group">
             <summary class="cursor-pointer text-base font-medium text-text-base transition hover:text-primary">• {{ goal.phrase }}</summary>
-            <p class="ml-4 mt-1 text-sm text-gray-500">{{ goal.translation[getUserTranslateLanguage] }}</p>
+            <p class="ml-4 mt-1 text-sm text-gray-500">{{ resolveTranslation(goal.translation) }}</p>
           </details>
         </div>
       </div>
@@ -603,6 +603,12 @@ export default defineComponent({
       isModalInfoOpen.value = true
     }
 
+    const resolveTranslation = (t: string | Record<string, string> | undefined) => {
+      if (!t) return ""
+      if (typeof t === "string") return t
+      return t[getUserTranslateLanguage.value] || ""
+    }
+
     watch(
       () => audioPlayer.audioElement.value,
       (newElement) => {
@@ -656,6 +662,7 @@ export default defineComponent({
       repeatLastAudio,
       toggleGoals,
       toggleSidebar,
+      resolveTranslation,
       t,
     }
   },
