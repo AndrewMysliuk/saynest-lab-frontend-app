@@ -262,7 +262,7 @@
     "tabs": { "topics": "Теми", "scenarios": "Сценарии", "ielts": "IELTS" },
     "search": { "placeholder": "Търсене...", "clear": "Изчисти", "clearTitle": "Изчисти търсенето" },
     "ielts": { "fullExam": "Пълен изпит", "part1": "Част 1", "part2": "Част 2", "part3": "Част 3" },
-    "loading": { "more": "Зареждат се още..." },
+    "loading": { "more": "Зареждане..." },
     "ieltsScenarioCard": {
       "lockedTitle": "Сценарият е заключен",
       "status": { "completed": "Завършено {count}×", "notCompleted": "Незавършено" },

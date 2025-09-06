@@ -74,8 +74,6 @@ export interface ISubmodule {
   title: string
   description: string
   tips: string[]
-  tags: string[]
-  difficulty?: string
   scenarios: string[]
 }
 

@@ -194,7 +194,12 @@ export default defineComponent({
 
     const fetchSetupData = async () => {
       try {
-        await userProgressStore.fetchCurrentUserProgress()
+        await Promise.all([
+          userProgressStore.fetchCurrentUserProgress(),
+          promptStore.fetchModuleList(false, { target_language: "English" }),
+          promptStore.fetchScenariosList(false, { is_module_only: false, target_language: "English" }),
+          promptStore.fetchIeltsScenariosList(false),
+        ])
       } catch (error: unknown) {
         console.error("Error fetchSetupData:", error)
       }

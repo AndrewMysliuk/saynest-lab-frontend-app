@@ -271,7 +271,7 @@
     "tabs": { "topics": "Temas", "scenarios": "Escenarios", "ielts": "IELTS" },
     "search": { "placeholder": "Buscar...", "clear": "Borrar", "clearTitle": "Borrar búsqueda" },
     "ielts": { "fullExam": "Examen completo", "part1": "Parte 1", "part2": "Parte 2", "part3": "Parte 3" },
-    "loading": { "more": "Cargando más..." },
+    "loading": { "more": "Cargando..." },
     "ieltsScenarioCard": {
       "lockedTitle": "El escenario está bloqueado",
       "status": { "completed": "Completado {count} veces", "notCompleted": "No completado" },

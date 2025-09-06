@@ -262,7 +262,7 @@
     "tabs": { "topics": "Tematy", "scenarios": "Scenariusze", "ielts": "IELTS" },
     "search": { "placeholder": "Szukaj...", "clear": "Wyczyść", "clearTitle": "Wyczyść wyszukiwanie" },
     "ielts": { "fullExam": "Pełny egzamin", "part1": "Część 1", "part2": "Część 2", "part3": "Część 3" },
-    "loading": { "more": "Wczytywanie kolejnych..." },
+    "loading": { "more": "Ładowanie..." },
     "ieltsScenarioCard": {
       "lockedTitle": "Scenariusz jest zablokowany",
       "status": { "completed": "Ukończono {count}×", "notCompleted": "Nie ukończono" },

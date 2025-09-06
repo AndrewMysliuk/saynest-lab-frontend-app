@@ -80,8 +80,6 @@ export const DEFAULT_MODULE_COMPLEX_STRUCTURE: IModuleStructureComplex = {
       title: "",
       description: "",
       tips: [],
-      tags: [],
-      difficulty: "",
       scenarios: [],
     },
   ],
