@@ -12,7 +12,7 @@
     <!-- Body -->
     <div class="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
       <div class="space-y-2 md:col-span-2">
-        <WorkshopTextField :model-value="getModuleInfo.title" @update:model-value="updateTitle" label="Title" placeholder="Module title" is-required />
+        <WorkshopTextField :model-value="getModuleInfo.title" @update:model-value="updateTitle" label="Title" placeholder="Module title" :error="titleError" is-required />
       </div>
 
       <div class="space-y-2 md:col-span-2">
@@ -21,6 +21,7 @@
           @update:model-value="updateDescription"
           label="Description"
           placeholder="Short summary of what this module covers"
+          :error="descriptionError"
           is-required
           is-multiline
           :rows="3"
@@ -28,7 +29,7 @@
       </div>
 
       <div class="space-y-2">
-        <WorkshopTagInput :model-value="getModuleInfo.tags" @update:model-value="updateTags" :suggestions="tagSuggestions" label="Tags" placeholder="Add tag and press Enter" />
+        <WorkshopTagInput :model-value="getModuleInfo.tags" @update:model-value="updateTags" :suggestions="tagSuggestions" label="Tags" placeholder="Add tag and press Enter" :error="tagsError" />
       </div>
 
       <div class="space-y-2">
@@ -55,6 +56,8 @@ import { defineComponent, ref, computed } from "vue"
 import { workshopStore } from "@/app"
 import { WorkshopTagInput, WorkshopRadioGroup, WorkshopTextField } from "@/shared/components"
 import { ModuleTypeEnum } from "@/shared/types"
+import { ModuleInfoSchema } from "@/shared/validation"
+import { validatePartial } from "@/shared/validation/utils"
 
 export default defineComponent({
   name: "ModuleInfo",
@@ -66,22 +69,23 @@ export default defineComponent({
   },
 
   setup() {
-    const isSubmitting = ref<boolean>(false)
+    const isSubmitting = ref(false)
     const tagSuggestions = ref<string[]>(["interview", "travel", "money", "health", "small talk"])
     const visabilities = Object.values(ModuleTypeEnum)
+    const titleError = ref<string>("")
+    const descriptionError = ref<string>("")
+    const tagsError = ref<string>("")
 
     const getModuleInfo = computed(() => workshopStore.getModuleInfo)
 
     const updateTitle = (value: string) => {
-      workshopStore.setModuleInfo({
-        title: value,
-      })
+      titleError.value = ""
+      workshopStore.setModuleInfo({ title: value })
     }
 
     const updateDescription = (value: string) => {
-      workshopStore.setModuleInfo({
-        description: value,
-      })
+      descriptionError.value = ""
+      workshopStore.setModuleInfo({ description: value })
     }
 
     const updateVisibility = (value: ModuleTypeEnum) => {
@@ -89,13 +93,37 @@ export default defineComponent({
     }
 
     const updateTags = (value: string[]) => {
-      workshopStore.setModuleInfo({
-        tags: value,
-      })
+      tagsError.value = ""
+      workshopStore.setModuleInfo({ tags: value })
     }
 
     const onNext = () => {
-      // TODO
+      titleError.value = ""
+      descriptionError.value = ""
+      tagsError.value = ""
+
+      const { ok, data, errors } = validatePartial(ModuleInfoSchema, ["title", "description", "tags"] as const, {
+        title: getModuleInfo.value.title.trim(),
+        description: getModuleInfo.value.description.trim(),
+        tags: getModuleInfo.value.tags,
+      })
+
+      if (!ok) {
+        titleError.value = errors.title ?? ""
+        descriptionError.value = errors.description ?? ""
+        tagsError.value = errors.tags ?? ""
+        return
+      }
+
+      isSubmitting.value = true
+      workshopStore.setModuleInfo({
+        title: data.title,
+        description: data.description,
+        tags: data.tags,
+      })
+      isSubmitting.value = false
+
+      alert("Validation Success")
     }
 
     return {
@@ -103,6 +131,9 @@ export default defineComponent({
       isSubmitting,
       getModuleInfo,
       tagSuggestions,
+      titleError,
+      descriptionError,
+      tagsError,
       updateTitle,
       updateDescription,
       updateVisibility,

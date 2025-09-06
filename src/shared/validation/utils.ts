@@ -34,3 +34,5 @@ export function validatePartial<TSchema extends z.ZodTypeAny, K extends readonly
   }
   return { ok: false as const, errors }
 }
+
+export const objectIdSchema = z.string().regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid MongoDB ObjectId" })

@@ -15,6 +15,11 @@
       </div>
     </div>
 
+    <!-- error -->
+    <p v-if="error" class="text-xs text-red-500 mt-1">
+      {{ error }}
+    </p>
+
     <div v-if="suggestions.length" class="space-y-1">
       <p class="text-xs text-gray-500 font-medium mb-2">Suggestions</p>
       <div class="flex flex-wrap gap-2">
@@ -49,20 +54,21 @@ export default defineComponent({
       type: Array as () => string[],
       required: true,
     },
-
     suggestions: {
       type: Array as () => string[],
       default: () => [],
     },
-
     label: {
       type: String,
       default: "Tags",
     },
-
     placeholder: {
       type: String,
       default: "Add tag and press Enter",
+    },
+    error: {
+      type: String,
+      default: "",
     },
   },
 

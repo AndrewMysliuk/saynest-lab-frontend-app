@@ -115,6 +115,10 @@
           <!-- /RIGHT -->
         </div>
       </div>
+
+      <p v-if="scenariosError" class="text-xs text-red-500 mt-6">
+        {{ scenariosError }}
+      </p>
     </div>
 
     <!-- Footer -->
@@ -135,6 +139,7 @@
 import { defineComponent, ref, computed, onBeforeMount, onMounted, onBeforeUnmount, nextTick } from "vue"
 import { useI18n } from "vue-i18n"
 import { promptStore, workshopStore } from "@/app"
+import { validatePartial, ModuleScenariosFlatSchema } from "@/shared/validation"
 
 export default defineComponent({
   name: "ModuleAddFlatScenarios",
@@ -151,6 +156,7 @@ export default defineComponent({
     const observer = ref<IntersectionObserver | null>(null)
     const titlesCache = ref<Record<string, string>>({})
     let debounceTimeout: ReturnType<typeof setTimeout> | null = null
+    const scenariosError = ref<string>("")
 
     const getModuleScenariosFlat = computed(() => workshopStore.getModuleScenariosFlat)
     const getPromptList = computed(() => promptStore.getPromptList)
@@ -188,6 +194,7 @@ export default defineComponent({
     const getTitle = (id: string) => titlesCache.value[id] ?? id
 
     const toggleSelectScenarioWithCache = (id: string) => {
+      scenariosError.value = ""
       const fromList = getPromptList.value.find((x: any) => x._id === id)?.title
       if (fromList) titlesCache.value[id] = fromList
       toggleSelectScenario(id)
@@ -263,7 +270,24 @@ export default defineComponent({
     }
 
     const onNext = () => {
-      // TODO
+      scenariosError.value = ""
+
+      const { ok, data, errors } = validatePartial(ModuleScenariosFlatSchema, ["scenarios"] as const, {
+        scenarios: getModuleScenariosFlat.value.scenarios,
+      })
+
+      if (!ok) {
+        scenariosError.value = errors.scenarios ?? ""
+        return
+      }
+
+      isSubmitting.value = true
+      workshopStore.setModuleScenariosFlat({
+        scenarios: data.scenarios,
+      })
+      isSubmitting.value = false
+
+      alert("Validation Success")
     }
 
     onBeforeUnmount(() => {
@@ -273,6 +297,7 @@ export default defineComponent({
     return {
       loadMoreTrigger,
       isListLoading,
+      scenariosError,
       searchQueryScenarios,
       isReady,
       isSubmitting,
